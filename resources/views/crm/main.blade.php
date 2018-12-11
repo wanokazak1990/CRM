@@ -55,7 +55,34 @@
 		<div class="tab-content " style="width: 100%;">
 			<!-- Трафик -->
 			<div class="tab-pane" id="traffic" role="tabpanel" aria-labelledby="traffic-tab">
-				<h3 align="center">Трафик</h3>
+				<table class="table table-bordered table-sm">
+					<thead>
+						<tr>
+							<th>№</th>
+							<th>Клиент</th>
+							<th>Тип трафика</th>
+							<th>Дата создания</th>
+							<th>Назначенный менеджер</th>
+							<th>Админ</th>
+							<th>Интересующая модель</th>
+							<th>Назначенное действие</th>
+							<th>Комментарий</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>2</td>
+							<td>1</td>
+							<td>01.12.18</td>
+							<td>1</td>
+							<td>2</td>
+							<td>3</td>
+							<td>4</td>
+							<td>Бутерброд</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 			<!-- Контакты -->
 			<div class="tab-pane" id="contacts" role="tabpanel" aria-labelledby="contacts-tab">
