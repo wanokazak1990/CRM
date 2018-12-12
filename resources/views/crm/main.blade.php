@@ -59,28 +59,32 @@
 					<thead>
 						<tr>
 							<th>№</th>
-							<th>Клиент</th>
-							<th>Тип трафика</th>
 							<th>Дата создания</th>
+							<th>Тип трафика</th>
+							<th>Интересующая модель</th>
+							<th>Клиент</th>
+							<th>Комментарий</th>
 							<th>Назначенный менеджер</th>
 							<th>Админ</th>
-							<th>Интересующая модель</th>
 							<th>Назначенное действие</th>
-							<th>Комментарий</th>
+							<th>Дата действия</th>
+							<th>Время действия</th>
 						</tr>
 					</thead>
 					<tbody>
 						@foreach($traffics as $key => $traffic)
 						<tr>
 							<td>{{ $key+1 }}</td>
-							<td>{{ $traffic->client->name }}</td>
+							<td>{{ date('d.m.Y H:i:s', $traffic->creation_date) }}</td>
 							<td>{{ $traffic->traffic_type->name }}</td>
-							<td>{{ date('d.m.Y', $traffic->creation_date) }}</td>
+							<td>{{ $traffic->model->name }}</td>
+							<td>{{ $traffic->client->name }}</td>
+							<td>{{ $traffic->comment }}</td>
 							<td>{{ $traffic->manager->name }}</td>
 							<td>{{ $traffic->admin->name }}</td>
-							<td>{{ $traffic->model->name }}</td>
 							<td>{{ $traffic->assigned_action->name }}</td>
-							<td>{{ $traffic->comment }}</td>
+							<td>{{ date('d.m.Y', $traffic->action_date) }}</td>
+							<td>{{ date('H:i', $traffic->action_time) }}</td>
 						</tr>
 						@endforeach
 					</tbody>

@@ -14,6 +14,8 @@ class crm_traffic extends Model
     	'admin_id',
     	'desired_model',
     	'assigned_action_id',
+        'action_date',
+        'action_time',
     	'comment'
     ];
 
@@ -24,7 +26,9 @@ class crm_traffic extends Model
     	'manager_id' => 0,
     	'admin_id' => 0,
     	'desired_model' => 0,
-    	'assigned_action_id' => 0,
+        'assigned_action_id' => 0,
+        'action_date' => 0,
+    	'action_time' => 0,
         'comment' => '0'
     ];
     
