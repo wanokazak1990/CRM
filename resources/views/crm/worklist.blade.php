@@ -23,7 +23,7 @@
 	</div>
 
 	<!-- Tab panes -->
-	<div class="tab-content" style="width: 100%;">
+	<div class="tab-content container" style="width: 100%;">
 		<!-- Вкладка Журнал -->
 		<div class="tab-pane active" id="log" role="tabpanel" aria-labelledby="log-tab">
 			<table class="table table-bordered table-sm">
@@ -80,98 +80,78 @@
 		</div>
 		<!-- Вкладка Лист трафика -->
 		<div class="tab-pane" id="trafficList" role="tabpanel" aria-labelledby="trafficList-tab">
-			<div>
+			<div class="row justify-content-between">
 				<span class="h3">Трафик №138</span>
-				<span class="h3" style="float: right;">05 января 2018</span>
+				<span class="h3">05 января 2018</span>
 			</div>
+			{!! Form::open() !!}
+			{{ csrf_field() }}
+			<span class="h4">Тип трафика</span>
+			<div class="row">
+				@foreach($traffic_types as $traffic)
+				<div class="col-3"><input type="radio" name="traffic_type" value="{{ $traffic->id }}"> {{ $traffic->name }}</div>
+				@endforeach
+			</div>
+			<hr>
+			
+			<span class="h4">Интересующая модель</span>
+			<div class="row">
+				@foreach($models as $key => $model)
+				<div class="col-3"><input type="radio" name="model" value="{{ $key }}"> {{ $model }}</div>
+				@endforeach
+			</div>
+			<hr>
 
-			<table width="100%" style="table-layout: fixed;">
-				<tr>
-					<td><button type="button" class="btn btn-warning btn-block">Переговоры в ДЦ</button></td>
-					<td><button type="button" class="btn btn-light btn-block">Входящий звонок</button></td>
-					<td><button type="button" class="btn btn-light btn-block">LID Renault</button></td>
-					<td><button type="button" class="btn btn-light btn-block">Визит на сервис</button></td>
-				</tr>
-				<tr>
-					<td><button type="button" class="btn btn-light btn-block">Контакт с сайта</button></td>
-					<td><button type="button" class="btn btn-light btn-block">Заказ с сайта</button></td>
-					<td><button type="button" class="btn btn-light btn-block" disabled="disabled">Новый канал</button></td>
-					<td><button type="button" class="btn btn-light btn-block" disabled="disabled">Новый канал</button></td>
-				</tr>
-			</table>
+			<span class="h4">Назначенный менеджер</span>
+			<div class="row">
+				@foreach($users as $key => $user)
+				<div class="col-3"><input type="radio" name="manager" value="{{ $key }}"> {{ $user }}</div>
+				@endforeach
+			</div>
+			<hr>
 
-			<div><span class="h3">Интересующая модель</span></div>
-
-			<table width="100%" style="table-layout: fixed;">
-				<tr>
-					<td><button type="button" class="btn btn-light btn-block">KAPTUR</button></td>
-					<td><button type="button" class="btn btn-warning btn-block">DUSTER</button></td>
-					<td><button type="button" class="btn btn-light btn-block">STEPWAY</button></td>
-					<td><button type="button" class="btn btn-light btn-block">SANDERO</button></td>
-				</tr>
-				<tr>
-					<td><button type="button" class="btn btn-light btn-block">LOGAN</button></td>
-					<td><button type="button" class="btn btn-light btn-block">KOLEOS</button></td>
-					<td><button type="button" class="btn btn-light btn-block">DOKKER</button></td>
-					<td><button type="button" class="btn btn-light btn-block" disabled="disabled">Новая модель</button></td>
-				</tr>
-			</table>
-
-			<div><span class="h3">Назначенный менеджер</span></div>
-
-			<table width="100%" style="table-layout: fixed;">
-				<tr>
-					<td><button type="button" class="btn btn-light btn-block">Данилейченко</button></td>
-					<td><button type="button" class="btn btn-light btn-block" disabled="disabled">Гарус</button></td>
-					<td><button type="button" class="btn btn-warning btn-block">Мухин</button></td>
-					<td><button type="button" class="btn btn-light btn-block" disabled="disabled">Мельник</button></td>
-				</tr>
-				<tr>
-					<td><button type="button" class="btn btn-light btn-block">Быков</button></td>
-					<td><button type="button" class="btn btn-light btn-block">Пеньковский</button></td>
-					<td><button type="button" class="btn btn-light btn-block">Неизвестно</button></td>
-					<td></td>
-				</tr>
-			</table>
-
-			<div><span class="h3">Адрес клиента</span></div>
-			<table width="100%" style="table-layout: fixed;">
-				<tr>
-					<td><button type="button" class="btn btn-light btn-block">Неизвестно</button></td>
-					<td><button type="button" class="btn btn-warning btn-block">Сыктывкар</button></td>
-					<td><button type="button" class="btn btn-light btn-block">Республика</button></td>
-					<td><button type="button" class="btn btn-light btn-block">Др. регион</button></td>
-				</tr>
-			</table>
-			<br>
+			<span class="h4">Адрес клиента</span>
+			<div class="row">
+				<div class="col-3"><input type="radio" name="client_address" value="Неизвестно"> Неизвестно</div>
+				<div class="col-3"><input type="radio" name="client_address" value="Сыктывкар"> Сыктывкар</div>
+				<div class="col-3"><input type="radio" name="client_address" value="Республика"> Республика</div>
+				<div class="col-3"><input type="radio" name="client_address" value="Др. регион"> Др. регион</div>
+			</div>
+			<hr>
+			
+			<span class="h4">Данные клиента</span>
 			<div>
 				<div class="input-group">
-					<input type="text" class="col-6 form-control" placeholder="ФИО Клиента">
-					<input type="text" class="col-6 form-control" placeholder="Способ связи">
+					<input type="text" name="client_name" class="col-6 form-control" placeholder="ФИО">
+					<input type="text" name="client_phone" class="col-3 form-control" placeholder="Телефон">
+					<input type="text" name="client_email" class="col-3 form-control" placeholder="Email">
 				</div>
 				<div class="input-group">
-					<select class="form-control col-6">
-						<option selected>Назначенное действие</option>
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
+					<select name="assigned_action" class="form-control col-6">
+						<option selected disabled>Назначенное действие</option>
+						@foreach($assigned_actions as $action)
+						<option value="{{ $action->id }}"> {{ $action->name }} </option>
+						@endforeach
 					</select>
-					<input type="date" class="col-6 form-control">
+					<input name="action_date" type="date" class="col-3 form-control" title="Назначенная дата">
+					<input name="action_time" type="time" class="col-3 form-control" title="Назначенное время">
 				</div>
 			</div>
-			<br>
-			<div><span class="h3">Ваши комментарии</span></div>
-			<textarea class="form-control" cols="3" style="resize: none;" placeholder="Введите комментарий"></textarea>
-			<br>
-			<div class="input-group">
+			<hr>
+
+			<span class="h4">Ваши комментарии</span>
+			<textarea name="comment" class="form-control" cols="3" style="resize: none;" placeholder="Введите комментарий"></textarea>
+			<hr>
+
+			<div class="form-row">
 				<div class="col-6">
-					<button type="button" class="btn btn-outline-primary btn-block">Создать трафик</button>
+					<input type="submit" name="traffic_submit" class="btn btn-outline-primary btn-block" value="Создать трафик">
 				</div>
 				<div class="col-6">
 					<button type="button" class="btn btn-outline-primary btn-block">Создать трафик и рабочий лист</button>
 				</div>
 			</div>
-
+			{!! Form::close() !!}
 		</div>
 		
 		<!-- Вкладка Рабочий лист -->
