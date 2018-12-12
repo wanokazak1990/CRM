@@ -27,18 +27,26 @@ class BrandController extends Controller
 	//Создание нового бренда (вывод формы)
 	public function add()
 	{
+		$brand = new oa_brand();
 		return view('brand.brandadd')//вывод вива создания бренда
 			->with('title','Новый бренд')//заголовок
+			->with('brand',$brand)
 			->with(['addTitle'=>'Новый бренд','route'=>'brandadd']);
 	}
 
 	//Создание нового бренда (запись данных из формы в бд)
-	public function put()
+	public function put(Request $request)
 	{
 		if(isset($_POST['submit']))//если нажат сабмит
 		{
-			$brand = new oa_brand();
-			$brand->create($_POST);//записываем данные из поста в модель и заливаем модель в БД 
+			$brand = new oa_brand($request->except('icon'));
+			$brand->save();//записываем данные из поста в модель и заливаем модель в БД 
+			foreach ($request->file() as $key=>$file) {
+     			$name = $key.$brand->id.'.'.pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+     			$brand->icon = $name;
+     			$file->move(storage_path('app/public/brand/'), $name);
+            }
+            $brand->update();
 		}
 		return redirect()->route('brandlist');//перенаправляем на список брендов (имя роута brandlist)
 	}
@@ -54,13 +62,20 @@ class BrandController extends Controller
 	}
 
 	//Редактирование бренда (запись данных из формы в бд)
-	public function update($id)
+	public function update(Request $request,$id)
 	{
 		if(isset($_POST['submit']))//если нажат сабмит
 		{
 			$brand = new oa_brand();
 			$brand = $brand->find($id);//ищу бренд по id
 			$brand->name = $_POST['name'];//перезаписываю в модели бренд имя бренда из поста
+
+			foreach ($request->file() as $key=>$file) {
+     			$name = $key.$brand->id.'.'.pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+     			$brand->icon = $name;
+     			$file->move(storage_path('app/public/brand/'), $name);
+            }
+    		
 			$brand->save();//пересохраняю модель в бд
 		}
 		return redirect()->route('brandlist');//перенаправляем на список брендов (имя роута brandlist)
@@ -81,6 +96,8 @@ class BrandController extends Controller
 	{
 		if(isset($_POST['delete']))//если нажат делете
 		{
+			$brand = oa_brand::find($id);//ищу бренд по id
+			@unlink(storage_path('app/public/brand/'.$brand->icon));
 			oa_brand::destroy($id);//удаляю жестко
 		}
 		return redirect()->route('brandlist');//перенаправляем на список брендов (имя роута brandlist)

@@ -58,7 +58,7 @@
 				@isset($option->brands)
 					@foreach($option->brands as $brand)
 						@isset($brand->getBrandObj)
-							{{ $brand->getBrandObj->name }}
+							<?= $brand->getBrandObj->getIcon(); ?>
 						@endisset
 					@endforeach
 				@endisset

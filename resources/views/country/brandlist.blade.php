@@ -8,19 +8,17 @@
 	@foreach ($list as $key=>$item)
 		<tr>
 			<td class="width-50">{{$key+1}}</td>
-	    	<td class="width-100">{{ $item->name }}</td>
-	    	<td>
-	    		@if($item->icon)
-	    			<?= $item->getIcon(); ?>
-	    		@endif
+			<td class="width-100">
+	    		<?=$item->getFlag();?>
 	    	</td>
+	    	<td>{{ $item->name }}</td>
 	    	<td class="width-50">
-	    		<a title="Изменить" href="{{ route($edit, array('id'=>$item->id)) }}">
-	    			<i class=" glyphicon glyphicon-cog"></i>	
+	    		<a href="{{ route($edit, array('id'=>$item->id)) }}">
+	    			<i class=" glyphicon glyphicon-cog"></i>
 	    		</a>
 	    	</td>
 	    	<td class="width-50">
-	    		<a title="Удалить" href="{{ route($delete, array('id'=>$item->id)) }}">
+	    		<a href="{{ route($delete, array('id'=>$item->id)) }}">
 	    			<i class="text-danger glyphicon glyphicon-remove"></i>
 	    		</a>
 	    	</td>

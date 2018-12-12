@@ -39,7 +39,7 @@
 			<td>{{$car->vin}}</td>
 			<td>
 				@isset($car->brand)
-					{{$car->brand->name}}
+					<?=$car->brand->getIcon();?>
 				@endisset
 			</td>
 			<td>
