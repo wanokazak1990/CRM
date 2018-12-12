@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Session;
 use App\oa_dop;
 use App\oa_brand;
 use App\option_parent;
@@ -11,19 +12,31 @@ use App\option_parent;
 
 class DopController extends Controller
 {
-    public function list()
+    public function list(Request $request,$url_get=array())
     {
-    	$list = oa_dop::paginate(20);
+        if($request->has('reset')) //если нажата кнопка очистить
+            return redirect()->route('optionlist');//перенаправляем на роут без параметров
+        
+        $query = oa_dop::select('*');
+
+        if($request->has('parent_id'))
+            $query->where('oa_dops.parent_id',$request->parent_id);
+
+    	$list = $query->paginate(20);
+        $url_get = $request->except('page');
+
+        $parents = option_parent::pluck('name','id');
     	return view('option.list')
     		->with('title','Список доп.оборудования')
     		->with('list',$list)
     		->with(['addTitle'=>'Новое доп.оборудование','route'=>'dopadd'])
-            ->with(['edit'=>'dopedit','delete'=>'dopdelete']);
+            ->with(['edit'=>'dopedit','delete'=>'dopdelete'])
+            ->with('url_get',$url_get)
+            ->with('parents',$parents);
     }
 
     public function add()
     {
-    	//$brandlist = oa_brand::pluck('name','id');
         $parentlist = option_parent::pluck('name','id');
 
     	$option = new oa_dop();
@@ -47,7 +60,7 @@ class DopController extends Controller
 
     public function edit($id)
     {
-        //$brandlist = oa_brand::pluck('name','id');
+        Session::put('prev_page',url()->previous());
         $parentlist = option_parent::pluck('name','id');
 
         $option = new oa_dop();
@@ -65,13 +78,14 @@ class DopController extends Controller
         {
             $option = oa_dop::find($id);
             $option->update($request->input());
-            return redirect()->route('doplist');
+            return redirect(Session::pull('prev_page','/optionlist'));
         }
-        return redirect()->route('doplist');
+        return redirect(Session::pull('prev_page','/optionlist'));
     }
 
     public function delete($id)
     {
+        Session::put('prev_page',url()->previous());
         $option = new oa_dop();
         $option = $option->find($id);
         return view('option.del')//вывод вива
@@ -85,6 +99,6 @@ class DopController extends Controller
         {
             oa_dop::destroy($id);
         }
-        return redirect()->route('doplist');
+        return redirect(Session::pull('prev_page','/optionlist'));
     }
 }
