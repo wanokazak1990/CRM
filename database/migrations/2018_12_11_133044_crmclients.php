@@ -13,7 +13,7 @@ class Crmclients extends Migration
      */
     public function up()
     {
-        Schema::create('CRM_clients', function (Blueprint $table) {
+        Schema::create('crm_clients', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('phone');
@@ -29,6 +29,6 @@ class Crmclients extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('CRM_clients');
+        Schema::dropIfExists('crm_clients');
     }
 }

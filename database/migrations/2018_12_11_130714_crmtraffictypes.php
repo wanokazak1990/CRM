@@ -13,7 +13,7 @@ class Crmtraffictypes extends Migration
      */
     public function up()
     {
-        Schema::create('CRM_traffic_types', function (Blueprint $table) {
+        Schema::create('crm_traffic_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
         });
@@ -26,6 +26,6 @@ class Crmtraffictypes extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('CRM_traffic_types');
+        Schema::dropIfExists('crm_traffic_types');
     }
 }

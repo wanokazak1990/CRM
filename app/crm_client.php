@@ -4,10 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CRM_client extends Model
+class crm_client extends Model
 {
    protected $fillable = [
     	'name',
+        'birthday',
     	'phone',
     	'email',
     	'address'
@@ -15,6 +16,7 @@ class CRM_client extends Model
 
     protected $attributes = [
     	'name' => '0',
+        'birthday' => 0,
     	'phone' => '0',
     	'email' => '0',
         'address' => '0'

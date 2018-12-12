@@ -13,7 +13,7 @@ class Crmassignedactions extends Migration
      */
     public function up()
     {
-        Schema::create('CRM_assigned_actions', function (Blueprint $table) {
+        Schema::create('crm_assigned_actions', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
         });
@@ -26,6 +26,6 @@ class Crmassignedactions extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('CRM_assigned_actions');
+        Schema::dropIfExists('crm_assigned_actions');
     }
 }

@@ -351,3 +351,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 /* CRM */
 
 Route::get('/crm', 'CRMMainController@main')->name('crm');
+
+// Добавление трафика
+Route::post('/crm', 'CRMTrafficController@put')->name('traffic');

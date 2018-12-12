@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Crmroles extends Migration
+class CrmclientsAddBirthday extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class Crmroles extends Migration
      */
     public function up()
     {
-        Schema::create('crm_roles', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
+        Schema::table('crm_clients', function (Blueprint $table) {
+            $table->integer('birthday')->after('name');
         });
     }
 
@@ -26,6 +25,8 @@ class Crmroles extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('crm_roles');
+        Schema::table('crm_clients', function (Blueprint $table) {
+            //
+        });
     }
 }

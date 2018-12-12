@@ -13,9 +13,9 @@ class Crmtraffics extends Migration
      */
     public function up()
     {
-        Schema::create('CRM_traffics', function (Blueprint $table) {
+        Schema::create('crm_traffics', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('cliend_id'); // ИД клиента
+            $table->integer('client_id'); // ИД клиента
             $table->integer('traffic_type_id'); // ИД тип трафика
             $table->integer('creation_date'); // Дата создания
             $table->integer('manager_id'); // ИД назначенного менеджера
@@ -33,6 +33,6 @@ class Crmtraffics extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('CRM_traffics');
+        Schema::dropIfExists('crm_traffics');
     }
 }

@@ -6,13 +6,13 @@
 <!-- Nav tabs -->
 		<ul class="nav nav-tabs nav-justified" id="myTab" role="tablist" style="width: 100%;">
 		  <li class="nav-item">
-		    <a class="nav-link" id="traffic-tab" data-toggle="tab" href="#traffic" role="tab" aria-controls="traffic" aria-selected="true">Трафик</a>
+		    <a class="nav-link active" id="traffic-tab" data-toggle="tab" href="#traffic" role="tab" aria-controls="traffic" aria-selected="true">Трафик</a>
 		  </li>
 		  <li class="nav-item">
 		    <a class="nav-link" id="contacts-tab" data-toggle="tab" href="#contacts" role="tab" aria-controls="contacts" aria-selected="false">Контакты</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link active" id="reserves-tab" data-toggle="tab" href="#reserves" role="tab" aria-controls="reserves" aria-selected="false">Резервы</a>
+		    <a class="nav-link" id="reserves-tab" data-toggle="tab" href="#reserves" role="tab" aria-controls="reserves" aria-selected="false">Резервы</a>
 		  </li>
 		  <li class="nav-item">
 		    <a class="nav-link" id="deals-tab" data-toggle="tab" href="#deals" role="tab" aria-controls="deals" aria-selected="false">Сделки</a>
@@ -54,8 +54,8 @@
 		<!-- Tab panes -->
 		<div class="tab-content " style="width: 100%;">
 			<!-- Трафик -->
-			<div class="tab-pane" id="traffic" role="tabpanel" aria-labelledby="traffic-tab">
-				<table class="table table-bordered table-sm">
+			<div class="tab-pane active" id="traffic" role="tabpanel" aria-labelledby="traffic-tab">
+				<table class="table table-bordered table-striped table-sm">
 					<thead>
 						<tr>
 							<th>№</th>
@@ -70,17 +70,19 @@
 						</tr>
 					</thead>
 					<tbody>
+						@foreach($traffics as $key => $traffic)
 						<tr>
-							<td>1</td>
-							<td>2</td>
-							<td>1</td>
-							<td>01.12.18</td>
-							<td>1</td>
-							<td>2</td>
-							<td>3</td>
-							<td>4</td>
-							<td>Бутерброд</td>
+							<td>{{ $key+1 }}</td>
+							<td>{{ $traffic->client->name }}</td>
+							<td>{{ $traffic->traffic_type->name }}</td>
+							<td>{{ date('d.m.Y', $traffic->creation_date) }}</td>
+							<td>{{ $traffic->manager->name }}</td>
+							<td>{{ $traffic->admin->name }}</td>
+							<td>{{ $traffic->model->name }}</td>
+							<td>{{ $traffic->assigned_action->name }}</td>
+							<td>{{ $traffic->comment }}</td>
 						</tr>
+						@endforeach
 					</tbody>
 				</table>
 			</div>
@@ -89,8 +91,8 @@
 				<h3 align="center">Контакты</h3>
 			</div>
 			<!-- Резервы -->
-			<div class="tab-pane active" id="reserves" role="tabpanel" aria-labelledby="reserves-tab">
-				<table class="table table-bordered table-sm">
+			<div class="tab-pane" id="reserves" role="tabpanel" aria-labelledby="reserves-tab">
+				<table class="table table-bordered table-striped table-sm">
 					<thead>
 						<tr>
 							<th>Марка</th>
