@@ -19,7 +19,7 @@ class CountryController extends Controller
 	{
 		$country = new country_model();
 		$list = $country->get();//получаю все страны
-		return view('brand.brandlist')//вывод вива списка стран
+		return view('country.brandlist')//вывод вива списка стран
 			->with('list',$list)//список стран
 			->with('title','Список стран')//заголовок
 			->with(['addTitle'=>'Новая страна','route'=>'countryadd'])
@@ -29,18 +29,25 @@ class CountryController extends Controller
 
 	//Создание нового страны (вывод формы)
 	public function add()
-	{
-		return view('brand.brandadd')//вывод вива создания стран
-			->with('title','Новая страна');
+	{	
+		return view('country.brandadd')//вывод вива создания стран
+			->with('title','Новая страна')
+			->with('country',new country_model());
 	}
 
 	//Создание нового страны (запись данных из формы в бд)
-	public function put()
+	public function put(Request $request)
 	{
 		if(isset($_POST['submit']))//если нажат сабмит
 		{
-			$country = new country_model();
-			$country->create($_POST);//записываем данные из поста в модель и заливаем модель в БД 
+			$country = new country_model($request->input());
+			$country->save();			
+			foreach ($request->file() as $key=>$file) {
+     			$name = $key.$country->id.'.'.pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+     			$country->flag = $name;
+     			$file->move(storage_path('app/public/country/'), $name);
+            }
+            $country->update();
 		}
 		return redirect()->route('countrylist');//перенаправляем на список стран (имя роута countrylist)
 	}
@@ -50,19 +57,24 @@ class CountryController extends Controller
 	{
 		$country = new country_model();
 		$country = $country->find($id);//ищу странe по id
-		return view('brand.brandadd')//вывод вива
+		return view('country.brandadd')//вывод вива
 			->with('title','Редактирование страны')//заголовок
 			->with('brand',$country);
 	}
 
 	//Редактирование страны (запись данных из формы в бд)
-	public function update($id)
+	public function update(Request $request,$id)
 	{
 		if(isset($_POST['submit']))//если нажат сабмит
 		{
 			$country = new country_model();
 			$country = $country->find($id);//ищу стран по id
 			$country->name = $_POST['name'];//перезаписываю в модели страны имя страны из поста
+			foreach ($request->file() as $key=>$file) {
+     			$name = $key.$country->id.'.'.pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+     			$country->flag = $name;
+     			$file->move(storage_path('app/public/country/'), $name);
+            }
 			$country->save();//пересохраняю модель в бд
 		}
 		return redirect()->route('countrylist');//перенаправляем на список стран (имя роута countrylist)
@@ -73,7 +85,7 @@ class CountryController extends Controller
 	{
 		$country = new country_model();
 		$country = $country->find($id);//ищу страну по id
-		return view('brand.branddel')//вывод вива
+		return view('country.branddel')//вывод вива
 			->with('title','Удаление страны')//заголовок
 			->with('brand',$country);
 	}
@@ -83,6 +95,8 @@ class CountryController extends Controller
 	{
 		if(isset($_POST['delete']))//если нажат делете
 		{
+			$country = country_model::find($id);//ищу country по id
+			@unlink(storage_path('app/public/country/'.$country->flag));
 			country_model::destroy($id);//удаляю жестко
 		}
 		return redirect()->route('countrylist');//перенаправляем на список брендов (имя роута brandlist)

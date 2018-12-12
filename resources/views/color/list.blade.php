@@ -10,7 +10,7 @@
 			<td>{{$color->rn_code}}</td>
 			<td>
 				@isset($color->brand)
-					{{$color->brand->name}}
+					<?=$color->brand->getIcon();?>
 				@endisset
 			</td>
 			<td>

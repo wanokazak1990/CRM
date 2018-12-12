@@ -33,4 +33,9 @@ class file extends Model
     {
         return $this->hasOne('App\oa_model','id','model_id');
     }
+
+    public function brand()
+    {
+        return $this->hasOne('App\oa_brand','id','brand_id');
+    }
 }

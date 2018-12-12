@@ -19,7 +19,7 @@ class OptionParentController extends Controller
 	{
 		$parent = new option_parent();
 		$list = $parent->get();//получаю все разделов
-		return view('brand.brandlist')//вывод вива списка разделов
+		return view('optionparent.brandlist')//вывод вива списка разделов
 			->with('list',$list)//список разделов
 			->with('title','Список разделов оборудования')//заголовок
 			->with(['addTitle'=>'Новый раздел оборудования','route'=>'optparentadd'])
@@ -30,7 +30,7 @@ class OptionParentController extends Controller
 	//Создание нового бренда (вывод формы)
 	public function add()
 	{
-		return view('brand.brandadd')//вывод вива создания бренда
+		return view('optionparent.brandadd')//вывод вива создания бренда
 			->with('title','Новый раздел оборудования');//заголовок
 	}
 
@@ -50,7 +50,7 @@ class OptionParentController extends Controller
 	{
 		$parent = new option_parent();
 		$parent = $parent->find($id);//ищу бренд по id
-		return view('brand.brandadd')//вывод вива
+		return view('optionparent.brandadd')//вывод вива
 			->with('title','Редактирование бренда')//заголовок
 			->with('brand',$parent);//модель бренда по id
 	}
@@ -73,7 +73,7 @@ class OptionParentController extends Controller
 	{
 		$parent = new option_parent();
 		$parent = $parent->find($id);//ищу бренд по id
-		return view('brand.branddel')//вывод вива
+		return view('optionparent.branddel')//вывод вива
 			->with('title','Удаление раздела оборудования')//заголовок
 			->with('brand',$parent);//модель бренда
 	}

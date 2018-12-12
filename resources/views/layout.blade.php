@@ -13,6 +13,15 @@
 			.pad-r-0{
 				padding-right: 0px !important;
 			}
+			.width-50{
+				width: 50px;
+			}
+			.width-100{
+				width: 100px;
+			}
+			.width-200{
+				width: 200px;
+			}
 
 			.adding-control{
 				padding-top: 30px;

@@ -20,7 +20,7 @@
 			<td>{{$key+1}}</td>
 			<td>
 				@isset($pack->brand)
-					{{ $pack->brand->name }}
+					<?=$pack->brand->geticon();?>
 				@endisset
 			</td>
 			<td>{{ $pack->code }}</td>
