@@ -130,7 +130,7 @@ Route::delete('/optparentdel/{id}', 'OptionParentController@destroy')			->name('
 
 /*РОУТЫ ДЛЯ РЕДАКТИРОВАНИЯ ОПЦИЙ*/
 
-Route::get('/optionlist',			'OptionController@list')	->name('optionlist');
+Route::match(['get','post'],'/optionlist',			'OptionController@list')	->name('optionlist');
 
 Route::get('/optionadd',			'OptionController@add')		->name('optionadd');
 

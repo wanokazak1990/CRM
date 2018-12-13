@@ -12,6 +12,7 @@
 			<th>Первый взнос<br>(%)</th>
 			<th>Начало</th>
 			<th>Конец</th>
+			<th>Бренд</th>
 			<th>Модели</th>
 			<th></th>
 			<th></th>
@@ -26,6 +27,11 @@
 			<td>{{$kredit->contibution}}</td>
 			<td>{{date('d.m.Y',$kredit->day_in)}}</td>
 			<td>{{date('d.m.Y',$kredit->day_out)}}</td>
+			<td>
+				@isset($kredit->brand)
+					<?=$kredit->brand->getIcon();?>
+				@endisset
+			</td>
 			<td class="font-12">
 
 				@isset($kredit->model)

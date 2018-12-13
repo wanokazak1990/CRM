@@ -18,7 +18,7 @@ class TypeModelController extends Controller
 	{
 		$type = new type_model();
 		$list = $type->get();//получаю все типы
-		return view('brand.brandlist')//вывод вива списка типов
+		return view('typemodel.brandlist')//вывод вива списка типов
 			->with('list',$list)//список типов
 			->with('title','Список типов авто')//заголовок
 			->with(['addTitle'=>'Новый тип','route'=>'typemodeladd'])
@@ -29,17 +29,24 @@ class TypeModelController extends Controller
 	//Создание нового типа (вывод формы)
 	public function add()
 	{
-		return view('brand.brandadd')//вывод вива создания типа
-			->with('title','Новый тип');
+		return view('typemodel.brandadd')//вывод вива создания типа
+			->with('title','Новый тип')
+			->with('type',new type_model());
 	}
 
 	//Создание нового типа (запись данных из формы в бд)
-	public function put()
+	public function put(Request $request)
 	{
 		if(isset($_POST['submit']))//если нажат сабмит
 		{
-			$type = new type_model();
-			$type->create($_POST);//записываем данные из поста в модель и заливаем модель в БД 
+			$type = new type_model($request->input());
+			$type->save();
+			foreach ($request->file() as $key=>$file) {
+     			$name = $key.$type->id.'.'.pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+     			$type->icon = $name;
+     			$file->move(storage_path('app/public/typemodel/'), $name);
+            }
+            $type->update();
 		}
 		return redirect()->route('typemodellist');//перенаправляем на список типов (имя роута typemodellist)
 	}
@@ -49,19 +56,24 @@ class TypeModelController extends Controller
 	{
 		$type = new type_model();
 		$type = $type->find($id);//ищу тип по id
-		return view('brand.brandadd')//вывод вива
+		return view('typemodel.brandadd')//вывод вива
 			->with('title','Редактирование типа')//заголовок
-			->with('brand',$type);
+			->with('type',$type);
 	}
 
 	//Редактирование типа (запись данных из формы в бд)
-	public function update($id)
+	public function update(Request $request,$id)
 	{
 		if(isset($_POST['submit']))//если нажат сабмит
 		{
 			$type = new type_model();
 			$type = $type->find($id);//ищу тип по id
 			$type->name = $_POST['name'];//перезаписываю в модели тип имя тип из поста
+			foreach ($request->file() as $key=>$file) {
+     			$name = $key.$type->id.'.'.pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+     			$type->icon = $name;
+     			$file->move(storage_path('app/public/typemodel/'), $name);
+            }
 			$type->save();//пересохраняю модель в бд
 		}
 		return redirect()->route('typemodellist');//перенаправляем на список типов (имя роута countrylist)
@@ -72,7 +84,7 @@ class TypeModelController extends Controller
 	{
 		$type = new type_model();
 		$type = $type->find($id);//ищу тип по id
-		return view('brand.branddel')//вывод вива
+		return view('typemodel.branddel')//вывод вива
 			->with('title','Удаление типа')//заголовок
 			->with('brand',$type);
 	}
@@ -82,6 +94,8 @@ class TypeModelController extends Controller
 	{
 		if(isset($_POST['delete']))//если нажат делете
 		{
+			$type = type_model::find($id);
+			@unlink(storage_path('app/public/typemodel/'.$type->icon));
 			type_model::destroy($id);//удаляю жестко
 		}
 		return redirect()->route('typemodellist');//перенаправляем на список брендов (имя роута brandlist)

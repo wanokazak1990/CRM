@@ -50,7 +50,7 @@ return [
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
-            'strict' => true,
+            'strict' => false,//было тру, с ним не работал гроуп бай, поэтому поставил фолс
             'engine' => null,
         ],
 

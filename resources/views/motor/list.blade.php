@@ -6,7 +6,7 @@
 	@foreach($list as $key=>$motor)
 		<tr>
 			<td>{{$key+1}}</td>
-			<td>{{ $motor->brand->name }}</td>
+			<td><?= $motor->brand->getIcon(); ?></td>
 			<td>{{ $motor->type->name }}</td>
 			<td>{{ $motor->size }} л.</td>
 			<td>{{ $motor->power }} л.с.</td>

@@ -13,6 +13,20 @@
 			.pad-r-0{
 				padding-right: 0px !important;
 			}
+			.width-50{
+				width: 50px;
+			}
+			.width-100{
+				width: 100px;
+			}
+			.width-200{
+				width: 200px;
+			}
+
+			.adding-control{
+				padding-top: 30px;
+			}
+
 			table form{padding: 0px; margin: 0px;}
 			.avacars{font-size: 14px;}
 			.delete-button{background: transparent;border: 0px;padding: 0px;color:#f44;}
@@ -36,6 +50,10 @@
 			.exep div {padding: 0;}
 			.company-dop{display:none;position: absolute;top: 50px;left: 5%;width: 90%;min-height: 90vh;background: #eee;z-index: 100;box-shadow: 0 0 15px #000;border-radius:5px;}
 			.navbar{background: #ddd !important;border: 0px !important;}
+
+			.brand-span{display: inline-block;margin-right: 15px;}
+			.brand-span label{font-weight: normal;display: flex;align-items: center;}
+			.brand-span input{margin:0px !important;margin-right: 5px !important;display: inline-block;}
 		</style>
 	</head>
 

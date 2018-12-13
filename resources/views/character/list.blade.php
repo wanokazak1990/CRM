@@ -5,10 +5,18 @@
 <table class="table">
 	@foreach($list as $key => $char)
 	<tr>
-		<td>{{ $key + 1 }}</td>
+		<td class="width-50">{{ $key + 1 }}</td>
 		<td>{{ $char->name }}</td>	
-		<td><a href="{{ route($edit, array('id'=>$char->id)) }}">Изменить</a></td>	
-		<td><a href="{{ route($delete, array('id'=>$char->id)) }}">Удалить</a></td>	
+		<td class="width-50">
+			<a href="{{ route($edit, array('id'=>$char->id)) }}">
+				<i class=" glyphicon glyphicon-cog"></i>
+			</a>
+		</td>	
+		<td class="width-50">
+			<a href="{{ route($delete, array('id'=>$char->id)) }}">
+				<i class="text-danger glyphicon glyphicon-remove"></i>
+			</a>
+		</td>	
 	</tr>
 	@endforeach
 </table>

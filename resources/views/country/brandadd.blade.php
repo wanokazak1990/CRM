@@ -11,15 +11,13 @@
 			</div>
 
 			<div class="col-sm-2">
-				@isset($brand)
-				{{ Form::label('title','Иконка:*')}} 
-				{{ Form::file('icon') }}
-				@endisset
+				{{ Form::label('title','Флаг:*')}} 
+				{{ Form::file('flag') }}
 			</div>
 
 			<div class="col-sm-2">
-				@isset($brand->icon)
-					<?=$brand->getIcon(70);?>
+				@isset($brand->flag)
+					<?=$brand->getFlag(70);?>
 				@endisset
 			</div>
 

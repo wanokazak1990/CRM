@@ -15,4 +15,9 @@ class kredit extends Model
     {
     	return $this->hasMany('App\kredit_model','kredit_id','id');
     }
+
+    public function brand()
+    {
+    	return $this->hasOne('App\oa_brand','id','brand_id');
+    }
 }

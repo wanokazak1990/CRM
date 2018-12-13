@@ -8,7 +8,7 @@
 			<td>{{$key+1}}</td>
 			<td>
 				@isset($complect->brand)
-					{{ $complect->brand->name }}
+					<?=$complect->brand->getIcon();?>
 				@endisset
 			</td>
 			<td>

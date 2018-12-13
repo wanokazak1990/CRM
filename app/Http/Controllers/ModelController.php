@@ -18,7 +18,7 @@ class ModelController extends Controller
 {
     public function list()
     {
-    	$list = oa_model::get();
+    	$list = oa_model::orderBy('brand_id')->get();
     	return view('model.list')
     		->with('title','Список моделей')
     		->with('list',$list)
