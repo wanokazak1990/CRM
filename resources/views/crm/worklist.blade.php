@@ -26,7 +26,7 @@
 	<div class="tab-content container" style="width: 100%;">
 		<!-- Вкладка Журнал -->
 		<div class="tab-pane active" id="log" role="tabpanel" aria-labelledby="log-tab">
-			<table class="table table-bordered table-sm">
+			<table class="table table-bordered table-hover table-sm">
 				<thead>
 					<tr>
 						<th>Дата</th>
@@ -39,42 +39,17 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr class="text-danger">
-						<td>07.08.2017</td>
-						<td>10:30</td>
-						<td>Конта</td>
-						<td>Звонок</td>
-						<td>Николай</td>
-						<td>KAPTUR (HAH)</td>
-						<td>Данилейченко</td>
-					</tr>
-					<tr class="text-danger">
-						<td>08.08.2017</td>
-						<td>10:00</td>
-						<td>Конта</td>
-						<td>Тест-драйв</td>
-						<td>Александр</td>
-						<td>STEPWAY (46B)</td>
-						<td>Данилейченко</td>
-					</tr>
-					<tr class="text-success">
-						<td>08.08.2017</td>
-						<td>16:30</td>
-						<td>Задач</td>
-						<td>Контроль</td>
-						<td>Сменить выставку</td>
-						<td></td>
-						<td>Данилейченко</td>
-					</tr>
+					@foreach($traffics as $traffic)
 					<tr>
-						<td>11.08.2017</td>
-						<td>16:00</td>
-						<td>Конта</td>
-						<td>Встреча</td>
-						<td>Елена Сергеевна</td>
-						<td>DUSTER (79H)</td>
-						<td>Данилейченко</td>
+						<td>{{ date('d.m.Y', $traffic->action_date) }}</td>
+						<td>{{ date('H:i:s', $traffic->action_time) }}</td>
+						<td>{{ $traffic->traffic_type->name }}</td>
+						<td>{{ $traffic->assigned_action->name }}</td>
+						<td>{{ $traffic->client->name }}</td>
+						<td>{{ $traffic->model->name }}</td>
+						<td>{{ $traffic->manager->name }}</td>
 					</tr>
+					@endforeach
 				</tbody>
 			</table>
 		</div>

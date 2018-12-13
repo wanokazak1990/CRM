@@ -103,7 +103,6 @@
 							<th>Менеджер по сделке</th>
 							<th>Назначенное действие</th>
 							<th>Назначенная дата</th>
-							<th>Монитор назначенных событий</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -119,7 +118,6 @@
 								<td>{{ $traffic->manager->name }}</td>
 								<td>{{ $traffic->assigned_action->name }}</td>
 								<td>{{ date('d.m.Y', $traffic->action_date) }}  {{ date('H:i:s', $traffic->action_time) }}</td>
-								<td></td>
 								@endif
 							@endforeach
 						</tr>
