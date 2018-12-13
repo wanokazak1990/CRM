@@ -92,7 +92,40 @@
 			</div>
 			<!-- Контакты -->
 			<div class="tab-pane" id="contacts" role="tabpanel" aria-labelledby="contacts-tab">
-				<h3 align="center">Контакты</h3>
+				<table class="table table-bordered table-hover table-sm">
+					<thead>
+						<tr>
+							<th>№</th>
+							<th>Клиент</th>
+							<th>Телефон клиента</th>
+							<th>Email клиента</th>
+							<th>Интересующая модель</th>
+							<th>Менеджер по сделке</th>
+							<th>Назначенное действие</th>
+							<th>Назначенная дата</th>
+							<th>Монитор назначенных событий</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach($clients as $key => $client)
+						<tr>
+							<td>{{ $key + 1 }}</td>
+							<td>{{ $client->name }}</td>
+							<td>{{ $client->phone }}</td>
+							<td>{{ $client->email }}</td>
+							@foreach($traffics as $traffic)
+								@if($client->id == $traffic->client_id)
+								<td>{{ $traffic->model->name }}</td>
+								<td>{{ $traffic->manager->name }}</td>
+								<td>{{ $traffic->assigned_action->name }}</td>
+								<td>{{ date('d.m.Y', $traffic->action_date) }}  {{ date('H:i:s', $traffic->action_time) }}</td>
+								<td></td>
+								@endif
+							@endforeach
+						</tr>
+						@endforeach
+					</tbody>
+				</table>
 			</div>
 			<!-- Резервы -->
 			<div class="tab-pane" id="reserves" role="tabpanel" aria-labelledby="reserves-tab">
