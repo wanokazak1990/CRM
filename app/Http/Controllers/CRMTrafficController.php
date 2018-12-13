@@ -35,11 +35,6 @@ class CRMTrafficController extends Controller
     		$traffic->save();
 
     		return redirect()->route('crm');
-    		
-    		//$time = strtotime($request->action_time);
-    		
-    		//echo $time;
-    		//dump($request);
     	}
     }
 }

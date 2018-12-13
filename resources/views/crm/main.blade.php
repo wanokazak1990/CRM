@@ -4,7 +4,7 @@
 
 @section('main')
 <!-- Nav tabs -->
-		<ul class="nav nav-tabs nav-justified" id="myTab" role="tablist" style="width: 100%;">
+		<ul class="nav nav-tabs nav-justified" id="myTab" role="tablist" style="width: 100%; height: 42px;">
 		  <li class="nav-item">
 		    <a class="nav-link active" id="traffic-tab" data-toggle="tab" href="#traffic" role="tab" aria-controls="traffic" aria-selected="true">Трафик</a>
 		  </li>
@@ -38,7 +38,7 @@
 		</ul>
 
 		<!-- Icons panel -->
-		<div class="border" style="width: 100%;">
+		<div class="border" style="width: 100%; height: 40px;">
 			<button type="button" class="btn btn-light"><i class="fas fa-cog"></i></button>
 			<button type="button" class="btn btn-light"><i class="fas fa-search"></i></button>
 			<button type="button" class="btn btn-light"><i class="fas fa-car-side"></i></button>
@@ -52,10 +52,10 @@
 		</div>
 
 		<!-- Tab panes -->
-		<div class="tab-content " style="width: 100%;">
+		<div class="tab-content " style="width: 100%; height: calc(100% - 82px); overflow-x: auto;">
 			<!-- Трафик -->
 			<div class="tab-pane active" id="traffic" role="tabpanel" aria-labelledby="traffic-tab">
-				<table class="table table-bordered table-striped table-sm">
+				<table class="table table-bordered table-hover table-sm">
 					<thead>
 						<tr>
 							<th>№</th>
@@ -96,7 +96,11 @@
 			</div>
 			<!-- Резервы -->
 			<div class="tab-pane" id="reserves" role="tabpanel" aria-labelledby="reserves-tab">
-				<table class="table table-bordered table-striped table-sm">
+				<div class="input-group">
+					<span class="col-2 border-left">Количество: 3</span>
+					<span class="col-2 border-left">Сумма: 2 496 892 р.</span>
+				</div>
+				<table class="table table-bordered table-hover table-sm">
 					<thead>
 						<tr>
 							<th>Марка</th>
@@ -154,10 +158,6 @@
 						</tr>
 					</tbody>
 				</table>
-				<div>
-					<p>Количество: 3</p>
-					<p>Сумма: 2 496 892 р.</p>
-				</div>
 			</div>
 			<!-- Сделки -->
 			<div class="tab-pane" id="deals" role="tabpanel" aria-labelledby="deals-tab">
