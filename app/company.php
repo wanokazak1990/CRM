@@ -19,6 +19,12 @@ class company extends Model
     	return $this->hasMany('App\company_dop','company_id','id');
     }
 
+    public function getStatus()
+    {
+        $mas[0] = "Спрятана";
+        $mas[1] = "Открыта";
+        return $mas;
+    }
     public function getRazdels()
     {
     	$mas[1] = 'Скидка';

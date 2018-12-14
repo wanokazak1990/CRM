@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Session;
 use App\oa_complect;
 use App\oa_brand;
 use App\complect_color;
@@ -17,10 +18,26 @@ use App\pack;
 class ComplectController extends Controller
 {
     //
-    public function list()
+    public function list(Request $request, $url_get= array())
     {
-    	$list = oa_complect::paginate(20);
+        if($request->has('reset'))
+            return redirect()->route('complectlist');
+        $query = oa_complect::select('oa_complects.*')->with('motor')->with('brand')->with('model');
+
+        if($request->has('brand_id'))
+            $query->where('oa_complects.brand_id',$request->brand_id);
+        if($request->has('model_id'))
+            $query->where('oa_complects.model_id',$request->model_id);
+
+        $url_get = $request->except('page');
+    	$list = $query->paginate(20);
+
+        $mas['brands'] = oa_brand::pluck('name','id');
+        $mas['models'] = oa_model::pluck('name','id');
+
     	return view('complect.list')
+            ->with($mas)
+            ->with('url_get',$url_get)
     		->with('title','Список комплектаций')
     		->with('list',$list)
     		->with(['addTitle'=>'Новая комплектация','route'=>'complectadd'])
@@ -70,6 +87,7 @@ class ComplectController extends Controller
 
     public function edit($id)
     {
+        Session::put('prev_page',url()->previous());
     	$complect = oa_complect::find($id);//беру комплектацию по ид
     	$brands = oa_brand::pluck('name','id');//масив брендов ид -> название
     	$models = oa_model::where('brand_id',$complect->brand_id)->pluck('name','id');//массив моделей в зависимости от бренда комплектации ид_модели -> название модели
@@ -143,11 +161,12 @@ class ComplectController extends Controller
     			endforeach;
     		endif;
     	}
-    	return redirect()->route('complectlist');
+    	return redirect(Session::pull('prev_page','/complectlist'));
     }
 
     public function delete($id)
     {
+        Session::put('prev_page',url()->previous());
     	$complect = oa_complect::find($id);
     	return view('complect.del')
     		->with('title','Удалить комплектацию')
@@ -163,6 +182,6 @@ class ComplectController extends Controller
     		complect_pack::where('complect_id',$id)->delete();
     		oa_complect::destroy($id);
     	}
-    	return redirect()->route('complectlist');
+    	return redirect(Session::pull('prev_page','/complectlist'));
     }
 }

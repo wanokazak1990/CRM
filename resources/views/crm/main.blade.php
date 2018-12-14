@@ -4,15 +4,15 @@
 
 @section('main')
 <!-- Nav tabs -->
-		<ul class="nav nav-tabs nav-justified" id="myTab" role="tablist" style="width: 100%;">
+		<ul class="nav nav-tabs nav-justified" id="myTab" role="tablist" style="width: 100%; height: 42px;">
 		  <li class="nav-item">
-		    <a class="nav-link" id="traffic-tab" data-toggle="tab" href="#traffic" role="tab" aria-controls="traffic" aria-selected="true">Трафик</a>
+		    <a class="nav-link active" id="traffic-tab" data-toggle="tab" href="#traffic" role="tab" aria-controls="traffic" aria-selected="true">Трафик</a>
 		  </li>
 		  <li class="nav-item">
 		    <a class="nav-link" id="contacts-tab" data-toggle="tab" href="#contacts" role="tab" aria-controls="contacts" aria-selected="false">Контакты</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link active" id="reserves-tab" data-toggle="tab" href="#reserves" role="tab" aria-controls="reserves" aria-selected="false">Резервы</a>
+		    <a class="nav-link" id="reserves-tab" data-toggle="tab" href="#reserves" role="tab" aria-controls="reserves" aria-selected="false">Резервы</a>
 		  </li>
 		  <li class="nav-item">
 		    <a class="nav-link" id="deals-tab" data-toggle="tab" href="#deals" role="tab" aria-controls="deals" aria-selected="false">Сделки</a>
@@ -38,7 +38,7 @@
 		</ul>
 
 		<!-- Icons panel -->
-		<div class="border" style="width: 100%;">
+		<div class="border" style="width: 100%; height: 40px;">
 			<button type="button" class="btn btn-light"><i class="fas fa-cog"></i></button>
 			<button type="button" class="btn btn-light"><i class="fas fa-search"></i></button>
 			<button type="button" class="btn btn-light"><i class="fas fa-car-side"></i></button>
@@ -52,18 +52,86 @@
 		</div>
 
 		<!-- Tab panes -->
-		<div class="tab-content " style="width: 100%;">
+		<div class="tab-content " style="width: 100%; height: calc(100% - 82px); overflow-x: auto;">
 			<!-- Трафик -->
-			<div class="tab-pane" id="traffic" role="tabpanel" aria-labelledby="traffic-tab">
-				<h3 align="center">Трафик</h3>
+			<div class="tab-pane active" id="traffic" role="tabpanel" aria-labelledby="traffic-tab">
+				<table class="table table-bordered table-hover table-sm">
+					<thead>
+						<tr>
+							<th>№</th>
+							<th>Дата создания</th>
+							<th>Тип трафика</th>
+							<th>Интересующая модель</th>
+							<th>Клиент</th>
+							<th>Комментарий</th>
+							<th>Назначенный менеджер</th>
+							<th>Админ</th>
+							<th>Назначенное действие</th>
+							<th>Дата действия</th>
+							<th>Время действия</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach($traffics as $key => $traffic)
+						<tr>
+							<td>{{ $key+1 }}</td>
+							<td>{{ date('d.m.Y H:i:s', $traffic->creation_date) }}</td>
+							<td>{{ $traffic->traffic_type->name }}</td>
+							<td>{{ $traffic->model->name }}</td>
+							<td>{{ $traffic->client->name }}</td>
+							<td>{{ $traffic->comment }}</td>
+							<td>{{ $traffic->manager->name }}</td>
+							<td>{{ $traffic->admin->name }}</td>
+							<td>{{ $traffic->assigned_action->name }}</td>
+							<td>{{ date('d.m.Y', $traffic->action_date) }}</td>
+							<td>{{ date('H:i', $traffic->action_time) }}</td>
+						</tr>
+						@endforeach
+					</tbody>
+				</table>
 			</div>
 			<!-- Контакты -->
 			<div class="tab-pane" id="contacts" role="tabpanel" aria-labelledby="contacts-tab">
-				<h3 align="center">Контакты</h3>
+				<table class="table table-bordered table-hover table-sm">
+					<thead>
+						<tr>
+							<th>№</th>
+							<th>Клиент</th>
+							<th>Телефон клиента</th>
+							<th>Email клиента</th>
+							<th>Интересующая модель</th>
+							<th>Менеджер по сделке</th>
+							<th>Назначенное действие</th>
+							<th>Назначенная дата</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach($clients as $key => $client)
+						<tr>
+							<td>{{ $key + 1 }}</td>
+							<td>{{ $client->name }}</td>
+							<td>{{ $client->phone }}</td>
+							<td>{{ $client->email }}</td>
+							@foreach($traffics as $traffic)
+								@if($client->id == $traffic->client_id)
+								<td>{{ $traffic->model->name }}</td>
+								<td>{{ $traffic->manager->name }}</td>
+								<td>{{ $traffic->assigned_action->name }}</td>
+								<td>{{ date('d.m.Y', $traffic->action_date) }}  {{ date('H:i:s', $traffic->action_time) }}</td>
+								@endif
+							@endforeach
+						</tr>
+						@endforeach
+					</tbody>
+				</table>
 			</div>
 			<!-- Резервы -->
-			<div class="tab-pane active" id="reserves" role="tabpanel" aria-labelledby="reserves-tab">
-				<table class="table table-bordered table-sm">
+			<div class="tab-pane" id="reserves" role="tabpanel" aria-labelledby="reserves-tab">
+				<div class="input-group">
+					<span class="col-2 border-left">Количество: 3</span>
+					<span class="col-2 border-left">Сумма: 2 496 892 р.</span>
+				</div>
+				<table class="table table-bordered table-hover table-sm">
 					<thead>
 						<tr>
 							<th>Марка</th>
@@ -121,10 +189,6 @@
 						</tr>
 					</tbody>
 				</table>
-				<div>
-					<p>Количество: 3</p>
-					<p>Сумма: 2 496 892 р.</p>
-				</div>
 			</div>
 			<!-- Сделки -->
 			<div class="tab-pane" id="deals" role="tabpanel" aria-labelledby="deals-tab">

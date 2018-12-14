@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
+use Session;
 use App\pack;
 use App\oa_brand;
 use App\pack_option;
@@ -14,10 +16,28 @@ use App\complect_pack;
 class PackController extends Controller
 {
     //
-    public function list()
+    public function list(Request $request, $url_get = array(), $filter = false)
     {
-    	$pack = pack::paginate(20);
+        if($request->has('reset'))
+            return redirect()->route('packlist');
+
+        $query = pack::select(DB::raw('packs.*,avg(packs.id)'))->join('model_packs','model_packs.pack_id','=','packs.id');
+
+        if($request->has('code'))
+            $query->where('packs.code','LIKE',"%$request->code%");
+
+        if($request->has('brand_id'))
+            $query->where('packs.brand_id',$request->brand_id);
+    	
+        $pack = $query->groupBy('packs.id')->paginate(20);
+        $url_get = $request->except('page');
+
+        $mas['brands'] = oa_brand::pluck('name','id');
+        $mas['models'] = oa_model::pluck('name','id');
+
     	return view('pack.list')
+            ->with($mas)
+            ->with('url_get',$url_get)
     		->with('title','Список опций')
     		->with('list',$pack)
     		->with(['route'=>'packadd','addTitle'=>'Новая опция','delete'=>'packdelete','edit'=>'packedit']);
@@ -62,6 +82,7 @@ class PackController extends Controller
 
     public function edit($id)
     {
+        Session::put('prev_page',url()->previous());
     	$pack = pack::find($id);
     	$brands = oa_brand::pluck('name','id');
     	$model = oa_model::where('brand_id',$pack->brand_id)->get();
@@ -106,11 +127,12 @@ class PackController extends Controller
     			endforeach;
     		endif;
     	}
-    	return redirect()->route('packlist');
+    	return redirect(Session::pull('prev_page','/packlist'));
     }
 
     public function delete($id)
     {
+        Session::put('prev_page',url()->previous());
     	$pack = pack::find($id);
     	return view('pack.del')
     		->with('title','Удаление опции')
@@ -126,6 +148,6 @@ class PackController extends Controller
     		complect_pack::where('pack_id',$id)->delete();
     		pack_option::where('pack_id',$id)->delete();
     	}
-    	return redirect()->route('packlist');
+    	return redirect(Session::pull('prev_page','/packlist'));
     }
 }

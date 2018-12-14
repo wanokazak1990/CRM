@@ -4,6 +4,7 @@
 
 @section('right')
 	{!! Form::open(array('files'=>'true')) !!}
+	<div class="row">
 		<div class="col-sm-2">
 			{!! Form::label('title','Бренд:') !!}
 			{!! Form::select('brand_id',$brands,$complect->brand_id,['class'=>'form-control']) !!}			
@@ -37,7 +38,7 @@
 
 		<div class="col-sm-2">
 			{!! Form::label('title', 'Стоимость:') !!}
-			{!! Form::text('price', $complect->price, ['class' => 'form-control']) !!}
+			{!! Form::text('price', ($complect->price)?$complect->price:'', ['class' => 'form-control']) !!}
 		</div>
 		
 		<div class="clearfix"></div>
@@ -133,8 +134,16 @@
 		</div>
 		<!-- ----------------------------------------------------------------------- -->
 		
-		{!! Form::submit('Создать',	 ['class' => 'form-control','name'=>'submit']) !!}
-		{!! Form::submit('Отмена',	 ['class' => 'form-control','name'=>'cansel']) !!}
+		<div class="clearfix"></div>
 
+		<div class="adding-control"> 
+			<div class="col-sm-2">
+				{!! Form::submit('Создать',	 ['class' => 'form-control btn btn-primary','name'=>'submit']) !!}
+			</div>
+			<div class="col-sm-2"> 
+				{!! Form::submit('Отмена',	 ['class' => 'form-control btn btn-danger','name'=>'cansel']) !!}
+			</div>
+		</div>
+	</div>
 	{!! Form::close() !!}
 @endsection

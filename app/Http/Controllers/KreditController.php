@@ -111,7 +111,7 @@ class KreditController extends Controller
 
     public function destroy($id)
     {
-    	if($_POST['delete'])
+    	if(isset($_POST['delete']))
     	{
     		$kredit = kredit::find($id);
     		@unlink(storage_path('app/public/kredit/'.$kredit->banner));

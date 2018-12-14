@@ -24,33 +24,33 @@
 @show
 
 <!-- ОСНОВНОЙ КОНТЕНТ -->
-<section>
 <div id="main" class="container-fluid">
-	<div class="row">
-		<div class="col-12">
+	<div class="row" style="height: 100%; overflow-x: auto;">
+		<div class="col" style="">
 			@section('main')
-			
 			@show
 		</div>
 	</div>
 </div>
-</section>
 
 <!-- FOOTER -->
 <div id="footer" class="bg-info d-flex align-items-center">
 	<div class="container-fluid text-right text-white">
-		CRM Учет	
+		CRM "Учет"	
 	</div>	
 </div>
 <!-- /FOOTER -->
 
 <style>
+
 html {
 	height: 100%;
 }
 
-* html body {
+html,body {
 	height: 100%;
+	margin: 0;
+	padding: 0;
 }
 
 body {
@@ -59,7 +59,7 @@ body {
 }
 
 #main {
-	padding-bottom: 56px; 
+	height: calc(100% - 112px);
 	background-color: white; 
 	z-index: 0;
 }
@@ -70,8 +70,6 @@ body {
 }
 
 #footer {
-	position: absolute; 
-	bottom: 0; 
 	width: 100%;
 	height: 56px;
 	z-index: 1; 
