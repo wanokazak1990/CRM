@@ -117,7 +117,7 @@
 								<td>{{ $traffic->model->name }}</td>
 								<td>{{ $traffic->manager->name }}</td>
 								<td>{{ $traffic->assigned_action->name }}</td>
-								<td>{{ date('d.m.Y', $traffic->action_date) }}  {{ date('H:i:s', $traffic->action_time) }}</td>
+								<td>{{ date('d.m.Y', $traffic->action_date) }}  {{ date('H:i', $traffic->action_time) }}</td>
 								@endif
 							@endforeach
 						</tr>
