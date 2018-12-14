@@ -1,16 +1,25 @@
 @extends ('layout')
 
 @section('right')
-	<a href="{{ route($route) }}">{{ $addTitle }}</a>
+	
+	{{ Form::open(['method'=>'get','style'=>'padding-bottom:30px;']) }}
+		<div class="row">
+			<div class="col-sm-2">
+				<label>&nbsp</label>
+				<a class='form-control btn btn-danger' href="{{ route($route) }}">{{ $addTitle }}</a>
+			</div>
+		</div>
+	{{ Form::close() }}
+
 	<table class="table">
 	@foreach($list as $key=>$status)
 		<tr>
-			<td>{{$key+1}}</td>
+			<td class="width-50">{{$key+1}}</td>
 			<td>{{$status->name}}</td>
-			<td><a href="{{ route($edit,['id'=>$status->id]) }}">Изменить</a></td>
-			<td>
+			<td class="width-50"><a href="{{ route($edit,['id'=>$status->id]) }}"><i class="glyphicon glyphicon-cog"></i></a></td>
+			<td class="width-50">
 				@if($key!=0)
-				<a href="{{ route($delete,['id'=>$status->id]) }}">Удалить</a>
+				<a href="{{ route($delete,['id'=>$status->id]) }}"><i class="text-danger glyphicon glyphicon-remove"></i></a>
 				@endif
 			</td>
 		</tr>

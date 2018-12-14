@@ -204,6 +204,8 @@ Route::delete('/complectdel/{id}',	'ComplectController@destroy')	->name('complec
 
 Route::get('/carlist',			'CarController@list')		->name('carlist');
 
+Route::get('/carexport',		'CarController@export')		->name('carexport');
+
 Route::get('/caradd',			'CarController@add')		->name('caradd');
 
 Route::post('/caradd',			'CarController@put')		->name('caradd');

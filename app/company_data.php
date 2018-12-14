@@ -35,4 +35,33 @@ class company_data extends Model
         }
         return $mas;
     }
+
+    public function getCurrentModel()
+    {
+        return $this->hasOne('App\oa_model','id','model_id');
+    }
+
+    public function getCurrentComplect()
+    {
+        return $this->hasOne('App\oa_complect','id','complect_id');
+    }
+
+    public function getComplectName()
+    {
+        return $this->getCurrentComplect->name.' '.$this->getCurrentComplect->motor->getEasyName();
+    }
+
+    public function getCurrentTransmission()
+    {
+        return $this->hasOne('App\type_transmission','id','transmission_id');
+    }
+
+    public function getCurrentWheel()
+    {
+        return $this->hasOne('App\type_wheel','id','wheel_id');
+    }
+    public function getCurrentLocation()
+    {
+        return $this->hasOne('App\ava_loc','id','wheel_id');
+    }
 }

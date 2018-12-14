@@ -65,7 +65,7 @@
 						{!! Form::hidden('_method','delete') !!}
 						{!! Form::hidden('hidden','1') !!}
 						{!! Form::hidden('id',$trans->id) !!}
-						<button type="submit" class="delete-button">Удалить</button>
+						<button type="submit" class="delete-button"><i class="text-danger glyphicon glyphicon-remove"></i></button>
 					{!! Form::close() !!}
 				</td>
 			</tr>
@@ -84,7 +84,7 @@
 						{!! Form::hidden('_method','delete') !!}
 						{!! Form::hidden('hidden','2') !!}
 						{!! Form::hidden('id',$wheel->id) !!}
-						<button type="submit" class="delete-button">Удалить</button>
+						<button type="submit" class="delete-button"><i class="text-danger glyphicon glyphicon-remove"></i></button>
 					{!! Form::close() !!}
 				</td>
 			</tr>
@@ -104,7 +104,7 @@
 						{!! Form::hidden('_method','delete') !!}
 						{!! Form::hidden('hidden','3') !!}
 						{!! Form::hidden('id',$type->id) !!}
-						<button type="submit" class="delete-button">Удалить</button>
+						<button type="submit" class="delete-button"><i class="text-danger glyphicon glyphicon-remove"></i></button>
 					{!! Form::close() !!}
 				</td>
 			</tr>

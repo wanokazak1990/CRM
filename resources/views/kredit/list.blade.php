@@ -1,7 +1,16 @@
 @extends ('layout')
 
 @section('right')
-	<a href="{{ route($route) }}">{{ $addTitle }}</a>
+
+	{{ Form::open(['method'=>'get','style'=>'padding-bottom:30px;']) }}
+		<div class="row">
+			<div class="col-sm-2">
+				<label>&nbsp</label>
+				<a class='form-control btn btn-danger' href="{{ route($route) }}">{{ $addTitle }}</a>
+			</div>
+		</div>
+	{{ Form::close() }}
+	
 	<table class="table">
 		<tr>
 			<th>№</th>
@@ -23,7 +32,7 @@
 			<td>{{$kredit->name}}</td>
 			<td>{{$kredit->rate}}</td>
 			<td>{{$kredit->period}}</td>
-			<td>{{$kredit->pay}}</td>
+			<td>{{number_format($kredit->pay,0,'',' ')}}</td>
 			<td>{{$kredit->contibution}}</td>
 			<td>{{date('d.m.Y',$kredit->day_in)}}</td>
 			<td>{{date('d.m.Y',$kredit->day_out)}}</td>
@@ -40,8 +49,8 @@
 					@endforeach
 				@endisset
 			</td>
-			<td><a href="{{ route($edit,['id'=>$kredit->id]) }}">Изменить</a>
-			<td><a href="{{ route($delete,['id'=>$kredit->id]) }}">Удалить</a>
+			<td class="width-50"><a href="{{ route($edit,['id'=>$kredit->id]) }}"><i class="glyphicon glyphicon-cog"></i></a></td>
+			<td class="width-50"><a href="{{ route($delete,['id'=>$kredit->id]) }}"><i class="text-danger glyphicon glyphicon-remove"></i></a>
 		</tr>
 	@endforeach
 	</table>
