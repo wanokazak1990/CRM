@@ -117,7 +117,7 @@
 								<td>{{ $traffic->model->name }}</td>
 								<td>{{ $traffic->manager->name }}</td>
 								<td>{{ $traffic->assigned_action->name }}</td>
-								<td>{{ date('d.m.Y', $traffic->action_date) }}  {{ date('H:i:s', $traffic->action_time) }}</td>
+								<td>{{ date('d.m.Y', $traffic->action_date) }}  {{ date('H:i', $traffic->action_time) }}</td>
 								@endif
 							@endforeach
 						</tr>
@@ -128,64 +128,160 @@
 			<!-- Резервы -->
 			<div class="tab-pane" id="reserves" role="tabpanel" aria-labelledby="reserves-tab">
 				<div class="input-group">
-					<span class="col-2 border-left">Количество: 3</span>
-					<span class="col-2 border-left">Сумма: 2 496 892 р.</span>
+					<span class="col-2 border-left">Количество: <b>N</b></span>
+					<span class="col-2 border-left">Сумма: <b>SUM</b></span>
 				</div>
 				<table class="table table-bordered table-hover table-sm">
 					<thead>
-						<tr>
+						<tr style="white-space: nowrap;">
+							<th class="bg-warning"></th>
+							<th class="bg-warning">Этап сделки</th>
+							<th class="bg-warning">Статус ПТС</th>
+							<th class="bg-warning">Этап поставки</th>
+							<!-- ЛОГИСТ -->
+							<th>Маркер логиста</th>
+							<th>Оформитель заказа</th>
+							<th>Дата заказа в производство</th>
+							<th>Дата производства планируемая</th>
+							<th>Дата производства уточненная</th>
+							<th>Дата производства фактическая</th>
+							<th>Дата готовности к отгрузке</th>
+							<th>Локация цеха отгрузки</th>
+							<th>Дата отгрузки</th>
+							<th>Дата приемки на склад</th>
+							<th>Техник по приемке</th>
+							<th>Тип отгрузки</th>
+							<th>Расчетный закуп</th>
+							<th>Фактический закуп</th>
+							<th>Суммарная скидка в закупе</th>
+							<th>Скидка при отгрузке</th>
+							<th>Скидка при возмещении</th>
+							<th>Дата возмещения</th>
+							<th>Комментарий к цене закупа</th>
+							<th>Дата товарной накладной</th>
+							<th>Начало отсрочки платежа</th>
+							<th>Период отсрочки</th>
+							<th>Окончание отсрочки платежа</th>
+							<th>Дата оплаты ПТС</th>
+							<th>Дата прихода ПТС</th>
+							<!-- /ЛОГИСТ -->
+							<th class="bg-warning">Монитор состояния а/м</th>
+							<!-- ДРУГОЙ СОТРУДНИК -->
+							<th>Год</th>
 							<th>Марка</th>
 							<th>Модель</th>
-							<th>Год</th>
+							<th>Комплектация (расшифровка)</th>
+							<th>Опции (код)</th>
+							<th>Цвет (код)</th>
+							<th>Цвет (расшифровка)</th>
 							<th>VIN</th>
-							<th>Цвет</th>
-							<th>Опции</th>
-							<th>Цена</th>
-							<th>Аванс</th>
-							<th>Клиент</th>
-							<th>Телефон</th>
-							<th>Менеджер</th>
+							<th>Номер заказа</th>
+							<th>Цена а/м по прайс-листу</th>
+							<th>Цена опций по прайс-листу</th>
+							<th>Цена допов по заказ-наряду</th>
+							<th>Скидка на а/м</th>
+							<th>Цена продажи</th>
+							<!-- /ДРУГОЙ СОТРУДНИК -->
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td>Renault</td>
-							<td>LOGAN (46L)</td>
-							<td>2017</td>
-							<td>X7L4SREA457723060</td>
-							<td>RPL</td>
-							<td>PM</td>
-							<td>733 700р.</td>
-							<td>0р.</td>
+							<td><input type="checkbox"></td>
+							<td>Резерв >7 дн.</td>
+							<td>Оригинал</td>
+							<td>Отгружен</td>
+
+							<td></td>
+							<td></td>
+							<td>Июль</td>
+							<td>13.09.2018</td>
+							<td>13.09.2018</td>
+							<td>13.09.2018</td>
+							<td>05.11.2018</td>
+							<td>Тольятти</td>
+							<td>19.11.2018</td>
+							<td></td>
+							<td></td>
+							<td>ВТБ (22)</td>
+							<td>596806 р.</td>
+							<td>596806 р.</td>
+							<td>60000 р.</td>
+							<td>50000 р.</td>
+							<td>10000 р.</td>
+							<td></td>
+							<td></td>
+							<td>19.11.2018</td>
 							<td></td>
 							<td></td>
 							<td></td>
+							<td></td>
+							<td>23.11.2018</td>
+
+							<td>19.11.2018</td>
+
+							<td>2018</td>
+							<td>LADA</td>
+							<td>LARGUS</td>
+							<td>Norma Climate 1.6(87) 5MT 5 мест +Glonass</td>
+							<td>М</td>
+							<td>283</td>
+							<td>Темно-коричневый (кашемир)</td>
+							<td>XTAKS035LK1147405</td>
+							<td>1761948</td>
+							<td>622900 р.</td>
+							<td>12000 р.</td>
+							<td>0 р.</td>
+							<td>0 р.</td>
+							<td>634900 р.</td>
 						</tr>
 						<tr>
-							<td>Renault</td>
-							<td>DUSTER (79H)</td>
-							<td>2017</td>
-							<td>X7LHSRGAN57798929</td>
-							<td>369</td>
+							<td><input type="checkbox"></td>
+							<td>Свободный</td>
+							<td>Оригинал</td>
+							<td>Склад</td>
+
+							<td></td>
+							<td></td>
+							<td>Январь</td>
+							<td>Доп. квота</td>
+							<td>Доп. квота</td>
+							<td>21.03.2018</td>
+							<td></td>
+							<td>Тольятти</td>
+							<td>02.05.2018</td>
+							<td>05.05.2018</td>
+							<td>Кульчицкий</td>
+							<td>ВТБ (22)</td>
+							<td>679410 р.</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td>03.05.2018</td>
+							<td>03.05.2019</td>
+							<td>365</td>
+							<td>02.05.2020</td>
+							<td>23.04.2018</td>
+							<td>03.05.2018</td>
+
+							<td>225</td>
+
+							<td>2018</td>
+							<td>LADA</td>
+							<td>XRAY</td>
+							<td>Luxe Prestige 1.6(106) 5МТ</td>
 							<td>Нет</td>
-							<td>922 375р.</td>
-							<td>1р.</td>
-							<td>ФКУ ГБМСЭ РК МИНТРУДА РОССИИ</td>
-							<td>8 (904) 100-1917</td>
-							<td>Быков</td>
-						</tr>
-						<tr>
-							<td>Renault</td>
-							<td>STEPWAY (46B)</td>
-							<td>2017</td>
-							<td>X7L5SREAG58154872</td>
-							<td>RPL</td>
-							<td>PK5NVM, PBCH</td>
-							<td>840 817р.</td>
-							<td>10 000р.</td>
-							<td>Ваховский Игорь Павлович</td>
-							<td>8 (912) 946-1713</td>
-							<td>Гарус</td>
+							<td>221</td>
+							<td>Белый (ледниковый)</td>
+							<td>XTAGAB110J1099840</td>
+							<td>1560800</td>
+							<td>784900 р.</td>
+							<td>0 р.</td>
+							<td>4201 р.</td>
+							<td>74101 р.</td>
+							<td>715000 р.</td>
 						</tr>
 					</tbody>
 				</table>

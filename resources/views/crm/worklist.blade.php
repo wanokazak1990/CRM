@@ -62,35 +62,35 @@
 			{!! Form::open() !!}
 			{{ csrf_field() }}
 			<span class="h4">Тип трафика</span>
-			<div class="row">
+			<div class="row btn-group-toggle" data-toggle="buttons">
 				@foreach($traffic_types as $traffic)
-				<div class="col-3"><input type="radio" name="traffic_type" value="{{ $traffic->id }}"> {{ $traffic->name }}</div>
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="traffic_type" value="{{ $traffic->id }}" autocomplete="off"> {{ $traffic->name }}</div>
 				@endforeach
 			</div>
 			<hr>
 			
 			<span class="h4">Интересующая модель</span>
-			<div class="row">
+			<div class="row btn-group-toggle" data-toggle="buttons">
 				@foreach($models as $key => $model)
-				<div class="col-3"><input type="radio" name="model" value="{{ $key }}"> {{ $model }}</div>
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="model" value="{{ $key }}" autocomplete="off"> {{ $model }}</div>
 				@endforeach
 			</div>
 			<hr>
 
 			<span class="h4">Назначенный менеджер</span>
-			<div class="row">
+			<div class="row btn-group-toggle" data-toggle="buttons">
 				@foreach($users as $key => $user)
-				<div class="col-3"><input type="radio" name="manager" value="{{ $key }}"> {{ $user }}</div>
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="manager" value="{{ $key }}" autocomplete="off"> {{ $user }}</div>
 				@endforeach
 			</div>
 			<hr>
 
 			<span class="h4">Адрес клиента</span>
-			<div class="row">
-				<div class="col-3"><input type="radio" name="client_address" value="Неизвестно"> Неизвестно</div>
-				<div class="col-3"><input type="radio" name="client_address" value="Сыктывкар"> Сыктывкар</div>
-				<div class="col-3"><input type="radio" name="client_address" value="Республика"> Республика</div>
-				<div class="col-3"><input type="radio" name="client_address" value="Др. регион"> Др. регион</div>
+			<div class="row btn-group-toggle" data-toggle="buttons">
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Неизвестно"> Неизвестно</div>
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Сыктывкар"> Сыктывкар</div>
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Республика"> Республика</div>
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Др. регион"> Др. регион</div>
 			</div>
 			<hr>
 			
@@ -120,10 +120,10 @@
 
 			<div class="form-row">
 				<div class="col-6">
-					<input type="submit" name="traffic_submit" class="btn btn-outline-primary btn-block" value="Создать трафик">
+					<input type="submit" name="traffic_submit" class="btn btn-outline-info btn-block" value="Создать трафик">
 				</div>
 				<div class="col-6">
-					<button type="button" class="btn btn-outline-primary btn-block">Создать трафик и рабочий лист</button>
+					<button type="button" class="btn btn-outline-info btn-block">Создать трафик и рабочий лист</button>
 				</div>
 			</div>
 			{!! Form::close() !!}
