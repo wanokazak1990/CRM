@@ -1,7 +1,5 @@
 @extends('layout')
 
-
-
 @section('right')
 	<a href="{{ route($route) }}">{{ $addTitle }}</a>
 	<table class="table">
