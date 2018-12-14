@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="csrf-token" content="{{ csrf_token() }}">
-		<title>{{ $title }}</title>
+		<title>CMS - {{ $title }}</title>
 		<style>
 			.pad-0{
 				padding: 0px !important;
@@ -25,8 +25,17 @@
 
 			.adding-control{
 				padding-top: 30px;
+				padding-bottom: 100px;
 			}
-
+			.size-10{
+				font-size: 10px;
+			}
+			.size-25{
+				font-size: 25px;
+			}
+			.text-grey{
+				color: #dcdcdc;
+			}
 			table form{padding: 0px; margin: 0px;}
 			.avacars{font-size: 14px;}
 			.delete-button{background: transparent;border: 0px;padding: 0px;color:#f44;}

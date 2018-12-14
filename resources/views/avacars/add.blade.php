@@ -4,7 +4,7 @@
 
 @section('right')
 	{!! Form::open(array('files'=>'true')) !!}
-
+	<div class="row">
 		<div class="col-sm-2"> 
 			{!! Form::label('title','Бренд:') !!}
 			{!! Form::select('brand_id',$brands,$car->brand_id,['class'=>'form-control']) !!}
@@ -49,12 +49,12 @@
 
 		<div class="col-sm-2">
 			{{Form::label('title','Сборка:')}}
-			{{ Form::text('prodaction',$car->prodaction,['class'=>'form-control'])}}
+			{{ Form::text('prodaction',($car->prodaction)?date('d.m.Y',$car->prodaction):'',['class'=>'form-control calendar'])}}
 		</div>
 
 		<div class="col-sm-2">
 			{{Form::label('title','Стоимость доп.оборудования:')}}
-			{{ Form::text('dopprice',$car->dopprice,['class'=>'form-control'])}}
+			{{ Form::text('dopprice',($car->dopprice)?$car->dopprice:'',['class'=>'form-control'])}}
 		</div>
 
 		<div class="col-sm-12"><h3>Доступные цвета</h3></div>
@@ -86,7 +86,7 @@
 				@isset($packs)
 					@foreach($packs as $pack)
 					<tr>
-						<td>
+						<td style="padding: 0px;">
 							<input 
 								type="checkbox" 
 								name="packs[]" 
@@ -141,20 +141,23 @@
 								@endisset
 							>
 							{{$dop->name}}
+						</label>
 					</div>
 				@endforeach
 			@endisset
 		</div>
 
-		<div class="clearfix"></div><br><br><br>
+		<div class="clearfix"></div>
 
-		<div class="col-sm-2"> 
-		{!! Form::submit('Создать',	 ['class' => 'form-control','name'=>'submit']) !!}
+		<div class="adding-control">
+			<div class="col-sm-2"> 
+				{!! Form::submit('Создать',	 ['class' => 'form-control btn btn-primary','name'=>'submit']) !!}
+			</div>
+			
+			<div class="col-sm-2">
+				{!! Form::submit('Отмена',	 ['class' => 'form-control btn btn-danger','name'=>'cansel']) !!}
+			</div>
 		</div>
-		
-		<div class="col-sm-2">
-		{!! Form::submit('Отмена',	 ['class' => 'form-control','name'=>'cansel']) !!}
-		</div>
-
+	</div>
 	{!! Form::close() !!}
 @endsection

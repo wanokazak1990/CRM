@@ -34,11 +34,11 @@ class CompanyController extends Controller
 
     public function list()
     {
-    	$list = company::get();
+    	$list = company::with('exception')->get();
     	return view('company.list')
     		->with('list',$list)//список брендов
 			->with('title','Список акций')//заголовок
-			->with(['addTitle'=>'Новый акция','route'=>'companyadd'])
+			->with(['addTitle'=>'Новая акция','route'=>'companyadd'])
 			->with('edit','companyedit')
 			->with('delete','companydelete');
     }

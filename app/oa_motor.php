@@ -32,36 +32,56 @@ class oa_motor extends Model
 
     public function name()
     {
-    	$mas[] = $this->brand->name;
-    	$mas[] = $this->type->name;
-    	$mas[] = $this->size.' л.';
-    	$mas[] = '('.$this->power.' л.с.)';
-    	$mas[] = $this->valve.' кл.';
-    	$mas[] = $this->transmission->name;
-    	$mas[] = $this->wheel->name;
-    	return implode(' ',$mas);
+        if(isset($this->type) && isset($this->transmission) && isset($this->wheel)) :
+        	$mas[] = $this->brand->name;
+        	$mas[] = $this->type->name;
+        	$mas[] = $this->size.' л.';
+        	$mas[] = '('.$this->power.' л.с.)';
+        	$mas[] = $this->valve.' кл.';
+        	$mas[] = $this->transmission->name;
+        	$mas[] = $this->wheel->name;
+        	return implode(' ',$mas);
+        endif;
+        return 'Не полный мотор';
     }
 
     public function nameForSelect()
     {
-        $mas[] = $this->type->name;
-        $mas[] = $this->size.' л.';
-        $mas[] = '('.$this->power.' л.с.)';
-        $mas[] = $this->valve.' кл.';
-        $mas[] = $this->transmission->name;
-        $mas[] = $this->wheel->name;
-        $name = implode(' ', $mas);
-        return array('id'=>$this->id,'name'=>$name);
+        if(isset($this->type) && isset($this->transmission) && isset($this->wheel)) :
+            $mas[] = $this->type->name;
+            $mas[] = $this->size.' л.';
+            $mas[] = '('.$this->power.' л.с.)';
+            $mas[] = $this->valve.' кл.';
+            $mas[] = $this->transmission->name;
+            $mas[] = $this->wheel->name;
+            $name = implode(' ', $mas);
+            return array('id'=>$this->id,'name'=>$name);
+        endif;
     }
 
     public function forAdmin()
+    {   
+        if(isset($this->type) && isset($this->transmission) && isset($this->wheel)) :
+            $mas[] = $this->type->name;
+            $mas[] = $this->size.' л.';
+            $mas[] = '('.$this->power.' л.с.)';
+            $mas[] = $this->valve.' кл.';
+            $mas[] = $this->transmission->name;
+            $mas[] = $this->wheel->name;
+            return implode(' ',$mas);
+        endif;
+        return 'Не полный мотор';
+    }
+
+    public function getEasyName()
     {
-        $mas[] = $this->type->name;
-        $mas[] = $this->size.' л.';
-        $mas[] = '('.$this->power.' л.с.)';
-        $mas[] = $this->valve.' кл.';
-        $mas[] = $this->transmission->name;
-        $mas[] = $this->wheel->name;
-        return implode(' ',$mas);
+        if(isset($this->type) && isset($this->transmission) && isset($this->wheel)) :
+            $mas[] = $this->size;
+            $mas[] = '('.$this->power.' л.с.)';
+            $mas[] = $this->transmission->name;
+            $mas[] = $this->wheel->name;
+            return implode(' ',$mas);
+        endif;
+        return 'Не полный мотор';
     }
 }
