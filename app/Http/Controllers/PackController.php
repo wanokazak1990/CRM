@@ -28,7 +28,7 @@ class PackController extends Controller
 
         if($request->has('brand_id'))
             $query->where('packs.brand_id',$request->brand_id);
-    	
+    	//$pack = pack::paginate(300);
         $pack = $query->groupBy('packs.id')->paginate(20);
         $url_get = $request->except('page');
 

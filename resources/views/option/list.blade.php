@@ -47,7 +47,7 @@
 		</tr>
 	@foreach($list as $key=>$option)
 		<tr>
-			<td>{{(($list->currentPage()-1)*20)+$key+1}}</td>
+			<td>{{(($list->currentPage()-1)*$list->perPage())+$key+1}}</td>
 			<td style="width: 70%">{{$option->name}}</td>
 			<td>
 				@isset($option->type)
@@ -63,12 +63,12 @@
 					@endforeach
 				@endisset
 			</td>
-			<td>
+			<td class="width-50">
 				<a href="{{ route($edit,['id'=>$option->id]) }}" title="Редактировать">
 					<i class="glyphicon glyphicon-cog"></i>
 				</a>
 			</td>
-			<td>
+			<td  class="width-50">
 				<a href="{{ route($delete,['id'=>$option->id]) }}">
 					<i class="text-danger glyphicon glyphicon-remove"></i>
 				</a>

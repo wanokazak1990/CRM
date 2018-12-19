@@ -60,26 +60,31 @@ class ModelController extends Controller
             $model->save();
 
             $model_id = $model->id;
-                        
-            foreach ($request->color_id as $color) 
-            {
-                $model_color = new model_color();
-                $model_color->model_id = $model->id;
-                $model_color->color_id = $color;
-                $model_color->save();
-            }
-
-            foreach ($request->char as $key => $char) 
-            {
-                if (!empty($char))
+            if(is_array($request->color_id))
+            :        
+                foreach ($request->color_id as $color) 
                 {
-                    $model_character = new model_character();
-                    $model_character->model_id = $model_id;
-                    $model_character->character_id = $key;
-                    $model_character->value = $char;
-                    $model_character->save();
+                    $model_color = new model_color();
+                    $model_color->model_id = $model->id;
+                    $model_color->color_id = $color;
+                    $model_color->save();
                 }
-            }
+            endif;
+
+            if(is_array($request->char)) 
+            :
+                foreach ($request->char as $key => $char) 
+                {
+                    if (!empty($char))
+                    {
+                        $model_character = new model_character();
+                        $model_character->model_id = $model_id;
+                        $model_character->character_id = $key;
+                        $model_character->value = $char;
+                        $model_character->save();
+                    }
+                }
+            endif;
 
             return redirect()->route('modellist');
     	}
@@ -122,26 +127,32 @@ class ModelController extends Controller
             }
 
             model_color::where('model_id',$model->id)->delete();
-            foreach ($request->color_id as $color) 
-            {
-                $model_color = new model_color();
-                $model_color->model_id = $model->id;
-                $model_color->color_id = $color;
-                $model_color->save();
-            }
+            if(is_array($request->color_id))
+            :
+                foreach ($request->color_id as $color) 
+                {
+                    $model_color = new model_color();
+                    $model_color->model_id = $model->id;
+                    $model_color->color_id = $color;
+                    $model_color->save();
+                }
+            endif;
 
             model_character::where('model_id',$model->id)->delete();
-            foreach ($request->char as $key => $char) 
-            {
-                if (!empty($char))
+            if(is_array($request->char))
+            :
+                foreach ($request->char as $key => $char) 
                 {
-                    $model_character = new model_character();
-                    $model_character->model_id = $model->id;
-                    $model_character->character_id = $key;
-                    $model_character->value = $char;
-                    $model_character->save();
+                    if (!empty($char))
+                    {
+                        $model_character = new model_character();
+                        $model_character->model_id = $model->id;
+                        $model_character->character_id = $key;
+                        $model_character->value = $char;
+                        $model_character->save();
+                    }
                 }
-            }
+            endif;
 
             $model->update($request->input());
             return redirect()->route('modellist');

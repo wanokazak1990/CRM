@@ -42,6 +42,7 @@
 		</div>
 	{{Form::close() }}
 
+	<div class="col-sm-12">Нашлось: {{$list->total()}}</div>
 	<table class="table">
 		<tr>
 			<th>№</th>
@@ -57,19 +58,19 @@
 		</tr>
 	@foreach($list as $key=> $pack)
 		<tr>
-			<td class="width-50">{{$key+1}}</td>
+			<td class="width-50">{{(($list->currentPage()-1)*$list->perPage())+$key+1}}</td>
 			<td class="width-50">
 				@isset($pack->brand)
 					<?=$pack->brand->geticon();?>
 				@endisset
 			</td>
-			<td>{{ $pack->code }}</td>
-			<td>{{ $pack->name }}</td>
-			<td class="font-12">
+			<td class="width-150">{{ $pack->code }}</td>
+			<td class="width-200">{{ $pack->name }}</td>
+			<td class="font-12 width-150">
 				@isset($pack->model)
 					@foreach($pack->model as $model)
 						@isset($model->model)
-							{{$model->model->name}}
+							{{$model->model->name}}<br>
 						@endisset
 					@endforeach
 				@endisset

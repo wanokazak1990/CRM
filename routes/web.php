@@ -286,6 +286,8 @@ Route::delete('/kreditdel/{id}',	'KreditController@destroy')		->name('kreditdele
 
 Route::get('/companylist',			'CompanyController@list')		->name('companylist');
 
+Route::get('/companyexport',		'CompanyController@export')		->name('companyexport');
+
 Route::get('/companyadd',			'CompanyController@add')		->name('companyadd');
 
 Route::post('/companyadd',			'CompanyController@put')		->name('companyadd');
