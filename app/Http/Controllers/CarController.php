@@ -15,8 +15,36 @@ use App\oa_model;
 use App\pack;
 use App\oa_color;
 use App\oa_complect;
-
+use App\oa_option;
+use DB;
 use Excel;
+
+
+/*
+$all = avacar::get();
+foreach ($all as $key => $car) 
+{
+    if(strlen($car->prodaction)==4)
+    {
+        $day = mb_substr($car->prodaction, 0,2);
+        $month = mb_substr($car->prodaction, 2,4);
+        $year = $car->year;
+        $date = $day.'.'.$month.'.'.$year;
+        $date = strtotime($date);
+        $car->prodaction = $date;
+    } 
+    if(strlen($car->prodaction)==3)
+    {
+        $day = mb_substr($car->prodaction, 0,1); 
+        $month = mb_substr($car->prodaction, 1,3);
+        $year = $car->year;
+        $date = $day.'.'.$month.'.'.$year;
+        $date = strtotime($date);
+        $car->prodaction = $date;
+    }
+    $car->update();
+}
+*/
 
 class CarController extends Controller
 {
@@ -26,14 +54,24 @@ class CarController extends Controller
     //ЭКСПОРТ АВТОМОБИЛЕЙ
     public function export(Request $request)
     {
-        $query = avacar::select('avacars.*')
-            ->with('brand')
-            ->with('model')
-            ->with('complect')
-            ->with('status')
-            ->with('location')
-            ->with('packs')
-            ->with('dops');
+        
+
+        if(Session::has('option'))
+        {
+            $query = avacar::select(DB::raw('avacars.*,avg(_view_caroption.id)'));
+            $query->join('_view_caroption','_view_caroption.id','=','avacars.id');
+        }
+        else{
+            $query = avacar::select('avacars.*');
+        }
+            
+        $query  ->with('brand')
+                ->with('model')
+                ->with('complect')
+                ->with('status')
+                ->with('location')
+                ->with('packs')
+                ->with('dops');          
 
         if(Session::has('vin'))
             $query->where('avacars.vin','LIKE',"%Session::get('vin')%");
@@ -52,6 +90,14 @@ class CarController extends Controller
 
         if(Session::has('location_id'))
             $query->where('avacars.location_id',Session::get('location_id'));
+        
+        if(Session::has('option'))
+            $query->whereIn('_view_caroption.filter_order', Session::get('option'));
+        
+        $query->groupBy('avacars.id');
+
+        if(Session::has('option'))
+            $query->having(DB::raw('COUNT(_view_caroption.id)'),'=',count(Session::get('option')));
 
         $list = $query->get();
 
@@ -73,6 +119,12 @@ class CarController extends Controller
                     'Дата последнего изменения',
                 ));
                 foreach ($list as $key => $car) {
+                    $pack_str = '';
+                    if(isset($car->packs)):
+                        foreach($car->packs as $pack) :
+                            $pack_str .= $pack->pack->code.' ';
+                        endforeach;
+                    endif;
                     $sheet->row($key+2, array(
                         $key+1,
                         $car->vin,
@@ -80,13 +132,13 @@ class CarController extends Controller
                         $car->model->name,
                         $car->complect->name,
                         $car->complect->motor->forAdmin(),
-                        count($car->packs),
+                        $pack_str,
                         $car->status->name,
                         $car->location->name,
                         $car->year,
                         number_format($car->totalPrice(),0,'',' '),
-                        $car->created_at->format('d.m.Y'),
-                        $car->updated_at->format('d.m.Y')
+                        ($car->created_at)?$car->created_at->format('d.m.Y'):"n/a",
+                        ($car->updated_at)?$car->updated_at->format('d.m.Y'):"n/a"
                     ));
                 }
             });
@@ -108,14 +160,24 @@ class CarController extends Controller
         if(!empty($request->except('page')))
             $filter = true;
 
-    	$query = avacar::select('avacars.*')
-            ->with('brand')
-            ->with('model')
-            ->with('complect')
-            ->with('status')
-            ->with('location')
-            ->with('packs')
-            ->with('dops');
+    	
+
+        if($request->has('option'))
+        {
+            $query = avacar::select(DB::raw('avacars.*,avg(_view_caroption.id)'));
+            $query->join('_view_caroption','_view_caroption.id','=','avacars.id');
+        }
+        else{
+            $query = avacar::select('avacars.*');
+        }
+            
+        $query  ->with('brand')
+                ->with('model')
+                ->with('complect')
+                ->with('status')
+                ->with('location')
+                ->with('packs')
+                ->with('dops');          
 
         if($request->has('vin'))
             $query->where('avacars.vin','LIKE',"%$request->vin%");
@@ -134,8 +196,17 @@ class CarController extends Controller
 
         if($request->has('location_id'))
             $query->where('avacars.location_id',$request->location_id);
+        
+        if($request->has('option'))
+            $query->whereIn('_view_caroption.filter_order', $request->option);
+        
+        $query->groupBy('avacars.id');
+
+        if($request->has('option'))
+            $query->having(DB::raw('COUNT(_view_caroption.id)'),'=',count($request->option));
 
         $list = $query->paginate(20);
+
         $url_get = $request->except('page');
 
         $mas['brands'] = oa_brand::pluck('name','id');
@@ -144,6 +215,8 @@ class CarController extends Controller
         $mas['locations'] = ava_loc::pluck('name','id');
         $mas['statuses'] = ava_status::pluck('name','id');
 
+        $options_list = oa_option::orderBy('filter_order')->pluck('filtered','filter_order');
+        
         return view('avacars.list')
             ->with('filter',$filter)
             ->with($mas)
@@ -151,6 +224,7 @@ class CarController extends Controller
             ->with('title','Список автомобилей')
             ->with('list',$list)
             ->with(['addTitle'=>'Новый автомобиль','route'=>'caradd'])
+            ->with('options_list',$options_list)
             ->with(['edit'=>'caredit','delete'=>'cardelete']);
     }
 

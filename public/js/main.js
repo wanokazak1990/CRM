@@ -227,17 +227,17 @@ function getPacks(elem)
 			str += '<tbody>';
 			param.forEach(function(obj,i){
 				str += '<tr>';
-					str += '<td>';
+					str += '<td class="width-200 checkbox-td">';
 						str += '<input type="checkbox" name="packs[]" value="'+obj.id+'">'
 					
-						str += obj.name;
+						str += (obj.name)?obj.name:'';
 					str += '</td>';
 
-					str += '<td>';
+					str += '<td class="width-150">';
 						str += obj.code;
 					str += '</td>';
 
-					str += '<td>';
+					str += '<td class="width-200">';
 						str += obj.price+' руб.';
 					str += '</td>';
 
@@ -362,11 +362,30 @@ switch (url[1])
 			getPacks($(this));
 			getColor($(this));
 		});
+		$('body').on('click','.pack tr',function(){
+			var check = $(this).find('input');
+			if(check.prop("checked"))
+				check.removeAttr("checked");
+			else
+				check.attr("checked","checked");
+		})
 	break;
 
+	case 'complectedit':
+		alert("ДОДЕЛАТЬ JS ДЛЯ ЭТОЙ СТРАНИЦЫ");
+	break;
 	///////////////////////
 	//СОЗДАНИЕ АВТОМОБИЛЯ//
 	///////////////////////
+	case 'carlist':
+		$('body').on('click',' #option_check',function(){
+			$(".company-dop").css('display','block');
+		});
+		$('body').on('click','.close',function(){
+			$(".company-dop").css('display','none');
+		});
+	break;
+
 	case 'caradd':
 		$('select[name="brand_id"]').change(function(){
 			getModels($(this),'list');

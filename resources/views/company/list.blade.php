@@ -10,6 +10,11 @@
 				<label>&nbsp</label>
 				<a class='form-control btn btn-danger' href="{{ route($route) }}">{{ $addTitle }}</a>
 			</div>
+
+			<div class="col-sm-2 col-sm-offset-8">
+				<label>&nbsp</label>
+				{{ Form::submit('Экспорт',['class'=>'form-control btn btn-default','name'=>'export'])}}
+			</div>
 		</div>
 	{{ Form::close() }}
 

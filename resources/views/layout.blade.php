@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		@section('head')
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<title>CMS - {{ $title }}</title>
 		<style>
@@ -16,8 +17,14 @@
 			.width-50{
 				width: 50px;
 			}
+			.width-75{
+				width: 75px;
+			}
 			.width-100{
 				width: 100px;
+			}
+			.width-150{
+				width: 150px;
 			}
 			.width-200{
 				width: 200px;
@@ -26,6 +33,9 @@
 			.adding-control{
 				padding-top: 30px;
 				padding-bottom: 100px;
+			}
+			.size-9{
+				font-size: 9px;
 			}
 			.size-10{
 				font-size: 10px;
@@ -37,6 +47,8 @@
 				color: #dcdcdc;
 			}
 			table form{padding: 0px; margin: 0px;}
+			.checkbox-td{padding-left: 0px !important;}
+			.checkbox-td input{margin-right: 15px !important;display: inline-block;}
 			.avacars{font-size: 14px;}
 			.delete-button{background: transparent;border: 0px;padding: 0px;color:#f44;}
 			.active-menu{color:#a55;}
@@ -57,17 +69,19 @@
 			.font-14{font-size: 14px;}
 			.font-12{font-size: 12px;}
 			.exep div {padding: 0;}
-			.company-dop{display:none;position: absolute;top: 50px;left: 5%;width: 90%;min-height: 90vh;background: #eee;z-index: 100;box-shadow: 0 0 15px #000;border-radius:5px;}
+			.company-dop{display:none;position: absolute;top: 70px;left: 5%;width: 90%;min-height: 90vh;background: #fff;z-index: 100;box-shadow: 0 0 15px #000;border-radius:5px;z-index: 999}
 			.navbar{background: #ddd !important;border: 0px !important;}
 
 			.brand-span{display: inline-block;margin-right: 15px;}
 			.brand-span label{font-weight: normal;display: flex;align-items: center;}
 			.brand-span input{margin:0px !important;margin-right: 5px !important;display: inline-block;}
 		</style>
+		@show
 	</head>
 
 	<body>
 		<div id="app">
+			@section('content')
 	        <nav class="navbar navbar-default navbar-fixed-top">
 	            <div class="container-fluid">
 	                <div class="navbar-header">
@@ -124,7 +138,7 @@
 	            </div>
 	        </nav>
 
-	        @yield('content')
+	        @show
 	    </div>
 
 		<div class="col-sm-3 col-lg-2">
@@ -183,14 +197,14 @@
 			@show
 		</div>
 		
-
-		<script src="/js/jquery.js"></script>
-		<link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.min.css">
-		<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
-		<script src="/js/main.js"></script>
-		<script src="/js/jquery-ui.js"></script><!--http://api.jqueryui.com/datepicker/-->
-		<link href='/css/jquery-ui.css' rel='stylesheet' type='text/css'>
-		<script src="/js/calendar-ui.js"></script>
-		<!--script src="{{ asset('js/app.js') }}"></script-->
+		@section('scripts')
+			<script src="/js/jquery.js"></script>
+			<link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.min.css">
+			<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+			<script src="/js/main.js"></script>
+			<script src="/js/jquery-ui.js"></script><!--http://api.jqueryui.com/datepicker/-->
+			<link href='/css/jquery-ui.css' rel='stylesheet' type='text/css'>
+			<script src="/js/calendar-ui.js"></script>
+		@show
 	</body>
 </html>

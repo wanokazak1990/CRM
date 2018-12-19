@@ -35,10 +35,12 @@
 		</div>
 	{{Form::close() }}
 
+	<div class="col-sm-12">Нашлось: {{$list->total()}}</div>
+	
 	<table class="table">
 	@foreach($list as $key=>$complect)
 		<tr>
-			<td class="width-50">{{$key+1}}</td>
+			<td class="width-50">{{(($list->currentPage()-1)*$list->perPage())+$key+1}}</td>
 			<td class="width-50">
 				@isset($complect->brand)
 					<?=$complect->brand->getIcon();?>
