@@ -1,0 +1,80 @@
+html{
+	height: 100%;
+}
+html,body{
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+body{
+	min-height: 100%;
+	position: relative;
+}
+#main{
+	height: calc(100% - 112px);
+	background-color: white; 
+	z-index: 0;
+}
+#header{
+	height: 56px; 
+	padding-left: 16px;
+}
+#footer{
+	width: 100%;
+	height: 56px;
+	z-index: 1; 
+}
+/* Полупрозрачный блок, перекрывающий основной контент при открытии боковой панели */
+#disableContent{
+	position: fixed; 
+	width: 100%; 
+	height: 100%; 
+	background-color: gray; 
+	opacity: 0.25;
+	z-index: 2;
+	display: none;
+}
+/* Скрытая боковая панель */
+#hidden_panel{
+    position: fixed; /* положение */
+    overflow: auto; 
+    z-index: 3;
+    top: 0;
+    right: -50%; /* отступ справа */
+    background: white; /* цвет фона */
+    width: 50%; 
+    height: 100%; 
+
+    -webkit-transition-duration: 0.3s; /* анимационное выдвижение для всех браузеров*/
+    -moz-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+/* Стили основных вкладок */
+#crmTabs li a{
+	color: #888;
+	background-color: #eee;
+	border: 1px #ddd solid;
+}
+#crmTabs li .active{
+	color: #000;
+	background-color: #fff;
+	border: 1px #eee solid;
+}
+/* Стили вкладок в боковой панели */
+#hiddenTab li a{
+	color: #888;
+	background-color: #eee;
+	border: 1px #ddd solid;
+}
+#hiddenTab li .active{
+	color: #000;
+	background-color: #fff;
+	border: 1px #eee solid;
+}
+/* Убирает выделение кнопки/ссылки/... после клика */
+:focus{
+    outline-style: none;
+    outline-width: 0px !important;
+    outline-color: none !important;
+}

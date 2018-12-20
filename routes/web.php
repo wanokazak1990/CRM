@@ -356,3 +356,6 @@ Route::get('/crm', 'CRMMainController@main')->name('crm');
 
 // Добавление трафика
 Route::post('/crm', 'CRMTrafficController@put')->name('traffic');
+
+// CRM AJAX запросы
+Route::post('/getcurrentfields', 'CRMAjaxController@getCurrentFields')->name('getcurrentfields');

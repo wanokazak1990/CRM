@@ -9,9 +9,11 @@ use App\User;
 use App\crm_assigned_action;
 use App\crm_traffic;
 use App\crm_client;
+use App\crm_all_field;
 
 class CRMMainController extends Controller
 {
+    // Отображение главной (и единственной) страницы CRM 
     public function main()
     {
         // Записи Трафика для вкладки "Трафик"
@@ -28,6 +30,8 @@ class CRMMainController extends Controller
     	$users = User::pluck('name', 'id');
         // Список возможных назначенных действий. Выводится при создании нового трафика
     	$assigned_actions = crm_assigned_action::get();
+
+        $fieldlist = crm_all_field::get();
     	
     	return view('crm.main')
     		->with('title', 'CRM "Учет"')
@@ -36,6 +40,7 @@ class CRMMainController extends Controller
     		->with('models', $models)
     		->with('users', $users)
     		->with('assigned_actions', $assigned_actions)
-            ->with('clients', $clients);
+            ->with('clients', $clients)
+            ->with('fieldlist', $fieldlist);
     }
 }
