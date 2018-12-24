@@ -10,6 +10,16 @@
 			{!! Form::select('brand_id',$brands,$complect->brand_id,['class'=>'form-control']) !!}			
 		</div>
 
+		<div class="col-sm-2">
+			{!! Form::label('title','Статус:') !!}
+			{!! Form::select(
+					'status',
+					['Удалено полностью','Удалиться при обнулении','Активна'],
+					(!empty($complect->brand_id))?$complect->brand_id:'2',
+					['class'=>'form-control']) 
+			!!}			
+		</div>
+
 		<div class="clearfix"></div> 
 
 		<div class="col-sm-2">
@@ -47,22 +57,31 @@
 		<div class="color">
 			@isset($colors)
 				@foreach($colors as $color)
-					<div class="col-sm-2">
-						<div>{{ $color->name }} ({{ $color->rn_code }})</div>
-						<div style="border:1px solid #ccc;height:20px;background: {{ $color->web_code }}"></div>
+					<div class="col-sm-4">
 						<label>
-							<input 
-								type="checkbox" 
-								name="color_id[]" 
-								value="{{ $color->id }}"
-								<?php
-									if($installs['install_colors']->contains('color_id',$color->id))
-										echo "checked";
-								?>
-							> 
-							Использовать
+							<div class="">
+								<div class="col-sm-1 pad-0">
+									<input 
+										type="checkbox" 
+										name="color_id[]" 
+										value="{{ $color->id }}"
+										<?php
+											if($installs['install_colors']->contains('color_id',$color->id))
+												echo "checked";
+										?>
+									> 
+								</div>
+								<div class="col-sm-2">
+									<?=$color->getColorIcon();?>
+								</div>
+								<div class="col-sm-8 size-10" style="height: 30px;">
+									{{ $color->name }} ({{ $color->rn_code }})
+								</div>
+							</div>
 						</label>
 					</div>
+					
+					
 				@endforeach
 			@endisset
 		</div>
@@ -70,24 +89,45 @@
 		<div class="clearfix"></div>
 
 		<div class="col-sm-12"><h3>Оборудование</h3></div>
-		<div class="option">
+		<div class="option col-sm-12">
 			@isset($options)
-				@foreach($options as $option)
-					<div class="col-sm-3">
-						<label>
-							<input 
-								type='checkbox' 
-								name='pack_option[]' 
-								value='{{ $option->id }}'
-								<?php
-									if($installs['install_options']->contains('option_id',$option->id))
-										echo "checked";
-								?>
-							>
-							{{ $option->name }}
-						</label>
-					</div>
+				@foreach($options as $key=>$option)
+					@if($key == 0 )
+						<div class="">
+							<h4>{{App\option_parent::find($option->parent_id)->name}}</h4>
+						</div>
+						<div class="column">
+					@elseif($options[$key-1]->parent_id != $option->parent_id)
+						</div>
+						<div class="">
+							<h4>{{App\option_parent::find($option->parent_id)->name}}</h4>
+						</div>
+						<div class="column">
+					@endif
+							<label>
+								<input 
+									type='checkbox' 
+									name='pack_option[]' 
+									value='{{ $option->id }}'
+									<?php
+										if($installs['install_options']->contains('option_id',$option->id))
+											echo "checked";
+									?>
+								>
+								{{mb_strimwidth($option->name, 0, 40, "...")}}
+								@if(mb_strlen($option->name)>40)
+									<span 
+										style="float: right; margin-top: -15px;" 
+										class="glyphicon glyphicon-info-sign" 
+										data-toggle="tooltip" 
+										data-placement="top"
+										title="{{$option->name}}"
+									>
+									</span>
+								@endif
+							</label>
 				@endforeach
+						</div>
 			@endisset
 		</div>
 
@@ -99,7 +139,7 @@
 				@isset($packs)
 					@foreach($packs as $pack)
 					<tr>
-						<td>
+						<td class="width-200 checkbox-td">
 							<input 
 								type="checkbox" 
 								name="packs[]" 
@@ -112,15 +152,15 @@
 							{{ $pack->name }}
 						</td>
 
-						<td>
+						<td class="width-150">
 							{{ $pack->code }}
 						</td>
 
-						<td >
+						<td class="width-200">
 							{{ $pack->price }} руб.
 						</td>
 
-						<td >
+						<td class="font-12" >
 							@isset($pack->option)
 								@foreach($pack->option as $option)
 									{{ $option->option->name }}

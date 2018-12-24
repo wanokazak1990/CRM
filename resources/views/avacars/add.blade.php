@@ -124,26 +124,48 @@
 		<div class="col-sm-12">
 			<h3>Доп. оборудование</h3>
 		</div>
-		<div class="dop">
+		<div class="dop col-sm-12">
 			@isset($dops)
-				@foreach( $dops as $dop )
-					<div class="col-sm-3">
-						<label>
-							<input 
-								type="checkbox" 
-								name="dops[]" 
-								value="{{$dop->id}}"
+				@foreach( $dops as $id => $dop )
+					@if($id == 0)
+						<div class="">
+							<h4>{{App\option_parent::find($dop->parent_id)->name}}</h4>
+						</div>
+						<div class="column">
+					@elseif($dops[$id]->parent_id != $dops[$id-1]->parent_id)
+						</div>
+						<div class="">
+							<h4>{{App\option_parent::find($dop->parent_id)->name}}</h4>
+						</div>
+						<div class="column">
+					@endif
 
-								@isset($car->dops)
-									@if($car->dops->contains('dop_id',$dop->id))
-										{{'checked'}}
-									@endif
-								@endisset
-							>
-							{{$dop->name}}
-						</label>
-					</div>
+							<label>
+								<input 
+									type="checkbox" 
+									name="dops[]" 
+									value="{{$dop->id}}"
+
+									@isset($car->dops)
+										@if($car->dops->contains('dop_id',$dop->id))
+											{{'checked'}}
+										@endif
+									@endisset
+								>
+								{{mb_strimwidth($dop->name, 0, 40, "...")}}
+								@if(mb_strlen($dop->name)>40)
+									<span 
+										class="glyphicon glyphicon-info-sign" 
+										data-toggle="tooltip" 
+										data-placement="top"
+										title="{{$dop->name}}"
+									>
+									</span>
+								@endif
+							</label>
+					
 				@endforeach
+						</div>
 			@endisset
 		</div>
 

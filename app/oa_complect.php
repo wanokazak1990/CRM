@@ -35,4 +35,9 @@ class oa_complect extends Model
     {
     	return $this->hasOne('App\oa_motor','id','motor_id');
     }
+
+    public function complectCount()
+    {
+        return avacar::where('complect_id',$this->id)->count();
+    }
 }

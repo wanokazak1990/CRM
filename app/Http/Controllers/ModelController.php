@@ -18,13 +18,22 @@ class ModelController extends Controller
 {
     public function list()
     {
-    	$list = oa_model::orderBy('brand_id')->get();
+    	$list = oa_model::orderBy('brand_id')->orderBy('sort')->get();
+
+        $total = oa_model::count('id');
+        for($i=1;$i<=$total;$i++)
+        {
+            $count[$i] = $i;
+        }
+        $count[$total+1] = $total+1;
+
     	return view('model.list')
     		->with('title','Список моделей')
     		->with('list',$list)
     		->with(['addTitle'=>'Новая модель','route'=>'modeladd'])
 			->with('edit','modeledit')
-			->with('delete','modeldelete');
+			->with('delete','modeldelete')
+            ->with('count',$count);
 
     }
 

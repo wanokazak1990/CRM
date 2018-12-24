@@ -152,7 +152,7 @@
 		</tr>
 	@foreach($list as $key=> $car)
 		<tr>
-			<td>{{$key+1}}</td>
+			<td class="width-50">{{($list->currentPage()-1)*$list->perPage()+$key+1}}</td>
 			<td>{{$car->vin}}</td>
 			<td>
 				@isset($car->brand)

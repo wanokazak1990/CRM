@@ -36,4 +36,9 @@ class oa_model extends Model
 	{
 		return $this->hasMany('App\model_color','model_id','id');
 	}
+
+	public function modelCount()
+	{
+		return avacar::where('model_id',$this->id)->count();
+	}
 }

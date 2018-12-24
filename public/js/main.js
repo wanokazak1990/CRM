@@ -3,6 +3,14 @@ url = URI.split('/');
 
 //ЗАГРУЖАЮТСЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ВСЕГДА
 
+//АКТИВИРУЕМ ТУЛТИПЫ
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+})
+
+
+
+
 //выдать установленое значение ренджей лабелю
 $('input[type="range"]').each(function(){
 	setRange($(this));
@@ -17,6 +25,8 @@ function setRange(range)
 	var labtext = label.html().split(':');
 	label.html(labtext[0]+":"+range.val());
 }
+
+
 //Подсветка активных ссылок в меню
 $(".left-menu ul a").each(function(){
 	var origin = url[1];
@@ -30,8 +40,143 @@ $(".left-menu ul a").each(function(){
 		$(this).addClass('active-menu');
 		log(origin+' --- '+$(this).attr('href'))
 	}
-	
 })
+
+//Подсвечиваем выбранные пакеты
+$('.pack tr').each(function () {
+	var check = $(this).find('input');
+	if(check.prop("checked"))
+		$(this).addClass('green-tr');
+})
+
+$('.dop label').each(function(){
+	var check = $(this).find('input');
+	if(check.prop("checked"))
+		$(this).addClass('green-tr');
+})
+
+$('.option label').each(function(){
+	var check = $(this).find('input');
+	if(check.prop("checked"))
+		$(this).addClass('green-tr');
+})
+
+$(".model label").each(function(){
+	var check = $(this).find('input');
+	if(check.prop("checked"))
+		$(this).find("img").addClass('red-bg');
+})
+
+$(".color label").each(function(){
+	var check = $(this).find('input');
+	if(check.prop("checked"))
+		$(this).addClass('green-tr');
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//КЛИКИ ПО ИНПУТАМ ЭЛЕМЕНТАМ 
+$('body').on('click','.pack tr',function(){
+	var check = $(this).find('input');
+	if(check.prop("checked"))
+	{
+		check.removeAttr("checked");
+		$(this).removeClass('green-tr');
+	}
+	else
+	{
+		check.attr("checked","checked");
+		$(this).addClass('green-tr');
+	}
+});
+
+$('body').on('click','.dop label', function(){
+	var check = $(this).find('input');
+	if(!check.prop("checked"))
+	{
+		check.removeAttr("checked");
+		$(this).removeClass('green-tr');
+	}
+	else
+	{
+		check.attr("checked","checked");
+		$(this).addClass('green-tr');
+	}
+})
+
+$('body').on('click','.option label', function(){
+	var check = $(this).find('input');
+	if(!check.prop("checked"))
+	{
+		check.removeAttr("checked");
+		$(this).removeClass('green-tr');
+	}
+	else
+	{
+		check.attr("checked","checked");
+		$(this).addClass('green-tr');
+	}
+})
+
+$('body').on('click','.model label', function(){
+	var check = $(this).find('input');
+	if(!check.prop("checked"))
+	{
+		check.removeAttr("checked");
+		$(this).find("img").removeClass('red-bg');
+	}
+	else
+	{
+		check.attr("checked","checked");
+		$(this).find("img").addClass('red-bg');
+	}
+})
+
+$('body').on('click','.color label', function(){
+	var check = $(this).find('input');
+	if(!check.prop("checked"))
+	{
+		check.removeAttr("checked");
+		$(this).removeClass('green-tr');
+	}
+	else
+	{
+		check.attr("checked","checked");
+		$(this).addClass('green-tr');
+	}
+})
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -41,6 +186,17 @@ $(".left-menu ul a").each(function(){
 function log(param)
 {
 	console.log(param);
+}
+
+function getColorIcon(code)
+{
+	var mas = code.split(',');
+	var style = 'border:1px solid #ccc; width: 30px; height: 30px;';
+	if(mas.length>1)
+		style += ' background: linear-gradient('+mas[0]+' 50%,  '+mas[1]+' 50%)';
+	else
+		style += ' background: '+mas[0]+'"';
+	return '<div style="'+style+'"></div>';
 }
 
 function getColor(elem,type='check')//вернёт плитку цветов с инпутом 
@@ -78,11 +234,27 @@ function getColor(elem,type='check')//вернёт плитку цветов с 
         	param.forEach(function(obj,i){
         		if(type=='check')
         		{
-	        		str += '<div class="col-sm-2">';
+        			str += '<div class="col-sm-4">';
+						str += '<label>';
+							str += '<div class="">';
+								str += '<div class="col-sm-1 pad-0">'
+									str += '<input type="checkbox" name="color_id[]" value="'+obj.id+'"> ';
+								str += '</div>';
+								str += '<div class="col-sm-2">';
+									str += getColorIcon(obj.web_code);
+								str += '</div>';
+								str += '<div class="col-sm-8 size-10" style="height: 30px;">';
+									str += obj.name+' ('+obj.rn_code+')';
+								str += '</div>';
+							str += '</div>';
+						str += '</label>';
+					str += '</div>';
+
+	        		/*str += '<div class="col-sm-2">';
 	        			str += '<div>'+obj.name+' ('+obj.rn_code+')'+'</div>';
 	        			str += '<div style="border:1px solid #ccc;height:20px;background:'+obj.web_code+'"></div>';
 	        			str += '<label><input type="checkbox" name="color_id[]" value="'+obj.id+'"> Использовать</label>';
-	        		str += '</div>';
+	        		str += '</div>';*/
 	        	}
 	        	if(type=='radio')
         		{
@@ -110,7 +282,7 @@ function getOption(elem)
 		data: {'brand_id':brand_id},
 		success: function(param)
 		{
-			var objs = JSON.parse(param);
+			/*var objs = JSON.parse(param);
 			$('.option').html("");
 			var str = '';
 			objs.forEach(function(obj,i){
@@ -121,7 +293,9 @@ function getOption(elem)
 					str += '</label>';
 				str += '</div>';
 			});
-			$('.option').html(str);
+			$('.option').html(str);*/
+			$('.option').html(param);
+			$('[data-toggle="tooltip"]').tooltip();
 		},
 		error: function(msg){
             log('error');
@@ -144,12 +318,13 @@ function getModels(elem,type)
 			if(type=='string')
 			{
 				objs.forEach(function(obj,i){
-					str += '<span>';
-						str += '<label>';
+					str += '<div class="col-sm-1">';
+						str += '<label class="text-center">';
+							str += '<img src="/storage/images/'+obj.link+'/'+obj.alpha+'">'
 							str += "<input type='checkbox' name='pack_model[]' value='"+obj.id+"'>";
 							str += obj.name;
 						str += '</label>';
-					str += '</span>';
+					str += '</div>';
 				});
 				$('.model').html(str);
 			}
@@ -286,6 +461,34 @@ function getComplects(elem,pastle=0)
 
 
 
+function changeSort(obj_select)
+{
+	//obj_select - объект html
+	var formData = new FormData();
+	formData.append('sort',obj_select.val());
+	formData.append('data_id',obj_select.attr('data-id'));
+	formData.append('data_type',obj_select.attr('data-type'));
+	 $.ajax({
+        type: "POST",
+        url: '/changesort',
+        dataType : "json", 
+        cache: false,
+        contentType: false,
+        processData: false, 
+        data: formData,
+        headers: {
+	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    },
+		success: function(param){
+			alert('Установлен новый порядок сортировки');
+			location.reload(true);
+		},
+		error: function(param)
+		{
+			log('Не смог передать данные, объекта '+obj_select.name);
+		}
+	});
+}
 
 
 /////////////////////////////////////////////////////////////////////
@@ -301,6 +504,12 @@ switch (url[1])
 	////////////////////
 	//СОЗДАНИЕ МОДЕЛЕЙ//
 	////////////////////
+	case 'modellist' :
+		$('.sort').change(function(){
+			changeSort($(this));
+		})
+	break;
+
 	case 'modeladd':
 		$('select[name="brand_id"]').change(function(){
 			getColor($(this));
@@ -352,6 +561,14 @@ switch (url[1])
 	/////////////////////////
 	//СОЗДАНИЕ КОМПЛЕКТАЦИЙ//
 	/////////////////////////
+	case 'complectlist' :
+		$(".sort").keypress(function(e) {
+		    if(e.which == 13) {
+		        changeSort($(this));		        
+		    }
+		});
+	break;
+
 	case 'complectadd':
 		$('select[name="brand_id"]').change(function(){
 			getModels($(this),'list');
@@ -362,18 +579,24 @@ switch (url[1])
 			getPacks($(this));
 			getColor($(this));
 		});
-		$('body').on('click','.pack tr',function(){
-			var check = $(this).find('input');
-			if(check.prop("checked"))
-				check.removeAttr("checked");
-			else
-				check.attr("checked","checked");
-		})
 	break;
 
 	case 'complectedit':
-		alert("ДОДЕЛАТЬ JS ДЛЯ ЭТОЙ СТРАНИЦЫ");
+		$('select[name="brand_id"]').change(function(){
+			getModels($(this),'list');
+			getMotors($(this));
+			getOption($(this));
+			$(".pack").html("");
+			$(".color").html("");
+		});
+		$('select[name="model_id"]').change(function(){
+			getPacks($(this));
+			getColor($(this));
+		});
 	break;
+
+
+
 	///////////////////////
 	//СОЗДАНИЕ АВТОМОБИЛЯ//
 	///////////////////////

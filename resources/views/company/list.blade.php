@@ -35,7 +35,7 @@
 		</tr>
 	@foreach ($list as $key=>$item) 
 		<tr>
-			<td class="width-50" >{{$key+1}}</td>
+			<td class="width-50">{{$key+1}}</td>
 			
 	    	<td style="white-space: nowrap;">{{ $item->name }}</td>
 	    	<td class="width-50">

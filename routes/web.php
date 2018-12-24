@@ -20,6 +20,8 @@ Route::get('/', function () {
 
 Route::post('/getcolor',		'AjaxController@getcolor')			->name('getcolor');
 
+Route::post('/changesort',		'AjaxController@changesort')			->name('changesort');
+
 Route::get('/getoption',		'AjaxController@getoption')			->name('getoption');
 
 Route::get('/getmodels',		'AjaxController@getmodels')			->name('getmodels');

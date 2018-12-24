@@ -12,6 +12,7 @@ use App\type_transmission;
 use App\type_wheel;
 use App\pack;
 use App\oa_complect;
+use App\option_parent;
 
 class AjaxController extends Controller
 {
@@ -41,22 +42,60 @@ class AjaxController extends Controller
     	echo json_encode($colorlist);
     }
 
-    public function getOption(Request $request)
+    public function getOption(Request $request,$str='')
     {
     	$option = new oa_option();
     	$optionlist = $option
 			    		->select('oa_options.id','oa_options.name','oa_options.parent_id')
 			    		->join('option_brands','option_brands.option_id','=','oa_options.id')
 			    		->where('brand_id',$request->brand_id)
-			    		->orderBy('oa_options.parent_id', 'desc')
+			    		->orderBy('oa_options.parent_id')
+			    		->orderBy('oa_options.name')
 			    		->get();
-    	echo json_encode($optionlist);
+		foreach ($optionlist as $key => $option) 
+		{
+			if($key==0)
+			{
+				$str .= "<div>";
+					$str .= '<h4>'.option_parent::find($option->parent_id)->name.'</h4>';
+				$str .= "</div>";
+				$str .= '<div class="column">';
+			}
+			elseif($optionlist[$key-1]->parent_id != $option->parent_id)
+			{
+				$str .= "</div>";
+				$str .= '<div class="">';
+					$str .= '<h4>'.option_parent::find($option->parent_id)->name.'</h4>';
+				$str .= '</div>';
+				$str .= '<div class="column">';
+			}
+			$str .= '<label>';
+				$str .= '<input 
+					type="checkbox" 
+					name="pack_option[]" 
+					value="'.$option->id.'"
+				>';
+				$str .= mb_strimwidth($option->name, 0, 40, "...");
+				if(mb_strlen($option->name)>40)
+				{
+					$str .= '<span 
+						style="float: right; margin-top: -13px;" 
+						class="glyphicon glyphicon-info-sign" 
+						data-toggle="tooltip" 
+						data-placement="left"
+						title="'.$option->name.'"
+					>
+					</span>';
+				}
+			$str .= '</label>';
+		}
+    	echo ($str);
     }
 
     public function getmodels(Request $request)
     {
     	$model = new oa_model();
-    	$modellist = $model->where('brand_id',$request->brand_id)->get();
+    	$modellist = $model->where('brand_id',$request->brand_id)->orderBy('sort')->get();
     	echo json_encode($modellist);
     }
 
@@ -108,5 +147,21 @@ class AjaxController extends Controller
     			$complects[$key]->fullname = $complect->name.' '.$complect->motor->nameForSelect()['name'] ;
     	}
     	echo json_encode($complects);
+    }
+
+
+
+    public function changesort(Request $request)
+    {
+    	if($request->has('data_type'))
+    		if($request->has('data_id'))
+    		{
+	    		$obj = $request->data_type::find($request->data_id); 
+	    		$obj->sort = $request->sort;
+	    		echo $obj->update(); 	
+	    		return;
+    		}
+    	echo "0";
+    	return;
     }
 }
