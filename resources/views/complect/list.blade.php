@@ -39,8 +39,14 @@
 	
 	<table class="table">
 	@foreach($list as $key=>$complect)
-		<tr>
-			<td class="width-50">{{(($list->currentPage()-1)*$list->perPage())+$key+1}}</td>
+		<tr style="color: <?=($complect->status<2)?'#cdcdcd;':'#333';?>">
+			<td class="width-50">
+				@if($complect->status>1)
+					{{(($list->currentPage()-1)*$list->perPage())+$key+1}}
+				@else
+					n/a
+				@endif
+			</td>
 			<td class="width-50">
 				@isset($complect->brand)
 					<?=$complect->brand->getIcon();?>
@@ -60,6 +66,21 @@
 				@isset($complect->motor)
 					{{ $complect->motor->name() }}
 				@endisset
+			</td>
+
+			<td class="width-50 
+				@if($complect->complectCount()==0)
+					danger
+				@elseif($complect->complectCount()>0 && $complect->complectCount()<5)
+					info
+				@else
+					success
+				@endif
+				text-center"> {{$complect->complectCount()}}
+			</td>
+			
+			<td class="width-50">	
+				{{Form::text('sort',$complect->sort,['class'=>'form-control sort','data-id'=>$complect->id, 'data-type'=>get_class($complect)])}}
 			</td>
 
 			<td class="width-50">

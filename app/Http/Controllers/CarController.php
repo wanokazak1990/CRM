@@ -150,36 +150,34 @@ class CarController extends Controller
     //
     //СПИСОК АВТОМОБИЛЕЙ С ФИЛЬТРОМ
     public function list(Request $request, $url_get = array(),$filter = false)
-    {
-        if($request->has('reset'))
-            return redirect()->route('carlist');
+    {        
+        if($request->has('reset'))//Если ресет 
+            return redirect()->route('carlist');//то перенаправляем на эту же страницу но без параметров фильтрации
 
-        if($request->has('export'))
-            return redirect()->route('carexport')->with($request->all());
+        if($request->has('export'))//если экспорт
+            return redirect()->route('carexport')->with($request->all());//то перенаправляем на страницу экспорта, сохраняем в сессию гет-параметры
 
-        if(!empty($request->except('page')))
-            $filter = true;
+        if(!empty($request->except('page')))//если в гет есть какой либо параметр кроме пэйдж
+            $filter = true;//тозначит фильтр используется
 
-    	
-
-        if($request->has('option'))
+        if($request->has('option'))//если в фильтре выбраны оборудование
         {
-            $query = avacar::select(DB::raw('avacars.*,avg(_view_caroption.id)'));
-            $query->join('_view_caroption','_view_caroption.id','=','avacars.id');
+            $query = avacar::select(DB::raw('avacars.*,avg(_view_caroption.id)'));//готовим жирный запрос
+            $query->join('_view_caroption','_view_caroption.id','=','avacars.id');//присоеденяем скуль_вив с оборудованием машины
         }
-        else{
-            $query = avacar::select('avacars.*');
+        else{//иначе
+            $query = avacar::select('avacars.*');//просто тащим всё из таблицы машин
         }
-            
-        $query  ->with('brand')
-                ->with('model')
-                ->with('complect')
-                ->with('status')
-                ->with('location')
-                ->with('packs')
-                ->with('dops');          
+        //жадные запросы
+        $query  ->with('brand')//получить модель бренд
+                ->with('model')//модель модель
+                ->with('complect')//модель комплектации
+                ->with('status')//модель статуса
+                ->with('location')//модель поставки
+                ->with('packs')//набор моделей установленных пакетов
+                ->with('dops');//набор моделей допов
 
-        if($request->has('vin'))
+        if($request->has('vin'))//если фильтр вин не пуст
             $query->where('avacars.vin','LIKE',"%$request->vin%");
 
         if($request->has('brand_id'))
@@ -234,7 +232,7 @@ class CarController extends Controller
         $brands = oa_brand::pluck('name','id');
         $status = ava_status::pluck('name','id');
         $loc = ava_loc::pluck('name','id');
-        $dops = oa_dop::get();
+        $dops = oa_dop::orderBy('parent_id')->orderBy('name')->get();
         return view('avacars.add')
             ->with('title','Новый автомобиль')
             ->with('car',$car)
@@ -288,7 +286,7 @@ class CarController extends Controller
         $brands = oa_brand::pluck('name','id');
         $status = ava_status::pluck('name','id');
         $loc = ava_loc::pluck('name','id');
-        $dops = oa_dop::get();
+        $dops = oa_dop::orderBy('parent_id')->orderBy('name')->get();
         $packs = pack::select('packs.*')
             ->join('complect_packs','complect_packs.pack_id','=','packs.id')
             ->where('complect_packs.complect_id',$car->complect_id)
@@ -367,7 +365,7 @@ class CarController extends Controller
     {
         if(isset($_POST['delete']))
         {
-            avacar::destroy($id);
+            avacar::destroy($id);            
             ava_pack::where('avacar_id',$id)->delete();
             ava_dop::where('avacar_id',$id)->delete();
         }

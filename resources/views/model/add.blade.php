@@ -67,29 +67,30 @@
 				<div class="col-sm-12"><h3>Палитра цветов</h3></div>
 				<div class="color">
 				@foreach($model->colorBybrand as $color )
-					<div class="col-sm-2">
-						<div>{{ $color->name }} ({{ $color->rn_code }})</div>
-						<div style="border:1px solid #ccc;height:20px;background: {{ $color->web_code }}"></div>
+					<div class="col-sm-4">
 						<label>
-							<input 
-								type="checkbox" 
-								name="color_id[]" 
-								value="{{ $color->id }}"
-								<?php
-									if(isset($model->colorBymodel))
-										if($model->colorBymodel->contains('color_id',$color->id))
-										{
-											echo "checked";
-										}
-										else
-										{
-											echo "";
-										}
-									else
-										echo "";
-								?>
-							> 
-							Использовать
+							<div class="">
+								<div class="col-sm-1 pad-0">
+									<input 
+										type="checkbox" 
+										name="color_id[]" 
+										value="{{ $color->id }}"
+										<?php
+											if(isset($model->colorBymodel))
+												if($model->colorBymodel->contains('color_id',$color->id))
+												{
+													echo "checked";
+												}
+										?>
+									> 
+								</div>
+								<div class="col-sm-2">
+									<?=$color->getColorIcon();?>
+								</div>
+								<div class="col-sm-8 size-10" style="height: 30px;">
+									{{ $color->name }} ({{ $color->rn_code }})
+								</div>
+							</div>
 						</label>
 					</div>
 				@endforeach
