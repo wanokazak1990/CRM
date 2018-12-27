@@ -21,4 +21,9 @@ class crm_client extends Model
     ];
     
     public $timestamps = false;
+
+    public function traffic()
+    {
+        return $this->belongsTo('App\crm_traffic','id','client_id');
+    }
 }

@@ -365,9 +365,24 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+
+
+
 /* CRM */
 
+// Главная страница
 Route::get('/crm', 'CRMMainController@main')->name('crm');
 
+// Сохранить настройку отображения таблицы
+Route::post('/crm/savesetting', 'CRMMainController@saveSetting')->name('savesetting');
+// Сделать настройку активной
+Route::get('/crm/setactive/{id}', 'CRMMainController@setActive')->name('setactive');
+
+// CRM Трафик
 // Добавление трафика
 Route::post('/crm', 'CRMTrafficController@put')->name('traffic');
+
+// CRM AJAX запросы
+Route::post('/getcurrentfields', 'CRMAjaxController@getCurrentFields')->name('getcurrentfields');
+
+Route::post('/getcurrentsettings', 'CRMAjaxController@getCurrentSettings')->name('getcurrentsettings');
