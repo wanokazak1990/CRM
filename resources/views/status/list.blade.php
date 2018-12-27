@@ -18,9 +18,9 @@
 			<td>{{$status->name}}</td>
 			<td class="width-50"><a href="{{ route($edit,['id'=>$status->id]) }}"><i class="glyphicon glyphicon-cog"></i></a></td>
 			<td class="width-50">
-				@if($key!=0)
-				<a href="{{ route($delete,['id'=>$status->id]) }}"><i class="text-danger glyphicon glyphicon-remove"></i></a>
-				@endif
+				<a class="{{($key>3)?'':'disabled'}}" href="{{ route($delete,['id'=>$status->id]) }}">
+					<i class="{{($key>3)?'text-danger':'disabled'}} glyphicon glyphicon-remove"></i>
+				</a>
 			</td>
 		</tr>
 	@endforeach

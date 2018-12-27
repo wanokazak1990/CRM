@@ -8,7 +8,7 @@ class oa_model extends Model
 {
     //
     protected $fillable = array(
-    	'brand_id','name','link','banner','icon','alpha','slogan','text','type_id','country_id','label','sort'
+    	'brand_id','name','link','banner','icon','alpha','slogan','text','type_id','country_id','label','sort','status'
     );
     public $timestamps = false;
 

@@ -5,56 +5,108 @@
 @section('right')
 	{!! Form::open(array('files'=>'true')) !!}
 	<div class="row">
-		<div class="col-sm-2"> 
-			{!! Form::label('title','Бренд:') !!}
-			{!! Form::select('brand_id',$brands,$car->brand_id,['class'=>'form-control']) !!}
+		<div class="col-sm-4">
+			<div class="row">
+				<div class="col-sm-6"> 
+					{!! Form::label('title','Бренд:') !!}
+					{!! Form::select('brand_id',$brands,$car->brand_id,['class'=>'form-control']) !!}
+				</div>
+
+				<div class="col-sm-6">
+					{{Form::label('title','VIN:')}}
+					{{ Form::text('vin',$car->vin,['class'=>'form-control'])}}
+				</div>
+
+				<!-- ----------------------------------------------------------------------- -->
+				
+				<div class="clearfix"></div>
+
+				<div class="col-sm-6">
+					{!! Form::label('title','Модель:') !!}
+					{!! Form::select('model_id', isset($models)?$models:[] ,$car->model_id,['class'=>'form-control model']) !!}
+				</div>
+
+				<div class="col-sm-6">
+					{!! Form::label('title','Комплектация:') !!}
+					{!! Form::select('complect_id', isset($complects)?$complects:[] ,$car->complect_id,['class'=>'form-control complect']) !!}
+				</div>
+
+				<div class="clearfix"></div>
+
+				<div class="col-sm-6">
+					{!! Form::label('title','Статус:') !!}
+					{!! Form::select('status_id', isset($status)?$status:[] ,$car->status_id,['class'=>'form-control']) !!}
+				</div>
+
+				<div class="col-sm-6">
+					{!! Form::label('title','Поставка:') !!}
+					{!! Form::select('location_id', isset($loc)?$loc:[] ,$car->location_id,['class'=>'form-control']) !!}
+				</div>
+
+				<div class="clearfix"></div>
+
+				
+
+				<div class="col-sm-6">
+					{{Form::label('title','Год выпуска:')}}
+					{{ Form::select('year',$car->getYearArray(),$car->year,['class'=>'form-control'])}}
+				</div>
+
+				<div class="col-sm-6">
+					{{Form::label('title','Сборка:')}}
+					{{ Form::text('prodaction',($car->prodaction)?date('d.m.Y',$car->prodaction):'',['class'=>'form-control calendar'])}}
+				</div>
+
+				<div class="clearfix"></div>
+
+				<div class="col-sm-6">
+					{{Form::label('title','Стоимость доп.оборудования:')}}
+					{{ Form::text('dopprice',($car->dopprice)?$car->dopprice:'',['class'=>'form-control'])}}
+				</div>
+			</div>
 		</div>
-		<!-- ----------------------------------------------------------------------- -->
-		
-		<div class="clearfix"></div>
 
-		<div class="col-sm-2">
-			{!! Form::label('title','Модель:') !!}
-			{!! Form::select('model_id', isset($models)?$models:[] ,$car->model_id,['class'=>'form-control model']) !!}
+		<div class="col-sm-4">
+
 		</div>
 
-		<div class="col-sm-2">
-			{!! Form::label('title','Комплектация:') !!}
-			{!! Form::select('complect_id', isset($complects)?$complects:[] ,$car->complect_id,['class'=>'form-control complect']) !!}
-		</div>
-
-		<div class="clearfix"></div>
-
-		<div class="col-sm-2">
-			{!! Form::label('title','Статус:') !!}
-			{!! Form::select('status_id', isset($status)?$status:[] ,$car->status_id,['class'=>'form-control']) !!}
-		</div>
-
-		<div class="col-sm-2">
-			{!! Form::label('title','Поставка:') !!}
-			{!! Form::select('location_id', isset($loc)?$loc:[] ,$car->location_id,['class'=>'form-control']) !!}
-		</div>
-
-		<div class="clearfix"></div>
-
-		<div class="col-sm-2">
-			{{Form::label('title','VIN:')}}
-			{{ Form::text('vin',$car->vin,['class'=>'form-control'])}}
-		</div>
-
-		<div class="col-sm-2">
-			{{Form::label('title','Год выпуска:')}}
-			{{ Form::select('year',$car->getYearArray(),$car->year,['class'=>'form-control'])}}
-		</div>
-
-		<div class="col-sm-2">
-			{{Form::label('title','Сборка:')}}
-			{{ Form::text('prodaction',($car->prodaction)?date('d.m.Y',$car->prodaction):'',['class'=>'form-control calendar'])}}
-		</div>
-
-		<div class="col-sm-2">
-			{{Form::label('title','Стоимость доп.оборудования:')}}
-			{{ Form::text('dopprice',($car->dopprice)?$car->dopprice:'',['class'=>'form-control'])}}
+		<div class="col-sm-3" id="car-price" >
+			<div class="fixed-count-price" style="width: inherit;">
+				<div class="row">
+					<div class="col-sm-5">
+						<img src="" id="car-img" style="width: 80%;">
+						<div style="padding: 10px;">
+							<span id='car-brand'></span>
+							<span id='car-model'></span>
+							<div id='car-complect' class="size-12" style="white-space: nowrap;"></div>
+						</div>
+					</div>
+					<div class="col-sm-7">
+						<table class="table" style="margin-bottom: 0px;">
+							<tr>
+								<td class="width-100">Цена базы: </td>
+								<td class="width-100 text-right" id="car-base">0</td>
+								<td class="width-50"> руб.</td>
+							</tr>
+							<tr>
+								<td>Цена опций: </td>
+								<td class="width-100 text-right" id="car-option">0</td>
+								<td> руб.</td>
+							</tr>
+							<tr>
+								<td>Цена допов: </td>
+								<td class="width-100 text-right" id="car-dop"> 0 </td>
+								<td> руб.</td>
+							</tr>
+							<tr>
+								<td>Цена всего: </td>
+								<td class="width-100 text-right" id="car-total">0</td>
+								<td> руб.</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<div class="col-sm-12"><h3>Доступные цвета</h3></div>
