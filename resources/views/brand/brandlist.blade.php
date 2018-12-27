@@ -1,7 +1,5 @@
 @extends('layout')
 
-
-
 @section('right')
 
 	{{ Form::open(['method'=>'get','style'=>'padding-bottom:30px;']) }}

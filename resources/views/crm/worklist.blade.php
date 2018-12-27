@@ -1,8 +1,8 @@
 @section('worklist')
 <div id="hidden_panel" class="container border-left border-info">
 <div class="row">
-	<!-- Nav tabs -->
-	<ul class="nav nav-tabs nav-justified" id="hiddenTab" role="tablist" style="width: 100%;">
+	<!-- Вкладки боковой панели -->
+	<ul class="nav nav-tabs nav-justified bg-info" id="hiddenTab" role="tablist" style="width: 100%;">
 		<li class="nav-item">
 			<a class="nav-link active" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="true">Журнал</a>
 		</li>
@@ -17,13 +17,13 @@
 		</li>
 	</ul>
 
-	<!-- Icons panel -->
+	<!-- Панель иконок -->
 	<div class="border" style="width: 100%;">
 		<button id="closing" type="button" class="btn btn-light"><i class="fas fa-arrow-circle-right"></i></button>			
 	</div>
 
-	<!-- Tab panes -->
-	<div class="tab-content container" style="width: 100%;">
+	<!-- Контент вкладок -->
+	<div class="tab-content container" style="width: 100%; padding-left: 0; padding-right: 0;">
 		<!-- Вкладка Журнал -->
 		<div class="tab-pane active" id="log" role="tabpanel" aria-labelledby="log-tab">
 			<table class="table table-bordered table-hover table-sm">
@@ -55,42 +55,42 @@
 		</div>
 		<!-- Вкладка Лист трафика -->
 		<div class="tab-pane" id="trafficList" role="tabpanel" aria-labelledby="trafficList-tab">
-			<div class="row justify-content-between">
+			<div class="">
 				<span class="h3">Трафик №138</span>
-				<span class="h3">05 января 2018</span>
+				<span class="h3" style="float: right;">05 января 2018</span>
 			</div>
 			{!! Form::open() !!}
 			{{ csrf_field() }}
 			<span class="h4">Тип трафика</span>
-			<div class="row">
+			<div class="input-group btn-group-toggle" data-toggle="buttons">
 				@foreach($traffic_types as $traffic)
-				<div class="col-3"><input type="radio" name="traffic_type" value="{{ $traffic->id }}"> {{ $traffic->name }}</div>
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="traffic_type" value="{{ $traffic->id }}" autocomplete="off"> {{ $traffic->name }}</div>
 				@endforeach
 			</div>
 			<hr>
 			
 			<span class="h4">Интересующая модель</span>
-			<div class="row">
+			<div class="input-group btn-group-toggle" data-toggle="buttons">
 				@foreach($models as $key => $model)
-				<div class="col-3"><input type="radio" name="model" value="{{ $key }}"> {{ $model }}</div>
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="model" value="{{ $key }}" autocomplete="off"> {{ $model }}</div>
 				@endforeach
 			</div>
 			<hr>
 
 			<span class="h4">Назначенный менеджер</span>
-			<div class="row">
+			<div class="input-group btn-group-toggle" data-toggle="buttons">
 				@foreach($users as $key => $user)
-				<div class="col-3"><input type="radio" name="manager" value="{{ $key }}"> {{ $user }}</div>
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="manager" value="{{ $key }}" autocomplete="off"> {{ $user }}</div>
 				@endforeach
 			</div>
 			<hr>
 
 			<span class="h4">Адрес клиента</span>
-			<div class="row">
-				<div class="col-3"><input type="radio" name="client_address" value="Неизвестно"> Неизвестно</div>
-				<div class="col-3"><input type="radio" name="client_address" value="Сыктывкар"> Сыктывкар</div>
-				<div class="col-3"><input type="radio" name="client_address" value="Республика"> Республика</div>
-				<div class="col-3"><input type="radio" name="client_address" value="Др. регион"> Др. регион</div>
+			<div class="input-group btn-group-toggle" data-toggle="buttons">
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Неизвестно"> Неизвестно</div>
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Сыктывкар"> Сыктывкар</div>
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Республика"> Республика</div>
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Др. регион"> Др. регион</div>
 			</div>
 			<hr>
 			
@@ -118,12 +118,12 @@
 			<textarea name="comment" class="form-control" cols="3" style="resize: none;" placeholder="Введите комментарий"></textarea>
 			<hr>
 
-			<div class="form-row">
+			<div class="input-group">
 				<div class="col-6">
-					<input type="submit" name="traffic_submit" class="btn btn-outline-primary btn-block" value="Создать трафик">
+					<input type="submit" name="traffic_submit" class="btn btn-outline-info btn-block" value="Создать трафик">
 				</div>
 				<div class="col-6">
-					<button type="button" class="btn btn-outline-primary btn-block">Создать трафик и рабочий лист</button>
+					<button type="button" class="btn btn-outline-info btn-block">Создать трафик и рабочий лист</button>
 				</div>
 			</div>
 			{!! Form::close() !!}
