@@ -37,7 +37,7 @@ class MotorController extends Controller
         if($request->has('wheel_id'))
             $query->where('wheel_id',$request->wheel_id);
     	
-        $list = $query->get();
+        $list = $query->orderBy('brand_id')->orderBy('type_id')->orderBy('size')->orderBy('power')->get();
     	
         return view('motor.list')
             ->with($mas)

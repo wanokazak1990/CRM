@@ -18,7 +18,7 @@ class ModelController extends Controller
 {
     public function list()
     {
-    	$list = oa_model::orderBy('brand_id')->orderBy('sort')->get();
+    	$list = oa_model::orderBy('brand_id')->orderBy('status',' DESC')->orderBy('sort')->get();
 
         $total = oa_model::count('id');
         for($i=1;$i<=$total;$i++)
@@ -164,6 +164,7 @@ class ModelController extends Controller
             endif;
 
             $model->update($request->input());
+
             return redirect()->route('modellist');
     	}
     	return redirect()->route('modellist');
@@ -184,10 +185,12 @@ class ModelController extends Controller
     	{
             $model = new oa_model();
             $model = $model->find($id);
-            File::deleteDirectory(storage_path('app/public/images/'.$model->link));
+            /*File::deleteDirectory(storage_path('app/public/images/'.$model->link));
     		oa_model::destroy($id);
             model_color::where('model_id',$id)->delete();
-            model_character::where('model_id',$id)->delete();
+            model_character::where('model_id',$id)->delete();*/
+            $model->status = 0;
+            $model->update();
     	}
     	return redirect()->route('modellist');
     }

@@ -1,6 +1,40 @@
 var URI = document.location.pathname;
 url = URI.split('/');
 
+
+
+
+function number_format(number,decimals,dec_point,thousands_sep)
+{
+	var i,j,kw,kd,km;
+	if(isNaN(decimals=Math.abs(decimals))){
+		decimals=2;
+	}
+
+	if(dec_point==undefined){
+		dec_point=",";
+	}
+	
+	if(thousands_sep==undefined){
+		thousands_sep=".";
+	}
+
+	i=parseInt(number=(+number||0).toFixed(decimals))+"";
+	
+	if((j=i.length)>3){
+		j=j%3;
+	}
+	else{
+		j=0;
+	}
+
+	km=(j?i.substr(0,j)+thousands_sep:"");
+	kw=i.substr(j).replace(/(\d{3})(?=\d)/g,"$1"+thousands_sep);
+	kd=(decimals?dec_point+Math.abs(number-i).toFixed(decimals).replace(/-/,0).slice(2):"");
+	return km+kw+kd;
+}
+
+
 //ЗАГРУЖАЮТСЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ВСЕГДА
 
 //АКТИВИРУЕМ ТУЛТИПЫ
@@ -38,7 +72,7 @@ $(".left-menu ul a").each(function(){
 	origin = '/'+origin.slice(0,-4)+current+'list';
 	if($(this).attr('href').indexOf(origin) + 1) {
 		$(this).addClass('active-menu');
-		log(origin+' --- '+$(this).attr('href'))
+		//log(origin+' --- '+$(this).attr('href'))
 	}
 })
 
@@ -100,15 +134,17 @@ $('body').on('click','.pack tr',function(){
 	var check = $(this).find('input');
 	if(check.prop("checked"))
 	{
-		check.removeAttr("checked");
+		check.attr("checked",false);
 		$(this).removeClass('green-tr');
 	}
 	else
 	{
-		check.attr("checked","checked");
+		check.attr("checked",true);
 		$(this).addClass('green-tr');
 	}
 });
+
+
 
 $('body').on('click','.dop label', function(){
 	var check = $(this).find('input');
@@ -199,6 +235,11 @@ function getColorIcon(code)
 	return '<div style="'+style+'"></div>';
 }
 
+
+
+
+
+
 function getColor(elem,type='check')//вернёт плитку цветов с инпутом 
 {
 	var formData = new FormData();
@@ -249,12 +290,6 @@ function getColor(elem,type='check')//вернёт плитку цветов с 
 							str += '</div>';
 						str += '</label>';
 					str += '</div>';
-
-	        		/*str += '<div class="col-sm-2">';
-	        			str += '<div>'+obj.name+' ('+obj.rn_code+')'+'</div>';
-	        			str += '<div style="border:1px solid #ccc;height:20px;background:'+obj.web_code+'"></div>';
-	        			str += '<label><input type="checkbox" name="color_id[]" value="'+obj.id+'"> Использовать</label>';
-	        		str += '</div>';*/
 	        	}
 	        	if(type=='radio')
         		{
@@ -273,6 +308,17 @@ function getColor(elem,type='check')//вернёт плитку цветов с 
     });
 }
 
+
+
+
+
+
+
+
+
+
+
+
 function getOption(elem)
 {
 	var brand_id = elem.val();
@@ -282,18 +328,6 @@ function getOption(elem)
 		data: {'brand_id':brand_id},
 		success: function(param)
 		{
-			/*var objs = JSON.parse(param);
-			$('.option').html("");
-			var str = '';
-			objs.forEach(function(obj,i){
-				str += '<div class="col-sm-3">';
-					str += '<label>';
-						str += "<input type='checkbox' name='pack_option[]' value='"+obj.id+"'>";
-						str += obj.name;
-					str += '</label>';
-				str += '</div>';
-			});
-			$('.option').html(str);*/
 			$('.option').html(param);
 			$('[data-toggle="tooltip"]').tooltip();
 		},
@@ -345,6 +379,13 @@ function getModels(elem,type)
 	})
 }
 
+
+
+
+
+
+
+
 function getMotors(elem)
 {
 	var brand_id = elem.val();
@@ -370,6 +411,12 @@ function getMotors(elem)
 		}
 	})
 }
+
+
+
+
+
+
 
 function getPacks(elem)
 {
@@ -431,6 +478,15 @@ function getPacks(elem)
 	})
 }
 
+
+
+
+
+
+
+
+
+
 function getComplects(elem,pastle=0)
 {	log(pastle)
 	var model_id = elem.val();
@@ -461,9 +517,14 @@ function getComplects(elem,pastle=0)
 
 
 
+
+
+
+
+
+
 function changeSort(obj_select)
 {
-	//obj_select - объект html
 	var formData = new FormData();
 	formData.append('sort',obj_select.val());
 	formData.append('data_id',obj_select.attr('data-id'));
@@ -489,6 +550,174 @@ function changeSort(obj_select)
 		}
 	});
 }
+
+
+
+
+
+function complectPrice(id)
+{
+	var result = '';
+	var formData = new FormData();
+	formData.append('id',id);
+	$.ajax({
+		async: false,
+        type: "POST",
+        url: '/complectprice',
+        dataType : "json", 
+        cache: false,
+        contentType: false,
+        processData: false, 
+        data: formData,
+        headers: {
+	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    },
+		success: function(param){
+			$("#car-complect").html(param.name+' ('+param.code+')');
+			$("#car-base").html(number_format(param.price,0,'',' '));
+			$("#car-option").html(0);
+			result = param.price;
+		},
+		error: function(param)
+		{
+			log('Не смог получить стоимость комплектации id = '+id);
+		}
+	});
+	return result;
+}
+
+
+
+function packprice(id)
+{
+	var result = '';
+	var formData = new FormData();
+	formData.append('id',id);
+	$.ajax({
+		async: false,
+        type: "POST",
+        url: '/packprice',
+        dataType : "json", 
+        cache: false,
+        contentType: false,
+        processData: false, 
+        data: formData,
+        headers: {
+	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    },
+		success: function(param){
+			$("#car-option").html(number_format(param,0,'',' '));
+			result = param;
+		},
+		error: function(param)
+		{
+			log('Не смог получить стоимость пакетов id = '+id);
+		}
+	});
+	return result;
+}
+
+
+function dopPrice(val)
+{
+	$("#car-dop").html(number_format(val,0,'',' '));
+	return val;
+}
+
+function brandObj(val)
+{
+	var result = '';
+	var formData = new FormData();
+	formData.append('id',val);
+	$.ajax({
+		async: false,
+        type: "POST",
+        url: '/getbrand',
+        dataType : "json", 
+        cache: false,
+        contentType: false,
+        processData: false, 
+        data: formData,
+        headers: {
+	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    },
+		success: function(param){
+			$("#car-brand").html(param.name);
+			result = param;
+		},
+		error: function(param)
+		{
+			log('Не смог получить стоимость пакетов id = '+val);
+		}
+	});
+	return result;
+}
+
+function modelObj(val)
+{
+	var result = '';
+	var formData = new FormData();
+	formData.append('id',val);
+	$.ajax({
+		async: false,
+        type: "POST",
+        url: '/getmodel',
+        dataType : "json", 
+        cache: false,
+        contentType: false,
+        processData: false, 
+        data: formData,
+        headers: {
+	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    },
+		success: function(param){
+			$("#car-model").html(param.name);
+			$("#car-img").attr('src','/storage/images/'+param.link+'/'+param.alpha);
+			result = param;
+		},
+		error: function(param)
+		{
+			log('Не смог получить стоимость пакетов id = '+val);
+		}
+	});
+	return result;
+}
+
+function colorObj(val)
+{
+	var result = '';
+	var formData = new FormData();
+	formData.append('color_id',val);
+	$.ajax({
+		async: false,
+        type: "POST",
+        url: '/getcolor',
+        dataType : "json", 
+        cache: false,
+        contentType: false,
+        processData: false, 
+        data: formData,
+        headers: {
+	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    },
+		success: function(param){
+			$("#car-img").css('background',param.web_code);
+			result = param;
+		},
+		error: function(param)
+		{
+			log('Не смог получить стоимость пакетов id = '+val);
+		}
+	});
+	return result;
+}
+
+
+
+
+
+
+
 
 
 /////////////////////////////////////////////////////////////////////
@@ -532,6 +761,10 @@ switch (url[1])
 		});
 	break;
 
+
+
+
+
 	//////////////////////////
 	//СОЗДАНИЕ ПАКЕТОВ ОПЦИЙ//
 	//////////////////////////
@@ -557,6 +790,12 @@ switch (url[1])
 			}
 		});
 	break;
+
+
+
+
+
+
 
 	/////////////////////////
 	//СОЗДАНИЕ КОМПЛЕКТАЦИЙ//
@@ -597,6 +836,7 @@ switch (url[1])
 
 
 
+
 	///////////////////////
 	//СОЗДАНИЕ АВТОМОБИЛЯ//
 	///////////////////////
@@ -610,29 +850,117 @@ switch (url[1])
 	break;
 
 	case 'caradd':
-		$('select[name="brand_id"]').change(function(){
+		var base = 0;
+		var pack = 0;
+		var dops = 0;
+
+		function totalPrice()
+		{
+			total = parseInt(base)+parseInt(pack)+parseInt(dops);
+			$("#car-total").html(number_format(total,0,'',' '));
+		}
+
+		$('select[name="brand_id"]').change(function(){//получаем модели от бренда
 			getModels($(this),'list');
+			brandObj($(this).val());
 		});
-		$('select[name="model_id"]').change(function(){
+		$('select[name="model_id"]').change(function(){//получаем комплектации от модели
 			getComplects($(this));
+			modelObj($(this).val());
 		});
-		$(document).on('change','select[name="complect_id"]',function(){
+		$(document).on('change','select[name="complect_id"]',function(){//получаем пакеты и цвета			
+			base = complectPrice($(this).val());
+			totalPrice();
 			getPacks($(this));
 			getColor($(this),'radio');			
 		});
+
+		
+		$(document).on('click','.color input',function()
+		{
+			colorObj($(this).val());
+		})
+
+
+		$(document).on('click','.pack tr',function(){
+			var id = '';
+			$(".pack tr").each(function(){
+				if($(this).find('input').prop("checked"))
+					id += $(this).find('input').val()+",";
+			})
+			pack = packprice(id);
+			totalPrice();
+		});
+
+		$(document).on('keyup','input[name="dopprice"]',function(){
+			dops = $(this).val();
+			totalPrice();
+			$("#car-dop").html(number_format(dops,0,'',' '));
+		})
+
+
 	break;
 
 	case 'caredit':
+		function totalPrice()
+		{
+			total = parseInt(base)+parseInt(pack)+parseInt(dops);
+			$("#car-total").html(number_format(total,0,'',' '));
+		}
+
+		var base = complectPrice($('select[name="complect_id"]').val());
+		
+		var id = '';
+		$(".pack tr").each(function(){
+			if($(this).find('input').prop("checked"))
+				id += $(this).find('input').val()+",";
+		})
+		var	pack = packprice(id);
+		
+		var dops = dopPrice($('input[name="dopprice"]').val());
+
+		totalPrice();
+
+		brandObj($('select[name="brand_id"]').val());
+		modelObj($('select[name="model_id"]').val());
+		colorObj($('.color input:checked').val());
+
+
 		$('select[name="brand_id"]').change(function(){
 			getModels($(this),'list');
+			brandObj($(this).val());
 		});
 		$('select[name="model_id"]').change(function(){
 			getComplects($(this));
+			modelObj($(this).val());
 		});
 		$(document).on('change','select[name="complect_id"]',function(){
+			base = complectPrice($(this).val());
+			totalPrice();
 			getPacks($(this));
 			getColor($(this),'radio');			
 		});
+
+		$(document).on('click','.color input',function()
+		{
+			colorObj($(this).val());
+		})
+		
+		$(document).on('click','.pack tr',function(){
+			var id = '';
+			$(".pack tr").each(function(){
+				if($(this).find('input').prop("checked"))
+					id += $(this).find('input').val()+",";
+			})
+			pack = packprice(id);
+			totalPrice();
+		});
+
+		$(document).on('keyup','input[name="dopprice"]',function(){
+			dops = $(this).val();
+			totalPrice();
+			$("#car-dop").html(number_format(dops,0,'',' '));
+		})
 	break;
 
 	///////////////////////////////

@@ -5,6 +5,13 @@
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<title>CMS - {{ $title }}</title>
 		<style>
+			.disabled{
+				pointer-events: none;
+				color: #cdcdcd !important;
+			}
+			.delete-class{
+				color: #cdcdcd;
+			}
 			.pad-0{
 				padding: 0px !important;
 			}
@@ -39,6 +46,12 @@
 			}
 			.size-10{
 				font-size: 10px;
+			}
+			.size-12{
+				font-size: 12px;
+			}
+			.size-14{
+				font-size: 14px;
 			}
 			.size-25{
 				font-size: 25px;
@@ -94,6 +107,22 @@
 			.model input{display: block;position: absolute;right: 15px;top: 5px;}
 			.tooltip{white-space: normal !important; max-width: 300px !important;}
 			.color input{margin-top: 10px !important;}
+			.fixed-count-price{
+				position: fixed; 
+				right:0px;
+				padding: 15px; 
+				background: rgba(250,250,250,0.7); 
+				z-index: 500;
+				box-shadow: 0 0 10px #aaa;
+				border-radius: 7px;
+				margin-right: 15px;
+				transition: background 0.5s linear,color 0.5s linear;
+			}
+			.fixed-count-price:hover{
+				background: rgba(0,0,0,1);
+				color:#fff;
+			}
+			.fixed-count-price tr:hover{color: #000}
 		</style>
 		@show
 	</head>
@@ -197,6 +226,8 @@
 				<li><a href="{{ route('carstatuslist') }}">Список статусов автомобилей</a></li>
 				<li><a href="{{ route('carloclist') }}">Список поставок автомобилей</a></li>
 				<li><a href="{{ route('carlist') }}">Список автомобилей</a></li>
+				<li><a href="{{ route('carsold') }}">Проданные автомобили</a></li>
+				<li><a href="{{ route('cararchive') }}">Архив автомобилей</a></li>
 				<h4>Кредитные программы</h4>
 				<li><a href="{{ route('kreditlist') }}">Список кредитов</a></li>
 				<h4>Коммерческие акции</h4>

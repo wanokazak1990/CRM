@@ -13,7 +13,7 @@
 
 	<table class="table">
 	@foreach($list as $key=>$model)
-		<tr>
+		<tr class="<?=($model->status==0)?'delete-class':'';?>">
 			<td class="width-50">{{$key+1}}</td>
 			<td class="width-50"><?= $model->brand->getIcon(50); ?></td>
 			

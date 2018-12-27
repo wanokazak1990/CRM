@@ -12,6 +12,9 @@
 			{!! Form::label('title', 'Бренд: *') !!}
 				{!! Form::select('brand_id',$brands,$model->brand_id, ['class' => 'form-control']) !!}
 			<br>
+			{!! Form::label('title', 'Статус: 111*') !!}
+				{!! Form::select('status',['Архивная','Актуальная'],$model->status, ['class' => 'form-control']) !!}
+			<br>
 			{!! Form::label('title', 'Тип авто: *') !!}
 				{!! Form::select('type_id',$types,$model->type_id, ['class' => 'form-control']) !!}
 			<br>

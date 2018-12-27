@@ -39,7 +39,7 @@
 	
 	<table class="table">
 	@foreach($list as $key=>$complect)
-		<tr style="color: <?=($complect->status<2)?'#cdcdcd;':'#333';?>">
+		<tr class="<?=($complect->status<2)?'delete-class':'';?>">
 			<td class="width-50">
 				@if($complect->status>1)
 					{{(($list->currentPage()-1)*$list->perPage())+$key+1}}

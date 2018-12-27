@@ -20,7 +20,7 @@ Route::get('/', function () {
 
 Route::post('/getcolor',		'AjaxController@getcolor')			->name('getcolor');
 
-Route::post('/changesort',		'AjaxController@changesort')			->name('changesort');
+Route::post('/changesort',		'AjaxController@changesort')		->name('changesort');
 
 Route::get('/getoption',		'AjaxController@getoption')			->name('getoption');
 
@@ -28,10 +28,17 @@ Route::get('/getmodels',		'AjaxController@getmodels')			->name('getmodels');
 
 Route::get('/getmotors',		'AjaxController@getmotors')			->name('getmotors');
 
-Route::post('/getpacks',		'AjaxController@getpacks')		->name('getpacks');
+Route::post('/getpacks',		'AjaxController@getpacks')			->name('getpacks');
 
 Route::get('/getcomplects',		'AjaxController@getcomplects')		->name('getcomplects');
 
+Route::post('/complectprice',	'AjaxController@complectprice')		->name('complectprice');
+
+Route::post('/packprice',		'AjaxController@packprice')			->name('packprice');
+
+Route::post('/getbrand',		'AjaxController@getbrand')			->name('getbrand');
+
+Route::post('/getmodel',		'AjaxController@getmodel')			->name('getmodel');
 
 
 /*РОУТЫ ДЛЯ РЕДАКТИРОВАНИЯ БРЕНДОВ*/
@@ -205,6 +212,10 @@ Route::delete('/complectdel/{id}',	'ComplectController@destroy')	->name('complec
 /*РОУТЫ ДЛЯ СОЗДАНИЯ, ВЫГРУЗКЕ, РЕДАКТИРОВАНИЯ УДАЛЕНИЯ АВТОМОБИЛЕЙ*/
 
 Route::get('/carlist',			'CarController@list')		->name('carlist');
+
+Route::get('/cararchivelist',	'CarController@archive')	->name('cararchive');
+
+Route::get('/carsoldlist',		'CarController@sold')		->name('carsold');
 
 Route::get('/carexport',		'CarController@export')		->name('carexport');
 
