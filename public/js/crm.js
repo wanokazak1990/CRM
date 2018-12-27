@@ -26,8 +26,37 @@ $(document).ready(function() {
 	$('#crmTabPanels').children().each(function () {
 		if ($(this).hasClass('active'))
 		{
+			var tab_id = $(this).attr('id');
+			
 			var formData = new FormData();
-			formData.append('tab_id', $(this).attr('id'));
+			formData.append('tab_id', tab_id);
+
+			$.ajax({
+				type: 'POST',
+				url: '/getcurrentsettings',
+				dataType : "json", 
+		        cache: false,
+		        contentType: false,
+		        processData: false, 
+		        data: formData,
+		        headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success: function(data) {
+					if (data == '0')
+					{
+						$('#currentSettingsList').html('<div class="alert alert-warning" role="alert">Настройки не найдены</div>');
+					}
+					else
+					{
+						$('#currentSettingsList').html(data);
+					}
+				},
+				error: function() {
+					alert('Ошибка получения настроек для вкладки');
+				}
+			});
+
 			$.ajax({
 				type: 'POST',
 				url: '/getcurrentfields',
@@ -42,7 +71,7 @@ $(document).ready(function() {
 				success: function(data) {
 					if (data == '0')
 					{
-						$('#settingsFields').html('<div class="alert alert-danger" role="alert">Поля не найдены</div>');
+						$('#settingsFields').html('<div class="alert alert-warning" role="alert">Поля не найдены</div>');
 					}
 					else
 					{
@@ -53,6 +82,13 @@ $(document).ready(function() {
 					alert('Ошибка получения названий вкладок');
 				}
 			});
+
+			$('.'+tab_id+'-td').css('display', 'none');
+
+			$('.'+tab_id+'-head').each(function () {
+				var head_id = $(this).attr('id');
+				$('#'+head_id+'.'+tab_id+'-td').removeAttr('style');
+			});			
 		}
 	});
 
@@ -64,8 +100,37 @@ $(document).ready(function() {
 		$('#crmTabPanels').children().each(function () {
 			if ($(this).hasClass('active'))
 			{
+				var tab_id = $(this).attr('id');
+
 				var formData = new FormData();
-				formData.append('tab_id', $(this).attr('id'));
+				formData.append('tab_id', tab_id);
+				
+				$.ajax({
+					type: 'POST',
+					url: '/getcurrentsettings',
+					dataType : "json", 
+			        cache: false,
+			        contentType: false,
+			        processData: false, 
+			        data: formData,
+			        headers: {
+				        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    },
+				    success: function(data) {
+						if (data == '0')
+						{
+							$('#currentSettingsList').html('<div class="alert alert-warning" role="alert">Настройки не найдены</div>');
+						}
+						else
+						{
+							$('#currentSettingsList').html(data);
+						}
+					},
+					error: function() {
+						alert('Ошибка получения настроек для вкладки');
+					}
+				});
+
 				$.ajax({
 					type: 'POST',
 					url: '/getcurrentfields',
@@ -80,7 +145,7 @@ $(document).ready(function() {
 					success: function(data) {
 						if (data == '0')
 						{
-							$('#settingsFields').html('<div class="alert alert-danger" role="alert">Поля не найдены</div>');
+							$('#settingsFields').html('<div class="alert alert-warning" role="alert">Поля не найдены</div>');
 						}
 						else
 						{
@@ -91,6 +156,13 @@ $(document).ready(function() {
 						alert('Ошибка получения названий вкладок');
 					}
 				});
+
+				$('.'+tab_id+'-td').css('display', 'none');
+
+				$('.'+tab_id+'-head').each(function () {
+					var head_id = $(this).attr('id');
+					$('#'+head_id+'.'+tab_id+'-td').removeAttr('style');
+				});		
 			}
 		});
 	});
@@ -103,13 +175,13 @@ $(document).ready(function() {
 	$(document).on('click', '#checkAllFields', function() {
 		if ($(this).is(':checked'))
 		{
-			$('input[name="fieldsCheckbox"]').each(function() {
+			$('input[name="fieldsCheckbox[]"]').each(function() {
 				$(this).prop('checked', true);
 			});
 		}
 		else
 		{
-			$('input[name="fieldsCheckbox"]').each(function() {
+			$('input[name="fieldsCheckbox[]"]').each(function() {
 				$(this).prop('checked', false);
 			});
 		}

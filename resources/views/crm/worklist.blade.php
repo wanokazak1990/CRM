@@ -1,7 +1,7 @@
 @section('worklist')
 <div id="hidden_panel" class="container border-left border-info">
 <div class="row">
-	<!-- Nav tabs -->
+	<!-- Вкладки боковой панели -->
 	<ul class="nav nav-tabs nav-justified bg-info" id="hiddenTab" role="tablist" style="width: 100%;">
 		<li class="nav-item">
 			<a class="nav-link active" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="true">Журнал</a>
@@ -17,12 +17,12 @@
 		</li>
 	</ul>
 
-	<!-- Icons panel -->
+	<!-- Панель иконок -->
 	<div class="border" style="width: 100%;">
 		<button id="closing" type="button" class="btn btn-light"><i class="fas fa-arrow-circle-right"></i></button>			
 	</div>
 
-	<!-- Tab panes -->
+	<!-- Контент вкладок -->
 	<div class="tab-content container" style="width: 100%; padding-left: 0; padding-right: 0;">
 		<!-- Вкладка Журнал -->
 		<div class="tab-pane active" id="log" role="tabpanel" aria-labelledby="log-tab">

@@ -25,6 +25,10 @@
 @section('worklist')
 @show
 
+<!-- МОДАЛЬНОЕ ОКНО НАСТРОЕК -->
+@section('modal_settings')
+@show
+
 <!-- ОСНОВНОЙ КОНТЕНТ -->
 <div id="main" class="container-fluid">
 	<div class="row" style="height: 100%; overflow-x: auto;">
