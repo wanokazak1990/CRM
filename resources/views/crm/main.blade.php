@@ -74,10 +74,29 @@
 					<td class="clients-td" id="{{ $clients_fields_ids[0] }}">{{ $client->name }}</td>
 					<td class="clients-td" id="{{ $clients_fields_ids[1] }}">{{ $client->phone }}</td>
 					<td class="clients-td" id="{{ $clients_fields_ids[2] }}">{{ $client->email }}</td>
-					<td class="clients-td" id="{{ $clients_fields_ids[3] }}">{{ $client->traffic->model->name }}</td>
-					<td class="clients-td" id="{{ $clients_fields_ids[4] }}">{{ $client->traffic->manager->name }}</td>
-					<td class="clients-td" id="{{ $clients_fields_ids[5] }}">{{ $client->traffic->assigned_action->name }}</td>
-					<td class="clients-td" id="{{ $clients_fields_ids[6] }}">{{ date('d.m.Y', $client->traffic->action_date) }} {{ date('H:i', $client->traffic->action_time) }}</td>
+					<td class="clients-td" id="{{ $clients_fields_ids[3] }}">
+						@isset($client->traffic->model)
+							{{ $client->traffic->model->name }}
+						@endisset
+					</td>
+					<td class="clients-td" id="{{ $clients_fields_ids[4] }}">
+						@isset($client->traffic->manager->name)
+							{{ $client->traffic->manager->name }}
+						@endisset
+					</td>
+					<td class="clients-td" id="{{ $clients_fields_ids[5] }}">
+						@isset($client->traffic->assigned_action->name)
+							{{ $client->traffic->assigned_action->name }}
+						@endisset
+					</td>
+					<td class="clients-td" id="{{ $clients_fields_ids[6] }}">
+						@isset($client->traffic->action_date)
+							{{ date('d.m.Y', $client->traffic->action_date) }}
+						@endisset
+						@isset($client->traffic->action_time)
+							{{ date('H:i', $client->traffic->action_time) }}
+						@endisset
+					</td>
 				</tr>
 				@endforeach
 			</tbody>
@@ -110,12 +129,32 @@
 					<td>{{ $key+1 }}</td>
 					<td class="traffic-td" id="{{ $traffic_fields_ids[0] }}">{{ date('d.m.Y H:i:s', $traffic->creation_date) }}</td>
 					<td class="traffic-td" id="{{ $traffic_fields_ids[1] }}">{{ $traffic->traffic_type->name }}</td>
-					<td class="traffic-td" id="{{ $traffic_fields_ids[2] }}">{{ $traffic->model->name }}</td>
-					<td class="traffic-td" id="{{ $traffic_fields_ids[3] }}">{{ $traffic->client->name }}</td>
+					<td class="traffic-td" id="{{ $traffic_fields_ids[2] }}">
+						@isset($traffic->model->name)
+							{{ $traffic->model->name }}
+						@endisset
+					</td>
+					<td class="traffic-td" id="{{ $traffic_fields_ids[3] }}">
+						@isset($traffic->client->name)
+							{{ $traffic->client->name }}
+						@endisset
+					</td>
 					<td class="traffic-td" id="{{ $traffic_fields_ids[4] }}">{{ $traffic->comment }}</td>
-					<td class="traffic-td" id="{{ $traffic_fields_ids[5] }}">{{ $traffic->manager->name }}</td>
-					<td class="traffic-td" id="{{ $traffic_fields_ids[6] }}">{{ $traffic->admin->name }}</td>
-					<td class="traffic-td" id="{{ $traffic_fields_ids[7] }}">{{ $traffic->assigned_action->name }}</td>
+					<td class="traffic-td" id="{{ $traffic_fields_ids[5] }}">
+						@isset($traffic->manager->name)
+							{{ $traffic->manager->name }}
+						@endisset
+					</td>
+					<td class="traffic-td" id="{{ $traffic_fields_ids[6] }}">
+						@isset($traffic->admin->name)
+							{{ $traffic->admin->name }}
+						@endisset
+					</td>
+					<td class="traffic-td" id="{{ $traffic_fields_ids[7] }}">
+						@isset($traffic->assigned_action->name)
+							{{ $traffic->assigned_action->name }}
+						@endisset
+					</td>
 					<td class="traffic-td" id="{{ $traffic_fields_ids[8] }}">{{ date('d.m.Y', $traffic->action_date) }}</td>
 					<td class="traffic-td" id="{{ $traffic_fields_ids[9] }}">{{ date('H:i', $traffic->action_time) }}</td>
 				</tr>
