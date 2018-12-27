@@ -179,8 +179,10 @@ return [
 
         /*Illuminate\Html\HtmlServiceProvider::class*/
 
+        //EXCEL
         Maatwebsite\Excel\ExcelServiceProvider::class,
 
+        ConsoleTVs\Charts\ChartsServiceProvider::class,
     ],
 
     /*
@@ -230,11 +232,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        /*'Form' => Illuminate\Html\FormFacade::class,
-        'Html' => Illuminate\Html\HtmlFacade::class,*/
-
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
+        'Charts' => ConsoleTVs\Charts\Facades\Charts::class,
     ],
 
 ];

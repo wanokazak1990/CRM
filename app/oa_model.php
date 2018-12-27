@@ -8,7 +8,7 @@ class oa_model extends Model
 {
     //
     protected $fillable = array(
-    	'brand_id','name','link','banner','icon','alpha','slogan','text','type_id','country_id','label','sort'
+    	'brand_id','name','link','banner','icon','alpha','slogan','text','type_id','country_id','label','sort','status'
     );
     public $timestamps = false;
 
@@ -35,5 +35,10 @@ class oa_model extends Model
 	public function colorBymodel()
 	{
 		return $this->hasMany('App\model_color','model_id','id');
+	}
+
+	public function modelCount()
+	{
+		return avacar::where('model_id',$this->id)->count();
 	}
 }

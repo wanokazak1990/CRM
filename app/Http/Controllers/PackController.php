@@ -28,7 +28,7 @@ class PackController extends Controller
 
         if($request->has('brand_id'))
             $query->where('packs.brand_id',$request->brand_id);
-    	
+    	//$pack = pack::paginate(300);
         $pack = $query->groupBy('packs.id')->paginate(20);
         $url_get = $request->except('page');
 
@@ -85,11 +85,12 @@ class PackController extends Controller
         Session::put('prev_page',url()->previous());
     	$pack = pack::find($id);
     	$brands = oa_brand::pluck('name','id');
-    	$model = oa_model::where('brand_id',$pack->brand_id)->get();
+    	$model = oa_model::where('brand_id',$pack->brand_id)->orderBy('sort')->orderBy('brand_id')->get();
     	$option = oa_option::select('oa_options.id','oa_options.name','oa_options.parent_id')
     					->join('option_brands','option_brands.option_id','=','oa_options.id')
     					->where('option_brands.brand_id',$pack->brand_id)
-                        ->orderBy('oa_options.parent_id', 'desc')
+                        ->orderBy('oa_options.parent_id')
+                        ->orderBy('oa_options.name')
     					->get();
     	return view('pack.add')
     		->with('title','Изменить опцию')

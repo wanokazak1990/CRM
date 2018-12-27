@@ -30,19 +30,27 @@ class ComplectController extends Controller
             $query->where('oa_complects.model_id',$request->model_id);
 
         $url_get = $request->except('page');
-    	$list = $query->paginate(20);
+    	$list = $query->orderBy('brand_id')->orderBy('model_id')->orderBy('status','DESC')->orderBy('sort')->orderBy('price')->paginate(20);
 
         $mas['brands'] = oa_brand::pluck('name','id');
         $mas['models'] = oa_model::pluck('name','id');
 
-    	return view('complect.list')
+        $total = oa_complect::count('id');
+        for($i=1;$i<=$total;$i++)
+        {
+            $count[$i] = $i;
+        }
+        $count[$total+1] = $total+1;
+    	
+        return view('complect.list')
             ->with($mas)
             ->with('url_get',$url_get)
     		->with('title','Список комплектаций')
     		->with('list',$list)
     		->with(['addTitle'=>'Новая комплектация','route'=>'complectadd'])
 			->with('edit','complectedit')
-			->with('delete','complectdelete');
+			->with('delete','complectdelete')
+            ->with('count',$count);
     }
 
     public function add()
@@ -102,7 +110,8 @@ class ComplectController extends Controller
     	$options = oa_option::select('oa_options.*')
     				->join('option_brands','option_brands.option_id','=','oa_options.id')
     				->where('option_brands.brand_id',$complect->brand_id)
-                    ->orderBy('oa_options.parent_id', 'desc')
+                    ->orderBy('oa_options.parent_id')
+                    ->orderBy('oa_options.name')
     				->get();//тянем все опции в зависимости от того какому бренду пренадлежит комплектация
     	$colors = oa_color::select('oa_colors.*')
     					->join('model_colors','model_colors.color_id','=','oa_colors.id')
@@ -177,10 +186,16 @@ class ComplectController extends Controller
     {
     	if(isset($_POST['delete']))
     	{
-    		complect_color::where('complect_id',$id)->delete();
+    		/*complect_color::where('complect_id',$id)->delete();
     		complect_option::where('complect_id',$id)->delete();
     		complect_pack::where('complect_id',$id)->delete();
-    		oa_complect::destroy($id);
+    		oa_complect::destroy($id);*/
+            $complect = oa_complect::find($id);
+            if($complect->complectCount()>0)
+                $complect->status = 1;
+            else
+                $complect->status = 0;
+            $complect->update();
     	}
     	return redirect(Session::pull('prev_page','/complectlist'));
     }

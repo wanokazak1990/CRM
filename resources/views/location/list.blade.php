@@ -22,8 +22,8 @@
 				</a>
 			</td>
 			<td class="width-50">
-				<a href="{{ route($delete,['id'=>$loc->id]) }}">
-					<i class="text-danger glyphicon glyphicon-remove"></i>
+				<a class="{{($key>3)?'':'disabled'}}" href="{{ route($delete,['id'=>$loc->id]) }}">
+					<i class="{{($key>3)?'text-danger':'disabled'}} glyphicon glyphicon-remove"></i>
 				</a>
 			</td>
 		</tr>

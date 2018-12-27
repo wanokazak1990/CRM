@@ -77,4 +77,9 @@ class avacar extends Model
     	$price+=$this->packPrice();
     	return $price;
     }
+
+    public function color()
+    {
+        return $this->hasOne('App\oa_color','id','color_id');
+    }
 }

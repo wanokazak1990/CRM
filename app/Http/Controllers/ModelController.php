@@ -18,13 +18,22 @@ class ModelController extends Controller
 {
     public function list()
     {
-    	$list = oa_model::orderBy('brand_id')->get();
+    	$list = oa_model::orderBy('brand_id')->orderBy('status',' DESC')->orderBy('sort')->get();
+
+        $total = oa_model::count('id');
+        for($i=1;$i<=$total;$i++)
+        {
+            $count[$i] = $i;
+        }
+        $count[$total+1] = $total+1;
+
     	return view('model.list')
     		->with('title','Список моделей')
     		->with('list',$list)
     		->with(['addTitle'=>'Новая модель','route'=>'modeladd'])
 			->with('edit','modeledit')
-			->with('delete','modeldelete');
+			->with('delete','modeldelete')
+            ->with('count',$count);
 
     }
 
@@ -60,26 +69,31 @@ class ModelController extends Controller
             $model->save();
 
             $model_id = $model->id;
-                        
-            foreach ($request->color_id as $color) 
-            {
-                $model_color = new model_color();
-                $model_color->model_id = $model->id;
-                $model_color->color_id = $color;
-                $model_color->save();
-            }
-
-            foreach ($request->char as $key => $char) 
-            {
-                if (!empty($char))
+            if(is_array($request->color_id))
+            :        
+                foreach ($request->color_id as $color) 
                 {
-                    $model_character = new model_character();
-                    $model_character->model_id = $model_id;
-                    $model_character->character_id = $key;
-                    $model_character->value = $char;
-                    $model_character->save();
+                    $model_color = new model_color();
+                    $model_color->model_id = $model->id;
+                    $model_color->color_id = $color;
+                    $model_color->save();
                 }
-            }
+            endif;
+
+            if(is_array($request->char)) 
+            :
+                foreach ($request->char as $key => $char) 
+                {
+                    if (!empty($char))
+                    {
+                        $model_character = new model_character();
+                        $model_character->model_id = $model_id;
+                        $model_character->character_id = $key;
+                        $model_character->value = $char;
+                        $model_character->save();
+                    }
+                }
+            endif;
 
             return redirect()->route('modellist');
     	}
@@ -122,28 +136,35 @@ class ModelController extends Controller
             }
 
             model_color::where('model_id',$model->id)->delete();
-            foreach ($request->color_id as $color) 
-            {
-                $model_color = new model_color();
-                $model_color->model_id = $model->id;
-                $model_color->color_id = $color;
-                $model_color->save();
-            }
+            if(is_array($request->color_id))
+            :
+                foreach ($request->color_id as $color) 
+                {
+                    $model_color = new model_color();
+                    $model_color->model_id = $model->id;
+                    $model_color->color_id = $color;
+                    $model_color->save();
+                }
+            endif;
 
             model_character::where('model_id',$model->id)->delete();
-            foreach ($request->char as $key => $char) 
-            {
-                if (!empty($char))
+            if(is_array($request->char))
+            :
+                foreach ($request->char as $key => $char) 
                 {
-                    $model_character = new model_character();
-                    $model_character->model_id = $model->id;
-                    $model_character->character_id = $key;
-                    $model_character->value = $char;
-                    $model_character->save();
+                    if (!empty($char))
+                    {
+                        $model_character = new model_character();
+                        $model_character->model_id = $model->id;
+                        $model_character->character_id = $key;
+                        $model_character->value = $char;
+                        $model_character->save();
+                    }
                 }
-            }
+            endif;
 
             $model->update($request->input());
+
             return redirect()->route('modellist');
     	}
     	return redirect()->route('modellist');
@@ -164,10 +185,12 @@ class ModelController extends Controller
     	{
             $model = new oa_model();
             $model = $model->find($id);
-            File::deleteDirectory(storage_path('app/public/images/'.$model->link));
+            /*File::deleteDirectory(storage_path('app/public/images/'.$model->link));
     		oa_model::destroy($id);
             model_color::where('model_id',$id)->delete();
-            model_character::where('model_id',$id)->delete();
+            model_character::where('model_id',$id)->delete();*/
+            $model->status = 0;
+            $model->update();
     	}
     	return redirect()->route('modellist');
     }
