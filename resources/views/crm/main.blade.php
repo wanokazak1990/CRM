@@ -128,7 +128,11 @@
 				<tr>
 					<td>{{ $key+1 }}</td>
 					<td class="traffic-td" id="{{ $traffic_fields_ids[0] }}">{{ date('d.m.Y H:i:s', $traffic->creation_date) }}</td>
-					<td class="traffic-td" id="{{ $traffic_fields_ids[1] }}">{{ $traffic->traffic_type->name }}</td>
+					<td class="traffic-td" id="{{ $traffic_fields_ids[1] }}">
+						@isset($traffic->traffic_type->name)
+							{{ $traffic->traffic_type->name }}
+						@endisset
+					</td>
 					<td class="traffic-td" id="{{ $traffic_fields_ids[2] }}">
 						@isset($traffic->model->name)
 							{{ $traffic->model->name }}
