@@ -386,3 +386,5 @@ Route::post('/crm', 'CRMTrafficController@put')->name('traffic');
 Route::post('/getcurrentfields', 'CRMAjaxController@getCurrentFields')->name('getcurrentfields');
 
 Route::post('/getcurrentsettings', 'CRMAjaxController@getCurrentSettings')->name('getcurrentsettings');
+
+Route::post('/crmgetcontent', 'CRMAjaxController@crmgetcontent')->name('crmgetcontent');

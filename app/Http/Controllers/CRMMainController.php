@@ -14,6 +14,8 @@ use App\crm_all_field;
 use App\crm_setting;
 use App\crm_tab;
 
+use App\_tab_client;
+
 class CRMMainController extends Controller
 {
     /**
@@ -38,6 +40,8 @@ class CRMMainController extends Controller
 
         $fieldlist = crm_all_field::get();
 
+        $clientTab = _tab_client::with('model')->with('manager')->with('action')->paginate(2);
+
         $test = DB::table('crm_tabs')
             ->join('crm_all_fields', 'crm_tabs.field_id', '=', 'crm_all_fields.id')
             ->join('crm_settings', 'crm_tabs.setting_id', '=', 'crm_settings.id')
@@ -53,7 +57,8 @@ class CRMMainController extends Controller
     		->with('assigned_actions', $assigned_actions)
             ->with('clients', $clients)
             ->with('fieldlist', $fieldlist)
-            ->with('test', $test);
+            ->with('test', $test)
+            ->with('clientTab',$clientTab);
     }
 
 

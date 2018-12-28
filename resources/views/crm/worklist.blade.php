@@ -43,11 +43,27 @@
 					<tr>
 						<td>{{ date('d.m.Y', $traffic->action_date) }}</td>
 						<td>{{ date('H:i:s', $traffic->action_time) }}</td>
-						<td>{{ $traffic->traffic_type->name }}</td>
-						<td>{{ $traffic->assigned_action->name }}</td>
+						<td>
+							@isset($traffic->traffic_type)
+								{{ $traffic->traffic_type->name }}
+							@endisset
+						</td>
+						<td>
+							@isset($traffic->assigned_action)
+								{{ $traffic->assigned_action->name }}
+							@endisset
+						</td>
 						<td>{{ $traffic->client->name }}</td>
-						<td>{{ $traffic->model->name }}</td>
-						<td>{{ $traffic->manager->name }}</td>
+						<td>
+							@isset($traffic->model)
+								{{ $traffic->model->name }}
+							@endisset
+						</td>
+						<td>
+							@isset($traffic->manager)
+								{{ $traffic->manager->name }}
+							@endisset
+						</td>
 					</tr>
 					@endforeach
 				</tbody>
