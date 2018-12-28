@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\crm_all_field;
 use App\crm_setting;
 
+use App\_tab_traffic;
+use App\_tab_client;
+
 class CRMAjaxController extends Controller
 {
     /**
@@ -91,5 +94,17 @@ class CRMAjaxController extends Controller
     	}
     	else
     		echo '0';
+    }
+
+    public function crmgetcontent(Request $request)
+    {
+        if($request->has('model'))
+        {
+            $class_name = 'App\\'.$request->model;            
+            $query = new $class_name();
+            $list = $query->paginate(2);
+            $links = (string)$list->appends(['model'=>$request->model])->links();
+            echo json_encode(['list'=>$list,'links'=>$links]);
+        }
     }
 }

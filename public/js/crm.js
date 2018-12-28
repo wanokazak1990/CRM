@@ -1,4 +1,115 @@
+function log(val)
+{
+	console.log(val);
+}
+
 $(document).ready(function() {
+
+	$(document).on('click','#crmTabs a',function(){
+		var obj = $("#crmTabPanels").find("div[aria-labelledby='"+$(this).attr('id')+"']");
+		if(obj.find('table').html()=='' || obj.find('table').html()===undefined)
+		{
+			var formData = new FormData();
+			formData.append('model',$(this).attr('model-name'));
+			$.ajax({
+				type: 'POST',
+				url: '/crmgetcontent',
+				dataType : "json", 
+		        cache: false,
+		        contentType: false,
+		        processData: false, 
+		        data: formData,
+		        headers: {
+			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			    },
+			    success:function(param){
+			    	var str = '';
+			    	param['list'].data.forEach(function(item,i){			    		
+			    		str += '<tr>';
+			    		for(var index in item) { 
+						    str += '<td>'+item[index]+'</td>'; 
+						}
+			    		str += '</tr>';
+			    	})
+			    	
+			    	obj.find('table').html(str);
+			    	obj.append(param['links']);
+			    },
+			    error:function(param){
+			    	log(1);
+			    }
+			});
+		}
+		else
+			log("Вкладка не пуста, наверное пользователь в ней уже что то делал, поэтому ничего не догружаем");
+	})
+
+
+
+
+
+	$(document).on('click','#crmTabPanels .tab-pane .pagination a',function(e){
+		e.preventDefault();
+		var link = $(this);
+		var obj = $(this).closest('.tab-pane');
+		var mas = link.attr('href').split('/');
+		var mas = mas[mas.length-1].split('?');
+		$.ajax({
+			type: 'POST',
+			url: '/crmgetcontent?'+mas[mas.length-1],
+			dataType : "json", 
+	        cache: false,
+	        contentType: false,
+	        processData: false, 
+	        headers: {
+		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    },
+		    success:function(param){
+		    	var str = '';
+		    	param['list'].data.forEach(function(item,i){
+		    		str += '<tr>';
+		    			for(var index in item) { 
+						    str += '<td>'+item[index]+'</td>'; 
+						}
+		    		str += '</tr>';
+		    	})
+		    	
+		    	obj.find('table').html(str);
+		    	if(param['links']!==undefined)
+		    	{
+		    		obj.find('.pagination').remove();
+		    		obj.append(param['links']);
+		    	}
+		    },
+		    error:function(param){
+		    	log(1);
+		    }
+		});
+	})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	// Открытие боковой панели
 	$(document).on('click', '#opening', function() {
 		$(this).blur();
