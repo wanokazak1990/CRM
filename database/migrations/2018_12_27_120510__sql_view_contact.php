@@ -16,7 +16,7 @@ class SqlViewContact extends Migration
     public function up()
     {
         $sql = "
-            CREATE VIEW _tab_clients as SELECT 
+            CREATE OR REPLACE VIEW _tab_clients as SELECT 
                 client.id,
                 client.name,
                 /*client.lastname,*/

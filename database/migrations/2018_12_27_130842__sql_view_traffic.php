@@ -14,7 +14,7 @@ class SqlViewTraffic extends Migration
     public function up()
     {
         $sql = "
-            CREATE VIEW _tab_traffics 
+            CREATE OR REPLACE VIEW _tab_traffics 
             AS SELECT 
                 traffic.id,
                 traffic.creation_date,
