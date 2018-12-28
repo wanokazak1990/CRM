@@ -15,6 +15,7 @@ use App\crm_setting;
 use App\crm_tab;
 
 use App\_tab_client;
+use App\_tab_stock;
 
 class CRMMainController extends Controller
 {
