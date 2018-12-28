@@ -24,9 +24,18 @@ $(document).ready(function() {
 			    },
 			    success:function(param){
 			    	var str = '';
+			    	log(param);
+
+			    	str += '<tr>';
+			    	param['titles'].forEach(function(item,i){
+			    		str += '<th>'+item.name+'</th>';		    		
+			    	});
+			    	str += '</tr>';
+
 			    	param['list'].data.forEach(function(item,i){			    		
 			    		str += '<tr>';
-			    		for(var index in item) { 
+			    		for(var index in item) {
+			    			if(index=='id') continue; 
 						    str += '<td>'+item[index]+'</td>'; 
 						}
 			    		str += '</tr>';
@@ -66,9 +75,18 @@ $(document).ready(function() {
 		    },
 		    success:function(param){
 		    	var str = '';
+		    	log(param)
+
+		    	str += '<tr>';
+		    	param['titles'].forEach(function(item,i){
+		    		str += '<th>'+item.name+'</th>';		    		
+		    	});
+		    	str += '</tr>';
+		    	
 		    	param['list'].data.forEach(function(item,i){
 		    		str += '<tr>';
 		    			for(var index in item) { 
+		    				if(index=='id') continue;
 						    str += '<td>'+item[index]+'</td>'; 
 						}
 		    		str += '</tr>';
