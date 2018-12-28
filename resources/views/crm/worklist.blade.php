@@ -44,11 +44,16 @@
 						<td>{{ date('d.m.Y', $traffic->action_date) }}</td>
 						<td>{{ date('H:i:s', $traffic->action_time) }}</td>
 						<td>
+<<<<<<< HEAD
 							@isset($traffic->traffic_type)
+=======
+							@isset($traffic->traffic_type->name)
+>>>>>>> origin/master
 								{{ $traffic->traffic_type->name }}
 							@endisset
 						</td>
 						<td>
+<<<<<<< HEAD
 							@isset($traffic->assigned_action)
 								{{ $traffic->assigned_action->name }}
 							@endisset
@@ -56,11 +61,28 @@
 						<td>{{ $traffic->client->name }}</td>
 						<td>
 							@isset($traffic->model)
+=======
+							@isset($traffic->assigned_action->name)
+								{{ $traffic->assigned_action->name }}
+							@endisset
+						</td>
+						<td>
+							@isset($traffic->client->name)
+								{{ $traffic->client->name }}
+							@endisset
+						</td>
+						<td>
+							@isset($traffic->model->name)
+>>>>>>> origin/master
 								{{ $traffic->model->name }}
 							@endisset
 						</td>
 						<td>
+<<<<<<< HEAD
 							@isset($traffic->manager)
+=======
+							@isset($traffic->manager->name)
+>>>>>>> origin/master
 								{{ $traffic->manager->name }}
 							@endisset
 						</td>
