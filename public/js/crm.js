@@ -44,6 +44,10 @@ $(document).ready(function() {
 			log("Вкладка не пуста, наверное пользователь в ней уже что то делал, поэтому ничего не догружаем");
 	})
 
+
+
+
+
 	$(document).on('click','#crmTabPanels .tab-pane .pagination a',function(e){
 		e.preventDefault();
 		var link = $(this);

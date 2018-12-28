@@ -54,7 +54,9 @@
 
 	<!-- Трафик -->
 	<div class="tab-pane" id="traffic" role="tabpanel" aria-labelledby="traffic-tab">
+
 		<table class="table table-bordered table-hover table-sm"></table>
+
 	</div>
 	
 	<!-- Автосклад -->
