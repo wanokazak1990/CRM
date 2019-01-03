@@ -12,7 +12,8 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.5",
         "maatwebsite/excel": "~2.0",
-        "phpoffice/phpword": "^0.15.0"
+        "phpoffice/phpword": "^0.15.0",
+	    "cboden/ratchet": "^0.3.3"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
