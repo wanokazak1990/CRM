@@ -13,50 +13,12 @@
 <div id="crmTabPanels" class="tab-content border-top border-info" style="width: 100%; height: calc(100% - 82px); overflow-x: auto;">
 	<!-- Клиенты -->
 	<div class="tab-pane active" id="clients" role="tabpanel" aria-labelledby="clients-tab">
-		<table class="table table-bordered table-hover table-sm">
-			
-			<tr>
-				@foreach(App\_tab_client::getTitle() as $row)
-					<th>{{$row->name}}</th>
-				@endforeach
-			</tr>
-			
-			@foreach($clientTab as $client)
-				<tr client-id="{{$client->id}}">
-					<td>{{$client->name}}</td>
-					<td>{{$client->phone}}</td>
-					<td>{{$client->email}}</td>
-					<td>
-						@isset($client->model)
-							{{$client->model->name}}
-						@endisset
-					</td>
-					<td>
-						@isset($client->manager)
-							{{$client->manager->name}}
-						@endisset
-					</td>
-					<td>
-						@isset($client->action)
-							{{$client->action->name}}
-						@endisset
-					</td>
-					<td>
-						@if(!empty($client->action_date))
-							{{$client->date()}}
-						@endif
-					</td>
-				</tr>
-			@endforeach
-		</table>
-		{{$clientTab->appends(['model'=>'_tab_client'])->links()}}
+		<table class="table table-bordered table-hover table-sm"></table>
 	</div>
 
 	<!-- Трафик -->
 	<div class="tab-pane" id="traffic" role="tabpanel" aria-labelledby="traffic-tab">
-
 		<table class="table table-bordered table-hover table-sm"></table>
-
 	</div>
 	
 	<!-- Автосклад -->

@@ -14,10 +14,23 @@
 <div id="disableContent"></div>
 
 <!-- HEADER -->
-<div style="z-index: 1;">
-	<div id="header" class="bg-info d-flex align-items-center">
-		<span class="text-white">{{auth()->user()->name}} сейчас онлайн</span>
-	</div>
+<div class="container-fluid bg-info d-flex align-items-center" id="header">
+	<button onclick="send();">Отправить</button>
+    @guest
+        <li><a href="{{ route('login') }}">Login</a></li>
+        <li><a href="{{ route('register') }}">Register</a></li>
+    @else
+        <a href="{{ route('logout') }}"
+            onclick="event.preventDefault();
+                     document.getElementById('logout-form').submit();"
+        >
+            Выход
+        </a>
+
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+        </form>
+    @endguest
 </div>
 <!-- /HEADER -->
 
@@ -209,6 +222,28 @@
 	</div>	
 </div>
 <!-- /FOOTER -->
+
+<!--WEBSOCKET-->
+<script>
+	var conn = new WebSocket('ws://new1.loc:8080');
+	conn.onopen = function (e)
+	{
+		console.log('Соединение установлено!');
+	}
+
+	conn.onmessage = function(e)
+	{
+		alert("Получено сообщение: "+e.data);
+	}
+
+	function send()
+	{
+		var data = 'Отправляю сообщение '+Math.random();
+		conn.send(data);
+		console.log('Отправлено: '+data);
+	}
+</script>
+<!--END_WEBSOCKET-->
 
 <script src="/js/jquery.js"></script>
 <link rel="stylesheet" type="text/css" href="/lib/bootstrap-4/css/bootstrap.min.css">

@@ -1,2 +1,2 @@
-hello good boy
-
+ДЛЯ ratchet 
+	sudo apt-get install libevent-dev
