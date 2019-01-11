@@ -1,4 +1,4 @@
-var conn = new WebSocket('ws://new1.loc:8080');
+var conn = new WebSocket('ws://cms.loc:8080');
 conn.onopen = function (e)
 {
 	console.log('Соединение установлено!');
