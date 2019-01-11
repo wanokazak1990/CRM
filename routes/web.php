@@ -378,9 +378,17 @@ Route::post('/crm/savesetting', 'CRMMainController@saveSetting')->name('savesett
 // Сделать настройку активной
 Route::get('/crm/setactive/{id}', 'CRMMainController@setActive')->name('setactive');
 
-// CRM Трафик
-// Добавление трафика
-Route::post('/crm', 'CRMTrafficController@put')->name('traffic');
+
+
+// CRM Трафик //////
+// ДОБАВЛЕНИЕ трафика ajax
+Route::post('/trafficadd', 'CRMTrafficController@put')->name('trafficadd');
+
+// ПОЛУЧЕНИЕ трафика ajax
+Route::post('/gettraffic', 'CRMTrafficController@get')->name('gettraffic');
+
+
+
 
 // CRM AJAX запросы
 Route::post('/getcurrentfields', 'CRMAjaxController@getCurrentFields')->name('getcurrentfields');

@@ -22,10 +22,17 @@ Class ChatSocket extends BaseSocket
 
 	public function onMessage(ConnectionInterface $from,$msg)
 	{
+		$param = json_decode($msg);
+
+		$user = $param->user;
+		$data = $param->data;
+
 		$numRecv = count($this->clients) - 1;
-		echo sprintf('Пользователь %d отправил сообщение "%s" другим %d пользователям'."\n",
-				$from->resourceId, $msg, $numRecv
-			);
+		
+		echo sprintf('Пользователь %d отправил сообщение "%s" другому %d пользователю из %d '."\n",
+				$from->resourceId, $data, $user, $numRecv
+		);
+
 		foreach ($this->clients as $key => $client) {
 			if($from !== $client)
 			{
@@ -37,12 +44,12 @@ Class ChatSocket extends BaseSocket
 	public function onClose(ConnectionInterface $conn)
 	{
 		$this->clients->detach($conn);
-		echo "Соединение {$conn->resourceId} разорвано";
+		echo "Соединение {$conn->resourceId} разорвано \n";
 	}
 
 	public function onError(ConnectionInterface $conn, \Exception $e)
 	{
-		echo "Обнаружена ошибка, соединение разорвано";
+		echo "Обнаружена ошибка, соединение разорвано \n";
 		$conn->close();
 	}
 }
