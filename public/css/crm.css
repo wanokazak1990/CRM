@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700&subset=cyrillic');
+
 html{
 	height: 100%;
 }
@@ -78,3 +80,59 @@ body{
     outline-width: 0px !important;
     outline-color: none !important;
 }
+
+.alert_traffic_block{
+	width: 200px;
+	height: 30px;
+	background: #1e90ff;
+	color: #fff;
+	position: fixed;
+	bottom: 15px;
+	left: 15px;
+	text-align: center;
+	box-shadow: 0 0 10px #000;
+	border-radius: 5px;
+	font-size: 16px;
+	padding-top: 6px;
+	line-height: 16px;
+	cursor: pointer;
+}
+.alert_traffic_block:hover{
+	background: #f00 !important;
+}
+
+/********************************************************/
+.animate-label-traffic{
+	animation: alarm-traffic 1s infinite ease-in-out;
+}
+@keyframes alarm-traffic{
+	from{
+		background: #1e90ff;
+		color: #fff;
+	}
+	50%{
+		background: #007fff;
+		color: #ddd
+	}
+	to{
+		background: #1e90ff;
+		color: #fff;
+	}
+}
+/********************************************************/
+
+.traffic_modal{
+	width: 30%;
+	position: fixed;
+	top: 200px;
+	left: 35%;
+	background: #fff;
+	border: 1px solid #aaa;
+	padding: 15px 0;
+}
+.traffic_modal .param{
+	background: #fc3;
+	color: #333;
+	margin-bottom: 10px;
+}
+
