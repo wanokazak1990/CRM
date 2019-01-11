@@ -15,11 +15,16 @@
 
 <!-- HEADER -->
 <div class="container-fluid bg-info d-flex align-items-center" id="header">
-	<button onclick="send();">Отправить</button>
+	<button onclick="send();">Отправить (ТЕСТ WEBSOCKET)</button>
+
     @guest
         <li><a href="{{ route('login') }}">Login</a></li>
         <li><a href="{{ route('register') }}">Register</a></li>
     @else
+
+    	<!--ID пользователя-->
+    	<input type="hidden" id="auth_user_id" value="{{ Auth::user()->id }}">
+
         <a href="{{ route('logout') }}"
             onclick="event.preventDefault();
                      document.getElementById('logout-form').submit();"
@@ -223,27 +228,21 @@
 </div>
 <!-- /FOOTER -->
 
+
+
+
 <!--WEBSOCKET-->
 <script>
-	var conn = new WebSocket('ws://new1.loc:8080');
-	conn.onopen = function (e)
-	{
-		console.log('Соединение установлено!');
-	}
 
-	conn.onmessage = function(e)
-	{
-		alert("Получено сообщение: "+e.data);
-	}
-
-	function send()
-	{
-		var data = 'Отправляю сообщение '+Math.random();
-		conn.send(data);
-		console.log('Отправлено: '+data);
-	}
 </script>
 <!--END_WEBSOCKET-->
+
+
+
+
+
+
+
 
 <script src="/js/jquery.js"></script>
 <link rel="stylesheet" type="text/css" href="/lib/bootstrap-4/css/bootstrap.min.css">
@@ -252,7 +251,11 @@
 <script src="/js/jquery-ui.js"></script><!--http://api.jqueryui.com/datepicker/-->
 <link href='/css/jquery-ui.css' rel='stylesheet' type='text/css'>
 <script src="/js/calendar-ui.js"></script>
+
+<script src="/js/function-content.js"></script>
 <script src="/js/crm.js"></script>
+<script src="/js/socket/trafficsocket.js"></script>
+<script src="/js/traffic-label.js"></script>
 
 </body>
 </html>

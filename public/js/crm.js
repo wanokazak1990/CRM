@@ -5,93 +5,23 @@ function log(val)
 
 $(document).ready(function() {
 
-	function getTitleContent(parent,array,str='')
-	//создаст заголовки, парент-это родительская вкладка в которой есть таблица, в которую нужно вставить данные
-	//аррай-массив заголовков которые передал аякс из функции гетКонтент
-	{
-		str += '<tr>';
-    	array.forEach(function(item,i){
-    		str += '<th>'+item.name+'</th>';		    		
-    	});
-    	str += '</tr>';
-    	parent.find('table').append(str);
-	}
-
-	function getDataContent(parent,array,str='')
-	//создаст контент вкладки, парент-это родительская вкладка в которой есть таблица, в которую нужно вставить данные
-	//аррай-массив заголовков которые передал аякс из функции гетКонтент
-	{
-		array.data.forEach(function(item,i){
-    		str += '<tr>';
-    			for(var index in item) { 
-    				if(index=='id') continue;
-				    str += '<td>'+item[index]+'</td>'; 
-				}
-    		str += '</tr>';
-    	});
-    	parent.find('table').append(str);
-	}
-
-	function getPaginationContent(parent,str='')
-	//создаст пагинацию, парент-это родительская вкладка, в которую нужно вставить данные пагинации
-	{
-		if(str!==undefined && str!=='')
-    	{
-    		parent.find('.pagination').remove();
-    		parent.append(str);
-    	}
-	}
-
-	function getContent(obj,get_param='')
-	{
-		var formData = new FormData();
-		if(obj.closest('#crmTabs').attr('id')===undefined)
-		{
-			var parent = obj.closest('.tab-pane');
-			var mas = obj.attr('href').split('/');
-			var mas = mas[mas.length-1].split('?');
-			get_param = '?'+mas[mas.length-1];
-		}
-		else
-		{
-			var parent = $("#crmTabPanels").find("div[aria-labelledby='"+obj.attr('id')+"']");
-			formData.append('model',obj.attr('model-name'));
-		}
-		$.ajax({
-			type: 'POST',
-			url: '/crmgetcontent'+get_param,
-			dataType : "json", 
-	        cache: false,
-	        contentType: false,
-	        processData: false, 
-	        data: formData,
-	        headers: {
-		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		    },
-		    success:function(param){
-		    	parent.find('table').html("");
-		    	getTitleContent(parent,param['titles']);		    
-		    	getDataContent(parent,param['list']);		    	
-		    	getPaginationContent(parent,param['links']);	    	
-		    },
-		    error:function(xhr, ajaxOptions, thrownError){
-		    	log("Ошибка: code-"+xhr.status+" "+thrownError);
-		    	log(xhr.responseText);
-		    	log(ajaxOptions)
-		    }
-		});
-	}
-
 	//ЗАГРУЗКА ПЕРВОЙ СТРАНИЦЫ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
 	$(function(){
 		getContent($("#crmTabs a:first"));
 	})
+
+
+
+
 
 	//КЛИК ПО ССЫЛКАМ ПАГИНАТОРА
 	$(document).on('click','#crmTabPanels .tab-pane .pagination a',function(e){
 		e.preventDefault();
 		getContent($(this))
 	})
+
+
+
 
 	//КЛИК ПО ССЫЛКАМ НАВИГАЦИИ
 	//аттрибут id ссылки в навигации (клиенты, трафик, автосклад и ...) равен аттрибуту aria-labelledby контент-полей вкладок. тоесть
@@ -111,22 +41,47 @@ $(document).ready(function() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	//ADD TRAFFIC///////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	$(document).on("click","#traffic_submit",function(e){
+		var Form = $(this).closest('form');
+		var data = Form.serialize();
+		$.ajax({
+			type: 'POST',
+			url: '/trafficadd',
+			dataType : "json", 
+	        data: data,
+	        headers: {
+		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    },
+		    success: function(data, xhr,ajaxOptions, thrownError)
+		    {
+		    	if(data.status===1){
+		    		send(data.user,data.message);
+		    		refreshContent();
+		    	}
+		    	else{
+		    		log('На сервере какие-то проблемы. Трафик не создан. ');
+		    		log("Ошибка: code-"+xhr.status+" "+thrownError);
+			    	log(xhr.responseText);
+			    	log(ajaxOptions)
+		    	}
+		    },
+		    error:function(xhr, ajaxOptions, thrownError){
+		    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+		    	log(xhr.responseText);
+		    	log(ajaxOptions)
+		    }
+		})
+	});
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	//END TRAFFIC///////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
 
 
 
@@ -149,6 +104,17 @@ $(document).ready(function() {
 		$('#hidden_panel').css('right', '-50%');
 		$('#disableContent').css('display', 'none');
 	});
+
+})
+
+
+
+
+
+
+
+
+
 
 	/** 
 	 * Отправка id открытой вкладки через AJAX, для получения в Настройках полей соответствующих полей для отображения
@@ -318,4 +284,3 @@ $(document).ready(function() {
 		}
 	});
 
-});

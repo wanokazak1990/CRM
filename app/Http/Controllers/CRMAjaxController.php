@@ -103,7 +103,7 @@ class CRMAjaxController extends Controller
 
     //Так же вернёт готовую html строку с пагинацией
 
-    public function crmgetcontent(Request $request)
+    public function crmgetcontent(Request $request,$list = array())
     {
         if($request->has('model'))
         {
@@ -112,10 +112,12 @@ class CRMAjaxController extends Controller
             switch ($request->model) {
                 case '_tab_client':
                     $query->with('model')->with('manager')->with('action');
+                    $list = $query->orderBy('id','desc')->paginate(20);
                     break;
 
                 case '_tab_traffic':
                     $query->with('model')->with('manager')->with('action')->with('admin');
+                    $list = $query->orderBy('id','desc')->paginate(20);
                     break;
 
                 case '_tab_stock':
@@ -126,7 +128,7 @@ class CRMAjaxController extends Controller
                     # code...
                     break;
             }
-            $list = $query->paginate(2);
+            
 
             foreach ($list as $key => $item) {
                 $help = clone $item;
@@ -145,9 +147,9 @@ class CRMAjaxController extends Controller
             $links = (string)$list->appends(['model'=>$request->model])->links();
 
             echo json_encode([
-                            'list'=>$list,
-                            'links'=>$links,
-                            'titles'=>$titles
+                'list'=>$list,
+                'links'=>$links,
+                'titles'=>$titles
             ]);
         }
     }
