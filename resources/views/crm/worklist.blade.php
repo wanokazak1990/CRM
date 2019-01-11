@@ -17,15 +17,25 @@
 		</li>
 	</ul>
 
-	<!-- Панель иконок -->
-	<div class="border" style="width: 100%;">
-		<button id="closing" type="button" class="btn btn-light"><i class="fas fa-arrow-circle-right"></i></button>			
-	</div>
+	
+	
 
 	<!-- Контент вкладок -->
 	<div class="tab-content container" style="width: 100%; padding-left: 0; padding-right: 0;">
 		<!-- Вкладка Журнал -->
 		<div class="tab-pane active" id="log" role="tabpanel" aria-labelledby="log-tab">
+			<!-- Панель иконок -->
+			<div class="border input-group align-items-center">
+				<div class="flex-grow-1">
+					<button id="closing" type="button" class="btn btn-light"><i class="fas fa-arrow-circle-right"></i></button>
+					<span class="text-success"><input type="checkbox" autocomplete="off"> Только мои</span>
+				</div>
+				<div>
+					<button type="button" class="btn btn-light"><i class="fas fa-filter"></i></button>
+					<button type="button" class="btn btn-light"><i class="fas fa-print"></i></button>
+				</div>
+			</div>
+
 			<table class="table table-bordered table-hover table-sm">
 				<thead>
 					<tr>
@@ -35,14 +45,14 @@
 						<th>Действие</th>
 						<th>Клиент</th>
 						<th>Автомобиль</th>
-						<th>Продавец</th>
+						<th>Сотрудник</th>
 					</tr>
 				</thead>
 				<tbody>
 					@foreach($traffics as $traffic)
 					<tr>
 						<td>{{ date('d.m.Y', $traffic->action_date) }}</td>
-						<td>{{ date('H:i:s', $traffic->action_time) }}</td>
+						<td>{{ date('H:i', $traffic->action_time) }}</td>
 						<td>
 							@isset($traffic->traffic_type)
 								{{ $traffic->traffic_type->name }}
@@ -72,10 +82,22 @@
 		<!-- Вкладка Лист трафика -->
 		<div class="tab-pane" id="trafficList" role="tabpanel" aria-labelledby="trafficList-tab">
 
-			<div class="">
-				<span class="h3">Трафик №138</span>
-				<span class="h3" style="float: right;">05 января 2018</span>
+			<!-- Панель иконок -->
+			<div class="border input-group align-items-center">
+				<div class="flex-grow-1">
+					<button id="closing" type="button" class="btn btn-light"><i class="fas fa-arrow-circle-right"></i></button>
+				</div>
+				<div>
+					<button type="button" class="btn btn-light"><i class="fas fa-save"></i></button>
+					<button type="button" class="btn btn-light"><i class="fas fa-trash-alt"></i></button>
+				</div>
 			</div>
+			<!-- Заголовок -->
+			<div class="d-flex">
+				<span class="h3 flex-grow-1">Трафик №138</span>
+				<span class="h3">05 января 2018</span>
+			</div>
+			<!-- Форма вкладки -->
 
 			{!! Form::open() !!}
 			{{ csrf_field() }}
@@ -95,6 +117,15 @@
 			</div>
 			<hr>
 
+			<span class="h4">Зона контакта</span>
+			<div class="input-group btn-group-toggle" data-toggle="buttons">
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Неизвестно"> Неизвестно</div>
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Сыктывкар"> Сыктывкар</div>
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Республика"> Республика</div>
+				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Др. регион"> Др. регион</div>
+			</div>
+			<hr>
+
 			<span class="h4">Назначенный менеджер</span>
 			<div class="input-group btn-group-toggle" data-toggle="buttons">
 				@foreach($users as $key => $user)
@@ -106,50 +137,44 @@
 			</div>
 			<hr>
 
-			<span class="h4">Адрес клиента</span>
-			<div class="input-group btn-group-toggle" data-toggle="buttons">
-				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Неизвестно"> Неизвестно</div>
-				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Сыктывкар"> Сыктывкар</div>
-				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Республика"> Республика</div>
-				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Др. регион"> Др. регион</div>
-			</div>
-			<hr>
-			
-			<span class="h4">Данные клиента</span>
+			<span class="h4">Назначенное действие</span>
 			<div>
 				<div class="input-group">
-					<input type="text" name="client_name" class="col-6 form-control" placeholder="ФИО">
-					<input type="text" name="client_phone" class="col-3 form-control" placeholder="Телефон">
-					<input type="text" name="client_email" class="col-3 form-control" placeholder="Email">
-				</div>
-				<div class="input-group">
-					<select name="assigned_action" class="form-control col-6">
-						<option selected disabled>Назначенное действие</option>
-						@foreach($assigned_actions as $action)
-						<option value="{{ $action->id }}"> {{ $action->name }} </option>
-						@endforeach
-					</select>
 					<input name="action_date" type="date" class="col-3 form-control" title="Назначенная дата">
 					<input name="action_time" type="time" class="col-3 form-control" title="Назначенное время">
 				</div>
+				<div class="input-group btn-group-toggle" data-toggle="buttons">
+					@foreach($assigned_actions as $key => $action)
+					<div class="col-3 btn btn-outline-info"><input type="radio" name="assigned_action" value="{{ $key }}" autocomplete="off"> {{ $action }}</div>
+					@endforeach
+				</div>
 			</div>
 			<hr>
 
-			<span class="h4">Ваши комментарии</span>
-			<textarea name="comment" class="form-control" cols="3" style="resize: none;" placeholder="Введите комментарий"></textarea>
-			<hr>
 
-			<div class="input-group">
-				<div class="col-6">
-					<button type="button" id="traffic_submit" name="traffic_submit" class="btn btn-outline-info btn-block">
-						Создать трафик
-					</button>
+			<span class="h4">Клиент</span>
+			<div>
+				<div class="input-group">
+					<input type="text" name="client_name" class="col-4 form-control" placeholder="Имя">
+					<input type="text" class="col-4 form-control" placeholder="Отчество">
+					<input type="text" class="col-4 form-control" placeholder="Фамилия">
 				</div>
-				<div class="col-6">
-					<button type="button" class="btn btn-outline-info btn-block">
-						Создать трафик и рабочий лист
-					</button>
+				<div class="input-group">
+					<input type="text" name="client_phone" class="col-6 form-control" placeholder="Телефон">
+					<input type="text" name="client_email" class="col-6 form-control" placeholder="Email">
 				</div>
+				<div class="input-group">
+					<input type="text" name="comment" class="col-12 form-control" placeholder="Комментарий">
+				</div>
+			</div>
+
+			<div class="input-group justify-content-center p-3 no-gutters">
+				<button type="button" id="traffic_submit" name="traffic_submit" class="btn btn-outline-info col-3">
+						Назначить трафик
+					</button>
+          <button type="button" class="btn btn-outline-info col-3">
+              Отмена
+            </button>
 			</div>
 			{!! Form::close() !!}
 		</div>
@@ -166,74 +191,124 @@
 		
 		<!-- Вкладка Рабочий лист -->
 		<div class="tab-pane" id="worksheet" role="tabpanel" aria-labelledby="worksheet-tab">
-			<div>
-				<span class="h3">Рабочий лист №138</span>
-				<span class="h3" style="float: right;">05 января 2018</span>
-			</div>
-			<!-- Блок с фоткой слева и инпутами справа -->
-			<div class="row" style="width: 100%;">
-				<div class="col-4" align="center">
-					<img src="/face.png">
-					<div style="width: 100%;">
-						<button type="button" class="btn btn-light"><i class="fas fa-camera"></i></button>
-						<button type="button" class="btn btn-light"><i class="fas fa-folder-open"></i></button>
-						<button type="button" class="btn btn-light"><i class="fas fa-search"></i></button>
-						<button type="button" class="btn btn-light"><i class="fas fa-caret-square-up"></i></button>
-						<button type="button" class="btn btn-light"><i class="fas fa-trash-alt"></i></button>
-					</div>
+			<!-- Панель иконок -->
+			<div class="border input-group align-items-center">
+				<div class="flex-grow-1">
+					<button id="closing" type="button" class="btn btn-light"><i class="fas fa-arrow-circle-right"></i></button>
+					<span>это_типа_VIN_номер_автомобиля</span>
 				</div>
-				<div class="col-8">
-					<div class="input-group">
-						<select class="form-control">
-							<option>Быков</option>
-							<option>Не Быков</option>
-						</select>
-						<select class="form-control">
-							<option>Входящий звонок</option>
-							<option>Не входящий звонок</option>
-						</select>
-					</div>
-					<div class="input-group">
-						<input type="text" class="form-control" placeholder="Клиент">
-						<select class="form-control">
-							<option>Физ</option>
-							<option>Юр</option>
-						</select>
-					</div>
-					<div class="input-group">
-						<input type="text" class="form-control" placeholder="Телефон">
-						<input type="text" class="form-control" placeholder="Почта">
-					</div>
-					<div class="input-group">
-						<select class="form-control">
-							<option>Республика</option>
-							<option>Коми</option>
-							<option>Запределье</option>
-						</select>
-						<input type="text" class="form-control" placeholder="Уточните адрес">
-					</div>
-					<div class="input-group">
-						<select class="form-control">
-							<option>Следующее событие</option>
-							<option>Покупка колбасы</option>
-							<option>Уничтожение колбасы</option>
-						</select>
-						<input class="form-control" type="date">
-						<input class="form-control" type="text" placeholder="Время">
-					</div>
+				<div>
+					<button type="button" class="btn btn-light"><i class="fas fa-save"></i></button>
+					<button type="button" class="btn btn-light"><i class="fas fa-trash-alt"></i></button>
 				</div>
 			</div>
 
+			<div class="d-flex">
+				<span class="h3 flex-grow-1">Рабочий лист №138</span>
+				<span class="h3">05 января 2018</span>
+			</div>
+			<!-- Основной блок рабочего листа -->
+			<div>
+				<div>
+					<div class="input-group">
+						<label class="col-3">Трафик</label>
+						<label class="col-3">Спрос</label>
+						<label class="col-3">Менеджер</label>
+						<select class="col-3 form-control">
+							<option>Звонок</option>
+							<option>Встреча</option>
+							<option>И т. д.</option>
+						</select>
+					</div>
+					<div class="input-group">
+						<div class="col-3 text-success d-flex align-items-center">LID Renault</div>
+						<div class="col-3 text-success d-flex align-items-center">DUSTER</div>
+						<div class="col-3 text-success d-flex align-items-center">Быков</div>
+						<input type="date" class="col-3 text-danger form-control">
+					</div>
+				</div>
+				<hr>
+				<div>
+					<div class="input-group">
+						<label class="col-3">Тип контакта</label>					
+						<label class="col-9">Контакт</label>					
+					</div>
+					<div class="input-group">
+						<select class="col-3 form-control">
+							<option>Частный</option>
+							<option>Общественный</option>
+						</select>
+						<input type="text" class="col-3 form-control" placeholder="Имя">
+						<input type="text" class="col-3 form-control" placeholder="Отчество">
+						<input type="text" class="col-3 form-control" placeholder="Фамилия">
+					</div>
+				</div>
+				<hr>
+				<div>
+					<div class="input-group">
+						<label class="col-3">Телефон</label>
+						<label class="col-3">Почта</label>
+						<label class="col-3">Маркер</label>
+						<div class="col-3 d-flex align-items-center justify-content-end">
+							<a data-toggle="collapse" href="#worklistMoreInfo" aria-expanded="false" aria-controls="worklistMoreInfo">Еще</a>
+						</div>
+					</div>
+					<div class="input-group">
+						<input type="text" class="col-3 form-control" placeholder="Введите номер">
+						<input type="text" class="col-3 form-control" placeholder="Введите Email">
+						<input type="text" class="col-3 form-control" placeholder="Маркер">
+						<div class="col-3 d-flex align-items-center">
+							<a href=""><i class="fas fa-times text-danger"></i></a>
+						</div>
+					</div>
+					<div class="input-group">
+						<input type="text" class="col-3 form-control" placeholder="Введите номер">
+						<input type="text" class="col-3 form-control" placeholder="Введите Email">
+						<input type="text" class="col-3 form-control" placeholder="Маркер">
+						<div class="col-3 d-flex align-items-center">
+							<a href=""><i class="fas fa-times text-danger"></i></a>
+							<a href=""><i class="fas fa-plus-circle text-primary"></i></a>
+						</div>
+					</div>
+				</div>
+				<div id="worklistMoreInfo" class="collapse">
+					<hr>
+					<div class="input-group">
+						<label class="col-3">Зона контакта</label>
+						<label class="col-6">Адрес прописки</label>
+						<label class="col-3">Дата рождения</label>
+					</div>
+					<div class="input-group">
+						<select class="col-3 form-control">
+							<option>Сыктывкар</option>
+						</select>
+						<input type="text" class="col-6 form-control" placeholder="Адрес">
+						<input type="date" class="col-3 form-control">
+					</div>
+					<br>
+					<div class="input-group">
+						<label class="col-6">Паспорт</label>
+						<label class="col-6">Водительское удостоверение</label>
+					</div>
+					<div class="input-group">
+						<input type="text" class="col-3 form-control" placeholder="Серия, номер">
+						<input type="date" class="col-3 form-control">
+						<input type="text" class="col-6 form-control" placeholder="Номер">
+						<input type="date" class="col-3 form-control">
+					</div>
+				</div>
+			</div>
+			<hr>
 			<!-- Блок с вкладками в рабочем листе -->
 			<div class="container">
 				<div class="row">
 					<!-- nav tabs -->
 					<ul class="nav nav-tabs nav-justified" id="worksheetTabs" role="tablist" style="width: 100%;">
 						<li class="nav-item">
-							<a class="nav-link active" id="worksheet-parameters-tab" data-toggle="tab" href="#worksheet-parameters" role="tab" aria-controls="worksheet-parameters" aria-selected="true">Параметры</a>
+							<a class="nav-link active" id="worksheet-funnel-tab" data-toggle="tab" href="#worksheet-funnel" role="tab" aria-controls="worksheet-funnel" aria-selected="true">Образ клиента</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" id="worksheet-design-tab" data-toggle="tab" href="#worksheet-design" role="tab" aria-controls="worksheet-design" aria-selected="true">Оформление</a>
+							<a class="nav-link" id="worksheet-parameters-tab" data-toggle="tab" href="#worksheet-parameters" role="tab" aria-controls="worksheet-parameters" aria-selected="true">Параметры</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" id="worksheet-comments-tab" data-toggle="tab" href="#worksheet-comments" role="tab" aria-controls="worksheet-comments" aria-selected="true">Комментарии</a>
@@ -242,173 +317,191 @@
 							<a class="nav-link" id="worksheet-auto-tab" data-toggle="tab" href="#worksheet-auto" role="tab" aria-controls="worksheet-auto" aria-selected="true">Автомобиль</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" id="worksheet-funnel-tab" data-toggle="tab" href="#worksheet-funnel" role="tab" aria-controls="worksheet-funnel" aria-selected="true">Воронка РЛ</a>
+							<a class="nav-link" id="worksheet-design-tab" data-toggle="tab" href="#worksheet-design" role="tab" aria-controls="worksheet-design" aria-selected="true">Оформление</a>
 						</li>
 					</ul>
 					<!-- Tab panes -->
 					<div class="tab-content" style="width: 100%;">
+						<!-- Рабочий лист Вкладка Образ клиента -->
+						<div class="tab-pane active" id="worksheet-funnel" role="tabpanel" aria-labelledby="worksheet-funnel-tab">
+							<p class="h3">образ клиента</p>
+						</div>
 						<!-- Рабочий лист Вкладка Параметры -->
-						<div class="tab-pane active" id="worksheet-parameters" role="tabpanel" aria-labelledby="worksheet-parameters-tab">
-							<div class="p-2 bg-info">
-								<span class="text-white">Пробная поездка</span>
-								<span style="float: right;">Прогресс 0%</span>
+						<div class="tab-pane" id="worksheet-parameters" role="tabpanel" aria-labelledby="worksheet-parameters-tab">
+							<!-- 
+							Пробная поездка
+							Заголовок 
+							-->
+							<div class="p-2 bg-info d-flex">
+								<span class="flex-grow-1">
+									<a class="text-white" data-toggle="collapse" href="#wsparam1" aria-expanded="false" aria-controls="wsparam1">Пробная поездка</a>
+								</span>
+								<span><i class="fas fa-circle text-success"></i></span>
 							</div>
-							<div class="" style="width: 100%;">
-								<div class="input-group">
-									<div class="col-6">
-										<label>Паспорт (серия, номер, дата выдачи)</label>
+							<!-- 
+							Пробная поездка
+							Контент 
+							-->
+							<div id="wsparam1" class="collapse">
+								<a href="#" class="text-primary"><i class="fas fa-plus-circle"></i> Добавить</a>
+								<div class="input-group" id="testdriveCars">
+									<div class="col-3 border">
+										<div class="text-right">
+											<a href=""><i class="fas fa-trash-alt text-danger"></i></a>
+										</div>
+										<div class="bg-light border d-flex justify-content-center">DUSTER</div>
+										<div class="d-flex justify-content-center">
+											<p align="center">
+												01.10.2018 в 15:40
+												<br>
+												<span class="text-success">Оценка 9</span>
+											</p>
+										</div>
 									</div>
-									<div class="col-offset-6">
-										<label>Водительское удостоверение</label>
+									<div class="col-3 border">
+										<div class="text-right">
+											<a href=""><i class="fas fa-trash-alt text-danger"></i></a>
+										</div>
+										<div class="bg-light border d-flex justify-content-center">KAPTUR</div>
+										<div class="d-flex justify-content-center">
+											<p align="center">
+												Сегодня в 11:30
+												<br>
+												<span class="text-danger">В обработке</span>
+											</p>
+										</div>
+									</div>
+								</div>								
+							</div>
+							<!-- 
+							Подбор по потребностям
+							Заголовок 
+							-->
+							<div class="p-2 bg-info d-flex">
+								<span class="flex-grow-1">
+									<a class="text-white" data-toggle="collapse" href="#wsparam2" aria-expanded="false" aria-controls="wsparam2">Подбор по потребностям</a>
+								</span>
+								<span><i class="fas fa-circle text-warning"></i></span>
+							</div>
+							<!-- 
+							Подбор по потребностям
+							Контент 
+							-->
+							<div class="collapse" id="wsparam2">
+								<a href="#" class="text-primary"><i class="fas fa-plus-circle"></i> Добавить</a>
+
+								<div class="input-group" id="carsByNeeds">
+									<div class="col-3 border">
+										<div class="text-right">
+											<a href=""><i class="fas fa-trash-alt text-danger"></i></a>
+										</div>
+										<div class="bg-light border d-flex justify-content-center">DUSTER</div>
+										<select class="form-control">
+											<option>Механическая</option>
+											<option>Автомат</option>
+										</select>
+										<select class="form-control">
+											<option>Полный (4WD)</option>
+											<option>Половинчатый</option>
+										</select>
+									</div>
+									<div class="col-3 border">
+										<div class="text-right">
+											<a href=""><i class="fas fa-trash-alt text-danger"></i></a>
+										</div>
+										<div class="bg-light border d-flex justify-content-center">KAPTUR</div>
+										<select class="form-control">
+											<option>Выбрать</option>
+										</select>
+										<select class="form-control">
+											<option>Выбрать</option>
+										</select>
 									</div>
 								</div>
-								<div class="input-group">
-									<input type="text" class="col-3 form-control" placeholder="Серия, номер">
-									<input type="text" class="col-3 form-control" placeholder="Ввести дату">
-									<input type="text" class="col-3 form-control" placeholder="Номер">
-									<input type="text" class="col-3 form-control" placeholder="Ввести дату">
-								</div>
-								<hr>
+								<br>
 								<div class="input-group">
 									<div class="col-3">
-										<label>Дата рождения</label>
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
 									</div>
-									<div class="col-9">
-										<label>Автомобиль на тест-драйв</label>
+									<div class="col-3">
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
+									</div>
+									<div class="col-3">
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
+									</div>
+									<div class="col-3">
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
+										<span><input type="checkbox"> Оборудование</span><br>
 									</div>
 								</div>
+								<br>
 								<div class="input-group">
-									<input type="text" class="col-3 form-control" placeholder="Ввести дату">
-									<select class="form-control col-6">
-										<option>Выбрать</option>
-										<option>Какой-либо пункт</option>
+									<label class="col-3">Формат покупки</label>
+									<label class="col-3">Форма оплаты</label>
+									<label class="col-3">Первый взнос</label>
+									<label class="col-3">Бюджет покупки</label>
+								</div>
+								<div class="input-group">
+									<select class="col-3 form-control">
+										<option>Из наличия</option>
 									</select>
-									<div class="col-3 d-flex align-items-center justify-content-center">
-										<a href="#">Распечатать</a>
-									</div>
-								</div>
-							</div>
-							<br>
-							<div class="p-2 bg-info">
-								<span class="text-white">Потребности Клиента</span>
-								<span style="float: right;">Прогресс 25%</span>
-							</div>
-							<div>
-								<div class="input-group">
-									<div class="col-3">
-										<label>Модель</label>
-									</div>
-									<div class="col-3">
-										<label>Бюджет покупки</label>
-									</div>
-									<div class="col-3">
-										<label>Форма покупки</label>
-									</div>
-									<div class="col-3">
-										<label>Сроки покупки</label>
-									</div>
-								</div>
-								<div class="input-group">
-									<select class="form-control col-3">
-										<option>DUSTER</option>
-										<option>Еще какой-нибудь</option>
+									<select class="col-3 form-control">
+										<option>В кредит</option>
 									</select>
 									<input type="text" class="col-3 form-control" placeholder="Сумма, р.">
-									<select class="form-control col-3">
-										<option>Выбрать</option>
-										<option>Вот такая</option>
-									</select>
-									<input type="text" class="col-3 form-control" placeholder="Ввести дату">
-								</div>
-							</div>
-							<br>
-							<div class="p-2 bg-info">
-								<span class="text-white">Подбор автомобиля</span>
-								<span style="float: right;">Прогресс 75%</span>
-							</div>
-							<div>
-								<div class="input-group">
-									<div class="col-3">
-										<label>КПП</label>
-									</div>
-									<div class="col-3">
-										<label>Привод</label>
-									</div>
-									<div class="col-6">
-										<label>Этап поставки</label>
-									</div>
+									<input type="text" class="col-3 form-control" placeholder="Сумма, р.">
 								</div>
 								<div class="input-group">
-									<select class="form-control col-3">
-										<option>Механическая</option>
-										<option>Автомат</option>
-									</select>
-									<select class="form-control col-3">
-										<option>Полный</option>
-										<option>Передний</option>
-										<option>Задний</option>
-									</select>
-									<select class="form-control col-3">
-										<option>Выбрать</option>
-										<option>Один из этапов</option>
-									</select>
-									<div class="col-3 d-flex align-items-center justify-content-center">
-										<a href="#">Подобрать (5)</a>
-									</div>
+									<input type="button" class="col-3 offset-6 btn btn-outline-success" value="Показать варианты">
+									<input type="button" class="col-3 btn btn-outline-primary" value="Резервировать">
 								</div>
 							</div>
-							<hr>
-							<div class="input-group">
-								<div class="col-3">
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-								</div>
-								<div class="col-3">
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-								</div>
-								<div class="col-3">
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-								</div>
-								<div class="col-3">
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-								</div>
+							<!-- 
+							Конфигуратор
+							Заголовок 
+							-->
+							<div class="p-2 bg-info d-flex">
+								<span class="flex-grow-1">
+									<a class="text-white" data-toggle="collapse" href="#wsparam3" aria-expanded="false" aria-controls="wsparam3">Конфигуратор</a>
+								</span>
+								<span><i class="fas fa-circle text-warning"></i></span>
 							</div>
-							<br>
-							<div class="p-2 bg-info input-group">
-								<span class="col-6 text-white">Конфигуратор</span>
-								<a href="#" class="col-3 text-white">Очистить</a>
-								<a href="#" class="col-3 text-white">Создать заявку</a>
-							</div>
-							<div>
+							<!-- 
+							Конфигуратор
+							Контент 
+							-->
+							<div id="wsparam3" class="collapse">
 								<div class="input-group">
+									<div class="col-3"><label>Модель</label></div>
 									<div class="col-6"><label>Комплектация</label></div>
-									<div class="col-6"><label>Окраска кузова</label></div>
 								</div>
 								<div class="input-group">
+									<select class="col-3 form-control">
+										<option>DUSTER</option>
+									</select>
 									<select class="col-6 form-control">
 										<option>Privilege 2.0 (143) 4WD МКП</option>
 										<option>Not Privilege 2.0 (143) 4WD МКП</option>
 									</select>
-									<select class="col-3 form-control">
-										<option>Выбрать</option>
-										<option>Цвет кузова сииииний</option>
-									</select>
-									<div class="col-3 bg-light d-flex align-items-center justify-content-center">1 499 990 р.</div>
+									<div class="col-3 d-flex align-items-center justify-content-center">
+										<a href="#" class="btn btn-light"><i class="fas fa-times"></i></a>
+										<a href="#" class="btn btn-light"><i class="fas fa-plus-circle"></i></a>
+									</div>
 								</div>
 								<hr>
 								<div>
@@ -436,260 +529,274 @@
 									</div>
 								</div>
 							</div>
+							<!-- 
+							Дополнительное оборудование
+							Заголовок 
+							-->
+							<div class="p-2 bg-info d-flex">
+								<span class="flex-grow-1">
+									<a class="text-white" data-toggle="collapse" href="#wsparam4" aria-expanded="false" aria-controls="wsparam4">Дополнительное оборудование</a>
+								</span>
+								<span><i class="fas fa-circle text-warning"></i></span>
+							</div>
+							<!-- 
+							Дополнительное оборудование
+							Контент 
+							-->
+							<div id="wsparam4" class="collapse">
+								<div class="input-group">
+									<label class="col-3">Установлено</label>
+									<label class="col-3">Предложено</label>
+									<label class="col-3">Заказ-наряд</label>
+								</div>
 
-							<div class="p-2 bg-info">
-								<span class="text-white">Дополнительное оборудование</span>
-								<span style="float: right;">Прогресс 100%</span>
+								<div class="input-group">
+									<div class="col-3 bg-light d-flex align-items-center">21 500</div>
+									<div class="col-3">
+										<input type="text" class="form-control" placeholder="Введи" value="25 000">
+									</div>
+									<div class="col-3 bg-light d-flex align-items-center">37 200</div>
+									<div class="col-3 bg-light d-flex align-items-center">
+										<span><input type="checkbox"> Разделить в КП</span>
+									</div>
+								</div>
+								
+								<hr>
+
+								<div class="input-group">
+									<label class="col-12">Установленное оборудование:</label>
+								</div>
+
+								<div class="input-group">
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+								</div>
+
+								<hr>
+
+								<div class="input-group">
+									<label class="col-9">Предложенное оборудование:</label>
+									<a href="#" class="col-3 text-success">Установить</a>
+								</div>
+
+								<div class="input-group">
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+									<span class="col-3"><input type="checkbox"> Оборудование</span>
+								</div>
+
 							</div>
-							<p class="alert alert-success">Коврики салона, Коврик багажника, Автосигнализация, Зимняя резина, Колесные диски, Дорожный набор, Подкрылки, Фаркоп, Дефлекторы окон, Защита радиатора.</p>
-							<div class="input-group">
-								<div class="col-3"><label>Заказ-наряд</label></div>
-								<div class="col-3"><label>Виртуальный з/н</label></div>
-								<div class="col-3"><label><input type="checkbox"> Скидка на з/н</label></div>
-								<div class="col-3"><label>ИТОГО з/н</label></div>
-							</div>
-							<div class="input-group">
-								<div class="col-3 bg-light d-flex align-items-center">21 500</div>
-								<div class="col-3">
-									<input type="text" class="form-control" placeholder="Введи" value="25 000">
-								</div>
-								<div class="col-3">
-									<input type="text" class="form-control" placeholder="Введи" value="9 300">
-								</div>
-								<div class="col-3 bg-light d-flex align-items-center">37 200</div>
-							</div>
-							<hr>
-							<div class="input-group">
-								<div class="col-3">
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-								</div>
-								<div class="col-3">
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-								</div>
-								<div class="col-3">
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-								</div>
-								<div class="col-3">
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-									<span><input type="checkbox"> Оборудование</span><br>
-								</div>
-							</div>
-							<br>
 							<!-- 
 							АВТОМОБИЛЬ КЛИЕНТА
 							ЗАГОЛОВОК 
 							-->
-							<div class="p-2 bg-info">
-								<span class="text-white">Автомобиль клиента</span>
-								<span style="float: right;">Прогресс 0%</span>
+							<div class="p-2 bg-info d-flex">
+								<span class="flex-grow-1">
+									<a class="text-white" data-toggle="collapse" href="#wsparam5" aria-expanded="false" aria-controls="wsparam5">Автомобиль клиента</a>
+								</span>
+								<span><i class="fas fa-circle text-danger"></i></span>
 							</div>
 							<!-- 
 							АВТОМОБИЛЬ КЛИЕНТА
 							КОНТЕНТ
 							-->
-							<div>
+							<div id="wsparam5" class="collapse">
 								<div class="input-group">
-									<div class="col-6"><input type="checkbox"> Нет автомобиля</div>
-									<div class="col-3"><input type="checkbox"> Утилизация</div>
+									<div class="col-3"><input type="checkbox"> Нет авто</div>
+									<div class="col-3"><input type="checkbox"> Есть авто</div>
 									<div class="col-3"><input type="checkbox"> Трейд-ин</div>
+									<div class="col-3"><input type="checkbox"> Утилизация</div>
+								</div>
+								<div class="input-group">
+									<input type="text" class="col-3 form-control" placeholder="Марка">
+									<input type="text" class="col-3 form-control" placeholder="Модель">
+									<input type="text" class="col-3 form-control" placeholder="Год по ПТС">
+									<input type="text" class="col-3 form-control" placeholder="Пробег">
 								</div>
 								<hr>
 								<div class="input-group">
-									<div class="col-6" align="center">
-										<img src="/cars.png">
-										<div>
-											<button type="button" class="btn btn-light"><i class="fas fa-camera"></i></button>
-											<button type="button" class="btn btn-light"><i class="fas fa-folder-open"></i></button>
-											<button type="button" class="btn btn-light"><i class="fas fa-search"></i></button>
-											<button type="button" class="btn btn-light"><i class="fas fa-caret-square-up"></i></button>
-											<button type="button" class="btn btn-light"><i class="fas fa-trash-alt"></i></button>
-										</div>
+									<label class="col-3">Владельцы</label>
+									<label class="col-3">Оценка клиента</label>
+								</div>
+								<div class="input-group">
+									<input type="text" class="col-3 form-control" placeholder="Количество" value="2">
+									<input type="text" class="col-3 form-control" placeholder="Руб.">
+									<div class="col-3">
+										<a href="#" class="btn btn-light"><i class="far fa-file"></i></a>
+										<a href="#" class="btn btn-light"><i class="far fa-file-alt"></i></a>
 									</div>
-									<div class="col-6">
-										<div class="input-group">
-											<div class="col-6 d-flex align-items-center">Скидка 90 000 р.</div>
-											<div class="col-6 d-flex align-items-center">Скидка 75 000 р.</div>
-										</div>
-										<div class="input-group">
-											<input type="text" class="col-6 form-control" placeholder="Марка">
-											<input type="text" class="col-6 form-control" placeholder="Модель">
-										</div>
-										<div class="input-group">
-											<select class="col-6 form-control">
-												<option>Год по ПТС</option>
-												<option>1024</option>
-												<option>2048</option>
-											</select>
-											<input type="text" class="col-6 form-control" placeholder="Пробег, км">
-										</div>
-										<select class="form-control">
-											<option>Состояние со слов Клиента</option>
-											<option>Норм</option>
-											<option>Так себе</option>
-											<option>Утиль</option>
-										</select>
-										<div class="input-group">
-											<select class="col-6 form-control">
-												<option>Записи в ПТС</option>
-												<option>Запись 1</option>
-												<option>Запись 2</option>
-											</select>
-											<select class="col-6 form-control">
-												<option>Где обслуживал</option>
-												<option>У бабушки в деревне</option>
-												<option>У соседа алкаша</option>
-											</select>
-										</div>
+								</div>
+								<br>
+								<div class="input-group no-gutters">
+									<div class="col-3">
+										<button type="button" class="btn btn-outline-success btn-block">Фотографии</button>
+									</div>
+									<div class="col-3">
+										<button type="button" class="btn btn-outline-success btn-block">Анализ рынка</button>
+									</div>
+									<div class="col-3">
+										<button type="button" class="btn btn-outline-success btn-block">Акт осмотра</button>
+									</div>
+									<div class="col-3">
+										<button type="button" class="btn btn-outline-success btn-block">Акт диагностики</button>
 									</div>
 								</div>
 								<hr>
 								<div class="input-group">
-									<div class="col-3">
-										<input type="text" class="form-control" placeholder="Оценка Клиент, р.">
-									</div>
-									<div class="col-3 d-flex align-items-center justify-content-center"><i>Оценка Дилер, р.</i></div>
-									<div class="col-3 d-flex align-items-center justify-content-center"><i>Закуп Дилера, р.</i></div>
-									<div class="col-3 d-flex align-items-center justify-content-center">
-										<a href="#">Жду оценку</a>
-									</div>
+									<label class="col-3">Модель на обмен</label>
+									<label class="col-3">Оценка рынок</label>
+									<label class="col-3">Оценка осмотр</label>
+									<label class="col-3">Оценка диагностика</label>
 								</div>
-							</div>
-							<br>
-							<!-- 
-							ФИНАНСОВЫЕ УСЛУГИ
-							ЗАГОЛОВОК
-							-->
-							<div class="p-2 bg-info">
-								<span class="text-white">Финансовые услуги</span>
-								<span style="float: right;">Прогресс 0%</span>
-							</div>
-							<!-- 
-							ФИНАНСОВЫЕ УСЛУГИ
-							КОНТЕНТ
-							-->
-							<div>
-								<div class="input-group">
-									<div class="col-3"><label>Первый взнос</label></div>
-									<div class="col-3"><label>Сумма кредита</label></div>
-									<div class="col-6"><label>Субсидия</label></div>
-								</div>
-								<div class="input-group">
-									<div class="col-3">
-										<input type="text" class="form-control" placeholder="Сумма, р." value="250 000">
+								<div>
+									<div class="input-group">
+										<div class="col-3 bg-light d-flex align-items-center">DUSTER</div>
+										<div class="col-3 bg-light d-flex align-items-center">350 000 руб.</div>
+										<div class="col-3 bg-light d-flex align-items-center">345 000 руб.</div>
+										<div class="col-3 bg-light d-flex align-items-center">340 000 руб.</div>
 									</div>
-									<div class="col-3 d-flex align-items-center justify-content-center"><i>Сумма, р.</i></div>
-									<div class="col-3 d-flex align-items-center justify-content-center"><i>Сумма, р.</i></div>
-									<div class="col-3 d-flex align-items-center justify-content-center">
-										<a href="#">Жду одобрение</a>
+									<div class="input-group">
+										<div class="col-3 bg-light d-flex align-items-center">-90 000 руб. <sup class="text-danger">20 000 руб.</sup></div>
+										<div class="col-3 d-flex align-items-center">01.12.2018 в 15:30</div>
+										<div class="col-3 d-flex align-items-center">01.12.2018 в 15:51</div>
+										<div class="col-3 d-flex align-items-center">01.12.2018 в 18:30</div>
+									</div>
+									<br>
+									<div class="input-group">
+										<div class="col-3 bg-light d-flex align-items-center">KAPTUR</div>
+										<div class="col-3 bg-light d-flex align-items-center">Руб.</div>
+										<div class="col-3 bg-light d-flex align-items-center">Руб.</div>
+										<div class="col-3 bg-light d-flex align-items-center">Руб.</div>
+									</div>
+									<div class="input-group">
+										<div class="col-3 bg-light d-flex align-items-center"><span class="text-danger">Мало данных</span></div>
+										<div class="col-3 d-flex align-items-center"></div>
+										<div class="col-3 d-flex align-items-center"></div>
+										<div class="col-3 d-flex align-items-center"></div>
 									</div>
 								</div>
-								<div class="input-group">
-									<div class="col-3"><input type="checkbox"> Страхование</div>
-									<div class="col-9"><input type="checkbox"> Renault Extra</div>
-								</div>
-							</div>
-							<br>
+							</div>							
 							<!-- 
 							ПРОГРАММА ЛОЯЛЬНОСТИ
 							ЗАГОЛОВОК
 							-->
-							<div class="p-2 bg-info">
-								<span class="text-white">Программа лояльности</span>
-								<span style="float: right;">Прогресс 0%</span>
+							<div class="p-2 bg-info d-flex">
+								<span class="flex-grow-1">
+									<a class="text-white" data-toggle="collapse" href="#wsparam6" aria-expanded="false" aria-controls="wsparam6">Программа лояльности</a>
+								</span>
+								<span><i class="fas fa-circle text-success"></i></span>
 							</div>
 							<!-- 
 							ПРОГРАММА ЛОЯЛЬНОСТИ
 							КОНТЕНТ
 							-->
-							<div>
+							<div id="wsparam6" class="collapse">
+								<label class="font-weight-bold">Сервисы:</label>
+								
 								<div class="input-group">
-									<div class="col-3"><input type="checkbox"> Лизинг</div>
-									<div class="col-3"><input type="checkbox"> Корпоративка</div>
-									<div class="col-3"><input type="checkbox"> Партнёрка</div>
-									<div class="col-3"><input type="checkbox"> Гарантия цены</div>
+									<span class="col-9"><input type="checkbox" checked> Гарантия Renault Extra (4 года)</span>
+									<input type="text" class="col-3 form-control" value="+ 12 900 руб.">
 								</div>
 								<div class="input-group">
-									<div class="col-3 d-flex align-items-center"><i>Скидка 5%</i></div>
-									<div class="col-3 d-flex align-items-center"><i>Скидка 3,5%</i></div>
-									<div class="col-3 d-flex align-items-center"><i>Скидка 2%</i></div>
-									<div class="col-3 d-flex align-items-center"><i>Скидка 2%</i></div>
-								</div>
-								<hr>
-								<div class="input-group">
-									<div class="col-3"><input type="checkbox"> Акция дилера 1</div>
-									<div class="col-3"><input type="checkbox"> Акция дилера 2</div>
-									<div class="col-3"><input type="checkbox"> Акция дилера 3</div>
-									<div class="col-3"><input type="checkbox"> Акция дилера 4</div>
+									<span class="col-9"><input type="checkbox"> Гарантия Renault Extra (5 лет)</span>
+									<input type="text" class="col-3 form-control" value="+ 19 900 руб.">
 								</div>
 								<div class="input-group">
-									<div class="col-3 d-flex align-items-center"><i>Скидка, р.</i></div>
-									<div class="col-3 d-flex align-items-center"><i>Скидка, р.</i></div>
-									<div class="col-3 d-flex align-items-center"><i>Скидка, р.</i></div>
-									<div class="col-3 d-flex align-items-center"><i>Скидка, р.</i></div>
+									<span class="col-9"><input type="checkbox"> Комплимент за Тест-драйв</span>
+									<button type="button" class="col-3 btn btn-outline-success">Сертификат</button>
 								</div>
-								<hr>
 								<div class="input-group">
-									<div class="col-3 d-flex align-items-center"><span><input type="checkbox"> My Renault</span></div>
-									<div class="col-6">
-										<button type="button" class="btn btn-outline-dark btn-block">Коммерческое предложение</button>
-									</div>
+									<span class="col-9"><input type="checkbox" checked> Оплата дороги до автосалона</span>
+									<input type="text" class="col-3 form-control" value="-650 руб.">
+								</div>
+								
+								<label class="font-weight-bold">Акции:</label>
+								
+								<div class="input-group">
+									<span class="col-9"><input type="checkbox" checked> Проживание в гостиннице</span>
+									<button type="button" class="col-3 btn btn-outline-success">Направление</button>
+								</div>
+								<div class="input-group">
+									<span class="col-9"><input type="checkbox"> Подарок постоянному клиенту</span>
+								</div>
+
+								<label class="font-weight-bold">Скидки:</label>
+								
+								<div class="input-group">
+									<span class="col-9"><input type="checkbox" checked> Скидка на аксессуары</span>
+									<span class="col-3 d-flex align-items-center">-8500 р.</span>
+								</div>
+								<div class="input-group">
+									<span class="col-9"><input type="checkbox" checked> Выгода по Трейд-ин 90 000 руб.</span>
+									<span class="col-3 d-flex align-items-center">-90 000</span>
+								</div>
+
+								<label class="font-weight-bold">Подарки:</label>
+
+								<div class="input-group">
+									<span class="col-9"><input type="checkbox" checked> Дорожный набор, защитная сетка</span>
+								</div>
+								<div class="input-group">
+									<span class="col-3 offset-6 font-weight-bold">Итого сумма скидок:</span>
+									<span class="col-3 font-weight-bold">99 150 р.</span>
 								</div>
 							</div>
 							<!-- 
-							АРХИВ КОММЕРЧЕСКИХ ПРЕДЛОЖЕНИЙ
+							КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ
 							ЗАГОЛОВОК
 							-->
-							<div class="p-2 bg-info">
-								<span class="text-white">Архив коммерческих предложений</span>
-								<span style="float: right;">Прогресс 100%</span>
+							<div class="p-2 bg-info d-flex">
+								<span class="flex-grow-1">
+									<a class="text-white" data-toggle="collapse" href="#wsparam7" aria-expanded="false" aria-controls="wsparam7">Коммерческое предложение</a>
+								</span>
+								<span><i class="fas fa-circle text-success"></i></span>
 							</div>
 							<!-- 
-							АРХИВ КОММЕРЧЕСКИХ ПРЕДЛОЖЕНИЙ
+							КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ
 							КОНТЕНТ
 							-->
-							<div>
+							<div id="wsparam7" class="collapse">
 								<table class="table table-bordered table-sm table-striped" style="table-layout: fixed;" width="100%">
 									<tr>
 										<td>20.01.2017 16:31</td>
 										<td>X7LHSRGAN59685351</td>
-										<td><a href="#">Смотреть</a></td>
+										<td><a href="#">Открыть</a></td>
 									</tr>
 									<tr>
 										<td>18.01.2017 12:45</td>
 										<td>X7LHSRGAN59685587, X7L5SRAT6335…</td>
-										<td><a href="#">Смотреть</a></td>
-									</tr>
-									<tr>
-										<td>16.01.2017 16:31</td>
-										<td>X7LHSRGAN59685351, X7L5SRAT6597…</td>
-										<td><a href="#">Смотреть</a></td>
-									</tr>
-									<tr>
-										<td>15.01.2017 12:45</td>
-										<td>X7LHSRGAN59685587, X7L5SRAT6321…</td>
-										<td><a href="#">Смотреть</a></td>
+										<td><a href="#">Открыть</a></td>
 									</tr>
 								</table>
+								<hr>
+								<div class="input-group">
+									<div class="col-3 d-flex align-items-center"><span><input type="checkbox"> My Renault</span></div>
+									<div class="col-6">
+										<button type="button" class="btn btn-outline-success btn-block">Коммерческое предложение</button>
+									</div>
+								</div>
 							</div>
+						</div>
+						<!-- Рабочий лист Вкладка  Комментарии -->
+						<div class="tab-pane" id="worksheet-comments" role="tabpanel" aria-labelledby="worksheet-comments-tab">
+							<p class="h3">комментарии</p>
+						</div>
+						<!-- Рабочий лист Вкладка  Автомобиль -->
+						<div class="tab-pane" id="worksheet-auto" role="tabpanel" aria-labelledby="worksheet-auto-tab">
+							<p class="h3">автомобиль</p>
 						</div>
 						<!-- Рабочий лист Вкладка  Оформление -->
 						<div class="tab-pane" id="worksheet-design" role="tabpanel" aria-labelledby="worksheet-design-tab">
@@ -697,20 +804,16 @@
 							ПЛАТЕЖИ
 							ЗАГОЛОВОК
 							-->
-							<div class="input-group border-bottom border-top border-info">
-								<div class="col-9 p-2 bg-info">
-									<span class="text-white">Платежи</span>
-									<span style="float: right;"><a href="#"><i class="fas fa-plus-circle text-white"></i></a></span>
-								</div>
-								<div class="col-3 d-flex align-items-center">
-									<a href="#" class="btn btn-info btn-block">Обновить</a>
-								</div>
+							<div class="p-2 bg-info d-flex">
+								<span class="flex-grow-1">
+									<a class="text-white" data-toggle="collapse" href="#wsdesign1" aria-expanded="false" aria-controls="wsdesign1">Платежи</a>
+								</span>
 							</div>
 							<!-- 
 							ПЛАТЕЖИ
 							КОНТЕНТ
 							-->
-							<div>
+							<div id="wsdesign1" class="collapse">
 								<div class="input-group">
 									<div class="col-3"><label>Сумма платежа</label></div>
 									<div class="col-6"><label>Дата платежа</label></div>
@@ -737,24 +840,21 @@
 									</div>
 								</div>
 							</div>
-							<br>
 							<!-- 
 							ОФОРМЛЕНИЕ
 							ЗАГОЛОВОК
 							-->
-							<div class="input-group border-bottom border-top border-info">
-								<div class="col-9 p-2 bg-info">
-									<span class="text-white">Оформление</span>
-								</div>
-								<div class="col-3 d-flex align-items-center">
-									<a href="#" class="btn btn-info btn-block">Обновить</a>
-								</div>
+							<div class="p-2 bg-info d-flex">
+								<span class="flex-grow-1">
+									<a class="text-white" data-toggle="collapse" href="#wsdesign2" aria-expanded="false" aria-controls="wsdesign2">Оформление</a>
+								</span>
+								<span class="col-2"><a href="#" class="text-white">Обновить</a></span>
 							</div>
 							<!-- 
 							ОФОРМЛЕНИЕ
 							КОНТЕНТ
 							-->
-							<div>
+							<div id="wsdesign2" class="collapse">
 								<div class="input-group">
 									<div class="col-3"><label>Номер договора</label></div>
 									<div class="col-3"><label>Дата договора</label></div>
@@ -795,7 +895,7 @@
 								</div>
 								<hr>
 								<div class="input-group">
-									<div class="col-3"><label>VOC-RECO</label></div>
+									<div class="col-3"><label>Скрипт VOC</label></div>
 									<div class="col-3"><label>Дата опроса</label></div>
 									<div class="col-6"><label>Решение РОП</label></div>
 								</div>
@@ -816,25 +916,22 @@
 									</div>
 								</div>
 							</div>
-							<br>
 							<!-- 
 							КРЕДИТОВАНИЕ И ЛИЗИНГ
 							ЗАГОЛОВОК
 							-->
-							<div class="input-group border-bottom border-top border-info">
-								<div class="col-9 p-2 bg-info">
-									<span class="text-white">Кредитование и лизинг</span>
-									<span style="float: right;"><a href="#"><i class="fas fa-plus-circle text-white"></i></a></span>
-								</div>
-								<div class="col-3 d-flex align-items-center">
-									<a href="#" class="btn btn-info btn-block">Обновить</a>
-								</div>
+							<div class="p-2 bg-info d-flex">
+								<span class="flex-grow-1">
+									<a class="text-white" data-toggle="collapse" href="#wsdesign3" aria-expanded="false" aria-controls="wsdesign3">Кредитование и лизинг</a>
+								</span>
+								<span class="col-1"><a href=""><i class="fas fa-plus-circle text-white"></i></a></span>
+								<span class="col-2"><a href="#" class="text-white">Обновить</a></span>
 							</div>
 							<!-- 
 							КРЕДИТОВАНИЕ И ЛИЗИНГ
 							КОНТЕНТ
 							-->
-							<div>
+							<div id="wsdesign3" class="collapse">
 								<div class="input-group">
 									<div class="col-3"><label>Консультант</label></div>
 									<div class="col-3"><label>Кредитор</label></div>
@@ -885,25 +982,22 @@
 									<input type="date" class="form-control col-3">
 								</div>
 							</div>
-							<br>
 							<!-- 
 							СТРАХОВАНИЕ И СЕРВИСЫ
 							ЗАГОЛОВОК
 							-->
-							<div class="input-group border-bottom border-top border-info">
-								<div class="col-9 p-2 bg-info">
-									<span class="text-white">Страхование и сервисы</span>
-									<span style="float: right;"><a href="#"><i class="fas fa-plus-circle text-white"></i></a></span>
-								</div>
-								<div class="col-3 d-flex align-items-center">
-									<a href="#" class="btn btn-info btn-block">Обновить</a>
-								</div>
+							<div class="p-2 bg-info d-flex">
+								<span class="flex-grow-1">
+									<a class="text-white" data-toggle="collapse" href="#wsdesign4" aria-expanded="false" aria-controls="wsdesign4">Страхование и сервисы</a>
+								</span>
+								<span class="col-1"><a href=""><i class="fas fa-plus-circle text-white"></i></a></span>
+								<span class="col-2"><a href="#" class="text-white">Обновить</a></span>
 							</div>
 							<!-- 
 							СТРАХОВАНИЕ И СЕРВИСЫ
 							КОНТЕНТ
 							-->
-							<div>
+							<div id="wsdesign4" class="collapse">
 								<div class="input-group">
 									<div class="col-3"><label>Полис ОСАГО</label></div>
 									<div class="col-3"><label>Полис КАСКО</label></div>
@@ -935,20 +1029,8 @@
 									<input type="date" class="form-control col-3">
 								</div>
 							</div>
+						</div>
 
-						</div>
-						<!-- Рабочий лист Вкладка  Комментарии -->
-						<div class="tab-pane" id="worksheet-comments" role="tabpanel" aria-labelledby="worksheet-comments-tab">
-							<p class="h3">комментарии</p>
-						</div>
-						<!-- Рабочий лист Вкладка  Автомобиль -->
-						<div class="tab-pane" id="worksheet-auto" role="tabpanel" aria-labelledby="worksheet-auto-tab">
-							<p class="h3">автомобиль</p>
-						</div>
-						<!-- Рабочий лист Вкладка  Воронка РЛ -->
-						<div class="tab-pane" id="worksheet-funnel" role="tabpanel" aria-labelledby="worksheet-funnel-tab">
-							<p class="h3">воронка рл</p>
-						</div>
 					</div>
 				</div>
 			</div><!-- /Блок c вкладками -->

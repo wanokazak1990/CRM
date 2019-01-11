@@ -37,7 +37,17 @@ class CRMMainController extends Controller
         // (на данный момент выводится список всех пользователей системы) 
     	$users = User::pluck('name', 'id');
         // Список возможных назначенных действий. Выводится при создании нового трафика
-    	$assigned_actions = crm_assigned_action::get();    
+
+        
+    	  
+        $assigned_actions = crm_assigned_action::pluck('name', 'id');
+        /*
+        $fieldlist = crm_all_field::get();
+
+        $clientTab = _tab_client::with('model')->with('manager')->with('action')->paginate(2);
+        */
+    	  //$assigned_actions = crm_assigned_action::get();    
+
 
         $test = DB::table('crm_tabs')
             ->join('crm_all_fields', 'crm_tabs.field_id', '=', 'crm_all_fields.id')

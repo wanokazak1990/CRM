@@ -121,7 +121,7 @@ class CRMAjaxController extends Controller
                     break;
 
                 case '_tab_stock':
-
+                	$query->with('car');
                     break;
                 
                 default:
@@ -139,7 +139,13 @@ class CRMAjaxController extends Controller
                 if(isset($item->creation_date))          $item->creation_date        =   @date('d.m.Y',$item->creation_date);
                 if(isset($item->traffic_type_id))        $item->traffic_type_id      =   @$help->trafic_type->name;
                 if(isset($item->admin_id))               $item->admin_id             =   @$help->admin->name;
-                if(isset($item->action_time))            $item->action_time          =   @date('d.m.Y',$item->action_time);
+                if(isset($item->action_time))            $item->action_time          =   @date('H:i',$item->action_time);
+                if(isset($item->car_id))
+                {
+                	unset($item->car_id);
+                	$item->model = @$help->car->model->name;
+                	$item->complect = @$help->car->complect->name;
+                }
             }
             
             $titles = crm_all_field::where('type_id',$class_name::$tab_index)->get();
