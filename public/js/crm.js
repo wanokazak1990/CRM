@@ -5,126 +5,83 @@ function log(val)
 
 $(document).ready(function() {
 
-	$(document).on('click','#crmTabs a',function(){
-		var obj = $("#crmTabPanels").find("div[aria-labelledby='"+$(this).attr('id')+"']");
-		if(obj.find('table').html()=='' || obj.find('table').html()===undefined)
-		{
-			var formData = new FormData();
-			formData.append('model',$(this).attr('model-name'));
-			$.ajax({
-				type: 'POST',
-				url: '/crmgetcontent',
-				dataType : "json", 
-		        cache: false,
-		        contentType: false,
-		        processData: false, 
-		        data: formData,
-		        headers: {
-			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			    },
-			    success:function(param){
-			    	var str = '';
-			    	log(param);
-
-			    	str += '<tr>';
-			    	param['titles'].forEach(function(item,i){
-			    		str += '<th>'+item.name+'</th>';		    		
-			    	});
-			    	str += '</tr>';
-
-			    	param['list'].data.forEach(function(item,i){			    		
-			    		str += '<tr>';
-			    		for(var index in item) {
-			    			if(index=='id') continue; 
-						    str += '<td>'+item[index]+'</td>'; 
-						}
-			    		str += '</tr>';
-			    	})
-			    	
-			    	obj.find('table').html(str);
-			    	obj.append(param['links']);
-			    },
-			    error:function(param){
-			    	log(1);
-			    }
-			});
-		}
-		else
-			log("Вкладка не пуста, наверное пользователь в ней уже что то делал, поэтому ничего не догружаем");
+	//ЗАГРУЗКА ПЕРВОЙ СТРАНИЦЫ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+	$(function(){
+		getContent($("#crmTabs a:first"));
 	})
 
 
 
 
 
+	//КЛИК ПО ССЫЛКАМ ПАГИНАТОРА
 	$(document).on('click','#crmTabPanels .tab-pane .pagination a',function(e){
 		e.preventDefault();
-		var link = $(this);
-		var obj = $(this).closest('.tab-pane');
-		var mas = link.attr('href').split('/');
-		var mas = mas[mas.length-1].split('?');
+		getContent($(this))
+	})
+
+
+
+
+	//КЛИК ПО ССЫЛКАМ НАВИГАЦИИ
+	//аттрибут id ссылки в навигации (клиенты, трафик, автосклад и ...) равен аттрибуту aria-labelledby контент-полей вкладок. тоесть
+	//к ссылке клиенты у которой id = 1, привязано контент-поле с аттрибутом aria-labelledby = 1
+	$(document).on('click','#crmTabs a',function(e){
+		e.preventDefault();
+		var content_area = $("#crmTabPanels").find("div[aria-labelledby='"+$(this).attr('id')+"']");//текущая вкладка
+		var content_table = content_area.find('table');//таблица во вкладке
+		if(content_table.html()=='' || content_table.html()===undefined)//если во вкладке пусто, то достаём контент
+		{
+			getContent($(this));
+		}
+	})
+
+
+
+
+
+
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	//ADD TRAFFIC///////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	$(document).on("click","#traffic_submit",function(e){
+		var Form = $(this).closest('form');
+		var data = Form.serialize();
 		$.ajax({
 			type: 'POST',
-			url: '/crmgetcontent?'+mas[mas.length-1],
+			url: '/trafficadd',
 			dataType : "json", 
-	        cache: false,
-	        contentType: false,
-	        processData: false, 
+	        data: data,
 	        headers: {
 		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		    },
-		    success:function(param){
-		    	var str = '';
-		    	log(param)
-
-		    	str += '<tr>';
-		    	param['titles'].forEach(function(item,i){
-		    		str += '<th>'+item.name+'</th>';		    		
-		    	});
-		    	str += '</tr>';
-		    	
-		    	param['list'].data.forEach(function(item,i){
-		    		str += '<tr>';
-		    			for(var index in item) { 
-		    				if(index=='id') continue;
-						    str += '<td>'+item[index]+'</td>'; 
-						}
-		    		str += '</tr>';
-		    	})
-		    	
-		    	obj.find('table').html(str);
-		    	if(param['links']!==undefined)
-		    	{
-		    		obj.find('.pagination').remove();
-		    		obj.append(param['links']);
+		    success: function(data, xhr,ajaxOptions, thrownError)
+		    {
+		    	if(data.status===1){
+		    		send(data.user,data.message);
+		    		refreshContent();
+		    	}
+		    	else{
+		    		log('На сервере какие-то проблемы. Трафик не создан. ');
+		    		log("Ошибка: code-"+xhr.status+" "+thrownError);
+			    	log(xhr.responseText);
+			    	log(ajaxOptions)
 		    	}
 		    },
-		    error:function(param){
-		    	log(1);
+		    error:function(xhr, ajaxOptions, thrownError){
+		    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+		    	log(xhr.responseText);
+		    	log(ajaxOptions)
 		    }
-		});
-	})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		})
+	});
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	//END TRAFFIC///////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
 
 
 
@@ -147,6 +104,17 @@ $(document).ready(function() {
 		$('#hidden_panel').css('right', '-50%');
 		$('#disableContent').css('display', 'none');
 	});
+
+})
+
+
+
+
+
+
+
+
+
 
 	/** 
 	 * Отправка id открытой вкладки через AJAX, для получения в Настройках полей соответствующих полей для отображения
@@ -316,4 +284,3 @@ $(document).ready(function() {
 		}
 	});
 
-});

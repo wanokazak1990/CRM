@@ -81,6 +81,7 @@
 		</div>
 		<!-- Вкладка Лист трафика -->
 		<div class="tab-pane" id="trafficList" role="tabpanel" aria-labelledby="trafficList-tab">
+
 			<!-- Панель иконок -->
 			<div class="border input-group align-items-center">
 				<div class="flex-grow-1">
@@ -97,6 +98,7 @@
 				<span class="h3">05 января 2018</span>
 			</div>
 			<!-- Форма вкладки -->
+
 			{!! Form::open() !!}
 			{{ csrf_field() }}
 			<span class="h4">Тип трафика</span>
@@ -127,7 +129,10 @@
 			<span class="h4">Назначенный менеджер</span>
 			<div class="input-group btn-group-toggle" data-toggle="buttons">
 				@foreach($users as $key => $user)
-				<div class="col-3 btn btn-outline-info"><input type="radio" name="manager" value="{{ $key }}" autocomplete="off"> {{ $user }}</div>
+					<div class="col-3 btn btn-outline-info" >
+						<input type="radio" name="manager" value="{{ $key }}" autocomplete="off" > 
+						{{ $user }}
+					</div>
 				@endforeach
 			</div>
 			<hr>
@@ -146,6 +151,7 @@
 			</div>
 			<hr>
 
+
 			<span class="h4">Клиент</span>
 			<div>
 				<div class="input-group">
@@ -163,11 +169,25 @@
 			</div>
 
 			<div class="input-group justify-content-center p-3 no-gutters">
-				<input type="submit" name="traffic_submit" class="col-3 btn btn-outline-success" value="Назначить трафик">
-				<input type="button" class="col-3 btn btn-outline-danger" value="Отменить">
+				<button type="button" id="traffic_submit" name="traffic_submit" class="btn btn-outline-info col-3">
+						Назначить трафик
+					</button>
+          <button type="button" class="btn btn-outline-info col-3">
+              Отмена
+            </button>
 			</div>
 			{!! Form::close() !!}
 		</div>
+
+
+
+
+
+
+
+
+
+
 		
 		<!-- Вкладка Рабочий лист -->
 		<div class="tab-pane" id="worksheet" role="tabpanel" aria-labelledby="worksheet-tab">
