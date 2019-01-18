@@ -1,6 +1,8 @@
-$("body").on("click",".alert_traffic_block",function(){
-	$(this).removeClass("animate-label-traffic");
-	traffic_id = $(this).find('a').attr('traffic_id');
+function addAlertTraffic(param)
+
+{	
+	modal = $(".original_traffic_modal").clone();
+	traffic_id = param.traffic_id;
 	$.ajax({
 		url: '/gettraffic',
 		type: 'POST',
@@ -10,56 +12,92 @@ $("body").on("click",".alert_traffic_block",function(){
 	    },
 		success: function(data){
 			var obj = JSON.parse(data);
-			var div = '<div class="traffic_modal">';
-				div += '<div class="col-12">';
-					div += '<h3>Трафик №'+obj.id+' <span style="float:right">'+obj.manager+'</span></h3>';
-					div += '<hr/>';
-					div += '<h3>'+obj.date+' '+obj.author+'</h3>';
-					div += '<div class="row">';
+			
+			modal.removeClass("original_traffic_modal");
+			modal.attr("traffic_id",param.traffic_id);
+			modal.find('.t_id').html(obj.id);
+			modal.find('.t_date').html(obj.date);
+			modal.find('.t_author').html(obj.author);
+			modal.find('.t_type').html(obj.type);
+			modal.find('.t_model').html(obj.model);
+			modal.find('.t_address').html(obj.address);
+			modal.find('.t_action').html(obj.action);
+			modal.find('.t_name').html(obj.client);
+			modal.find('.t_timer').html(response_time/1000);			
 
-						div += '<div class="col-4">';
-							div += '<div>Тип трафика</div>';
-							div += '<div class="param btn btn-block">'+obj.type+'</div>';
-						div += '</div>';
+			modal.appendTo("body");
 
-						div += '<div class="col-4">';
-							div += '<div>Спрос</div>';
-							div += '<div class="param btn btn-block">'+obj.model+'</div>';
-						div += '</div>';
+			if(param.response===1)//если это возврат обратно на рецепшон
+			{
+				//modal.find(".button-div").css('display','none');
+				modal.find(".hidden-button").css('display','block');
+				modal.find(".show-button").css('display','none');
+				//modal.find(".button-div").removeClass('hidden-button');
+				modal.find('.t_timer').remove();
+			}
+			if(param.response!==1)//если это отправленная модаль для манагера
+			{
+				modal.find(".hidden-button").css('display','none');
+				modal.find(".show-button").css('display','block');
+		      	var timerId = setInterval(function() {
+				  var current_timer =modal.find('.t_timer').html();
+				  modal.find('.t_timer').html(current_timer-1);
+				}, 1000);
 
-						div += '<div class="col-4">';
-							div += '<div>Зона трафика</div>';
-							div += '<div class="param btn btn-block">'+obj.address+'</div>';
-						div += '</div>';
+				setTimeout(function() {
+				  clearInterval(timerId);
+				  $(".traffic_modal[traffic_id='"+param.traffic_id+"']").remove();
+				  close(param);
+				}, response_time);
+			}
 
-						div += '<div class="col-4">';
-							div += '<div>Назначено</div>';
-							div += '<div class="param btn btn-block">'+obj.action+'</div>';
-						div += '</div>';
-
-						div += '<div class="col-8">';
-							div += '<div>&nbsp</div>';
-							div += '<div class="btn btn-block text-left" style="font-size:24px;">'+obj.client+'</div>';
-						div += '</div>';
-
-						div += '<div class="w-100" style="height:30px;"></div>';
-
-						div += '<div class="col-4">';
-							div += '<button class="btn btn-block btn-success" id="traffic_deny">Принять</button>';
-						div += '</div>';
-
-						div += '<div class="col-4">';
-							div += '<button class="btn btn-block btn-danger" id="traffic_deny">Отказаться</button>';
-						div += '</div>';
-
-					div += '</div>';
-				div += '</div>';
-			div+="</div>";
-
-			$("body").append(div);
 		},
 		error: function(){
 			alert(0)
 		}
 	})
-});
+
+
+	//ОТКЛОНИТЬ МОДАЛЬНОЕ ОКНО ТРАФИКА 
+	modal.on('click','.traffic_deny',function(){
+		$(".traffic_modal[traffic_id='"+param.traffic_id+"']").remove();
+		modal='';
+	})
+
+	//ОТПРАВИТЬ ВСЕМ МОДАЛЬНОЕ ОКНО ТРАФИКА
+	modal.on('click','.traffic_toall',function(){
+		param.from = 0;
+		close(param);
+		$(".traffic_modal[traffic_id='"+param.traffic_id+"']").remove();
+		modal='';
+	})
+
+	//ПОВТОР ОТПРАВКИ МОДАЛЬНОГО ОКНА
+	modal.on('click','.traffic_resend',function(){
+		close(param);
+		$(".traffic_modal[traffic_id='"+param.traffic_id+"']").remove();
+		modal='';
+	})
+
+	//ПРИНЯТЬ ТРАФИК
+	modal.on('click','.traffic_apply',function(){
+		alert('трафик будет принят');
+	})
+};
+
+
+function close(param){
+	var response = 1
+	if(param.response == '1')
+	{
+		response = 0;
+	}
+	var message = {
+		'traffic_id':param.traffic_id,
+		'user':param.from,
+		'client':param.client,
+		'response':response
+	};
+	send(message);
+}
+

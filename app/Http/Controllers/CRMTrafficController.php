@@ -35,13 +35,10 @@ class CRMTrafficController extends Controller
 
     		if($traffic->id)
             {
-                $data['status'] = 1;
-                $data['user'] = $traffic->manager_id;
-                $data['message'] = "
-                    <a class='alert_traffic' traffic_id=' {$traffic->id} '>
-                       {$client->name} 
-                    </a>
-                ";
+                $data['status'] = 1; //статус что всё хорошо
+                $data['data']['user'] = $traffic->manager_id; //кому отправлять
+                $data['data']['client'] = $client->name; //имя клиента
+                $data['data']['traffic_id'] = $traffic->id; //ид нового трафика
                 echo json_encode($data);
             }
             else
