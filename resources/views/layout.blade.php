@@ -143,7 +143,7 @@
 	                    </button>
 
 	                    <!-- Branding Image -->
-	                    <a class="navbar-brand" href="">
+	                    <a class="navbar-brand" href="/home">
 	                        "ОВЕН-АВТО" система управления контентом
 	                    </a>
 	                </div>

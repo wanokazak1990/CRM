@@ -97,6 +97,7 @@
 							role="tab" 
 							aria-controls="stock" 
 							aria-selected="false"
+							model-name="_tab_stock"
 						>
 							Автосклад
 						</a>

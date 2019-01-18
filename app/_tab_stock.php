@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class _tab_stock extends Model
 {
 
+    public static $tab_index = 3;
+
     public function prepare()
     {
    		
@@ -29,5 +31,11 @@ class _tab_stock extends Model
     	}
     	else
     		return null;
+    }
+
+
+    public function car()
+    {
+        return $this->hasOne('App\avacar', 'id', 'id');
     }
 }

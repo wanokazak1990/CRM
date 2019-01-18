@@ -16,7 +16,7 @@ class SqlViewStock extends Migration
         $sql = "
             CREATE OR REPLACE VIEW _tab_stocks 
             AS SELECT 
-                car.id
+                car.id, car.id as car_id 
             FROM avacars as car
         ";
 
