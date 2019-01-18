@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Redis;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -396,3 +397,21 @@ Route::post('/getcurrentfields', 'CRMAjaxController@getCurrentFields')->name('ge
 Route::post('/getcurrentsettings', 'CRMAjaxController@getCurrentSettings')->name('getcurrentsettings');
 
 Route::post('/crmgetcontent', 'CRMAjaxController@crmgetcontent')->name('crmgetcontent');
+
+
+
+
+
+
+
+
+
+
+
+/*ТЕСТОВЫЕ МАРШРУТЫ*/
+Route::get('/testim', function(){
+	Redis::set('name', 'Taylor');
+	$param = Redis::get('name');
+	echo $param;
+	echo "string";
+});

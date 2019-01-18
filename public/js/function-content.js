@@ -100,6 +100,49 @@ function refreshContent()
 
 
 
+//Принимает объект формы и массив названий полей формы
+// form - это $('form')
+// params - это массив например [name,lastname,phone, age]
+// в случае если все элементы формы с названиями из массива params не пусти или нажаты, то вернёт истину
+// иначе если хотя бы один из элементов формы с названием из массива params пуст, то вернёт ошибку в виде массива
+// где элемент массива это сообщение об ошибке для конкретного поля формы
+function validateForm(form, params)
+{
+	var error = [];
+	var k = 1;
+	if(!Array.isArray(params))
+		return false;
+
+	params.forEach(function(item,i){
+		var schet = 0;
+		form.find('[name="'+item+'"]').each(function(){
+			
+			if($(this).attr('type')=='text')
+			{
+				if($(this).val()=="")
+					schet = 0;
+				else
+					schet = 1;
+
+			}
+
+			else if ($(this).attr('type')=='radio')
+			{
+				var count = form.find('[name="'+item+'"]').length;
+				if($(this).prop("checked"))
+					schet = 1;
+			}
+		})
+
+		if(schet == 0)
+			error.push('\n'+(k++)+' - Поле '+item+' не заполнено');
+	})
+
+	if(error.length == 0)
+		return true;
+	else 
+		return error;
+}
 
 
 

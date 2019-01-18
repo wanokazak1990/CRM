@@ -129,6 +129,7 @@ body{
 	background: #fff;
 	border: 1px solid #aaa;
 	padding: 15px 0;
+	z-index: 9999;
 }
 .traffic_modal .param{
 	background: #fc3;
@@ -136,3 +137,8 @@ body{
 	margin-bottom: 10px;
 }
 
+.original_traffic_modal
+{
+	display: none;
+}
+.hidden-button button{/*display: none;*/}

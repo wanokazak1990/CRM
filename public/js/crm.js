@@ -49,6 +49,15 @@ $(document).ready(function() {
 	$(document).on("click","#traffic_submit",function(e){
 		var Form = $(this).closest('form');
 		var data = Form.serialize();
+
+		var required_params = ['assigned_action','client_name'];
+		
+		if(validateForm(Form,required_params)!==true)
+		{
+			alert(validateForm(Form,required_params));
+			return 0;
+		}
+
 		$.ajax({
 			type: 'POST',
 			url: '/trafficadd',
@@ -59,9 +68,13 @@ $(document).ready(function() {
 		    },
 		    success: function(data, xhr,ajaxOptions, thrownError)
 		    {
-		    	if(data.status===1){
-		    		send(data.user,data.message);
-		    		refreshContent();
+		    	if(data.status===1){//если трафик создан, нет ошибок и статус = 1
+		    		send(data.data); //отправляем сообщение 
+		    		refreshContent(); //обновляем контент
+		    		Form[0].reset(); //чистим форму создание трафика
+		    		Form.find(".active").each(function(){
+		    			$(this).removeClass('active');
+		    		})
 		    	}
 		    	else{
 		    		log('На сервере какие-то проблемы. Трафик не создан. ');
@@ -75,7 +88,8 @@ $(document).ready(function() {
 		    	log(xhr.responseText);
 		    	log(ajaxOptions)
 		    }
-		})
+		});
+		
 	});
 	////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
