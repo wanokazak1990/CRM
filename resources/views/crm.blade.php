@@ -49,6 +49,10 @@
 @section('modal_settings')
 @show
 
+<!-- МОДАЛЬНОЕ ОКНО КАРТОЧКИ АВТОМОБИЛЯ -->
+@section('modal_autocard')
+@show
+
 <!-- ОСНОВНОЙ КОНТЕНТ -->
 <div id="main" class="container-fluid">
 	<div class="row" style="height: 100%; overflow-x: auto;">
@@ -182,11 +186,11 @@
 
 					<div class="col-sm-6">
 
-						<button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal">
+						<button type="button" class="btn btn-light" data-toggle="modal" data-target="#settingsModal">
 							<i class="fas fa-cog"></i>
 						</button>
 
-						<button type="button" class="btn btn-light">
+						<button type="button" class="btn btn-light" data-toggle="modal" data-target="#autocardModal">
 							<i class="fas fa-search"></i>
 						</button>
 
