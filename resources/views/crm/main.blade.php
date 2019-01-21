@@ -4,6 +4,8 @@
 
 @extends('crm.modal_settings')
 
+@extends('crm.modal_autocard')
+
 @section('main')
 	
 
