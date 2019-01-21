@@ -169,12 +169,9 @@
 			</div>
 
 			<div class="input-group justify-content-center p-3 no-gutters">
-				<button type="button" id="traffic_submit" name="traffic_submit" class="btn btn-outline-info col-3">
-						Назначить трафик
-					</button>
-          <button type="button" class="btn btn-outline-info col-3">
-              Отмена
-            </button>
+				<button type="button" id="traffic_submit" name="traffic_submit" class="btn btn-outline-success col-4">
+					Назначить трафик
+				</button>
 			</div>
 			{!! Form::close() !!}
 		</div>
@@ -221,9 +218,9 @@
 						</select>
 					</div>
 					<div class="input-group">
-						<div class="col-3 text-success d-flex align-items-center">LID Renault</div>
-						<div class="col-3 text-success d-flex align-items-center">DUSTER</div>
-						<div class="col-3 text-success d-flex align-items-center">Быков</div>
+						<input type="text" class="col-3 form-control" value="LID Renault" disabled>
+						<input type="text" class="col-3 form-control" value="DUSTER" disabled>
+						<input type="text" class="col-3 form-control" value="Быков" disabled>
 						<input type="date" class="col-3 text-danger form-control">
 					</div>
 				</div>
@@ -256,7 +253,9 @@
 					<div class="input-group">
 						<input type="text" class="col-3 form-control" placeholder="Введите номер">
 						<input type="text" class="col-3 form-control" placeholder="Введите Email">
-						<input type="text" class="col-3 form-control" placeholder="Маркер">
+						
+						{!! Form::select('worklist_marker',$worklist_markers, '', ['class' => 'col-3 form-control']) !!}
+						
 						<div class="col-3 d-flex align-items-center">
 							<a href=""><i class="fas fa-times text-danger"></i></a>
 						</div>
@@ -264,7 +263,9 @@
 					<div class="input-group">
 						<input type="text" class="col-3 form-control" placeholder="Введите номер">
 						<input type="text" class="col-3 form-control" placeholder="Введите Email">
-						<input type="text" class="col-3 form-control" placeholder="Маркер">
+						
+						{!! Form::select('worklist_marker',$worklist_markers, '', ['class' => 'col-3 form-control']) !!}
+						
 						<div class="col-3 d-flex align-items-center">
 							<a href=""><i class="fas fa-times text-danger"></i></a>
 							<a href=""><i class="fas fa-plus-circle text-primary"></i></a>
@@ -349,7 +350,7 @@
 										<div class="text-right">
 											<a href=""><i class="fas fa-trash-alt text-danger"></i></a>
 										</div>
-										<div class="bg-light border d-flex justify-content-center">DUSTER</div>
+										<input type="text" class="form-control text-center" value="DUSTER" disabled>
 										<div class="d-flex justify-content-center">
 											<p align="center">
 												01.10.2018 в 15:40
@@ -362,7 +363,7 @@
 										<div class="text-right">
 											<a href=""><i class="fas fa-trash-alt text-danger"></i></a>
 										</div>
-										<div class="bg-light border d-flex justify-content-center">KAPTUR</div>
+										<input type="text" class="form-control text-center" value="KAPTUR" disabled>
 										<div class="d-flex justify-content-center">
 											<p align="center">
 												Сегодня в 11:30
@@ -395,7 +396,7 @@
 										<div class="text-right">
 											<a href=""><i class="fas fa-trash-alt text-danger"></i></a>
 										</div>
-										<div class="bg-light border d-flex justify-content-center">DUSTER</div>
+										<input type="text" class="form-control text-center" value="DUSTER" disabled>
 										<select class="form-control">
 											<option>Механическая</option>
 											<option>Автомат</option>
@@ -409,7 +410,7 @@
 										<div class="text-right">
 											<a href=""><i class="fas fa-trash-alt text-danger"></i></a>
 										</div>
-										<div class="bg-light border d-flex justify-content-center">KAPTUR</div>
+										<input type="text" class="form-control text-center" value="KAPTUR" disabled>
 										<select class="form-control">
 											<option>Выбрать</option>
 										</select>
@@ -504,28 +505,87 @@
 									</div>
 								</div>
 								<hr>
-								<div>
-									<p class="h5">Система ЭРА-ГЛОНАСС</p>
-									<div class="input-group">
-										<span class="col-10"><input type="checkbox"></span>
-										<span class="col-2">11 590 р.</span>
+								<div class="input-group">
+									<!-- Левый блок -->
+									<div class="col-6">
+										<div style="width: 100%; height: 200px; background-color: #ddd;">
+											Тут типа картинка машины
+										</div>
+										<div class="input-group d-flex justify-content-center">
+											<button class="btn btn-primary">1</button>
+											<button class="btn btn-light">2</button>
+											<button class="btn btn-warning">3</button>
+											<button class="btn btn-danger">4</button>
+										</div>
+										<hr>
+										<div class="input-group no-gutters">
+											<div class="col-12 font-weight-bold">Исполнение E2GB4AG</div>
+											<p class="text-secondary">
+												Двигатель бензиновый 16-клапанный<br>
+												Рабочий объем 2.0 л. (143 л. с.)<br>
+												КПП механическая, шестиступенчатая<br>
+												Привод подключаемый, полный
+											</p>
+										</div>
+
 									</div>
-								</div>
-								<hr>
-								<div>
-									<p class="h5">Отделка сидений кожей</p>
-									<div class="input-group">
-										<span class="col-10"><input type="checkbox"></span>
-										<span class="col-2">35 990 р.</span>
-									</div>
-								</div>
-								<hr>
-								<div>
-									<p class="h5">Пакет Orange Style</p>
-									<p>Комплект персонализации Orange (сиденья с текстильными оранжевыми вставками, оранжевая окантовка центральной консоли, коврики со светоотражающей оранжевой окантовкой)</p>
-									<div class="input-group">
-										<span class="col-10"><input type="checkbox"></span>
-										<span class="col-2">13 990 р.</span>
+									<!-- Правый блок -->
+									<div class="col-6">
+										<div class="d-flex align-items-center justify-content-center">
+											<p align="center" class="h5">
+												Renault Duster<br>
+												1 028 980 руб.<br>
+												Прогноз 02.01.2019
+											</p>
+										</div>
+
+										<div class="d-flex border-bottom">
+											<label class="flex-grow-1 font-weight-bold">Комплектация Privilege</label>
+											<a href="#">Подробнее</a>
+										</div>
+										<div class="h5 text-right">1 012 990 руб.</div>
+
+										<div class="border-bottom font-weight-bold">
+											Выберите опционное оборудование
+										</div>
+										<div class="input-group no-gutters">
+											<div class="col-12">Система ЭРА-ГЛОНАСС</div>
+											<div class="col-12 d-flex no-gutters">
+												<div class="col-6">
+													<input type="checkbox"> CALL1+TCU3G2
+												</div>
+												<div class="col-6 h5 text-right">
+													11 990 руб.
+												</div>
+											</div>
+										</div>
+										<div class="input-group no-gutters">
+											<div class="col-12">Окраска кузова металлик</div>
+											<div class="col-12 d-flex no-gutters">
+												<div class="col-6">
+													<input type="checkbox" checked> PM
+												</div>
+												<div class="col-6 h5 text-right">
+													15 990 руб.
+												</div>
+											</div>
+										</div>
+										<div class="input-group no-gutters">
+											<div class="col-12">
+												Пакет Безопасность 2
+												<br>
+												Подушки безопасности передние боковые | Подушка безопасности переднего пассажира
+											</div>
+											<div class="col-12 d-flex no-gutters">
+												<div class="col-6">
+													<input type="checkbox"> PKSECB
+												</div>
+												<div class="col-6 h5 text-right">
+													16 990 руб.
+												</div>
+											</div>
+										</div>
+										
 									</div>
 								</div>
 							</div>
@@ -551,11 +611,15 @@
 								</div>
 
 								<div class="input-group">
-									<div class="col-3 bg-light d-flex align-items-center">21 500</div>
+									<div class="col-3">
+										<input type="text" class="form-control" value="21 500" disabled>
+									</div>
 									<div class="col-3">
 										<input type="text" class="form-control" placeholder="Введи" value="25 000">
 									</div>
-									<div class="col-3 bg-light d-flex align-items-center">37 200</div>
+									<div class="col-3">
+										<input type="text" class="form-control" value="37 200" disabled>
+									</div>
 									<div class="col-3 bg-light d-flex align-items-center">
 										<span><input type="checkbox"> Разделить в КП</span>
 									</div>
@@ -580,7 +644,7 @@
 
 								<div class="input-group">
 									<label class="col-9">Предложенное оборудование:</label>
-									<a href="#" class="col-3 text-success">Установить</a>
+									<a href="#" class="col-3 text-primary">Установить</a>
 								</div>
 
 								<div class="input-group">
@@ -627,6 +691,7 @@
 									<input type="text" class="col-3 form-control" placeholder="Пробег">
 								</div>
 								<hr>
+
 								<div class="input-group">
 									<label class="col-3">Владельцы</label>
 									<label class="col-3">Оценка клиента</label>
@@ -634,60 +699,69 @@
 								<div class="input-group">
 									<input type="text" class="col-3 form-control" placeholder="Количество" value="2">
 									<input type="text" class="col-3 form-control" placeholder="Руб.">
-									<div class="col-3">
-										<a href="#" class="btn btn-light"><i class="far fa-file"></i></a>
-										<a href="#" class="btn btn-light"><i class="far fa-file-alt"></i></a>
-									</div>
+									<button type="button" class="col-3 btn btn-success">Фотографии</button>
+									<button type="button" class="col-3 btn btn-primary">Отдать на оценку</button>
 								</div>
 								<br>
-								<div class="input-group no-gutters">
-									<div class="col-3">
-										<button type="button" class="btn btn-outline-success btn-block">Фотографии</button>
-									</div>
-									<div class="col-3">
-										<button type="button" class="btn btn-outline-success btn-block">Анализ рынка</button>
-									</div>
-									<div class="col-3">
-										<button type="button" class="btn btn-outline-success btn-block">Акт осмотра</button>
-									</div>
-									<div class="col-3">
-										<button type="button" class="btn btn-outline-success btn-block">Акт диагностики</button>
-									</div>
-								</div>
-								<hr>
+								
 								<div class="input-group">
-									<label class="col-3">Модель на обмен</label>
-									<label class="col-3">Оценка рынок</label>
-									<label class="col-3">Оценка осмотр</label>
-									<label class="col-3">Оценка диагностика</label>
-								</div>
-								<div>
-									<div class="input-group">
-										<div class="col-3 bg-light d-flex align-items-center">DUSTER</div>
-										<div class="col-3 bg-light d-flex align-items-center">350 000 руб.</div>
-										<div class="col-3 bg-light d-flex align-items-center">345 000 руб.</div>
-										<div class="col-3 bg-light d-flex align-items-center">340 000 руб.</div>
+									<div class="col-3 offset-3 text-center">
+										<label>Анализ рынка</label>
 									</div>
-									<div class="input-group">
-										<div class="col-3 bg-light d-flex align-items-center">-90 000 руб. <sup class="text-danger">20 000 руб.</sup></div>
-										<div class="col-3 d-flex align-items-center">01.12.2018 в 15:30</div>
-										<div class="col-3 d-flex align-items-center">01.12.2018 в 15:51</div>
-										<div class="col-3 d-flex align-items-center">01.12.2018 в 18:30</div>
+									<div class="col-3 text-center">
+										<label>Акт осмотра</label>
 									</div>
-									<br>
-									<div class="input-group">
-										<div class="col-3 bg-light d-flex align-items-center">KAPTUR</div>
-										<div class="col-3 bg-light d-flex align-items-center">Руб.</div>
-										<div class="col-3 bg-light d-flex align-items-center">Руб.</div>
-										<div class="col-3 bg-light d-flex align-items-center">Руб.</div>
-									</div>
-									<div class="input-group">
-										<div class="col-3 bg-light d-flex align-items-center"><span class="text-danger">Мало данных</span></div>
-										<div class="col-3 d-flex align-items-center"></div>
-										<div class="col-3 d-flex align-items-center"></div>
-										<div class="col-3 d-flex align-items-center"></div>
+									<div class="col-3 text-center">
+										<label>Акт диагностики</label>
 									</div>
 								</div>
+								<div id="CLIENT_AUTO_NESKOLKO_MASHIN_ANALIZ_VSE_TAKOE">
+									<div id="ANALIZ_111" class="border p-1">
+										<div class="input-group">
+											<div class="col-3 d-flex align-items-center justify-content-end">
+												<a href="#"><i class="fas fa-times"></i></a>
+											</div>
+											<div class="col-3 text-center">
+												<a href="#" class="btn btn-primary"><i class="fas fa-clipboard-list"></i></a>
+											</div>
+											<div class="col-3 text-center">
+												<a href="#" class="btn btn-primary"><i class="fas fa-clipboard-list"></i></a>
+											</div>
+											<div class="col-3 text-center">
+												<a href="#" class="btn btn-primary disabled"><i class="fas fa-clipboard-list"></i></a>
+											</div>
+										</div>
+										<div class="input-group">
+											<input type="text" class="col-3 form-control text-center" value="DUSTER" disabled>
+											<input type="text" class="col-3 form-control-plaintext text-center" value="350 000 руб." disabled>
+											<input type="text" class="col-3 form-control-plaintext text-center" value="345 000 руб." disabled>
+											<input type="text" class="col-3 form-control-plaintext text-center text-secondary" value="Сумма, руб." disabled>
+										</div>
+									</div>
+									<div id="ANALIZ_222" class="border p-1">
+										<div class="input-group">
+											<div class="col-3 d-flex align-items-center justify-content-end">
+												<a href="#"><i class="fas fa-times"></i></a>
+											</div>
+											<div class="col-3 text-center">
+												<a href="#" class="btn btn-primary disabled"><i class="fas fa-clipboard-list"></i></a>
+											</div>
+											<div class="col-3 text-center">
+												<a href="#" class="btn btn-primary disabled"><i class="fas fa-clipboard-list"></i></a>
+											</div>
+											<div class="col-3 text-center">
+												<a href="#" class="btn btn-primary disabled"><i class="fas fa-clipboard-list"></i></a>
+											</div>
+										</div>
+										<div class="input-group">
+											<input type="text" class="col-3 form-control text-center" value="KAPTUR" disabled>
+											<input type="text" class="col-3 form-control-plaintext text-center text-secondary" value="Сумма, руб." disabled>
+											<input type="text" class="col-3 form-control-plaintext text-center text-secondary" value="Сумма, руб." disabled>
+											<input type="text" class="col-3 form-control-plaintext text-center text-secondary" value="Сумма, руб." disabled>
+										</div>
+									</div>
+								</div>
+
 							</div>							
 							<!-- 
 							ПРОГРАММА ЛОЯЛЬНОСТИ
@@ -796,7 +870,125 @@
 						</div>
 						<!-- Рабочий лист Вкладка  Автомобиль -->
 						<div class="tab-pane" id="worksheet-auto" role="tabpanel" aria-labelledby="worksheet-auto-tab">
-							<p class="h3">автомобиль</p>
+							
+							<div class="input-group d-flex justify-content-center">
+								<div style="width: 300px; height: 200px; background-color: #eee;" class="d-flex align-items-center justify-content-center">
+									Типа картинка с машиной
+								</div>
+							</div>
+
+							<div class="input-group border-bottom">
+								<div class="col-4 text-secondary">
+									X7LHSRGA561473715
+								</div>
+								<div class="col-4 text-secondary">
+									Этап поставки
+								</div>
+								<div class="col-4 text-secondary">
+									Цена продажи
+								</div>
+							</div>
+
+							<div class="input-group">
+								<div class="col-4 h5">
+									Renault Duster<br>
+									Expression
+								</div>
+								<div class="col-4 h5">
+									А/м в наличии<br>
+									Склад Овен-авто
+								</div>
+								<div class="col-4 h5">
+									910 000 руб.<br>
+									<span class="text-warning">- 20 000 руб.</span>
+								</div>
+							</div>
+
+							<div class="input-group">
+								<div class="col-4">
+									<div>
+										<label>Исполнение E1FB2JA</label>
+										<ul class="list-unstyled text-secondary">
+											<li>Двигатель бензиновый 16-клапанный</li>
+											<li>Рабочий объем 1.6 л. (114 л. с.)</li>
+											<li>КПП механическая, пятиступенчатая</li>
+											<li>Привод передний</li>
+										</ul>
+									</div>
+									<div>
+										<label>Комплектация Expression</label>
+										<ul class="list-unstyled text-secondary">
+											<li>Бамперы, окрашенные в цвет кузова</li>
+											<li>Брызговики задние</li>
+											<li>Брызговики передние</li>
+											<li>Диски колес R16 штампованные стальные</li>
+											<li>Защита картера двигателя</li>
+										</ul>
+									</div>
+								</div>
+								<div class="col-4">
+									<ul class="list-unstyled text-secondary border-bottom">
+										<li>Адаптация к запуску в холодном климате</li>
+										<li>Аудиосистема (FM, USB, AUX, Bluetooth)</li>
+										<li>Зеркала заднего вида с электроприводом и электроподогревом</li>
+										<li>Иммобилайзер</li>
+										<li>Рулевая колонка с регулировкой по высоте</li>
+										<li>Рулевая колонка с усилителем управления</li>
+										<li>Сиденье заднее с раздельной спинкой</li>
+										<li>Стеклоподъемники передние с электроприводом</li>
+										<li>Центральный замок с дистанционным управлением</li>
+										<li>Антиблокировочная система тормозов (ABS)</li>
+									</ul>
+									<div class="text-right h5 text-secondary">
+										849 990 руб.
+									</div>
+								</div>
+								<div class="col-4">
+									
+									<label>Цвет автомобиля</label>
+									<div class="input-group text-secondary no-gutters">
+										<div class="col-12 border-bottom border-warning">
+											Темный каштан
+										</div>
+										<div class="col-12 d-flex">
+											<div class="flex-grow-1">
+												D17
+											</div>
+											<div>
+												Кружок с цветом
+											</div>
+										</div>
+									</div>
+
+									<label>Опционное оборудование</label>
+									<div class="input-group text-secondary no-gutters">
+										<div class="col-12 border-bottom">
+											Окраска кузова металлик
+										</div>
+										<div class="col-12 d-flex">
+											<div class="flex-grow-1">
+												PM
+											</div>
+											<div class="h5">
+												15 990 руб.
+											</div>
+										</div>
+									</div>
+
+									<label>Дополнительное оборудование</label>
+									<ul class="list-unstyled text-secondary border-bottom">
+										<li>Защитная сетка на решетку радиатора</li>
+										<li>Коврики салона резиновые</li>
+										<li>Коврик багажника резиновый</li>
+									</ul>
+
+									<div class="text-right h5 text-secondary">
+										44 120 руб.
+									</div>
+
+								</div>
+							</div>
+
 						</div>
 						<!-- Рабочий лист Вкладка  Оформление -->
 						<div class="tab-pane" id="worksheet-design" role="tabpanel" aria-labelledby="worksheet-design-tab">

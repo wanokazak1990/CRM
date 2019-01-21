@@ -74,6 +74,17 @@ body{
 	background-color: #fff;
 	border: 1px #eee solid;
 }
+/* Стили вкладок карточки автомобиля*/
+#autocardModalTabs li a{
+	color: #888;
+	background-color: #eee;
+	border: 1px #ddd solid;
+}
+#autocardModalTabs li .active{
+	color: #000;
+	background-color: #fff;
+	border: 1px #eee solid;
+}
 /* Убирает выделение кнопки/ссылки/... после клика */
 :focus{
     outline-style: none;

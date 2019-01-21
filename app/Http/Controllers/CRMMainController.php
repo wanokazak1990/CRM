@@ -13,6 +13,11 @@ use App\crm_client;
 use App\crm_all_field;
 use App\crm_setting;
 use App\crm_tab;
+use App\crm_worklist_marker;
+use App\crm_delivery_type;
+use App\crm_logist_marker;
+use App\crm_provide_type;
+use App\crm_discount_detail;
 
 use App\_tab_client;
 use App\_tab_stock;
@@ -37,9 +42,6 @@ class CRMMainController extends Controller
         // (на данный момент выводится список всех пользователей системы) 
     	$users = User::pluck('name', 'id');
         // Список возможных назначенных действий. Выводится при создании нового трафика
-
-        
-    	  
         $assigned_actions = crm_assigned_action::pluck('name', 'id');
         /*
         $fieldlist = crm_all_field::get();
@@ -48,6 +50,16 @@ class CRMMainController extends Controller
         */
     	  //$assigned_actions = crm_assigned_action::get();    
 
+        // Список Маркеров для контактых данных (Рабочий лист -> основной блок)
+        $worklist_markers = crm_worklist_marker::pluck('name', 'id');
+        // Тип поставки (карточка автомобиля)
+        $delivery_types = crm_delivery_type::pluck('name', 'id');
+        // Маркер логиста (карточка автомобиля)
+        $logist_markers = crm_logist_marker::pluck('name', 'id');
+        // Тип обеспечения (карточка автомобиля)
+        $provide_types = crm_provide_type::pluck('name', 'id');
+        // Детализация скидки (карточка автомобиля)
+        $discount_details = crm_discount_detail::pluck('name', 'id');
 
         $test = DB::table('crm_tabs')
             ->join('crm_all_fields', 'crm_tabs.field_id', '=', 'crm_all_fields.id')
@@ -63,7 +75,12 @@ class CRMMainController extends Controller
     		->with('users', $users)
     		->with('assigned_actions', $assigned_actions)
             ->with('clients', $clients)
-            ->with('test', $test);
+            ->with('test', $test)
+            ->with('worklist_markers', $worklist_markers)
+            ->with('delivery_types', $delivery_types)
+            ->with('logist_markers', $logist_markers)
+            ->with('provide_types', $provide_types)
+            ->with('discount_details', $discount_details);
     }
 
 
