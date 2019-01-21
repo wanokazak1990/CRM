@@ -145,7 +145,7 @@
 				</div>
 				<div class="input-group btn-group-toggle" data-toggle="buttons">
 					@foreach($assigned_actions as $key => $action)
-					<div class="col-3 btn btn-outline-info"><input type="radio" name="assigned_action" value="{{ $key }}" autocomplete="off"> {{ $action }}</div>
+					  <div class="col-3 btn btn-outline-info"><input type="radio" name="assigned_action" value="{{ $key }}" autocomplete="off"> {{ $action }}</div>
 					@endforeach
 				</div>
 			</div>
