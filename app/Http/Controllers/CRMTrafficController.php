@@ -7,17 +7,24 @@ use App\crm_traffic;
 use App\crm_client;
 use Auth;
 use App\_tab_traffic;
+use App\crm_client_contact;
 
 class CRMTrafficController extends Controller
 {
     public function put(Request $request)
-    {
+    {       
     		$client = new crm_client();
     		$client->name = $request->client_name;
-    		$client->phone = $request->client_phone;
-    		$client->email = $request->client_email;
-    		$client->address = $request->client_address;
+    		$client->lastname = $request->client_lastname;
+    		$client->secondname = $request->client_secondname;
+            $client->area_id = $request->area_id;
 			$client->save();
+
+            $contact = new crm_client_contact();
+            $contact->client_id = $client->id;
+            $contact->phone = $request->client_phone;
+            $contact->email = $request->client_email;
+            $contact->save();
 
     		$traffic = new crm_traffic();
     		$traffic->client_id = $client->id;
@@ -28,8 +35,12 @@ class CRMTrafficController extends Controller
     		$traffic->admin_id = Auth::user()->id;
     		$traffic->desired_model = $request->model;
     		$traffic->assigned_action_id = $request->assigned_action;
-    		$traffic->action_date = strtotime($request->action_date);
-    		$traffic->action_time = strtotime($request->action_time);
+    		$traffic->action_date = ($request->has('action_date') && !empty($request->action_date))?
+                strtotime($request->action_date)
+                :strtotime(date('d.m.Y'));
+    		$traffic->action_time = ($request->has('action_time') && !empty($request->action_time))?
+                strtotime($request->action_time):
+                strtotime(date('H:i'));
     		$traffic->comment = $request->comment;
     		$traffic->save();
 

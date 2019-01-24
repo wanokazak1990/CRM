@@ -20,8 +20,8 @@ class SqlViewContact extends Migration
                 client.id,
                 client.name,
                 /*client.lastname,*/
-                client.phone,
-                client.email,
+                /*client.phone,
+                client.email,*/
                 traffic.desired_model,
                 traffic.manager_id,
                 traffic.assigned_action_id,

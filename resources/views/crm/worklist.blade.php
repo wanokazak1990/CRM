@@ -2,8 +2,8 @@
 <div id="hidden_panel" class="container border-left border-info">
 <div class="row">
 	<!-- Вкладки боковой панели -->
-	<ul class="nav nav-tabs nav-justified bg-info" id="hiddenTab" role="tablist" style="width: 100%;">
-		<li class="nav-item">
+	<ul class="nav nav-tabs nav-justified bg-info right-menu" id="hiddenTab" role="tablist" style="width: 100%;">
+		<li class="nav-item ">
 			<a class="nav-link active" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="true">Журнал</a>
 		</li>
 		<li class="nav-item">
@@ -49,36 +49,11 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach($traffics as $traffic)
-					<tr>
-						<td>{{ date('d.m.Y', $traffic->action_date) }}</td>
-						<td>{{ date('H:i', $traffic->action_time) }}</td>
-						<td>
-							@isset($traffic->traffic_type)
-								{{ $traffic->traffic_type->name }}
-							@endisset
-						</td>
-						<td>
-							@isset($traffic->assigned_action)
-								{{ $traffic->assigned_action->name }}
-							@endisset
-						</td>
-						<td>{{ $traffic->client->name }}</td>
-						<td>
-							@isset($traffic->model)
-								{{ $traffic->model->name }}
-							@endisset
-						</td>
-						<td>
-							@isset($traffic->manager)
-								{{ $traffic->manager->name }}
-							@endisset
-						</td>
-					</tr>
-					@endforeach
+					
 				</tbody>
 			</table>
 		</div>
+
 		<!-- Вкладка Лист трафика -->
 		<div class="tab-pane" id="trafficList" role="tabpanel" aria-labelledby="trafficList-tab">
 
@@ -119,11 +94,21 @@
 
 			<span class="h4">Зона контакта</span>
 			<div class="input-group btn-group-toggle" data-toggle="buttons">
-				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Неизвестно"> Неизвестно</div>
-				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Сыктывкар"> Сыктывкар</div>
-				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Республика"> Республика</div>
-				<div class="col-3 btn btn-outline-info"><input type="radio" name="client_address" autocomplete="off" value="Др. регион"> Др. регион</div>
+				
+				<div class="col-3 btn btn-outline-info">
+					<input type="radio" name="area_id" autocomplete="off" value="0"> 
+					Неизвестно
+				</div>
+
+				@foreach(App\crm_city_list::pluck('name','id') as $id=>$city)
+				<div class="col-3 btn btn-outline-info">
+					<input type="radio" name="area_id" autocomplete="off" value="{{$id}}"> 
+					{{$city}}
+				</div>
+				@endforeach
+
 			</div>
+
 			<hr>
 
 			<span class="h4">Назначенный менеджер</span>
@@ -140,7 +125,7 @@
 			<span class="h4">Назначенное действие</span>
 			<div>
 				<div class="input-group">
-					<input name="action_date" type="date" class="col-3 form-control" title="Назначенная дата">
+					<input name="action_date" type="text" class="col-3 form-control calendar" title="Назначенная дата">
 					<input name="action_time" type="time" class="col-3 form-control" title="Назначенное время">
 				</div>
 				<div class="input-group btn-group-toggle" data-toggle="buttons">
@@ -156,8 +141,8 @@
 			<div>
 				<div class="input-group">
 					<input type="text" name="client_name" class="col-4 form-control" placeholder="Имя">
-					<input type="text" class="col-4 form-control" placeholder="Отчество">
-					<input type="text" class="col-4 form-control" placeholder="Фамилия">
+					<input type="text" name="client_secondname" class="col-4 form-control" placeholder="Отчество">
+					<input type="text" name="client_lastname" class="col-4 form-control" placeholder="Фамилия">
 				</div>
 				<div class="input-group">
 					<input type="text" name="client_phone" class="col-6 form-control" placeholder="Телефон">
@@ -188,118 +173,155 @@
 		
 		<!-- Вкладка Рабочий лист -->
 		<div class="tab-pane" id="worksheet" role="tabpanel" aria-labelledby="worksheet-tab">
+			{{Form::open() }}
 			<!-- Панель иконок -->
 			<div class="border input-group align-items-center">
+
 				<div class="flex-grow-1">
 					<button id="closing" type="button" class="btn btn-light"><i class="fas fa-arrow-circle-right"></i></button>
-					<span>это_типа_VIN_номер_автомобиля</span>
+					<span id="worklist-vin">
+						VIN-nomer
+					</span>
 				</div>
+
 				<div>
 					<button type="button" class="btn btn-light"><i class="fas fa-save"></i></button>
 					<button type="button" class="btn btn-light"><i class="fas fa-trash-alt"></i></button>
 				</div>
+
 			</div>
 
 			<div class="d-flex">
-				<span class="h3 flex-grow-1">Рабочий лист №138</span>
-				<span class="h3">05 января 2018</span>
+
+				<span class="h3 flex-grow-1" id="worklist-number">
+					Рабочий лист №<span name="wl_id">-</span>
+				</span>
+
+				<span class="h3" id="worklist-date">
+					<span name="wl_addingday">-</span>
+				</span>
+
 			</div>
+
 			<!-- Основной блок рабочего листа -->
 			<div>
 				<div>
 					<div class="input-group">
-						<label class="col-3">Трафик</label>
-						<label class="col-3">Спрос</label>
-						<label class="col-3">Менеджер</label>
-						<select class="col-3 form-control">
-							<option>Звонок</option>
-							<option>Встреча</option>
-							<option>И т. д.</option>
-						</select>
+
+						<label class="col-2">Трафик</label>
+						<label class="col-2">Спрос</label>
+						<label class="col-2">Менеджер</label>
+
+						{{Form::select('traffic_action',App\crm_assigned_action::pluck('name','id'),'',['class'=>'col-6 form-control'])}}
+						
 					</div>
+
 					<div class="input-group">
-						<input type="text" class="col-3 form-control" value="LID Renault" disabled>
-						<input type="text" class="col-3 form-control" value="DUSTER" disabled>
-						<input type="text" class="col-3 form-control" value="Быков" disabled>
-						<input type="date" class="col-3 text-danger form-control">
+
+						<input name="traffic_type" type="text" class="col-3 form-control" value="-" disabled>
+						<input name="traffic_model" type="text" class="col-3 form-control" value="-" disabled>
+						<input name="wl_manager" type="text" class="col-3 form-control" value="-" disabled>
+						<div class="col-3 trafic_action_block">
+							<div class="row">
+								<input name="traffic_action_date" type="text" class="col-6 text-danger form-control calendar">
+								<input name="traffic_action_time" type="time" class="col-6 text-danger form-control" >
+							</div>
+						</div>
+
 					</div>
 				</div>
+
 				<hr>
+				
 				<div>
 					<div class="input-group">
+
 						<label class="col-3">Тип контакта</label>					
-						<label class="col-9">Контакт</label>					
+						<label class="col-9">Контакт</label>
+
 					</div>
+
 					<div class="input-group">
-						<select class="col-3 form-control">
-							<option>Частный</option>
-							<option>Общественный</option>
-						</select>
-						<input type="text" class="col-3 form-control" placeholder="Имя">
-						<input type="text" class="col-3 form-control" placeholder="Отчество">
-						<input type="text" class="col-3 form-control" placeholder="Фамилия">
+						{{Form::select('client_type',App\crm_client_type::pluck('name','id'),'',['class'=>'col-3 form-control'])}}
+						
+						<input name="client_name" type="text" class="col-3 form-control" placeholder="Имя">
+						<input name="client_secondname" type="text" class="col-3 form-control" placeholder="Отчество">
+						<input name="client_lastname" type="text" class="col-3 form-control" placeholder="Фамилия">
+
 					</div>
 				</div>
+
 				<hr>
+
 				<div>
 					<div class="input-group">
+
 						<label class="col-3">Телефон</label>
 						<label class="col-3">Почта</label>
 						<label class="col-3">Маркер</label>
+
 						<div class="col-3 d-flex align-items-center justify-content-end">
-							<a data-toggle="collapse" href="#worklistMoreInfo" aria-expanded="false" aria-controls="worklistMoreInfo">Еще</a>
+							<a data-toggle="collapse" href="#worklistMoreInfo" aria-expanded="false" aria-controls="worklistMoreInfo">
+								Еще
+							</a>
 						</div>
+
 					</div>
-					<div class="input-group">
-						<input type="text" class="col-3 form-control" placeholder="Введите номер">
-						<input type="text" class="col-3 form-control" placeholder="Введите Email">
-						
-						{!! Form::select('worklist_marker',$worklist_markers, '', ['class' => 'col-3 form-control']) !!}
-						
-						<div class="col-3 d-flex align-items-center">
-							<a href=""><i class="fas fa-times text-danger"></i></a>
-						</div>
-					</div>
-					<div class="input-group">
-						<input type="text" class="col-3 form-control" placeholder="Введите номер">
-						<input type="text" class="col-3 form-control" placeholder="Введите Email">
-						
-						{!! Form::select('worklist_marker',$worklist_markers, '', ['class' => 'col-3 form-control']) !!}
-						
-						<div class="col-3 d-flex align-items-center">
-							<a href=""><i class="fas fa-times text-danger"></i></a>
-							<a href=""><i class="fas fa-plus-circle text-primary"></i></a>
+
+					<div wl_block='contacts'>
+						<div class="input-group">
+							<input type="text" class="col-3 form-control" placeholder="Введите номер" name='contact_phone[]'>
+							<input type="text" class="col-3 form-control" placeholder="Введите Email" name='contact_email[]'>
+							
+							{!! Form::select(
+								'contact_marker[]',
+								App\crm_worklist_marker::pluck('name','id'), 
+								'', 
+								['class' => 'col-3 form-control']) 
+							!!}
+							
+							<div class="col-3 d-flex align-items-center">
+								<a href=""><i class="fas fa-times text-danger"></i></a>
+								<a href=""><i class="fas fa-plus-circle text-primary"></i></a>
+							</div>
 						</div>
 					</div>
 				</div>
+
+				<hr>
+
 				<div id="worklistMoreInfo" class="collapse">
-					<hr>
+
 					<div class="input-group">
 						<label class="col-3">Зона контакта</label>
 						<label class="col-6">Адрес прописки</label>
 						<label class="col-3">Дата рождения</label>
 					</div>
+
 					<div class="input-group">
-						<select class="col-3 form-control">
-							<option>Сыктывкар</option>
-						</select>
-						<input type="text" class="col-6 form-control" placeholder="Адрес">
-						<input type="date" class="col-3 form-control">
+						{{Form::select('client_area',App\crm_city_list::pluck('name','id'),'',['class'=>'col-3 form-control'])}}
+						<input name="client_address" type="text" class="col-6 form-control" placeholder="Адрес">
+						<input name="client_birthday" type="text" class="col-3 form-control calendar">
 					</div>
-					<br>
+					
 					<div class="input-group">
 						<label class="col-6">Паспорт</label>
 						<label class="col-6">Водительское удостоверение</label>
 					</div>
+
 					<div class="input-group">
-						<input type="text" class="col-3 form-control" placeholder="Серия, номер">
-						<input type="date" class="col-3 form-control">
-						<input type="text" class="col-6 form-control" placeholder="Номер">
-						<input type="date" class="col-3 form-control">
+						<input name="client_passport_serial" type="text" class="col-2 form-control" placeholder="Серия">
+						<input name="client_passport_number" type="text" class="col-2 form-control" placeholder="Номер">
+						<input name="client_passport_giveday" type="text" class="col-2 form-control calendar">
+						<input name="client_drive_number" type="text" class="col-6 form-control" placeholder="Номер">
+						<input name="client_drive_giveday" type="text" class="col-3 form-control calendar">
 					</div>
+
 				</div>
 			</div>
+
 			<hr>
+
 			<!-- Блок с вкладками в рабочем листе -->
 			<div class="container">
 				<div class="row">
@@ -1226,6 +1248,7 @@
 					</div>
 				</div>
 			</div><!-- /Блок c вкладками -->
+			{{ Form::close() }}
 		</div><!-- /Рабочий лист -->
 		
 		<!-- Вкладка Задача -->
