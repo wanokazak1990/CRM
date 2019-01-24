@@ -30,9 +30,9 @@ class CRMMainController extends Controller
     public function main()
     {
         // Записи Трафика для вкладки "Трафик"
-    	$traffics = crm_traffic::get();
+    	//$traffics = crm_traffic::get();
         // Записи Клиентов для вкладки "Клиент"
-        $clients = crm_client::with('traffic')->get();
+        //$clients = crm_client::with('traffic')->get();
 
         // Список типов трафика. Выводится при создании нового трафика 
     	$types = crm_traffic_type::get();
@@ -69,12 +69,12 @@ class CRMMainController extends Controller
     	
     	return view('crm.main')
     		->with('title', 'CRM "Учет"')
-    		->with('traffics', $traffics)
+    		//->with('traffics', $traffics)
     		->with('traffic_types', $types)
     		->with('models', $models)
     		->with('users', $users)
     		->with('assigned_actions', $assigned_actions)
-            ->with('clients', $clients)
+            //->with('clients', $clients)
             ->with('test', $test)
             ->with('worklist_markers', $worklist_markers)
             ->with('delivery_types', $delivery_types)
