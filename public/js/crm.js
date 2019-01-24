@@ -5,6 +5,7 @@ function log(val)
 
 $(document).ready(function() {
 
+
 	//ЗАГРУЗКА ПЕРВОЙ СТРАНИЦЫ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
 	$(function(){
 		getContent($("#crmTabs a:first"));
@@ -99,11 +100,51 @@ $(document).ready(function() {
 
 
 
+
+
+
+	//КЛИК ПО ВКЛАДКЕ ЖУРНАЛ АКТИВЕН
+	$('body').on('click','#log-tab',function(){
+
+		getJournal();
+		
+	})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	// Открытие боковой панели
 	$(document).on('click', '#opening', function() {
 		$(this).blur();
 		$('#hidden_panel').css('right', '0');
 		$('#disableContent').css('display', 'block');
+		
+		if($("#log-tab").hasClass('active'))
+			getJournal();
 	});
 
 	// Закрытие боковой панели с помощью кнопки

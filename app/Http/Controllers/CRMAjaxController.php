@@ -9,6 +9,7 @@ use App\crm_setting;
 use App\_tab_traffic;
 use App\_tab_client;
 use App\_tab_stock;
+use App\crm_traffic;
 
 class CRMAjaxController extends Controller
 {
@@ -158,5 +159,19 @@ class CRMAjaxController extends Controller
                 'titles'=>$titles
             ]);
         }
+    }
+
+    public function getJournal(Request $request)
+    {
+        $traffics = crm_traffic::
+            with('traffic_type')->
+            with('client')->
+            with('manager')->
+            with('assigned_action')->
+            with('model')->
+            orderBy('id','DESC')->
+            get()->
+            toJson();
+        return $traffics;
     }
 }

@@ -398,6 +398,10 @@ Route::post('/getcurrentsettings', 'CRMAjaxController@getCurrentSettings')->name
 
 Route::post('/crmgetcontent', 'CRMAjaxController@crmgetcontent')->name('crmgetcontent');
 
+Route::post('/crm/get/journal', 'CRMAjaxController@getJournal')->name('getJournal');
+
+Route::post('/create/worklist', 'WorklistController@add')->name('createworklist');
+
 
 
 

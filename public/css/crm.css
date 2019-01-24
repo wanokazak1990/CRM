@@ -153,3 +153,8 @@ body{
 	display: none;
 }
 .hidden-button button{/*display: none;*/}
+
+.trafic_action_block input{
+	border-width: 0px;
+	text-align: center !important;
+}

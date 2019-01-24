@@ -312,9 +312,7 @@
 	</div>
 </div>
 
-<script>
-	var response_time = 5*1000;//время которое отображается сообщение 
-</script>
+
 
 
 
@@ -324,6 +322,12 @@
 
 
 <script src="/js/jquery.js"></script>
+
+<script>
+	var response_time = 5*1000;//время которое отображается сообщение
+	var manager = $("#auth_user_id").val(); //id пользователя 
+</script>
+
 <link rel="stylesheet" type="text/css" href="/lib/bootstrap-4/css/bootstrap.min.css">
 <script src="/lib/bootstrap-4/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>

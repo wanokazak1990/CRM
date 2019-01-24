@@ -1,3 +1,53 @@
+function isset(variable)
+{
+	if(typeof(variable) != "undefined" && variable !== null)
+		return true;
+	else 
+		return false;
+}
+
+
+function timeConverter(UNIX_timestamp,format){
+	if(UNIX_timestamp==0)
+		return '';
+	var a = new Date(UNIX_timestamp * 1000);
+
+	var months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+
+	var year = a.getFullYear();
+	var month = months[a.getMonth()];
+	var date = a.getDate();
+	var hour = a.getHours()-3;
+	var min = a.getMinutes();
+	var sec = a.getSeconds();
+
+	var str = format;
+
+	if(date<10)
+		day = '0'+date;
+	else 
+		day = date;
+
+	if(hour<10)
+		hour = '0'+hour;
+
+	if(min<10)
+		min = '0'+min;
+
+	if(sec<10)
+		sec = '0'+sec;
+
+	str = str.replace('d',day);
+	str = str.replace('m',month);
+	str = str.replace('y',year);
+	str = str.replace('h',hour);
+	str = str.replace('i',min);
+	str = str.replace('s',sec);
+
+  return str;
+}
+
+
 function getTitleContent(parent,array,str='')
 //создаст заголовки, парент-это родительская вкладка в которой есть таблица, в которую нужно вставить данные
 //аррай-массив заголовков которые передал аякс из функции гетКонтент
@@ -142,6 +192,65 @@ function validateForm(form, params)
 		return true;
 	else 
 		return error;
+}
+
+
+
+function getJournal()
+{
+	var area = $("#log");
+	var tbody = area.find('tbody');
+	var str = "";
+	tbody.html("");
+	$.ajax({
+		type: 'POST',
+		url: '/crm/get/journal',
+		dataType : "json", 
+        headers: {
+	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    },
+	    success: function(data, xhr,ajaxOptions, thrownError)
+	    {
+	    	data.forEach(function(item,i){
+	    		str += '<tr>';
+	    			str += '<td>'+timeConverter(item.action_date,'d.m.y')+'</td>';
+	    			str += '<td>'+timeConverter(item.action_time,'h:i')+'</td>';
+
+	    			if(isset(item.traffic_type))
+	    				str += '<td>'+item.traffic_type.name+'</td>';
+	    			else 
+	    				str += '<td></td>';
+
+	    			if(isset(item.assigned_action))
+	    				str += '<td>'+item.assigned_action.name+'</td>';
+	    			else 
+	    				str += '<td></td>';
+
+	    			if(isset(item.client))
+	    				str += '<td>'+item.client.name+'</td>';
+	    			else 
+	    				str += '<td></td>';
+
+	    			if(isset(item.model))
+	    				str += '<td>'+item.model.name+'</td>';
+	    			else 
+	    				str += '<td></td>';
+
+	    			if(isset(item.manager))
+	    				str += '<td>'+item.manager.name+'</td>';
+	    			else 
+	    				str += '<td></td>';
+	    		str += '</tr>';
+	    		tbody.append(str);
+	    		str="";
+	    	})		
+	    },
+	    error:function(xhr, ajaxOptions, thrownError){
+	    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+	    	log(xhr.responseText);
+	    	log(ajaxOptions)
+	    }
+	});
 }
 
 
