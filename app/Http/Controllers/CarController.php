@@ -440,7 +440,8 @@ class CarController extends Controller
                 }
             }
         }
-        return redirect()->route('carlist');
+        echo $request->ajax();
+        //return redirect()->route('carlist');
     }
 
     public function edit($id)
@@ -538,4 +539,13 @@ class CarController extends Controller
         }
         return redirect(Session::pull('prev_page','/carlist'));
     }
+
+    public function ajaxput(Request $request)
+    {
+        if($request->all())
+        {
+            print_r($request->all());
+        }
+    }
+    
 }

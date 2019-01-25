@@ -39,4 +39,19 @@ class crm_client extends Model
     {
         return $this->hasMany('App\crm_client_contact','client_id','id');
     }
+
+    public function contact()
+    {
+        return $this->hasOne('App\crm_client_contact','client_id','id');
+    }
+
+    public function getFullName()
+    {
+        if($this->lastname && $this->secondname )
+            return $this->lastname.' '.mb_substr($this->name,0,1).'.'.mb_substr($this->secondname,0,1).'.';
+        else if($this->lastname)
+            return $this->lastname.' '.$this->name;
+        else
+            return $this->name;
+    }
 }

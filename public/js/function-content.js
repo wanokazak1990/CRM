@@ -70,10 +70,14 @@ function getDataContent(parent,array,str='')
 //создаст контент вкладки, парент-это родительская вкладка в которой есть таблица, в которую нужно вставить данные
 //аррай-массив заголовков которые передал аякс из функции гетКонтент
 {
-	array.data.forEach(function(item,i){
+	array.forEach(function(item,i){
 		str += '<tr>';
 			for(var index in item) { 
 				if(index=='id') continue;
+				if(item[index]==null){
+					str += '<td></td>';
+					continue;
+				}
 			    str += '<td>'+item[index]+'</td>'; 
 			}
 		str += '</tr>';

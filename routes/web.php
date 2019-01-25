@@ -406,6 +406,10 @@ Route::post('/wlsavechanges', 'WorklistController@saveChanges')->name('wlsavecha
 
 Route::post('/wlloaddata', 'WorklistController@loadData')->name('wlloaddata');
 
+Route::post('/create/car', 'CarController@ajaxput')->name('createcar');
+
+
+
 
 
 
