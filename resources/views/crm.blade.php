@@ -15,7 +15,8 @@
 
 <!-- HEADER -->
 <div class="container-fluid bg-info d-flex align-items-center" id="header">
-	<button onclick="send();">Отправить (ТЕСТ WEBSOCKET)</button>
+	<button class="btn btn-info" onclick="send();">Отправить (ТЕСТ WEBSOCKET)</button>
+	<button type="button" id="test_load_worklist" class="btn btn-danger">Тестовая загрузка РЛ</button>
 
     @guest
         <li><a href="{{ route('login') }}">Login</a></li>
@@ -26,6 +27,7 @@
     	<input type="hidden" id="auth_user_id" value="{{ Auth::user()->id }}">
 
         <a href="{{ route('logout') }}"
+        	class="btn btn-info"
             onclick="event.preventDefault();
                      document.getElementById('logout-form').submit();"
         >
@@ -339,7 +341,9 @@
 <script src="/js/crm.js"></script>
 <script src="/js/socket/trafficsocket.js"></script>
 <script src="/js/traffic-label.js"></script>
+<script src="/js/worklist.js"></script>
 <script src="/js/car-add.js"></script>
+
 
 </body>
 </html>
