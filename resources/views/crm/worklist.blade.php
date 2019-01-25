@@ -185,7 +185,7 @@
 				</div>
 
 				<div>
-					<button type="button" class="btn btn-light"><i class="fas fa-save"></i></button>
+					<button type="button" class="btn btn-light" id="wl_save_changes" title="Сохранить рабочий лист"><i class="fas fa-save"></i></button>
 					<button type="button" class="btn btn-light"><i class="fas fa-trash-alt"></i></button>
 				</div>
 
@@ -206,13 +206,13 @@
 			<!-- Основной блок рабочего листа -->
 			<div>
 				<div>
-					<div class="input-group">
+					<div class="input-group d-flex align-items-center">
 
-						<label class="col-2">Трафик</label>
-						<label class="col-2">Спрос</label>
-						<label class="col-2">Менеджер</label>
+						<label class="col-3">Трафик</label>
+						<label class="col-3">Спрос</label>
+						<label class="col-3">Менеджер</label>
 
-						{{Form::select('traffic_action',App\crm_assigned_action::pluck('name','id'),'',['class'=>'col-6 form-control'])}}
+						{{Form::select('traffic_action',App\crm_assigned_action::pluck('name','id'),'',['class'=>'col-3 form-control'])}}
 						
 					</div>
 
@@ -268,7 +268,7 @@
 
 					</div>
 
-					<div wl_block='contacts'>
+					<div wl_block='contacts' id="wl_contacts">
 						<div class="input-group">
 							<input type="text" class="col-3 form-control" placeholder="Введите номер" name='contact_phone[]'>
 							<input type="text" class="col-3 form-control" placeholder="Введите Email" name='contact_email[]'>
@@ -281,16 +281,15 @@
 							!!}
 							
 							<div class="col-3 d-flex align-items-center">
-								<a href=""><i class="fas fa-times text-danger"></i></a>
-								<a href=""><i class="fas fa-plus-circle text-primary"></i></a>
+								<a href="#" class="col-6" id="wl_contacts_delete"><i class="fas fa-times text-danger"></i></a>
+								<a href="#" class="col-6" id="wl_contacts_add"><i class="fas fa-plus-circle text-primary"></i></a>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<hr>
-
 				<div id="worklistMoreInfo" class="collapse">
+					<hr>
 
 					<div class="input-group">
 						<label class="col-3">Зона контакта</label>
@@ -312,9 +311,9 @@
 					<div class="input-group">
 						<input name="client_passport_serial" type="text" class="col-2 form-control" placeholder="Серия">
 						<input name="client_passport_number" type="text" class="col-2 form-control" placeholder="Номер">
-						<input name="client_passport_giveday" type="text" class="col-2 form-control calendar">
+						<input name="client_passport_giveday" type="text" class="col-2 form-control calendar" placeholder="Дата выдачи">
 						<input name="client_drive_number" type="text" class="col-6 form-control" placeholder="Номер">
-						<input name="client_drive_giveday" type="text" class="col-3 form-control calendar">
+						<input name="client_drive_giveday" type="text" class="col-3 form-control calendar" placeholder="Дата выдачи">
 					</div>
 
 				</div>

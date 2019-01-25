@@ -402,6 +402,9 @@ Route::post('/crm/get/journal', 'CRMAjaxController@getJournal')->name('getJourna
 
 Route::post('/create/worklist', 'WorklistController@add')->name('createworklist');
 
+Route::post('/wlsavechanges', 'WorklistController@saveChanges')->name('wlsavechanges');
+
+Route::post('/wlloaddata', 'WorklistController@loadData')->name('wlloaddata');
 
 
 

@@ -156,7 +156,8 @@ function worklistData(data)
 			for(index in val)//проходусь по строкам массива
 			{
 				var subval = val[index];//текущая строка массива
-				if(index==0){
+				if(index==0)
+				{
 					for(name in subval){//прохожу по строке
 						
 						var znachenie = subval[name];
@@ -178,6 +179,32 @@ function worklistData(data)
 							})
 						}
 					}
+				}
+				else
+				{
+					var newblock = subblock.clone();
+					for(name in subval){//прохожу по строке
+						
+						var znachenie = subval[name];
+						var elem = newblock.find('[name="'+name+'[]"]');
+						var tag = elem[0].tagName.toLowerCase();
+						if(tag=='span' ){//если спан 
+							elem.html(znachenie);//записываю в него
+						}
+						if(tag=='input'){//если инпут
+							if(elem.attr('type')=='text')
+								elem.val(znachenie);//записываю в него				
+							if(elem.attr('type')=='time')
+								elem.val(znachenie);//записываю в него
+						}
+						if(tag=='select'){
+							elem.find('option').each(function(){
+								if($(this).val()==znachenie)
+									$(this).attr("selected", "selected");
+							})
+						}
+					}
+					block.append(newblock);
 				}
 			}
 		}
