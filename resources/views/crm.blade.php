@@ -339,6 +339,7 @@
 <script src="/js/crm.js"></script>
 <script src="/js/socket/trafficsocket.js"></script>
 <script src="/js/traffic-label.js"></script>
+<script src="/js/car-add.js"></script>
 
 </body>
 </html>

@@ -36,4 +36,9 @@ class _tab_client extends Model
     	$res = crm_all_field::where('type_id',self::$tab_index)->get();
     	return $res;
     }
+
+    public function contact()
+    {
+        return $this->hasOne('App\crm_client_contact','client_id','id');
+    }
 }

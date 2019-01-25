@@ -1,66 +1,96 @@
 @section('modal_autocard')
 <div class="modal bd-example-modal-lg" id="autocardModal" tabindex="-1" role="dialog" aria-labelledby="autocardModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
+		{{Form::open()}}
 		<div class="modal-content">
 			<div class="modal-header d-flex">
-				<h5 class="modal-title flex-grow-1" id="autocardModalLabel">Карточка автомобиля <span id="NUMBEROFCARHERE">00012345</span></h5>
+				<h5 class="modal-title flex-grow-1" id="autocardModalLabel">
+						Карточка автомобиля 
+						<span id="car_id"></span>
+				</h5>
+
 				<div class="col-1 d-flex align-items-center justify-content-center">
 					<a href="#" class="text-dark">
 						<i class="fas fa-save"></i>
 					</a>
 				</div>
+
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
+
 			</div>
+
+
+
 			<div class="modal-body">
 				<!-- Основной контент карточки автомобиля -->
 				<div>
 					<div class="input-group">
-						<label class="col-4">Тип поставки</label>
-						<label class="col-4">Автор заказа</label>
-						<label class="col-2">23.03.2018</label>
-						<div class="col-2 text-right">
+						{!! Form::label('title', 'Тип поставки: *',['class' => 'col-4']) !!}
+						{!! Form::label('title', 'Автор заказа: *',['class' => 'col-4']) !!}
+						{!! Form::label('title', 'Дата (чего?): *',['class' => 'col-3']) !!}
+						<div class="col-1 text-right">
 							<a href="#"><i class="fas fa-times"></i></a>
 						</div>
 					</div>
+
 					<div class="input-group">
-						{!! Form::select('delivery_types', $delivery_types, 1, ['class' => 'col-4 form-control']) !!}
-						<input type="text" class="col-4 form-control" value="Калачикова" disabled>
-						{!! Form::select('logist_markers', $logist_markers, '', ['class' => 'col-4 form-control']) !!}
+
+						{!! Form::select(
+							'delivery_types', 
+							$delivery_types, 
+							'',
+							['class' => 'col-4 form-control']) 
+						!!}
+
+						{!! Form::select(
+							'creator_id',
+							App\user::pluck('name','id'),
+							'', 
+							['class' => 'col-4 form-control']) 
+						!!}
+
+						{!! Form::select(
+							'logist_marker', 
+							$logist_markers, 
+							'', 
+							['class' => 'col-4 form-control']) 
+						!!}
+
+					</div>
+
+					
+					<div class="input-group">
+
+						{!! Form::label('title', 'Модель: *',['class' => 'col-4']) !!}
+						{!! Form::label('title', 'Комплектация: *',['class' => 'col-4']) !!}
+						
 					</div>
 
 					<div class="input-group">
-						<label class="col-4">Модель</label>
-						<label class="col-8">Комплектация</label>
-					</div>
-					<div class="input-group">
-						<select class="col-4 form-control">
-							<option>DUSTER</option>
-							<option>NOT DUSTER</option>
-						</select>
-						<select class="col-8 form-control">
-							<option>Privilege 2.0 (143) 4WD МКП</option>
-							<option>Not Privilege 2.0 (143) 4WD МКП</option>
-						</select>
+
+						{!! Form::select('model_id',App\oa_model::pluck('name','id'),'', ['class' => 'col-4 form-control'])!!}
+						{!! Form::select('complect_id',array(),'', ['class' => 'col-4 form-control'])!!}
+
 					</div>
 
 					<div class="input-group">
-						<label class="col-2">Радиокод</label>
-						<label class="col-2">Год выпуска</label>
-						<label class="col-4">VIN-номер</label>
-						<label class="col-2">№ заказа</label>
-						<label class="col-1">Обмен</label>
+						{!! Form::label('title', 'Радиокод:',['class' => 'col-2']) !!}
+						{!! Form::label('title', 'Выпуск:',['class' => 'col-2']) !!}
+						{!! Form::label('title', 'VIN:',['class' => 'col-4']) !!}
+						{!! Form::label('title', '№ заказа:',['class' => 'col-2']) !!}
+						{!! Form::label('title', 'Обмен:',['class' => 'col-1']) !!}
 						<div class="col-1 text-right">
 							<a href="#"><i class="far fa-caret-square-right"></i></a>
 						</div>
 					</div>
 					<div class="input-group">
-						<input type="text" class="col-2 form-control" value="7896">
-						<input type="text" class="col-2 form-control" value="2018">
-						<input type="text" class="col-4 form-control" value="X7LASRBA562214223">
-						<input type="text" class="col-2 form-control" value="6828A">
-						<input type="text" class="col-2 form-control">
+						{!! Form::text('radio_code','',['class' => 'col-2 form-control'])!!}
+						{!! Form::text('year','',['class' => 'col-2 form-control'])!!}
+						{!! Form::text('vin','',['class' => 'col-4 form-control'])!!}
+						{!! Form::text('order_number','',['class' => 'col-2 form-control'])!!}
+						{!! Form::text('swap','',['class' => 'col-2 form-control'])!!}
 					</div>
 					<hr>
 				</div>
@@ -88,9 +118,8 @@
 							<div class="input-group">
 								<!-- Левый блок -->
 								<div class="col-6">
-									<div style="width: 100%; height: 200px; background-color: #ddd;">
-										Тут типа картинка машины
-									</div>
+									
+									<img id="car-img" src='' style="width: 100%;height: auto;">
 									<div class="input-group d-flex justify-content-center">
 										<button class="btn btn-primary">1</button>
 										<button class="btn btn-light">2</button>
@@ -112,11 +141,11 @@
 								<!-- Правый блок -->
 								<div class="col-6">
 									<div class="d-flex align-items-center justify-content-center">
-										<p align="center" class="h5">
-											Renault Duster<br>
+										<div align="center" class="h5">
+											<div id="car-model">Model name</div>
 											1 028 980 руб.<br>
 											Прогноз 02.01.2019
-										</p>
+										</div>
 									</div>
 
 									<div class="d-flex border-bottom">
@@ -405,9 +434,10 @@
 							<i class="fas fa-trash-alt"></i>
 						</a>
 					</div>
-					<button type="button" class="btn btn-success col-3 offset-8" data-dismiss="modal">Сохранить</button>	
+					<button type="button" id="savecar" class="btn btn-success col-3 offset-8" data-dismiss="modal">Сохранить</button>	
 				</div>
 			</div>
+		{{Form::close()}}
 		</div>
 	</div>
 </div>
