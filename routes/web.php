@@ -402,6 +402,8 @@ Route::post('/crm/get/journal', 'CRMAjaxController@getJournal')->name('getJourna
 
 Route::post('/create/worklist', 'WorklistController@add')->name('createworklist');
 
+Route::post('/create/car', 'CarController@ajaxput')->name('createcar');
+
 
 
 

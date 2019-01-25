@@ -10,6 +10,8 @@ use App\_tab_traffic;
 use App\_tab_client;
 use App\_tab_stock;
 use App\crm_traffic;
+use App\crm_client;
+use App\avacar;
 
 class CRMAjaxController extends Controller
 {
@@ -104,60 +106,83 @@ class CRMAjaxController extends Controller
 
     //Так же вернёт готовую html строку с пагинацией
 
-    public function crmgetcontent(Request $request,$list = array())
+    public function crmgetcontent(Request $request,$list = array(),$mas=array())
     {
         if($request->has('model'))
         {
             $class_name = 'App\\'.$request->model;//создаём имя класса вкладки с которой сделан переход         
-            $query = new $class_name();//получаем объект вкладки с которой сделан клик 
+            $class_name = new $class_name();//получаем объект вкладки с которой сделан клик 
             switch ($request->model) {
                 case '_tab_client':
-                    $query->with('model')->with('manager')->with('action');
-                    $list = $query->orderBy('id','desc')->paginate(20);
+                    $list = crm_client::with('contact')->with('traffic')->orderBy('id','desc')->paginate(20);
+                    foreach ($list as $key => $item) {
+                            $mas[$key]['id']                = $item->id;
+                            $mas[$key]['name']              = $item->getFullName();
+                            $mas[$key]['phone']             = @$item->contact->phone;
+                            $mas[$key]['email']             = @$item->contact->email;;
+                            $mas[$key]['desired_model']     = @$item->traffic->model->name;
+                            $mas[$key]['manager']           = @$item->traffic->manager->name;
+                            $mas[$key]['assigned_action']   = @$item->traffic->assigned_action->name;
+                            $mas[$key]['action_date']    = @($item->traffic->action_date)?date('d.m.Y',$item->traffic->action_date):'';
+                    }
+                    $titles = crm_all_field::where('type_id',$class_name::$tab_index)->get();
+                    $links = (string)$list->appends(['model'=>$request->model])->links();
+                    echo json_encode([
+                        'list'=>$mas,
+                        'links'=>$links,
+                        'titles'=>$titles
+                    ]);
                     break;
 
                 case '_tab_traffic':
-                    $query->with('model')->with('manager')->with('action')->with('admin');
-                    $list = $query->orderBy('id','desc')->paginate(20);
+                    $list = crm_traffic::with('model')
+                        ->with('manager')
+                        ->with('assigned_action')
+                        ->with('admin')
+                        ->with('manager')
+                        ->with('traffic_type')
+                        ->orderBy('id','desc')->paginate(20);
+                    foreach ($list as $key => $item) {
+                            $mas[$key]['id']                = $item->id;
+                            $mas[$key]['creation_date']     = @($item->creation_date)?date('d.m.Y',$item->creation_date):'';
+                            $mas[$key]['type']              = @$item->traffic_type->name;
+                            $mas[$key]['desired_model']     = @$item->model->name;
+                            $mas[$key]['client']            = @$item->client->getFullName();
+                            $mas[$key]['comment']           = $item->comment;
+                            $mas[$key]['manager']           = @$item->manager->name;
+                            $mas[$key]['admin']             = @$item->admin->name;
+                            $mas[$key]['assigned_action']   = @$item->assigned_action->name;
+                            $mas[$key]['action_date']       = @($item->action_date)?date('d.m.Y',$item->action_date):'';
+                            $mas[$key]['action_time']       = @($item->action_time)?date('H:i',$item->action_time):'';
+                    }
+                    $titles = crm_all_field::where('type_id',$class_name::$tab_index)->get();
+                    $links = (string)$list->appends(['model'=>$request->model])->links();
+                    echo json_encode([
+                        'list'=>$mas,
+                        'links'=>$links,
+                        'titles'=>$titles
+                    ]);
                     break;
 
                 case '_tab_stock':
-                	$query->with('car');
+                    $list = avacar::get();
+                    foreach ($list as $key => $item) {
+                            $mas[$key]['id'] = $item->id;
+                            $mas[$key]['model'] = $item->model->name;
+                    }
+                    $titles = crm_all_field::where('type_id',$class_name::$tab_index)->get();
+                    $links = '';
+                    echo json_encode([
+                        'list'=>$mas,
+                        'links'=>$links,
+                        'titles'=>$titles
+                    ]);
                     break;
                 
                 default:
                     # code...
                     break;
-            }
-            
-
-            foreach ($list as $key => $item) {
-                $help = clone $item;
-                if(isset($item->desired_model))          $item->desired_model        =   @$help->model->name;
-                if(isset($item->manager_id))             $item->manager_id           =   @$help->manager->name;
-                if(isset($item->assigned_action_id))     $item->assigned_action_id   =   @$help->action->name;
-                if(isset($item->action_date))            $item->action_date          =   @date('d.m.Y',$item->action_date);
-                if(isset($item->creation_date))          $item->creation_date        =   @date('d.m.Y',$item->creation_date);
-                if(isset($item->traffic_type_id))        $item->traffic_type_id      =   @$help->trafic_type->name;
-                if(isset($item->admin_id))               $item->admin_id             =   @$help->admin->name;
-                if(isset($item->action_time))            $item->action_time          =   @date('H:i',$item->action_time);
-                if(isset($item->car_id))
-                {
-                	unset($item->car_id);
-                	$item->model = @$help->car->model->name;
-                	$item->complect = @$help->car->complect->name;
-                }
-            }
-            
-            $titles = crm_all_field::where('type_id',$class_name::$tab_index)->get();
-
-            $links = (string)$list->appends(['model'=>$request->model])->links();
-
-            echo json_encode([
-                'list'=>$list,
-                'links'=>$links,
-                'titles'=>$titles
-            ]);
+            }           
         }
     }
 

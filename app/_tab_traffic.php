@@ -33,4 +33,6 @@ class _tab_traffic extends Model
     {
     	return $this->hasOne('App\User','id','admin_id');
     }
+
+    
 }
