@@ -14,6 +14,7 @@ use App\pack;
 use App\oa_complect;
 use App\option_parent;
 use App\oa_brand;
+use App\complect_option;
 
 class AjaxController extends Controller
 {
@@ -130,6 +131,18 @@ class AjaxController extends Controller
     	}
     	
     	echo json_encode($result);
+    }
+
+    public function getmotor(Request $request)
+    {
+        $result = array();
+
+        $result = oa_motor::with('type')->with('wheel')->with('transmission')->find($request->id);
+        
+        $result->type_id = @$result->type->name;
+        $result->wheel_id = @$result->wheel->name;
+        $result->transmission_id = @$result->transmission->name;
+        echo json_encode($result);
     }
 
 
@@ -250,5 +263,20 @@ class AjaxController extends Controller
     	}
     	echo 0;
     	return;
+    }
+
+
+    public function getcomplectoption(Request $request)
+    {
+        if($request->has('complect_id'))
+        {
+            $options = oa_option::select('oa_options.*')
+                    ->join('complect_options','complect_options.option_id','=','oa_options.id')
+                    ->where('complect_options.complect_id',$request->complect_id)
+                    ->orderBy('oa_options.parent_id')
+                    ->orderBy('oa_options.name')
+                    ->get();
+            return $options->toJson();
+        }
     }
 }

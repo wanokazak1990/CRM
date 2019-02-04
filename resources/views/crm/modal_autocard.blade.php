@@ -38,7 +38,7 @@
 					<div class="input-group">
 
 						{!! Form::select(
-							'delivery_types', 
+							'delivery_type', 
 							$delivery_types, 
 							'',
 							['class' => 'col-4 form-control']) 
@@ -94,8 +94,10 @@
 					</div>
 					<hr>
 				</div>
+
 				<!-- Блок вкладок -->
 				<div>
+
 					<!-- Вкладки -->
 					<ul class="nav nav-tabs nav-justified" id="autocardModalTabs" role="tablist">
 						<li class="nav-item">
@@ -111,8 +113,15 @@
 							<a class="nav-link" id="autocardModalAdds-tab" data-toggle="tab" href="#autocardModalAdds" role="tab" aria-controls="autocardModalAdds" aria-selected="false">Установка ДО</a>
 						</li>
 					</ul>
+
+
 					<!-- Контент вкладок -->
 					<div class="tab-content" id="autocardModalTabsContent">
+
+						<!-- Вкладка Автомобиль -->
+						<!-- Вкладка Автомобиль -->
+						<!-- Вкладка Автомобиль -->
+						<!-- Вкладка Автомобиль -->
 						<!-- Вкладка Автомобиль -->
 						<div class="tab-pane active" id="autocardModalCar" role="tabpanel" aria-labelledby="autocardModalCar-tab">
 							<div class="input-group">
@@ -120,21 +129,19 @@
 								<div class="col-6">
 									
 									<img id="car-img" src='' style="width: 100%;height: auto;">
-									<div class="input-group d-flex justify-content-center">
-										<button class="btn btn-primary">1</button>
-										<button class="btn btn-light">2</button>
-										<button class="btn btn-warning">3</button>
-										<button class="btn btn-danger">4</button>
+									{!! Form::hidden('color_id','',['id'=>'color_id'])!!}
+									<div class="input-group d-flex justify-content-center" id="car-color">
+										
 									</div>
 									<hr>
 									<div class="input-group no-gutters">
-										<div class="col-12 font-weight-bold">Исполнение E2GB4AG</div>
-										<p class="text-secondary">
-											Двигатель бензиновый 16-клапанный<br>
-											Рабочий объем 2.0 л. (143 л. с.)<br>
-											КПП механическая, шестиступенчатая<br>
-											Привод подключаемый, полный
-										</p>
+										<div class="col-12 font-weight-bold" id="car-complect-code"></div>
+										<div class="text-secondary">
+											<div id="car-motor-type"></div>
+											<div id="car-motor-size"></div>
+											<div id="car-motor-transmission"></div>
+											<div id="car-motor-wheel"></div>
+										</div>
 									</div>
 
 								</div>
@@ -142,68 +149,40 @@
 								<div class="col-6">
 									<div class="d-flex align-items-center justify-content-center">
 										<div align="center" class="h5">
-											<div id="car-model">Model name</div>
-											1 028 980 руб.<br>
+											<div id="car-model"></div>
+											<div id="car-full-price"></div>
 											Прогноз 02.01.2019
 										</div>
 									</div>
 
-									<div class="d-flex border-bottom">
-										<label class="flex-grow-1 font-weight-bold">Комплектация Privilege</label>
-										<a href="#">Подробнее</a>
+									<div class="d-flex border-bottom" >
+										<label class="flex-grow-1 font-weight-bold" id="car-complect-name"></label>
+										<a href="#" id="car-more">Подробнее</a>
 									</div>
-									<div class="h5 text-right">1 012 990 руб.</div>
+
+									<div id="complect-option"></div>
+
+									<div class="h5 text-right" id="car-base-price"></div>
 
 									<div class="border-bottom font-weight-bold">
 										Выберите опционное оборудование
 									</div>
-									<div class="input-group no-gutters">
-										<div class="col-12">Система ЭРА-ГЛОНАСС</div>
-										<div class="col-12 d-flex no-gutters">
-											<div class="col-6">
-												<input type="checkbox"> CALL1+TCU3G2
-											</div>
-											<div class="col-6 h5 text-right">
-												11 990 руб.
-											</div>
-										</div>
-									</div>
-									<div class="input-group no-gutters">
-										<div class="col-12">Окраска кузова металлик</div>
-										<div class="col-12 d-flex no-gutters">
-											<div class="col-6">
-												<input type="checkbox" checked> PM
-											</div>
-											<div class="col-6 h5 text-right">
-												15 990 руб.
-											</div>
-										</div>
-									</div>
-									<div class="input-group no-gutters">
-										<div class="col-12">
-											Пакет Безопасность 2
-											<br>
-											Подушки безопасности передние боковые | Подушка безопасности переднего пассажира
-										</div>
-										<div class="col-12 d-flex no-gutters">
-											<div class="col-6">
-												<input type="checkbox"> PKSECB
-											</div>
-											<div class="col-6 h5 text-right">
-												16 990 руб.
-											</div>
-										</div>
-									</div>
+									<div class="pack-block"></div>
 									
 								</div>
 							</div>
 						</div>
+
+						<!-- Вкладка Логистика -->
+						<!-- Вкладка Логистика -->
+						<!-- Вкладка Логистика -->
+						<!-- Вкладка Логистика -->
 						<!-- Вкладка Логистика -->
 						<div class="tab-pane" id="autocardModalLogistics" role="tabpanel" aria-labelledby="autocardModalLogistics-tab">
 							<div class="input-group p-2 border-bottom">
 								<label class="col-8">Дата заказа в производство</label>
 								<div class="col-4">
-									<input type="date" class="form-control">
+									<input type="text" class="form-control calendar" name="date_order">
 								</div>
 							</div>
 
@@ -215,36 +194,35 @@
 									</a>
 								</div>
 								<div class="col-4">
-									<input type="date" class="form-control">
-									<input type="date" class="form-control">
+									<input type="text" class="form-control calendar" name="date_planned">
 								</div>
 							</div>
 
 							<div class="input-group p-2 border-bottom">
 								<label class="col-8">Дата уведомления о сборке</label>
 								<div class="col-4">
-									<input type="date" class="form-control">
+									<input type="text" class="form-control calendar" name="date_notification">
 								</div>
 							</div>
 
 							<div class="input-group p-2 border-bottom">
 								<label class="col-8">Дата сборки фактическая</label>
 								<div class="col-4">
-									<input type="date" class="form-control">
+									<input type="text" class="form-control calendar" name="date_build">
 								</div>
 							</div>
 
 							<div class="input-group p-2 border-bottom">
 								<label class="col-8">Дата готовности к отгрузке</label>
 								<div class="col-4">
-									<input type="date" class="form-control">
+									<input type="text" class="form-control calendar" name="date_ready">
 								</div>
 							</div>
 
 							<div class="input-group p-2 border-bottom">
 								<label class="col-8">Локация цеха отгрузки</label>
 								<div class="col-4">
-									<input type="text" class="form-control" value="Тольятти" disabled>
+									<input type="text" class="form-control" value="" disabled >
 								</div>
 							</div>
 
@@ -256,34 +234,35 @@
 									</a>
 								</div>
 								<div class="col-4">
-									<input type="date" class="form-control">
-									<input type="date" class="form-control">
+									<input type="text" class="form-control calendar" name="date_ship">
 								</div>
 							</div>
 						</div>
+
+						<!-- Вкладка Приемка -->
+						<!-- Вкладка Приемка -->
+						<!-- Вкладка Приемка -->
+						<!-- Вкладка Приемка -->
 						<!-- Вкладка Приемка -->
 						<div class="tab-pane" id="autocardModalReception" role="tabpanel" aria-labelledby="autocardModalReception-tab">
 							<div class="input-group p-2 border-bottom">
 								<label class="col-8">Дата приемки на склад</label>
 								<div class="col-4">
-									<input type="date" class="form-control">
+									<input type="text" class="form-control calendar" name="date_storage">
 								</div>
 							</div>
 
 							<div class="input-group p-2 border-bottom">
 								<label class="col-8">Дата предпродажной подготовки</label>
 								<div class="col-4">
-									<input type="date" class="form-control">
+									<input type="text" class="form-control calendar" name="date_preparation">
 								</div>
 							</div>
 
 							<div class="input-group p-2 border-bottom">
 								<label class="col-8">Техник по приемке</label>
 								<div class="col-4">
-									<select class="form-control">
-										<option>Кульчицкий</option>
-										<option>Не Кульчицкий</option>
-									</select>
+									{!! Form::select('technic',App\user::pluck('name','id'),'',['class'=>'form-control']) !!}
 								</div>
 							</div>
 
@@ -292,13 +271,14 @@
 									<label class="col-4 offset-4">Номер</label>
 									<label class="col-4">Дата</label>
 								</div>
+
 								<div class="input-group">
 									<label class="col-4">Приходная накладная</label>
 									<div class="col-4">
-										<input type="text" class="form-control" value="40338G1T">
+										<input type="text" class="form-control" value="" name="receipt_number">
 									</div>
 									<div class="col-4">
-										<input type="date" class="form-control">
+										<input type="text" class="form-control calendar" name="receipt_date">
 									</div>
 								</div>
 							</div>
@@ -316,11 +296,10 @@
 								<div class="input-group">
 									<label class="col-4">Условия отгрузки</label>
 									<div class="col-4">
-										{!! Form::select('provide_types', $provide_types, 2, ['class' => 'form-control']) !!}
+										{!! Form::select('st_provision', [1,2,3],'',['class' => 'form-control']) !!}
 									</div>
 									<div class="col-4">
-										<input type="date" class="form-control">
-										<input type="date" class="form-control">
+										<input type="text" class="form-control" name="st_delay">
 									</div>
 								</div>
 							</div>
@@ -333,10 +312,10 @@
 								<div class="input-group">
 									<label class="col-4">Себестоимость</label>
 									<div class="col-4">
-										<input type="text" class="form-control" value="856 000 руб." disabled>
+										<input type="text" class="form-control" disabled name="estimated_purchase">
 									</div>
 									<div class="col-4">
-										<input type="text" class="form-control" value="806 000 руб.">
+										<input type="text" class="form-control" name="actual_purchase">
 									</div>
 								</div>
 							</div>
@@ -344,7 +323,7 @@
 							<div class="input-group p-2 border-bottom">
 								<label class="col-8">Скидка при отгрузке</label>
 								<div class="col-4">
-									<input type="text" class="form-control" value="50 000 руб." disabled>
+									<input type="text" class="form-control" disabled name="shipping_discount">
 								</div>
 							</div>
 
@@ -355,13 +334,9 @@
 										<i class="fas fa-plus-circle"></i>
 									</a>
 								</div>
-								<div class="col-4">
-									{!! Form::select('discount_details', $discount_details, 1, ['class' => 'form-control']) !!}
-									{!! Form::select('discount_details', $discount_details, 3, ['class' => 'form-control']) !!}
-								</div>
-								<div class="col-4">
-									<input type="text" class="form-control" value="40 000 руб.">
-									<input type="text" class="form-control" value="10 000 руб.">
+								<div class="col-8 row">
+									{!! Form::select('dc_type', [1,2,3],'',['class' => 'form-control col-6']) !!}
+									<input type="text" class="form-control col-6" name="dc_sale">
 								</div>
 							</div>
 							
@@ -373,55 +348,54 @@
 								</div>
 								<div class="input-group">
 									<div class="col-4">
-										<input type="date" class="form-control">
+										<input type="text" class="form-control calendar" name="pts_datepay">
 									</div>
 									<div class="col-4">
-										<input type="date" class="form-control">
+										<input type="text" class="form-control calendar" name="pts_datereception">
 									</div>
 									<div class="col-4">
-										<input type="date" class="form-control">
+										<input type="text" class="form-control calendar" name="debited_date">
 									</div>
 								</div>
 							</div>
 							
 						</div>
+						
+						<!-- Вкладка Установка ДО -->
+						<!-- Вкладка Установка ДО -->
+						<!-- Вкладка Установка ДО -->
+						<!-- Вкладка Установка ДО -->
 						<!-- Вкладка Установка ДО -->
 						<div class="tab-pane" id="autocardModalAdds" role="tabpanel" aria-labelledby="autocardModalAdds-tab">
 							
 							<div class="input-group border-bottom">
 								<div class="col-8 d-flex align-items-center">Цена ДО по Заказ-наряду</div>
 								<div class="col-4">
-									<input type="text" class="form-control" value="40 750 руб.">
+									<input type="text" class="form-control" value="" name="dopprice">
 								</div>
 							</div>
 
-							<div class="input-group border-bottom">
-								<div class="col-12 text-primary">Основное оборудование</div>
-								<div class="col-6"><input type="checkbox" checked> Автосигнализация с автозапуском</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-								<div class="col-6"><input type="checkbox" checked> Ручная сигнализация с ручнозапуском</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-							</div>
-
-							<div class="input-group">
-								<div class="col-12 text-primary">Прочее оборудование</div>
-								<div class="col-6"><input type="checkbox" checked> Накладки порогов дверей</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-								<div class="col-6"><input type="checkbox" checked> Подложки проемов окон</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-								<div class="col-6"><input type="checkbox"> Оборудование</div>
-							</div>
+							@isset($dops)
+								@foreach( $dops as $id => $dop )
+									@if($id == 0)
+										<div class="">
+											<h4>{{App\option_parent::find($dop->parent_id)->name}}</h4>
+										</div>
+										<div class="column">
+									@elseif($dops[$id]->parent_id != $dops[$id-1]->parent_id)
+										</div>
+										<div class="">
+											<h4>{{App\option_parent::find($dop->parent_id)->name}}</h4>
+										</div>
+										<div class="column">
+									@endif
+											<label>
+												<input type="checkbox" name="dops[]" value="{{$dop->id}}">
+												{{mb_strimwidth($dop->name, 0, 40, "...")}}
+											</label>
+								@endforeach
+										</div>
+							@endisset
 
 						</div>
 					</div>
