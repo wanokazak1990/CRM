@@ -19,6 +19,14 @@ use App\oa_option;
 use DB;
 use Excel;
 
+use App\ava_date_build;
+use App\ava_date_planned;
+use App\ava_date_notification;
+use App\ava_date_order;
+use App\ava_date_ready;
+use App\ava_date_ship;
+use App\ava_discount;
+use App\ava_shipterm;
 
 /*
 $all = avacar::get();
@@ -541,10 +549,86 @@ class CarController extends Controller
     }
 
     public function ajaxput(Request $request)
-    {
-        if($request->all())
-        {
-            print_r($request->all());
+    {  
+        if(!$request->has('id'))
+        {   
+            
+            $avacar = new avacar($request->input());
+
+            if($avacar->date_storage!='')
+                $avacar->date_storage = strtotime($request->date_storage);
+            if($avacar->date_preparation!='')
+                $avacar->date_preparation = strtotime($request->date_preparation);
+            if($avacar->receipt_date!='')
+                $avacar->receipt_date = strtotime($request->receipt_date);
+            if($avacar->pts_datepay!='')
+                $avacar->pts_datepay = strtotime($request->pts_datepay);
+            if($avacar->pts_datereception!='')
+                $avacar->pts_datereception = strtotime($request->pts_datereception);
+            if($avacar->debited_date!='')
+                $avacar->debited_date = strtotime($request->debited_date);
+
+            $avacar->save();
+
+            if($request->has('packs'))//записываю пакеты выбранные
+                foreach ($request->packs as $key => $item)
+                    $pack = ava_pack::create(['avacar_id'=>$avacar->id,'pack_id'=>$item]);
+
+            if($request->has('dops'))//записываю допы выбранные
+                foreach ($request->dops as $key => $item) 
+                    $dop = ava_dop::create(['avacar_id'=>$avacar->id,'dop_id'=>$item]);
+
+            if($request->has('date_order'))//дата заявки
+            {
+                $date = strtotime($request->date_order);
+                $order = ava_date_order::create(['car_id'=>$avacar->id,'date'=>$date]);
+            }
+
+            /*ПЕРЕДЕЛАТЬ ПОД МАССИВ (ТАК КАК ДАТ ПЛАНИРУЕМОЙ СБОРКИ МОЖЕТ БЫТЬ МНОГО)*/
+            if($request->has('date_planned'))//планируемая дата сборки
+            {
+                $date = strtotime($request->date_planned);
+                $order = ava_date_planned::create(['car_id'=>$avacar->id,'date'=>$date]);
+            }
+
+            if($request->has('date_notification'))//уведомление о сборке
+            {
+                $date = strtotime($request->date_notification);
+                $order = ava_date_notification::create(['car_id'=>$avacar->id,'date'=>$date]);
+            }
+            if($request->has('date_build'))//дата сборки фактическая
+            {
+                $date = strtotime($request->date_build);
+                $order = ava_date_build::create(['car_id'=>$avacar->id,'date'=>$date]);
+            }
+            if($request->has('date_ready'))//готовность к отгрузке
+            {
+                $date = strtotime($request->date_ready);
+                $order = ava_date_ready::create(['car_id'=>$avacar->id,'date'=>$date]);
+            }
+            /*ПЕРЕДЕЛАТЬ ПОД МАССИВ (ТАК КАК ДАТ ОТГРУЗКИ МОЖЕТ БЫТЬ МНОГО)*/
+            if($request->has('date_ship'))//дата отгрузки
+            {
+                $date = strtotime($request->date_ship);
+                $order = ava_date_ship::create(['car_id'=>$avacar->id,'date'=>$date]);
+            }
+
+            if($request->has('st_provision'))
+            {
+                $res = ava_shipterm::create([
+                    'car_id'=>$avacar->id,
+                    'provision'=>$request->st_provision,
+                    'delay'=>$request->st_delay
+                ]);
+            }
+            if($request->has('dc_type'))
+            {
+                $res = ava_discount::create([
+                    'car_id'=>$avacar->id,
+                    'type'=>$request->dc_type,
+                    'sale'=>$request->dc_sale
+                ]);
+            }
         }
     }
     

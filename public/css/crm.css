@@ -158,3 +158,87 @@ body{
 	border-width: 0px;
 	text-align: center !important;
 }
+
+#car-color .active{
+	height: 40px !important;
+	margin-top: -5px;
+}
+
+.column{
+	margin-bottom: 20px;
+    width: 100%;
+    text-align: justify;
+    column-count: 2 !important;
+    -moz-column-count: 2 !important;
+    -webkit-column-count: 2 !important;
+    column-gap: 10px  !important;
+    -moz-column-gap: 10px  !important;
+    -webkit-column-gap: 10px  !important;
+}
+.column label{display: block;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*CHECKBOX*/
+.check {
+	position: relative;
+}
+
+.check input[type="checkbox"],
+.check label,
+.check label::before,
+.check label::after,
+.check {
+	-webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none !important;
+	display: inline-block  !important;
+	border-radius: 1rem  !important;
+	border: 0  !important;
+	transition: .35s ease-in-out  !important;
+	box-sizing: border-box  !important;
+	cursor: pointer  !important;
+}
+
+.check label {
+	width: 2.2rem;
+	height: 1rem;
+	background: #d7d7d7;
+	overflow: hidden;
+}
+
+.check input[type="checkbox"] {
+	position: absolute;
+	z-index: 1;
+	width: .8rem;
+	height: .8rem;
+	top: .1rem;
+	left: .1rem;
+	background: linear-gradient(45deg, #dedede, #ffffff);
+	box-shadow: 0 6px 7px rgba(0,0,0,0.3);
+	outline: none;
+}
+
+.check input[type="checkbox"]:checked {
+	left: 1.3rem;
+}
+
+.green-check{background: #0f0 !important;}
+.red-check{background: #f00 !important;}
+/*END CHECKBOX*/

@@ -66,6 +66,8 @@ class CRMMainController extends Controller
             ->join('crm_settings', 'crm_tabs.setting_id', '=', 'crm_settings.id')
             ->select('crm_settings.id as s_id', 'crm_all_fields.id as f_id', 'crm_settings.name as setting_name', 'crm_settings.level', 'crm_settings.field', 'crm_settings.active', 'crm_all_fields.name as field_name')
             ->get();
+
+        $dops = \App\oa_dop::orderBy('parent_id')->orderBy('name')->get();
     	
     	return view('crm.main')
     		->with('title', 'CRM "Учет"')
@@ -80,6 +82,7 @@ class CRMMainController extends Controller
             ->with('delivery_types', $delivery_types)
             ->with('logist_markers', $logist_markers)
             ->with('provide_types', $provide_types)
+            ->with('dops',$dops)
             ->with('discount_details', $discount_details);
     }
 
