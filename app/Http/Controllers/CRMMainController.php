@@ -18,6 +18,7 @@ use App\crm_delivery_type;
 use App\crm_logist_marker;
 use App\crm_provide_type;
 use App\crm_discount_detail;
+use App\avacar;
 
 use App\_tab_client;
 use App\_tab_stock;
@@ -61,6 +62,9 @@ class CRMMainController extends Controller
         // Детализация скидки (карточка автомобиля)
         $discount_details = crm_discount_detail::pluck('name', 'id');
 
+        //Список доступных для тест-драйва машин (для пробной поездки)
+        $testdrive_cars = avacar::where('delivery_type', 2)->get();
+
         $test = DB::table('crm_tabs')
             ->join('crm_all_fields', 'crm_tabs.field_id', '=', 'crm_all_fields.id')
             ->join('crm_settings', 'crm_tabs.setting_id', '=', 'crm_settings.id')
@@ -80,7 +84,8 @@ class CRMMainController extends Controller
             ->with('delivery_types', $delivery_types)
             ->with('logist_markers', $logist_markers)
             ->with('provide_types', $provide_types)
-            ->with('discount_details', $discount_details);
+            ->with('discount_details', $discount_details)
+            ->with('testdrive_cars', $testdrive_cars);
     }
 
 

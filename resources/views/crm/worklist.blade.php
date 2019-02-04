@@ -365,34 +365,8 @@
 							Контент 
 							-->
 							<div id="wsparam1" class="collapse">
-								<a href="#" class="text-primary"><i class="fas fa-plus-circle"></i> Добавить</a>
+								<a href="#" class="text-primary" data-toggle="modal" data-target="#addTestdriveModal"><i class="fas fa-plus-circle"></i> Добавить</a>
 								<div class="input-group" id="testdriveCars">
-									<div class="col-3 border">
-										<div class="text-right">
-											<a href=""><i class="fas fa-trash-alt text-danger"></i></a>
-										</div>
-										<input type="text" class="form-control text-center" value="DUSTER" disabled>
-										<div class="d-flex justify-content-center">
-											<p align="center">
-												01.10.2018 в 15:40
-												<br>
-												<span class="text-success">Оценка 9</span>
-											</p>
-										</div>
-									</div>
-									<div class="col-3 border">
-										<div class="text-right">
-											<a href=""><i class="fas fa-trash-alt text-danger"></i></a>
-										</div>
-										<input type="text" class="form-control text-center" value="KAPTUR" disabled>
-										<div class="d-flex justify-content-center">
-											<p align="center">
-												Сегодня в 11:30
-												<br>
-												<span class="text-danger">В обработке</span>
-											</p>
-										</div>
-									</div>
 								</div>								
 							</div>
 							<!-- 
@@ -608,6 +582,10 @@
 										</div>
 										
 									</div>
+								</div>
+								<div class="input-group">
+									<button type="button" class="col-3 offset-6 btn btn-outline-success">Сравнить еще один</button>
+									<button type="button" class="col-3 btn btn-outline-primary">Создать заявку</button>
 								</div>
 							</div>
 							<!-- 
@@ -880,7 +858,7 @@
 								<div class="input-group">
 									<div class="col-3 d-flex align-items-center"><span><input type="checkbox"> My Renault</span></div>
 									<div class="col-6">
-										<button type="button" class="btn btn-outline-success btn-block">Коммерческое предложение</button>
+										<button type="button" class="btn btn-outline-success btn-block">Создать Коммерческое предложение</button>
 									</div>
 								</div>
 							</div>
