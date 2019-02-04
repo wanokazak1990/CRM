@@ -27,6 +27,8 @@ Route::get('/getoption',		'AjaxController@getoption')			->name('getoption');
 
 Route::get('/getmodels',		'AjaxController@getmodels')			->name('getmodels');
 
+Route::POST('/getmotor',		'AjaxController@getmotor')			->name('getmotor');
+
 Route::get('/getmotors',		'AjaxController@getmotors')			->name('getmotors');
 
 Route::post('/getpacks',		'AjaxController@getpacks')			->name('getpacks');
@@ -40,6 +42,8 @@ Route::post('/packprice',		'AjaxController@packprice')			->name('packprice');
 Route::post('/getbrand',		'AjaxController@getbrand')			->name('getbrand');
 
 Route::post('/getmodel',		'AjaxController@getmodel')			->name('getmodel');
+
+Route::post('/complect/option', 'AjaxController@getcomplectoption')	->name('getcomplectoption');
 
 
 /*РОУТЫ ДЛЯ РЕДАКТИРОВАНИЯ БРЕНДОВ*/

@@ -8,11 +8,12 @@ class avacar extends Model
 {
     //
     public $timestamps = true;
-    protected $fillable = ['brand_id','model_id','complect_id','color_id','vin','location_id','status_id','year','dopprice','prodaction'];
-    protected $attributes = [
+    protected $fillable = ['delivery_type', 'creator_id', 'logist_marker', 'radio_code', 'order_number', 'swap', 'brand_id', 'model_id', 'complect_id', 'color_id', 'vin', 'location_id', 'status_id', 'year', 'dopprice', 'created_at', 'updated_at', 'prodaction', 'date_storage', 'date_preparation', 'receipt_number', 'receipt_date', 'technic', 'estimated_purchase', 'actual_purchase', 'shipping_discount', 'pts_datepay', 'pts_datereception', 'debited_date', 'commercial application'];
+    
+    /*protected $attributes = [
     	'dopprice' => 0,
     	'prodaction'=> 0
-    ];
+    ];*/
 
     public function getYearArray()
     {
