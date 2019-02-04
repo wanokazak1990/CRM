@@ -6,6 +6,8 @@
 
 @extends('crm.modal_autocard')
 
+@extends('crm.modal_add_testdrive')
+
 @section('main')
 	
 

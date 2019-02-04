@@ -55,6 +55,10 @@
 @section('modal_autocard')
 @show
 
+<!-- МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЕ ПРОБНОЙ ПОЕЗДКИ -->
+@section('modal_add_testdrive')
+@show
+
 <!-- ОСНОВНОЙ КОНТЕНТ -->
 <div id="main" class="container-fluid">
 	<div class="row" style="height: 100%; overflow-x: auto;">
