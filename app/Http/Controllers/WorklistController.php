@@ -7,10 +7,13 @@ use App\crm_traffic;
 use App\crm_worklist;
 use App\crm_client;
 use App\crm_client_contact;
+use App\crm_testdrive;
 
 class WorklistController extends Controller
 {
-    //
+    /**
+     * Добавить Рабочий лист
+     */
     public function add(Request $request,$data=array())
     {
     	$traffic = crm_traffic::find($request->traffic_id);
@@ -50,7 +53,9 @@ class WorklistController extends Controller
     	echo json_encode($data);
     }
 
-
+    /**
+     * Сохранить изменения в Рабочем листе
+     */
     public function saveChanges(Request $request)
     {
         $string = json_decode($request->worksheet);
@@ -94,7 +99,9 @@ class WorklistController extends Controller
         echo 1;
     }
 
-
+    /**
+     * Загрузить данные из БД в Рабочий лист
+     */
     public function loadData(Request $request, $data=array())
     {
         $worklist = crm_worklist::find($request->wl_id);
@@ -139,5 +146,97 @@ class WorklistController extends Controller
         }
 
         echo json_encode($data);
+    }
+
+
+    /**
+     * Добавить машину в Пробную поездку
+     */
+    public function addTestDrive(Request $request)
+    {
+        $worklist = crm_worklist::find($request->wl_id);
+
+        $testdrive = new crm_testdrive();
+        $testdrive->client_id = $worklist->client_id;
+        $testdrive->worklist_id = $request->wl_id;
+        $testdrive->model_id = $request->model_id;
+        $testdrive->date = strtotime(date('d.m.Y'));
+        $testdrive->time = strtotime(date('H:i:s'));
+        $testdrive->status = 0;
+        $testdrive->save();
+
+        $html = self::getTestDriveHTML($request->wl_id);
+
+        echo json_encode($html);
+    }
+
+
+    /**
+     * Вывести машины в Пробной поездке
+     */
+    public function loadTestDrive(Request $request)
+    {
+        $html = self::getTestDriveHTML($request->wl_id);
+
+        echo json_encode($html);
+    }
+
+
+    /**
+     * Удалить машину из Пробной поездки и вывести обновленный список машин
+     */
+    public function deleteTestDrive(Request $request)
+    {
+        $wl_id = crm_testdrive::select('worklist_id')->find($request->testdrive_id)->worklist_id;
+        crm_testdrive::where('id', $request->testdrive_id)->delete();
+
+        $html = self::getTestDriveHTML($wl_id);
+
+        echo json_encode($html);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Функция отрисовки блоков машин для Пробной поездки
+     * $worklist - id рабочего листа
+     * return - html код блоков машин
+     */
+    public function getTestDriveHTML($worklist)
+    {
+        $testdrives = crm_testdrive::where('worklist_id', $worklist)->get();
+
+        $html = '';
+        foreach ($testdrives as $key => $car)
+        {
+            $html .= '
+            <div class="col-3 border">
+                <div class="text-right">
+                    <a href="#" class="wl_del_testdrive" id="'.$car->id.'"><i class="fas fa-trash-alt text-danger"></i></a>
+                </div>
+                <input type="text" class="form-control text-center" value="'.$car->model->name.'" disabled>
+                <div class="d-flex justify-content-center">
+                    <p align="center">
+                        '.date('d.m.Y', $car->date).' в '.date('H:i', $car->time).'
+                        <br>'; 
+                        if($car->status == 0) 
+                            $html .= '<span class="text-danger">В обработке</span>'; 
+                        else 
+                            $html .= '<span class="text-success">Оценка '.$car->status.'</span>'; 
+            $html .= '</p>
+                </div>
+            </div>';
+        }
+
+        return $html;
     }
 }

@@ -406,14 +406,22 @@ Route::post('/crm/get/journal', 'CRMAjaxController@getJournal')->name('getJourna
 
 Route::post('/create/worklist', 'WorklistController@add')->name('createworklist');
 
+// Сохранение изменений в Рабочем листе
 Route::post('/wlsavechanges', 'WorklistController@saveChanges')->name('wlsavechanges');
 
+// Загрузка данных из БД в Рабочий лист
 Route::post('/wlloaddata', 'WorklistController@loadData')->name('wlloaddata');
 
 Route::post('/create/car', 'CarController@ajaxput')->name('createcar');
 
+// Добавление машины в Пробную поездку
+Route::post('/wladdtestdrive', 'WorklistController@addTestDrive')->name('wladdtestdrive');
 
+// Загрузка выбранных машин для тест-драйва из БД в блок Пробная поездка при открытии этого блока
+Route::post('/wlloadtestdrive', 'WorklistController@loadTestDrive')->name('wlloadtestdrive');
 
+// Удаление машины из Пробной поездки
+Route::post('/wldeltestdrive', 'WorklistController@deleteTestDrive')->name('wldeltestdrive');
 
 
 
