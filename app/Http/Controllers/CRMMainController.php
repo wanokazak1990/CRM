@@ -19,6 +19,7 @@ use App\crm_logist_marker;
 use App\crm_provide_type;
 use App\crm_discount_detail;
 use App\avacar;
+use App\oa_option;
 
 use App\_tab_client;
 use App\_tab_stock;
@@ -72,6 +73,8 @@ class CRMMainController extends Controller
             ->get();
 
         $dops = \App\oa_dop::orderBy('parent_id')->orderBy('name')->get();
+
+        $options_list = oa_option::where('filter_order', '<>', '0')->distinct('filter_order')->orderBy('filtered')->pluck('filtered','filter_order');
     	
     	return view('crm.main')
     		->with('title', 'CRM "Учет"')
@@ -88,7 +91,8 @@ class CRMMainController extends Controller
             ->with('provide_types', $provide_types)
             ->with('testdrive_cars', $testdrive_cars)
             ->with('dops',$dops)
-            ->with('discount_details', $discount_details);
+            ->with('discount_details', $discount_details)
+            ->with('options_list', $options_list);
     }
 
 

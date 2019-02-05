@@ -384,7 +384,7 @@
 							Контент 
 							-->
 							<div class="collapse" id="wsparam2">
-								<a href="#" class="text-primary"><i class="fas fa-plus-circle"></i> Добавить</a>
+								<a href="#" class="text-primary" data-toggle="modal" data-target="#selectCarModal"><i class="fas fa-plus-circle"></i> Добавить</a>
 
 								<div class="input-group" id="carsByNeeds">
 									<div class="col-3 border">
@@ -415,36 +415,13 @@
 									</div>
 								</div>
 								<br>
-								<div class="input-group">
-									<div class="col-3">
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-									</div>
-									<div class="col-3">
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-									</div>
-									<div class="col-3">
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-									</div>
-									<div class="col-3">
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-										<span><input type="checkbox"> Оборудование</span><br>
-									</div>
+
+								<div class="input-group" id="selectCarOptions">
+									@foreach($options_list as $id => $option)
+										<span class="col-6"><input type="checkbox" name="" value="{{ $id }}"> {{ $option }}</span>
+									@endforeach
 								</div>
+
 								<br>
 								<div class="input-group">
 									<label class="col-3">Формат покупки</label>
