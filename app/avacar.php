@@ -83,4 +83,40 @@ class avacar extends Model
     {
         return $this->hasOne('App\oa_color','id','color_id');
     }
+
+    public function getAuthor()
+    {
+        return $this->hasOne('App\user','id','creator_id');
+    }
+
+    public function getDateOrder()
+    {
+        return $this->hasOne('App\ava_date_order','car_id','id');
+    }
+
+    public function getDatePlanned()
+    {
+        return $this->hasOne('App\ava_date_planned','car_id','id');
+    }
+
+    public function getDateBuild()
+    {
+        return $this->hasOne('App\ava_date_build','car_id','id');
+    }
+
+    public function getDateReady()
+    {
+        return $this->hasOne('App\ava_date_ready','car_id','id');
+    }
+
+    public function getDateShip()
+    {
+        return $this->hasOne('App\ava_date_ship','car_id','id');
+    }
+
+    public function getTechnic()
+    {
+        return $this->hasOne('App\user','id','technic');
+    }
+
 }
