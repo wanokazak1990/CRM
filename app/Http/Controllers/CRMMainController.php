@@ -86,7 +86,7 @@ class CRMMainController extends Controller
             ->with('delivery_types', $delivery_types)
             ->with('logist_markers', $logist_markers)
             ->with('provide_types', $provide_types)
-            ->with('testdrive_cars', $testdrive_cars);
+            ->with('testdrive_cars', $testdrive_cars)
             ->with('dops',$dops)
             ->with('discount_details', $discount_details);
     }
