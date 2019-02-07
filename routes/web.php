@@ -423,8 +423,8 @@ Route::post('/wlloadtestdrive', 'WorklistController@loadTestDrive')->name('wlloa
 // Удаление машины из Пробной поездки
 Route::post('/wldeltestdrive', 'WorklistController@deleteTestDrive')->name('wldeltestdrive');
 
-
-
+// Показать машины по потребностям (Кнопка "Найти в автоскладе" в РЛ)
+Route::post('/crmgetcarsbyneeds', 'CRMAjaxController@getCarsByNeeds')->name('crmgetcarsbyneeds');
 
 
 

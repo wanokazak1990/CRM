@@ -209,4 +209,66 @@ class CRMAjaxController extends Controller
             toJson();
         return $traffics;
     }
+
+
+    /**
+     * Найти в автоскладе (РЛ -> Параметры -> Подбор по потребностям)
+     *
+     * $options - массив с потребностями (опциями)
+     * $cars - массив параметров машин (может содержать модель, тип кпп и тип привода для каждой машины)
+     */
+    public function getCarsByNeeds(Request $request, $options=array())
+    {
+        if ($request->wl_need_option)
+            $options = explode(',', $request->wl_need_option);
+        $cars = $request->data;
+        $cars = json_decode($cars);
+
+        $query = avacar::with('getAuthor')
+            ->with('getDateOrder')
+            ->with('getDatePlanned')
+            ->with('getDateBuild')
+            ->with('getDateReady')
+            ->with('brand')
+            ->with('model')
+            ->with('complect')
+            ->with('color')
+            ->leftJoin('oa_models as model', 'model.id', '=', 'avacars.model_id')
+            ->leftJoin('oa_complects as complect', 'complect.id', '=', 'avacars.complect_id')
+            ->leftJoin('oa_motors as motor', 'complect.motor_id', '=', 'motor.id')
+            ->join('_view_caroption as installed', 'installed.id', '=', 'avacars.id')
+            ->join('_view_car_price as carprice', 'carprice.id', '=', 'avacars.id');
+            
+        if (!empty($options))
+            $query->whereIn('installed.filter_order', $options);
+
+        if (is_array($cars))
+            $query->where(function ($query) use ($cars) {
+                foreach ($cars as $item) 
+                    $query->orWhere(function($query) use ($item){
+                        if($item->model)            $query->where('model.id',$item->model);
+                        if($item->transmission)     $query->where('motor.transmission_id',$item->transmission);
+                        if($item->wheel)            $query->where('motor.wheel_id',$item->wheel);
+                    });
+            });
+            
+        if($request->wl_need_sum)
+            $query->where('carprice.totalprice', '<=', $request->wl_need_sum);
+
+        $query->groupBy('avacars.id');
+        if (count($options) > 0)
+            $query->havingRaw("COUNT(avacars.id) = ".count($options));
+        $list = $query->get();
+
+        $result = new \App\autostock_helper($list);
+        $result->makeTableData();
+
+        $titles = crm_all_field::where('type_id',3)->get();
+        $links = '';
+        echo json_encode([
+            'list'=>$result->response,
+            'links'=>$links,
+            'titles'=>$titles
+        ]);
+    }
 }

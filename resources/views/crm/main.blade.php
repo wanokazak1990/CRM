@@ -8,8 +8,6 @@
 
 @extends('crm.modal_add_testdrive')
 
-@extends('crm.modal_select_car')
-
 @section('main')
 	
 
