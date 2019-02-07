@@ -174,58 +174,16 @@ class CRMAjaxController extends Controller
                         ->with('model')
                         ->with('complect')
                         ->with('color')
+                        ->orderBy('id','DESC')
                         ->get();
-                    foreach ($list as $key => $item) {
-                            $mas[$key]['id'] = $item->id;
-                            $mas[$key]['stage_deal'] = 'Этап сделки';
-                            $mas[$key]['status_pts'] = 'status_pts';
-                            $mas[$key]['stage_delivery'] = 'etap postavki';
-                            $mas[$key]['logist_marker'] = 'logist_marker';
-                            $mas[$key]['author'] = @$item->getAuthor->name;
-                            $mas[$key]['date_order'] = date('d.m.Y',@$item->getDateOrder->date);
-                            $mas[$key]['date_planned'] = date('d.m.Y',@$item->getDatePlanned->date);
-                            $mas[$key]['date_tochnee'] = 'tochnee';
-                            $mas[$key]['date_build'] = date('d.m.Y',@$item->getDateBuild->date);
-                            $mas[$key]['date_ready'] = date('d.m.Y',@$item->getDateReady->date);
-                            $mas[$key]['loc_ship'] = 'локация отгрузки';
-                            $mas[$key]['date_ship'] = date('d.m.Y',@$item->getDateShip->date);
-                            $mas[$key]['date_storage'] = date('d.m.Y',@$item->date_storage);
-                            $mas[$key]['technic'] = @$item->getTechnic->name;
-                            $mas[$key]['type_ship'] = 'type_ship';
-                            $mas[$key]['raschet_zakup'] = 'raschet_zakup';
-                            $mas[$key]['fakt_zakup'] = 'fakt_zakup';
-                            $mas[$key]['sum_discount'] = 'sum_discount';
-                            $mas[$key]['discount_ship'] = 'discount_ship';
-                            $mas[$key]['discount_vozmeshenee'] = 'discount_vozmeshenee';
-                            $mas[$key]['date_vozmechenee'] = 'date_vozmechenee';
-                            $mas[$key]['cmment'] = 'comment';
-                            $mas[$key]['date_noklad'] = 'date_noklad';
-                            $mas[$key]['begin_otsrochka'] = 'begin_otsrochka';
-                            $mas[$key]['period_otsrochka'] = 'period_otsrochka';
-                            $mas[$key]['end_otsrochka'] = 'end_otsrochka';
-                            $mas[$key]['date_sale_pts'] = 'date_sale_pts';
-                            $mas[$key]['date_prichod_pts'] = 'date_pts';
-                            $mas[$key]['monitor'] = 'monitor';
+                    
+                    $tr = new \App\autostock_helper($list);
+                    $tr->makeTableData();
 
-                            $mas[$key]['year'] = @$item->year;
-                            $mas[$key]['brand'] = @$item->brand->name;
-                            $mas[$key]['model'] = @$item->model->name;
-                            $mas[$key]['complect'] = @$item->complect->name.' '.@$item->complect->motor->forAdmin();
-                            $mas[$key]['pack'] = 'packs';
-                            $mas[$key]['color_code'] = $item->color->rn_code;
-                            $mas[$key]['color_name'] = $item->color->name;
-                            $mas[$key]['vin'] = $item->vin;
-                            $mas[$key]['order_number'] = $item->order_number;
-                            $mas[$key]['price_stock'] = 'Цена по прайсу';
-                            $mas[$key]['price_pack'] = $item->packPrice();
-                            $mas[$key]['price_dops'] = $item->dopprice;
-                            $mas[$key]['price_discount'] = 'СКИДКА';
-                            $mas[$key]['price_sell'] = 'Цена продажи';
-                    }
                     $titles = crm_all_field::where('type_id',$class_name::$tab_index)->get();
                     $links = '';
                     echo json_encode([
-                        'list'=>$mas,
+                        'list'=>$tr->response,
                         'links'=>$links,
                         'titles'=>$titles
                     ]);
