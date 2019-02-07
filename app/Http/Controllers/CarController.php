@@ -567,7 +567,8 @@ class CarController extends Controller
                 $avacar->pts_datereception = strtotime($request->pts_datereception);
             if($avacar->debited_date!='')
                 $avacar->debited_date = strtotime($request->debited_date);
-
+            $avacar->brand_id = oa_model::find($request->model_id)->brand_id;
+            $avacar->provision = $request->st_provision;
             $avacar->save();
 
             if($request->has('packs'))//записываю пакеты выбранные
@@ -584,7 +585,7 @@ class CarController extends Controller
                 $order = ava_date_order::create(['car_id'=>$avacar->id,'date'=>$date]);
             }
 
-            /*ПЕРЕДЕЛАТЬ ПОД МАССИВ (ТАК КАК ДАТ ПЛАНИРУЕМОЙ СБОРКИ МОЖЕТ БЫТЬ МНОГО)*/
+            //ПЕРЕДЕЛАТЬ ПОД МАССИВ (ТАК КАК ДАТ ПЛАНИРУЕМОЙ СБОРКИ МОЖЕТ БЫТЬ МНОГО)
             if($request->has('date_planned'))//планируемая дата сборки
             {
                 $date = strtotime($request->date_planned);
@@ -606,7 +607,7 @@ class CarController extends Controller
                 $date = strtotime($request->date_ready);
                 $order = ava_date_ready::create(['car_id'=>$avacar->id,'date'=>$date]);
             }
-            /*ПЕРЕДЕЛАТЬ ПОД МАССИВ (ТАК КАК ДАТ ОТГРУЗКИ МОЖЕТ БЫТЬ МНОГО)*/
+            //ПЕРЕДЕЛАТЬ ПОД МАССИВ (ТАК КАК ДАТ ОТГРУЗКИ МОЖЕТ БЫТЬ МНОГО)
             if($request->has('date_ship'))//дата отгрузки
             {
                 $date = strtotime($request->date_ship);
@@ -617,7 +618,6 @@ class CarController extends Controller
             {
                 $res = ava_shipterm::create([
                     'car_id'=>$avacar->id,
-                    'provision'=>$request->st_provision,
                     'delay'=>$request->st_delay
                 ]);
             }

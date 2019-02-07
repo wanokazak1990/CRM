@@ -177,6 +177,9 @@ body{
 }
 .column label{display: block;}
 
+b.red{background: #f00; height: 20px;width: 20px;border-radius: 100%;display: block; margin: auto;}
+b.yellow{background: #ff0;height: 20px;width: 20px;border-radius: 100%;display: block;margin: auto;}
+b.green{background: #0f0;height: 20px;width: 20px;border-radius: 100%;display: block;margin: auto;}
 
 
 
