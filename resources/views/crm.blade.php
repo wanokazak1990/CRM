@@ -59,10 +59,6 @@
 @section('modal_add_testdrive')
 @show
 
-<!-- МОДАЛЬНОЕ ОКНО ПОДБОР АВТО ПО ПОТРЕБНОСТЯМ -->
-@section('modal_select_car')
-@show
-
 <!-- ОСНОВНОЙ КОНТЕНТ -->
 <div id="main" class="container-fluid">
 	<div class="row" style="height: 100%; overflow-x: auto;">

@@ -181,6 +181,103 @@ $(document).on('click', '.wl_del_testdrive', function() {
 
 
 /**
+ * ПОДБОР ПО ПОТРЕБНОСТЯМ
+ * Добавление новой модели 
+ */
+$(document).on('click', '#addSelectedCar', function() {
+	var clone = $('#carsByNeeds').find('.col-3').first().clone();
+	clone.appendTo('#carsByNeeds');
+});
+
+
+/**
+ * ПОДБОР ПО ПОТРЕБНОСТЯМ
+ * Удаление модели (если одна - сброс селектов) 
+ */
+$(document).on('click', '.removeSelectedCar', function() {
+	var count = $('#carsByNeeds .col-3').length;
+
+	if (count > 1)
+		$(this).closest('.col-3').remove();
+	else
+	{
+		$('#carsByNeeds .col-3 select').prop('selectedIndex', 0);
+	}
+});
+
+
+/**
+ * ПОДБОР ПО ПОТРЕБНОСТЯМ
+ * Кнопка "Найти в автоскладе"
+ */
+$(document).on('click', '#getListByNeeds', function() {
+	$(this).blur();
+
+	function Car(){
+		this.model = '',
+		this.transmission = '',
+		this.wheel = ''
+	};
+
+	var data = [];
+	$('#carsByNeeds .border').each(function() {
+		var obj = new Car();
+		obj.model = $(this).find('.wl_need_model').val();
+		obj.transmission = $(this).find('.wl_need_transmission').val();
+		obj.wheel = $(this).find('.wl_need_wheel').val();
+		data.push(obj);
+	});
+	data = JSON.stringify(data);
+
+	var wl_need_option = [];
+	$('#selectCarOptions input:checkbox:checked').each(function() {
+		wl_need_option.push($(this).val());
+	});
+
+	var wl_need_sum = $('#wl_need_sum').val();
+
+	var formData = new FormData();
+	formData.append('wl_need_option', wl_need_option);
+	formData.append('wl_need_sum', wl_need_sum);
+	formData.append('data', data);
+
+	$.ajax({
+		url: '/crmgetcarsbyneeds',
+		type: 'POST',
+        data: formData,
+        dataType : "json", 
+        cache: false,
+        contentType: false,
+        processData: false, 
+		headers: {
+        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    	},
+    	success: function(data){
+    		// Закрываем боковую панель
+			$('#hidden_panel').css('right', '-50%');
+			$('#disableContent').css('display', 'none');
+			// Переходим на вкладку Автосклад
+			$('#crmTabs a[href="#stock"]').tab('show');
+			// Вставляем полученные данные в таблицу
+    		var parent = $("#crmTabPanels").find("div[aria-labelledby='stock-tab']");
+    		parent.find('table').html("");
+	    	getTitleContent(parent,data['titles']);		    
+	    	getDataContent(parent,data['list']);		    	
+	    	getPaginationContent(parent,data['links']);  
+    	},
+    	error:function(xhr, ajaxOptions, thrownError){
+    		log('Не удалось загрузить данные рабочего листа');
+	    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+	    	log(xhr.responseText);
+	    	log(ajaxOptions);
+	    }
+	});
+
+
+});
+
+
+/**
  * ТЕСТОВАЯ ЗАГРУЗКА РАБОЧЕГО ЛИСТА ПО НАЖАНИЮ НА БОЛЬШУЮ КРАСНУЮ КНОПКУ В ШАПКЕ САЙТА
  */
  $(document).on('click', '#test_load_worklist', function() {
@@ -201,11 +298,24 @@ $(document).on('click', '.wl_del_testdrive', function() {
         	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     	},
     	success: function(data){
-    		log('ok');
+    		log('Рабочий лист с id '+wl_id+' успешно загружен');
     		$('#hidden_panel').css('right', '0');
 			$('#disableContent').css('display', 'block');
 			$('#hiddenTab a[href="#worksheet"]').tab('show');
 	    	worklistData(data);
+
+	    	// Очистка лишних блоков в Подборе по потребностям
+	    	var count = $('#carsByNeeds .col-3').length;
+	    	if (count > 1)
+	    	{
+	    		while (count != 1) {
+	    			$('#carsByNeeds .col-3').first().remove();
+	    			count--;
+	    		}
+	    	}
+	    	// Выбор интересующей модели как модели по умолчанию в Подборе по потребностям
+	    	$('#carsByNeeds .col-3 select option:contains("'+data['traffic_model']+'")').prop('selected', true);
+	    	
     	},
     	error:function(xhr, ajaxOptions, thrownError){
     		log('Не удалось загрузить данные рабочего листа');
