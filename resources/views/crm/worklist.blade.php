@@ -384,41 +384,26 @@
 							Контент 
 							-->
 							<div class="collapse" id="wsparam2">
-								<a href="#" class="text-primary" data-toggle="modal" data-target="#selectCarModal"><i class="fas fa-plus-circle"></i> Добавить</a>
+								<a href="#" class="text-primary" id="addSelectedCar"><i class="fas fa-plus-circle"></i> Добавить</a>
 
 								<div class="input-group" id="carsByNeeds">
 									<div class="col-3 border">
-										<div class="text-right">
-											<a href=""><i class="fas fa-trash-alt text-danger"></i></a>
+										<div class="d-flex">
+											<label class="flex-grow-1">Выберите модель</label>
+											<a href="#" class="removeSelectedCar"><i class="fas fa-trash-alt text-danger"></i></a>
 										</div>
-										<input type="text" class="form-control text-center" value="DUSTER" disabled>
-										<select class="form-control">
-											<option>Механическая</option>
-											<option>Автомат</option>
-										</select>
-										<select class="form-control">
-											<option>Полный (4WD)</option>
-											<option>Половинчатый</option>
-										</select>
-									</div>
-									<div class="col-3 border">
-										<div class="text-right">
-											<a href=""><i class="fas fa-trash-alt text-danger"></i></a>
-										</div>
-										<input type="text" class="form-control text-center" value="KAPTUR" disabled>
-										<select class="form-control">
-											<option>Выбрать</option>
-										</select>
-										<select class="form-control">
-											<option>Выбрать</option>
-										</select>
-									</div>
+										{!! Form::select('wl_need_model',App\oa_model::pluck('name','id'),'', ['class' => 'wl_need_model form-control'])!!}
+										{!! Form::select('wl_need_transmission',App\type_transmission::pluck('name','id'),'', ['class' => 'wl_need_transmission form-control'])!!}
+										{!! Form::select('wl_need_wheel',App\type_wheel::pluck('name','id'),'', ['class' => 'wl_need_wheel form-control'])!!}
+											
+									</div>									
 								</div>
+
 								<br>
 
 								<div class="input-group" id="selectCarOptions">
 									@foreach($options_list as $id => $option)
-										<span class="col-6"><input type="checkbox" name="" value="{{ $id }}"> {{ $option }}</span>
+										<span class="col-6"><input type="checkbox" value="{{ $id }}"> {{ $option }}</span>
 									@endforeach
 								</div>
 
@@ -436,11 +421,11 @@
 									<select class="col-3 form-control">
 										<option>В кредит</option>
 									</select>
-									<input type="text" class="col-3 form-control" placeholder="Сумма, р.">
-									<input type="text" class="col-3 form-control" placeholder="Сумма, р.">
+									<input type="text" id="wl_need_firstpay" class="col-3 form-control" placeholder="Сумма, р.">
+									<input type="text" id="wl_need_sum" class="col-3 form-control" placeholder="Сумма, р.">
 								</div>
 								<div class="input-group">
-									<input type="button" class="col-3 offset-6 btn btn-outline-success" value="Показать варианты">
+									<input type="button" class="col-3 offset-6 btn btn-outline-success" id="getListByNeeds" value="Найти в автоскладе">
 									<input type="button" class="col-3 btn btn-outline-primary" value="Резервировать">
 								</div>
 							</div>
@@ -460,21 +445,17 @@
 							-->
 							<div id="wsparam3" class="collapse">
 								<div class="input-group">
-									<div class="col-3"><label>Модель</label></div>
-									<div class="col-6"><label>Комплектация</label></div>
+									<div class="col-4"><label>Модель</label></div>
+									<div class="col-8"><label>Комплектация</label></div>
 								</div>
 								<div class="input-group">
-									<select class="col-3 form-control">
+									<select class="col-4 form-control">
 										<option>DUSTER</option>
 									</select>
-									<select class="col-6 form-control">
+									<select class="col-8 form-control">
 										<option>Privilege 2.0 (143) 4WD МКП</option>
 										<option>Not Privilege 2.0 (143) 4WD МКП</option>
 									</select>
-									<div class="col-3 d-flex align-items-center justify-content-center">
-										<a href="#" class="btn btn-light"><i class="fas fa-times"></i></a>
-										<a href="#" class="btn btn-light"><i class="fas fa-plus-circle"></i></a>
-									</div>
 								</div>
 								<hr>
 								<div class="input-group">
