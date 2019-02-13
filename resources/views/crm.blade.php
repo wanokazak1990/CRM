@@ -336,6 +336,7 @@
 
 <link rel="stylesheet" type="text/css" href="/lib/bootstrap-4/css/bootstrap.min.css">
 <script src="/lib/bootstrap-4/js/bootstrap.min.js"></script>
+<!--script src="https://unpkg.com/axios/dist/axios.min.js"></script-->
 <script src="/js/main.js"></script>
 <script src="/js/jquery-ui.js"></script><!--http://api.jqueryui.com/datepicker/-->
 <link href='/css/jquery-ui.css' rel='stylesheet' type='text/css'>

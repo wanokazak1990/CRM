@@ -135,13 +135,13 @@ class AjaxController extends Controller
 
     public function getmotor(Request $request)
     {
-        $result = array();
+        $result = oa_motor::select('oa_motors.*')->join('oa_complects','oa_complects.motor_id','=','oa_motors.id')
+            ->with('type')
+            ->with('wheel')
+            ->with('transmission')
+            ->where('oa_complects.id',$request->complect_id)
+            ->get();
 
-        $result = oa_motor::with('type')->with('wheel')->with('transmission')->find($request->id);
-        
-        $result->type_id = @$result->type->name;
-        $result->wheel_id = @$result->wheel->name;
-        $result->transmission_id = @$result->transmission->name;
         echo json_encode($result);
     }
 
@@ -186,12 +186,18 @@ class AjaxController extends Controller
     //ВЕРНЁТ МАССИВ КОМПЛЕКТАЦИИ МОДЕЛИ (В ВИДЕ [complect_id]=>fullname)
     public function getcomplects(Request $request)
     {	
-    	$complects = oa_complect::where('model_id',$request->input('model_id'))->get();
+        //print_r($request->all());
+        $params = $request->id;
+        if($params)
+            $complects = oa_complect::where('model_id',$params)->get();
+        else
+          $complects = oa_complect::get();
+
     	foreach ($complects as $key => $complect) {
     		if($complect->motor)
     			$complects[$key]->fullname = $complect->name.' '.$complect->motor->nameForSelect()['name'] ;
     	}
-    	echo json_encode($complects);
+    	echo ($complects->toJson());
     }
 
 
@@ -218,12 +224,9 @@ class AjaxController extends Controller
     {
     	if($request->has('id'))
     	{
-    		$res = oa_complect::where('id',$request->id)->first();
-    		echo $res;
-    		return;
+    		$res = oa_complect::with('model')->where('id',$request->id)->first();
+    		echo $res->toJson();
     	}
-    	echo 0;
-    	return;
     }
 
     //вернёт стоимость пакетов id это строка разделитель которой запятая
