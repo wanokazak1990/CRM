@@ -43,6 +43,20 @@ $app->singleton(
 
 /*
 |--------------------------------------------------------------------------
+| Bootstrap 4 Views For Pagination
+|--------------------------------------------------------------------------
+|
+| This code connects Bootstrap 4 views for Pagination. I think it's logical 
+| from the title of the description block, but I need to fill in these 
+| lines.
+|
+*/
+
+Illuminate\Pagination\AbstractPaginator::defaultView("pagination::bootstrap-4");
+Illuminate\Pagination\AbstractPaginator::defaultSimpleView("pagination::simple-bootstrap-4");
+
+/*
+|--------------------------------------------------------------------------
 | Return The Application
 |--------------------------------------------------------------------------
 |
