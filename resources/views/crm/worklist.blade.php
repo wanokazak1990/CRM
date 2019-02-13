@@ -446,98 +446,57 @@
 							<div id="wsparam3" class="collapse">
 								<div class="input-group">
 									<div class="col-4"><label>Модель</label></div>
-									<div class="col-8"><label>Комплектация</label></div>
+									<div class="flex-grow-1"><label>Комплектация</label></div>
+									<a href="#"><i class="fas fa-times"></i></a>
 								</div>
 								<div class="input-group">
-									<select class="col-4 form-control">
-										<option>DUSTER</option>
-									</select>
-									<select class="col-8 form-control">
-										<option>Privilege 2.0 (143) 4WD МКП</option>
-										<option>Not Privilege 2.0 (143) 4WD МКП</option>
-									</select>
+									{!! Form::select('cfg_model',App\oa_model::pluck('name','id'),'', ['class' => 'col-4 form-control'])!!}
+									{!! Form::select('cfg_complect',array(),'', ['class' => 'col-8 form-control'])!!}
 								</div>
 								<hr>
 								<div class="input-group">
 									<!-- Левый блок -->
 									<div class="col-6">
-										<div style="width: 100%; height: 200px; background-color: #ddd;">
-											Тут типа картинка машины
-										</div>
-										<div class="input-group d-flex justify-content-center">
-											<button class="btn btn-primary">1</button>
-											<button class="btn btn-light">2</button>
-											<button class="btn btn-warning">3</button>
-											<button class="btn btn-danger">4</button>
+										<img id="cfg-img" src='' style="width: 100%;height: auto;">
+										{!! Form::hidden('cfg_color_id','',['id'=>'cfg_color_id'])!!}
+										<div class="input-group d-flex justify-content-center" id="cfg-color">
 										</div>
 										<hr>
 										<div class="input-group no-gutters">
-											<div class="col-12 font-weight-bold">Исполнение E2GB4AG</div>
-											<p class="text-secondary">
-												Двигатель бензиновый 16-клапанный<br>
-												Рабочий объем 2.0 л. (143 л. с.)<br>
-												КПП механическая, шестиступенчатая<br>
-												Привод подключаемый, полный
-											</p>
+											<div class="col-12 font-weight-bold" id="cfg-complect-code"></div>
+											<div class="text-secondary">
+												<div id="cfg-motor-type"></div>
+												<div id="cfg-motor-size"></div>
+												<div id="cfg-motor-transmission"></div>
+												<div id="cfg-motor-wheel"></div>
+											</div>
 										</div>
 
 									</div>
 									<!-- Правый блок -->
 									<div class="col-6">
 										<div class="d-flex align-items-center justify-content-center">
-											<p align="center" class="h5">
-												Renault Duster<br>
-												1 028 980 руб.<br>
+											<div align="center" class="h5">
+												<div id="cfg-model"></div>
+												<div id="cfg-full-price"></div>
 												Прогноз 02.01.2019
-											</p>
+											</div>
 										</div>
 
 										<div class="d-flex border-bottom">
-											<label class="flex-grow-1 font-weight-bold">Комплектация Privilege</label>
-											<a href="#">Подробнее</a>
+											<label class="flex-grow-1 font-weight-bold" id="cfg-complect-name"></label>
+											<a href="#" id="cfg-more">Подробнее</a>
 										</div>
-										<div class="h5 text-right">1 012 990 руб.</div>
+
+										<div id="cfg-complect-option"></div>
+
+										<div class="h5 text-right" id="cfg-base-price"></div>
 
 										<div class="border-bottom font-weight-bold">
 											Выберите опционное оборудование
 										</div>
-										<div class="input-group no-gutters">
-											<div class="col-12">Система ЭРА-ГЛОНАСС</div>
-											<div class="col-12 d-flex no-gutters">
-												<div class="col-6">
-													<input type="checkbox"> CALL1+TCU3G2
-												</div>
-												<div class="col-6 h5 text-right">
-													11 990 руб.
-												</div>
-											</div>
-										</div>
-										<div class="input-group no-gutters">
-											<div class="col-12">Окраска кузова металлик</div>
-											<div class="col-12 d-flex no-gutters">
-												<div class="col-6">
-													<input type="checkbox" checked> PM
-												</div>
-												<div class="col-6 h5 text-right">
-													15 990 руб.
-												</div>
-											</div>
-										</div>
-										<div class="input-group no-gutters">
-											<div class="col-12">
-												Пакет Безопасность 2
-												<br>
-												Подушки безопасности передние боковые | Подушка безопасности переднего пассажира
-											</div>
-											<div class="col-12 d-flex no-gutters">
-												<div class="col-6">
-													<input type="checkbox"> PKSECB
-												</div>
-												<div class="col-6 h5 text-right">
-													16 990 руб.
-												</div>
-											</div>
-										</div>
+										<div id="cfg-pack-block"></div>
+										
 										
 									</div>
 								</div>
@@ -735,55 +694,135 @@
 							КОНТЕНТ
 							-->
 							<div id="wsparam6" class="collapse">
-								<label class="font-weight-bold">Сервисы:</label>
-								
 								<div class="input-group">
-									<span class="col-9"><input type="checkbox" checked> Гарантия Renault Extra (4 года)</span>
-									<input type="text" class="col-3 form-control" value="+ 12 900 руб.">
-								</div>
-								<div class="input-group">
-									<span class="col-9"><input type="checkbox"> Гарантия Renault Extra (5 лет)</span>
-									<input type="text" class="col-3 form-control" value="+ 19 900 руб.">
-								</div>
-								<div class="input-group">
-									<span class="col-9"><input type="checkbox"> Комплимент за Тест-драйв</span>
-									<button type="button" class="col-3 btn btn-outline-success">Сертификат</button>
-								</div>
-								<div class="input-group">
-									<span class="col-9"><input type="checkbox" checked> Оплата дороги до автосалона</span>
-									<input type="text" class="col-3 form-control" value="-650 руб.">
+									<label class="col-6 font-weight-bold">Скидки:</label>
+									<label class="col-3">Скидка</label>
+									<label class="col-3">Возмещение</label>
 								</div>
 								
-								<label class="font-weight-bold">Акции:</label>
+								<div>
+									<div class="input-group">
+										<div class="col-6 d-flex align-items-center">
+											<span class="flex-grow-1 text-success"><input type="checkbox" checked> Скидка 13 000 р. (PromoPTS18)</span>
+											<a href="#"><i class="fas fa-question-circle"></i></a>
+										</div>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="- 13 000 р.">
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
+									</div>
+
+									<div class="input-group">
+										<div class="col-6 d-flex align-items-center">
+											<span class="flex-grow-1 text-success"><input type="checkbox" checked> Скидка Renault Finance 33 000 р.</span>
+											<a href="#"><i class="fas fa-question-circle"></i></a>
+										</div>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="- 28 519 р.">
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="28 519 р.">
+									</div>
+
+									<div class="input-group">
+										<div class="col-6 d-flex align-items-center">
+											<span class="flex-grow-1 text-secondary"><input type="checkbox" disabled> Скидка 15 000 р. (Sale1218)</span>
+											<a href="#"><i class="fas fa-question-circle"></i></a>
+										</div>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
+									</div>
+								</div>
 								
 								<div class="input-group">
-									<span class="col-9"><input type="checkbox" checked> Проживание в гостиннице</span>
-									<button type="button" class="col-3 btn btn-outline-success">Направление</button>
-								</div>
-								<div class="input-group">
-									<span class="col-9"><input type="checkbox"> Подарок постоянному клиенту</span>
+									<label class="col-6 font-weight-bold">Подарки:</label>
+									<label class="col-3">Скидка</label>
+									<label class="col-3">Возмещение</label>
 								</div>
 
-								<label class="font-weight-bold">Скидки:</label>
+								<div>
+									<div class="input-group">
+										<div class="col-6 d-flex align-items-center">
+											<span class="flex-grow-1 text-success"><input type="checkbox" checked> Зимняя резина в подарок (Gift1218)</span>
+											<a href="#"><i class="fas fa-question-circle"></i></a>
+										</div>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="- 22 630 р.">
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="22 630 р.">
+									</div>
+								</div>
+
+								<div class="input-group">
+									<label class="col-6 font-weight-bold">Акции:</label>
+									<label class="col-3">Скидка</label>
+									<label class="col-3">Возмещение</label>
+								</div>
 								
-								<div class="input-group">
-									<span class="col-9"><input type="checkbox" checked> Скидка на аксессуары</span>
-									<span class="col-3 d-flex align-items-center">-8500 р.</span>
-								</div>
-								<div class="input-group">
-									<span class="col-9"><input type="checkbox" checked> Выгода по Трейд-ин 90 000 руб.</span>
-									<span class="col-3 d-flex align-items-center">-90 000</span>
+								<div>
+									<div class="input-group">
+										<div class="col-6 d-flex align-items-center">
+											<span class="flex-grow-1 text-success"><input type="checkbox" checked> Скидка на заказ-наряд 1 654 р.</span>
+											<a href="#"><i class="fas fa-question-circle"></i></a>
+										</div>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="- 1 500 р.">
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
+									</div>
+
+									<div class="input-group">
+										<div class="col-6 d-flex align-items-center">
+											<span class="flex-grow-1 text-success"><input type="checkbox" checked> Дорога до автосалона</span>
+											<a href="#"><i class="fas fa-question-circle"></i></a>
+										</div>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="- 2 548 р.">
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
+									</div>
+
+									<div class="input-group">
+										<div class="col-6 d-flex align-items-center">
+											<span class="flex-grow-1"><input type="checkbox"> Выгода по Trade-In 40 000 р.</span>
+											<a href="#"><i class="fas fa-question-circle"></i></a>
+										</div>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="40000" disabled>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
+									</div>
+
+									<div class="input-group">
+										<div class="col-6 d-flex align-items-center justify-content-end">
+											<span>Скидка и возмещение по сделке</span>
+										</div>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="- 68 197 р." disabled>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="51 149 р." disabled>
+									</div>
+
+									<div class="input-group">
+										<div class="col-6 d-flex align-items-center justify-content-end">
+											<span>Изменение и остаток маржи</span>
+										</div>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="- 17 148 р." disabled>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="5 245 р." disabled>
+									</div>
 								</div>
 
-								<label class="font-weight-bold">Подарки:</label>
+								<div class="input-group">
+									<label class="col-6 font-weight-bold">Сервисы:</label>
+									<label class="col-3">Стоимость</label>
+									<label class="col-3">Возмещение</label>
+								</div>
 
-								<div class="input-group">
-									<span class="col-9"><input type="checkbox" checked> Дорожный набор, защитная сетка</span>
+								<div>
+									<div class="input-group">
+										<div class="col-6 d-flex align-items-center">
+											<span class="flex-grow-1 text-success"><input type="checkbox" checked> Разумное КАСКО за 30 900 р.</span>
+											<a href="#"><i class="fas fa-question-circle"></i></a>
+										</div>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="30 900 р.">
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
+									</div>
+
+									<div class="input-group">
+										<div class="col-6 d-flex align-items-center">
+											<span class="flex-grow-1"><input type="checkbox"> Гарантия Renault Extra (5 лет)</span>
+											<a href="#"><i class="fas fa-question-circle"></i></a>
+										</div>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="12 900 р." disabled>
+										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
+									</div>
 								</div>
-								<div class="input-group">
-									<span class="col-3 offset-6 font-weight-bold">Итого сумма скидок:</span>
-									<span class="col-3 font-weight-bold">99 150 р.</span>
-								</div>
+
 							</div>
 							<!-- 
 							КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ
@@ -946,6 +985,25 @@
 								</div>
 							</div>
 
+							<div class="input-group">
+								<div class="col-3">
+									<button type="button" class="btn btn-warning btn-block">Открыть карточку</button>
+								</div>
+								<div class="col-3">
+									<button type="button" class="btn btn-success btn-block">Отложить еще один</button>
+								</div>
+								<div class="col-3">
+									<button type="button" class="btn btn-primary btn-block">Отложить другой</button>
+								</div>
+								<div class="col-3">
+									<button type="button" class="btn btn-danger btn-block">Снять резерв</button>
+								</div>
+								<!-- <button type="button" class="col-3 btn btn-warning">Открыть карточку</button>
+								<button type="button" class="col-3 btn btn-success">Отложить еще один</button>
+								<button type="button" class="col-3 btn btn-primary">Отложить другой</button>
+								<button type="button" class="col-3 btn btn-danger">Снять резерв</button> -->
+							</div>
+
 						</div>
 						<!-- Рабочий лист Вкладка  Оформление -->
 						<div class="tab-pane" id="worksheet-design" role="tabpanel" aria-labelledby="worksheet-design-tab">
@@ -954,9 +1012,7 @@
 							ЗАГОЛОВОК
 							-->
 							<div class="p-2 bg-info d-flex">
-								<span class="flex-grow-1">
-									<a class="text-white" data-toggle="collapse" href="#wsdesign1" aria-expanded="false" aria-controls="wsdesign1">Платежи</a>
-								</span>
+								<a class="text-white" data-toggle="collapse" href="#wsdesign1" aria-expanded="false" aria-controls="wsdesign1">Платежи</a>
 							</div>
 							<!-- 
 							ПЛАТЕЖИ
@@ -964,29 +1020,43 @@
 							-->
 							<div id="wsdesign1" class="collapse">
 								<div class="input-group">
-									<div class="col-3"><label>Сумма платежа</label></div>
-									<div class="col-6"><label>Дата платежа</label></div>
-									<div class="col-3"><label>Сумма остатка</label></div>
+									<span class="col-3">Сумма платежа</span>
+									<span class="col-3">Дата платежа</span>
+									<span class="col-6">Сумма остатка</span>
 								</div>
-								<div class="input-group">
-									<input type="text" class="form-control col-3" placeholder="Сумма платежа" value="10 000">
-									<input type="date" class="form-control col-3">
-									<div class="col-3 d-flex align-items-center">
-										<span><input type="checkbox"> Оплачено</span>
+
+								<div>
+									<div class="input-group">
+										<input type="text" class="form-control col-3" placeholder="Сумма платежа" value="10 000">
+										<input type="text" class="form-control col-3" placeholder="Дата платежа" value="01.01.2019">
+										<input type="text" class="form-control col-3" value="690 000" disabled>
+										<div class="col-1 d-flex align-items-center">
+											<span><input type="checkbox" checked></span>
+										</div>
+										<div class="col-1 d-flex align-items-center">
+											<a href="#" class="text-danger"><i class="fas fa-times"></i></a>
+										</div>
 									</div>
-									<div class="col-3 bg-light d-flex align-items-center">
-										<span class="text-danger">690 000</span>
+
+									<div class="input-group">
+										<input type="text" class="form-control col-3" placeholder="Сумма платежа" value="240 000">
+										<input type="text" class="form-control col-3" placeholder="Дата платежа" value="05.01.2019">
+										<input type="text" class="form-control col-3" value="450 000" disabled>
+										<div class="col-1 d-flex align-items-center">
+											<span><input type="checkbox"></span>
+										</div>
+										<div class="col-1 d-flex align-items-center">
+											<a href="#" class="text-danger"><i class="fas fa-times"></i></a>
+										</div>
+										<div class="col-1 d-flex align-items-center">
+											<a href="#" class="text-success"><i class="fas fa-plus-circle"></i></a>
+										</div>
 									</div>
 								</div>
+
 								<div class="input-group">
-									<input type="text" class="form-control col-3" placeholder="Сумма платежа" value="240 000">
-									<input type="date" class="form-control col-3">
-									<div class="col-3 d-flex align-items-center">
-										<span><input type="checkbox"> Оплачено</span>
-									</div>
-									<div class="col-3 bg-light d-flex align-items-center">
-										<span class="text-danger">450 000</span>
-									</div>
+									<span class="col-12">График оплаты ПТС</span>
+									<input type="text" class="col-3 form-control" placeholder="Дата" value="25.01.2019">
 								</div>
 							</div>
 							<!-- 
@@ -994,10 +1064,7 @@
 							ЗАГОЛОВОК
 							-->
 							<div class="p-2 bg-info d-flex">
-								<span class="flex-grow-1">
-									<a class="text-white" data-toggle="collapse" href="#wsdesign2" aria-expanded="false" aria-controls="wsdesign2">Оформление</a>
-								</span>
-								<span class="col-2"><a href="#" class="text-white">Обновить</a></span>
+								<a class="text-white" data-toggle="collapse" href="#wsdesign2" aria-expanded="false" aria-controls="wsdesign2">Оформление</a>
 							</div>
 							<!-- 
 							ОФОРМЛЕНИЕ
@@ -1005,178 +1072,400 @@
 							-->
 							<div id="wsdesign2" class="collapse">
 								<div class="input-group">
-									<div class="col-3"><label>Номер договора</label></div>
-									<div class="col-3"><label>Дата договора</label></div>
-									<div class="col-3"><label>Дата поставки</label></div>
-									<div class="col-3"><label>Дата оплаты</label></div>
+									<span class="col-3">Оформитель</span>
+									<span class="col-3">Номер договора</span>
+									<span class="col-3">Дата договора</span>
+									<span class="col-3">Тип договора</span>
 								</div>
+
 								<div class="input-group">
-									<input type="text" class="form-control col-3" placeholder="Дата договора" value="ДПс00123">
-									<input type="date" class="form-control col-3">
-									<input type="date" class="form-control col-3">
-									<input type="date" class="form-control col-3">
-								</div>
-								<hr>
-								<div class="input-group">
-									<div class="col-3"><label>Дата выдачи</label></div>
-									<div class="col-3"><label>Оформитель</label></div>
-									<div class="col-3"><label>Дата продажи</label></div>
-									<div class="col-3"><label>Дата рождения</label></div>
-								</div>
-								<div class="input-group">
-									<input type="date" class="form-control col-3">
 									<select class="form-control col-3">
 										<option>Выбрать</option>
-										<option>Вася</option>
+										<option selected>Вася</option>
 										<option>Петя</option>
 									</select>
-									<input type="date" class="form-control col-3">
-									<input type="date" class="form-control col-3">
+									<input type="text" class="form-control col-3" placeholder="Номер договора" value="ДПс00123">
+									<input type="text" class="form-control col-3" placeholder="Дата" value="01.01.2019">
+									<input type="text" class="form-control col-3" placeholder="Тип" value="Предварительный">
 								</div>
-								<hr>
+								
 								<div class="input-group">
-									<div class="col-3"><label>Анкета</label></div>
-									<div class="col-6">
-										<div class="progress">
-											<div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+									<span class="col-12">Срок поставки</span>
+									<input type="text" class="form-control col-3" value="15.02.2018">
+								</div>
+
+								<div class="input-group">
+									<span class="col-3">Задолженность</span>
+									<span class="col-3"><input type="checkbox" checked> Акцептовано</span>
+								</div>
+
+								<div class="input-group">
+									<input type="text" class="col-3 form-control" value="450 000 р." disabled>
+									<input type="text" class="col-9 form-control" style="font-style: italic;" value="Кредитный менеджер Вася 25.01.2019 16.37" disabled>
+								</div>
+
+								<div class="input-group">
+									<span class="col-3">Оформитель</span>
+									<span class="col-3">Дата выдачи</span>
+									<span class="col-3">Дата продажи</span>
+									<span class="col-3">Дата списания</span>
+								</div>
+
+								<div class="input-group">
+									<select class="form-control col-3">
+										<option>Выбрать</option>
+										<option selected>Вася</option>
+										<option>Петя</option>
+									</select>
+									<input type="text" class="form-control col-3" placeholder="Дата выдачи" value="25.01.2019">
+									<input type="text" class="form-control col-3" placeholder="Дата продажи" value="25.01.2019">
+									<input type="text" class="form-control col-3" placeholder="Дата списания" disabled>
+								</div>
+
+							</div>
+							<!-- 
+							КРЕДИТОВАНИЕ
+							ЗАГОЛОВОК
+							-->
+							<div class="p-2 bg-info d-flex">
+								<a class="text-white" data-toggle="collapse" href="#wsdesign3" aria-expanded="false" aria-controls="wsdesign3">Кредитование</a>
+							</div>
+							<!-- 
+							КРЕДИТОВАНИЕ
+							КОНТЕНТ
+							-->
+							<div id="wsdesign3" class="py-3 collapse">
+								<div class="input-group">
+									<div class="col-12 d-flex">
+										<span class="flex-grow-1 font-weight-bold">Выявленные потребности</span>
+										<a href="#"><i class="fas fa-comment-dots"></i></a>
+									</div>
+								</div>
+
+								<div class="input-group">
+									<span class="col-3">Форма оплаты</span>
+									<span class="col-3">Первый взнос</span>
+									<span class="col-3">Цена продажи</span>
+									<span class="col-3">Сумма кредита</span>
+								</div>
+
+								<div class="input-group mb-3">
+									<select class="col-3 form-control">
+										<option>В кредит</option>
+										<option>За почку</option>
+									</select>
+									<input type="text" class="col-3 form-control" placeholder="Сумма, р.">
+									<input type="text" class="col-3 form-control" placeholder="Цена продажи" value="1 028 980 р." disabled>
+									<input type="text" class="col-3 form-control" placeholder="Сумма кредита" value="1 028 980 р." disabled>
+								</div>
+
+								<div class="input-group">
+									<div class="col-12 d-flex">
+										<span class="flex-grow-1 font-weight-bold">Работа с заявками (2)</span>
+										<a href="#"><i class="fas fa-plus-circle"></i></a>
+									</div>
+								</div>
+
+								<div>
+									<div class="mb-3">
+										<div class="input-group">
+											<span class="col-3">Консультант</span>
+											<span class="col-3">Кредитор</span>
+											<span class="col-3">Первый взнос</span>
+											<span class="col-3">Сумма кредита</span>
+										</div>
+
+										<div class="input-group">
+											<select class="col-3 form-control">
+												<option>Вася</option>
+												<option>Петя</option>
+											</select>
+											<select class="col-3 form-control">
+												<option>РНБ</option>
+												<option>Другой</option>
+											</select>
+											<input type="text" class="form-control col-3" placeholder="Первый взнос" value="400 000 р.">
+											<input type="text" class="form-control col-3" value="628 980 р." disabled>
+										</div>
+										
+										<div class="input-group">
+											<span class="col-3">Дата заявки</span>
+											<span class="col-3 text-danger">06.01.2019</span>
+											<span class="col-3">Срок действия</span>
+											<span class="col-3">Дата подписания</span>
+										</div>
+
+										<div class="input-group">
+											<input type="text" class="form-control col-3" placeholder="Дата" value="05.01.2019">
+											<select class="col-3 form-control">
+												<option>Отказ</option>
+											</select>
+											<input type="text" class="form-control col-1" placeholder="Дни">
+											<input type="text" class="form-control col-2" placeholder="Дата">
+											<input type="text" class="form-control col-3" placeholder="Дата подписания">
+										</div>
+
+										<div class="input-group">
+											<div class="col-12">
+												<span><input type="checkbox" checked> КАСКО</span>	
+												<span><input type="checkbox" checked> СЖ</span>	
+												<span><input type="checkbox"> GAP</span>	
+												<span><input type="checkbox" checked> Продленка</span>	
+											</div>
+										</div>
+									</div>
+
+									<div class="mb-3">
+										<div class="input-group">
+											<span class="col-3">Консультант</span>
+											<span class="col-3">Кредитор</span>
+											<span class="col-3">Первый взнос</span>
+											<span class="col-3">Сумма кредита</span>
+										</div>
+
+										<div class="input-group">
+											<select class="col-3 form-control">
+												<option>Вася</option>
+												<option>Петя</option>
+											</select>
+											<select class="col-3 form-control">
+												<option>РНБ</option>
+												<option>Другой</option>
+											</select>
+											<input type="text" class="form-control col-3" placeholder="Первый взнос" value="450 000 р.">
+											<input type="text" class="form-control col-3" value="578 980 р." disabled>
+										</div>
+										
+										<div class="input-group">
+											<span class="col-3">Дата заявки</span>
+											<span class="col-3 text-success">06.01.2019</span>
+											<span class="col-3">Срок действия</span>
+											<span class="col-3">Дата подписания</span>
+										</div>
+
+										<div class="input-group">
+											<input type="text" class="form-control col-3" placeholder="Дата" value="06.01.2019">
+											<select class="col-3 form-control">
+												<option>Одобрен</option>
+											</select>
+											<input type="text" class="form-control col-1" placeholder="Дни" value="100">
+											<input type="text" class="form-control col-2" placeholder="Дата" value="16.04.2019">
+											<input type="text" class="form-control col-3" placeholder="Дата подписания" value="07.01.2019">
+										</div>
+
+										<div class="input-group">
+											<div class="col-12">
+												<span><input type="checkbox" checked> КАСКО</span>	
+												<span><input type="checkbox"> СЖ</span>	
+												<span><input type="checkbox" checked> GAP</span>	
+												<span><input type="checkbox"> Продленка</span>	
+											</div>
 										</div>
 									</div>
 								</div>
-								<hr>
+
 								<div class="input-group">
-									<div class="col-3"><label>Скрипт VOC</label></div>
-									<div class="col-3"><label>Дата опроса</label></div>
-									<div class="col-6"><label>Решение РОП</label></div>
+									<div class="col-12 d-flex align-items-center">
+										<span class="flex-grow-1 font-weight-bold">Комиссионное вознаграждение</span>
+										<span><b>42 500 р.</b> (7,3%)</span>
+									</div>
 								</div>
+
 								<div class="input-group">
-									<select class="form-control col-3">
-										<option>Промоутер</option>
-										<option>2</option>
-										<option>3</option>
+									<span class="col-3">Дата валидации</span>
+									<span class="col-3">КВ за кузов</span>
+									<span class="col-3">КВ за продукты</span>
+									<span class="col-3">Прочее КВ</span>
+								</div>
+
+								<div class="input-group">
+									<input type="text" class="col-3 form-control" placeholder="Дата">
+									<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="7 500 р.">
+									<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="35 000 р.">
+									<input type="text" class="col-3 form-control" placeholder="Сумма, р.">
+								</div>
+
+							</div>
+							<!-- 
+							СТРАХОВАНИЕ И СЕРВИСЫ
+							ЗАГОЛОВОК
+							-->
+							<div class="p-2 bg-info d-flex">
+								<a class="text-white" data-toggle="collapse" href="#wsdesign4" aria-expanded="false" aria-controls="wsdesign4">Страхование и Сервисы</a>
+							</div>
+							<!-- 
+							СТРАХОВАНИЕ И СЕРВИСЫ
+							КОНТЕНТ
+							-->
+							<div id="wsdesign4" class="py-3 collapse">
+								
+								<div class="input-group">
+									<span class="col-6 font-weight-bold">Выявленные потребности</span>
+									<span class="col-3">Стоимость</span>
+									<div class="col-3 d-flex">
+										<span class="flex-grow-1">Возмещение</span>
+										<a href="#"><i class="fas fa-comment-dots"></i></a>
+									</div>
+								</div>
+
+								<div class="mb-3">
+									<div class="input-group">
+										<div class="col-6 d-flex align-items-center">
+											<span class="flex-grow-1">
+												<input type="checkbox"> Разумное КАСКО за 30 900 р.
+											</span>
+											<a href="#">
+												<i class="fas fa-question-circle"></i>
+											</a>
+										</div>
+										<input type="text" class="col-3 form-control" value="0 р." disabled>
+										<input type="text" class="col-3 form-control" value="0 р." disabled>
+									</div>
+
+									<div class="input-group">
+										<div class="col-6 d-flex align-items-center">
+											<span class="flex-grow-1 text-success">
+												<input type="checkbox" checked> Гарантия Renault Extra (5 лет)
+											</span>
+											<a href="#">
+												<i class="fas fa-question-circle"></i>
+											</a>
+										</div>
+										<input type="text" class="col-3 form-control" value="12 900 р.">
+										<input type="text" class="col-3 form-control" value="0 р." disabled>
+									</div>
+
+									<div class="input-group">
+										<div class="col-6 d-flex align-items-center">
+											<span class="flex-grow-1 text-success">
+												<input type="checkbox" checked> ОСАГО
+											</span>
+											<a href="#">
+												<i class="fas fa-question-circle"></i>
+											</a>
+										</div>
+										<input type="text" class="col-3 form-control" value="8 570 р.">
+										<input type="text" class="col-3 form-control" value="0 р." disabled>
+									</div>
+								</div>
+
+								<div class="input-group">
+									<div class="col-12 d-flex">
+										<span class="flex-grow-1 font-weight-bold">Работа с продуктами (2)</span>
+										<a href="#"><i class="fas fa-plus-circle"></i></a>
+									</div>
+								</div>
+
+								<div>
+									<div class="mb-3">
+										<div class="input-group">
+											<span class="col-3">Консультант</span>
+											<span class="col-3">Продукт</span>
+											<span class="col-3">Партнер</span>
+											<span class="col-3">Стоимость продукта</span>
+										</div>
+
+										<div class="input-group">
+											<select class="col-3 form-control">
+												<option>Вася</option>
+												<option>Петя</option>
+											</select>
+											<select class="col-3 form-control">
+												<option>Гарантия Renault Extra (5 лет)</option>
+												<option>Другой</option>
+											</select>
+											<select class="col-3 form-control">
+												<option>РЕНО РОССИЯ</option>
+												<option>Другой</option>
+											</select>
+											<input type="text" class="form-control col-3" placeholder="Стоимость" value="12 900 р.">
+										</div>
+										
+										<div class="input-group">
+											<span class="col-3">Дата оформления</span>
+											<span class="col-3">Дата окончания</span>
+											<span class="col-3">КВ за продукт</span>
+											<span class="col-3">Дата выплаты КВ</span>
+										</div>
+
+										<div class="input-group">
+											<input type="text" class="form-control col-3" placeholder="Дата" value="25.01.2019">
+											<input type="text" class="form-control col-1" placeholder="Мес." value="48">
+											<input type="text" class="form-control col-2" placeholder="Дата" value="20.01.2023">
+											<input type="text" class="form-control col-3" placeholder="Сумма, р." value="645 р.">
+											<input type="text" class="form-control col-3" placeholder="Сумма, р.">
+										</div>
+									</div>
+
+									<div class="mb-3">
+										<div class="input-group">
+											<span class="col-3">Консультант</span>
+											<span class="col-3">Продукт</span>
+											<span class="col-3">Партнер</span>
+											<span class="col-3">Стоимость продукта</span>
+										</div>
+
+										<div class="input-group">
+											<select class="col-3 form-control">
+												<option>Вася</option>
+												<option>Петя</option>
+											</select>
+											<select class="col-3 form-control">
+												<option>ОСАГО</option>
+												<option>Другой</option>
+											</select>
+											<select class="col-3 form-control">
+												<option>Альфа Страх</option>
+												<option>Другой</option>
+											</select>
+											<input type="text" class="form-control col-3" placeholder="Стоимость" value="8 570 р.">
+										</div>
+										
+										<div class="input-group">
+											<span class="col-3">Дата оформления</span>
+											<span class="col-3">Дата окончания</span>
+											<span class="col-3">КВ за продукт</span>
+											<span class="col-3">Дата выплаты КВ</span>
+										</div>
+
+										<div class="input-group">
+											<input type="text" class="form-control col-3" placeholder="Дата" value="25.01.2019">
+											<input type="text" class="form-control col-1" placeholder="Мес." value="12">
+											<input type="text" class="form-control col-2" placeholder="Дата" value="20.01.2020">
+											<input type="text" class="form-control col-3" placeholder="Сумма, р." value="857 р.">
+											<input type="text" class="form-control col-3" placeholder="Сумма, р." value="01.03.2019">
+										</div>
+									</div>
+
+								</div>
+
+								<div class="input-group mb-3">
+									<a href="#" class="col-3">Анкета</a>
+									<div class="col-6">
+										Тут типа результат анкеты в звездочках от 1 до 10
+									</div>
+								</div>
+
+								<div class="input-group">
+									<a href="#" class="col-3">Скрипт VOC</a>
+									<span class="col-3">Дата опроса</span>
+									<span class="col-3">Решение РОП</span>
+								</div>
+
+								<div class="input-group align-items-center">
+									<select class="col-3 form-control">
+										<option class="text-success">Промоутер</option>
+										<option>Не промоутер</option>
 									</select>
-									<input type="date" class="form-control col-3">
-									<select class="form-control col-3">
+									<input type="text" class="form-control col-3" placeholder="Дата">
+									<select class="col-3 form-control">
 										<option>Выбрать</option>
-										<option>Решение 1</option>
-										<option>Решение 2</option>
+										<option>1</option>
+										<option>2</option>
 									</select>
-									<div class="col-3 d-flex align-items-center justify-content-center">
-										<a href="#">Подать апелляцию</a>
-									</div>
+									<a href="#" class="col-3">Подать апелляцию</a>
 								</div>
-							</div>
-							<!-- 
-							КРЕДИТОВАНИЕ И ЛИЗИНГ
-							ЗАГОЛОВОК
-							-->
-							<div class="p-2 bg-info d-flex">
-								<span class="flex-grow-1">
-									<a class="text-white" data-toggle="collapse" href="#wsdesign3" aria-expanded="false" aria-controls="wsdesign3">Кредитование и лизинг</a>
-								</span>
-								<span class="col-1"><a href=""><i class="fas fa-plus-circle text-white"></i></a></span>
-								<span class="col-2"><a href="#" class="text-white">Обновить</a></span>
-							</div>
-							<!-- 
-							КРЕДИТОВАНИЕ И ЛИЗИНГ
-							КОНТЕНТ
-							-->
-							<div id="wsdesign3" class="collapse">
-								<div class="input-group">
-									<div class="col-3"><label>Консультант</label></div>
-									<div class="col-3"><label>Кредитор</label></div>
-									<div class="col-3"><label>Первый взнос</label></div>
-									<div class="col-3"><label>Сумма кредита</label></div>
-								</div>
-								<div class="input-group">
-									<select class="col-3 form-control">
-										<option>Пупкин</option>
-										<option>Сидоров</option>
-									</select>
-									<select class="col-3 form-control">
-										<option>РНБ</option>
-										<option>Другой</option>
-									</select>
-									<input type="text" class="form-control col-3" placeholder="Первый взнос" value="250 000">
-									<div class="col-3 bg-light d-flex align-items-center">
-										<span class="text-danger">400 000</span>
-									</div>
-								</div>
-								<hr>
-								<div class="input-group">
-									<div class="col-3"><label>Дата заявки</label></div>
-									<div class="col-3"><label>Дата решения</label></div>
-									<div class="col-3"><label>Решение</label></div>
-									<div class="col-3"><label>Срок действия</label></div>
-								</div>
-								<div class="input-group">
-									<input type="date" class="form-control col-3">
-									<input type="date" class="form-control col-3">
-									<select class="col-3 form-control">
-										<option>Одобрен</option>
-										<option>Не одобрен</option>
-									</select>
-									<input type="date" class="form-control col-3">
-								</div>
-								<hr>
-								<div class="input-group">
-									<div class="col-3"><label>Субсидия</label></div>
-									<div class="col-3"><label>Дата подписания</label></div>
-									<div class="col-3"><label>Комиссия</label></div>
-									<div class="col-3"><label>Дата оплаты КВ</label></div>
-								</div>
-								<div class="input-group">
-									<input type="text" class="form-control col-3" placeholder="Сумма, р." value="50 000">
-									<input type="date" class="form-control col-3">
-									<input type="text" class="form-control col-3" placeholder="Сумма, р.">
-									<input type="date" class="form-control col-3">
-								</div>
-							</div>
-							<!-- 
-							СТРАХОВАНИЕ И СЕРВИСЫ
-							ЗАГОЛОВОК
-							-->
-							<div class="p-2 bg-info d-flex">
-								<span class="flex-grow-1">
-									<a class="text-white" data-toggle="collapse" href="#wsdesign4" aria-expanded="false" aria-controls="wsdesign4">Страхование и сервисы</a>
-								</span>
-								<span class="col-1"><a href=""><i class="fas fa-plus-circle text-white"></i></a></span>
-								<span class="col-2"><a href="#" class="text-white">Обновить</a></span>
-							</div>
-							<!-- 
-							СТРАХОВАНИЕ И СЕРВИСЫ
-							КОНТЕНТ
-							-->
-							<div id="wsdesign4" class="collapse">
-								<div class="input-group">
-									<div class="col-3"><label>Полис ОСАГО</label></div>
-									<div class="col-3"><label>Полис КАСКО</label></div>
-									<div class="col-3"><label>Полис СЖ</label></div>
-									<div class="col-3"><label>Renault Extra</label></div>
-								</div>
-								<div class="input-group">
-									<input type="text" class="form-control col-3" placeholder="Сумма, р.">
-									<input type="text" class="form-control col-3" placeholder="Сумма, р.">
-									<input type="text" class="form-control col-3" placeholder="Сумма, р.">
-									<input type="text" class="form-control col-3" placeholder="Сумма, р.">
-								</div>
-								<div class="input-group">
-									<input type="date" class="form-control col-3">
-									<input type="date" class="form-control col-3">
-									<input type="date" class="form-control col-3">
-									<input type="date" class="form-control col-3">
-								</div>
-								<div class="input-group">
-									<input type="text" class="form-control col-3" placeholder="Комиссия, р.">
-									<input type="text" class="form-control col-3" placeholder="Комиссия, р.">
-									<input type="text" class="form-control col-3" placeholder="Комиссия, р.">
-									<input type="text" class="form-control col-3" placeholder="Комиссия, р.">
-								</div>
-								<div class="input-group">
-									<input type="date" class="form-control col-3">
-									<input type="date" class="form-control col-3">
-									<input type="date" class="form-control col-3">
-									<input type="date" class="form-control col-3">
-								</div>
+
 							</div>
 						</div>
 

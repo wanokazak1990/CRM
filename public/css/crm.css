@@ -85,7 +85,7 @@ body{
 	background-color: #fff;
 	border: 1px #eee solid;
 }
-/* Убирает выделение кнопки/ссылки/... после клика */
+/* Убирает пунктирное выделение кнопки/ссылки/... после клика */
 :focus{
     outline-style: none;
     outline-width: 0px !important;
