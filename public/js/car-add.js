@@ -1,152 +1,257 @@
-var base = 0;//база
-var pack = 0;//пакеты
-var dops = 0;//допы
-var total = 0;
+(function(){
 
+//объект модали
+let m_carModal 				= $("#autocardModal");
+//объекты управления
+let m_model 				= m_carModal.find('[name="model_id"]');
+let m_complect 				= m_carModal.find('[name="complect_id"]');
+let m_carmore				= m_carModal.find("#car-more");
 
-function totalPrice()//подсчёт полной цены
-{
-	total = parseInt(base)+parseInt(pack)+parseInt(dops);
-	$("#car-full-price").html(number_format(total,0,'',' '));
+let complect;
+
+//динамические ячейки данных 
+class carInfo{
+	constructor(){
+		this.base = 0;//база
+		this.pack = 0;//пакеты
+		this.dops = 0;//допы
+		this.total = 0;//полная цена
+
+		this.m_modelName 			= m_carModal.find("#car-model");
+		this.m_modelImg 			= m_carModal.find("#car-img");
+		this.m_complectCode 		= m_carModal.find("#car-complect-code");
+		this.m_complectName 		= m_carModal.find("#car-complect-name");
+		this.m_complectPrice 		= m_carModal.find("#car-base-price");
+		this.m_motorType 			= m_carModal.find("#car-motor-type");
+		this.m_motorSize 			= m_carModal.find("#car-motor-size");
+		this.m_motorTransmission 	= m_carModal.find("#car-motor-transmission");
+		this.m_motorWheel 			= m_carModal.find("#car-motor-wheel");
+		this.m_fullPrice 			= m_carModal.find("#car-full-price");
+		this.m_options				= m_carModal.find("#complect-option");
+	}
+
+	clear(){
+		this.m_modelName.html('');
+		this.m_modelImg.attr('src','');
+		this.m_complectCode.html('');
+		this.m_complectName.html('');
+		this.m_complectPrice.html('');
+		this.m_motorType.html('');
+		this.m_motorSize.html('');
+		this.m_motorTransmission.html('');
+		this.m_motorWheel.html('');
+		this.m_fullPrice.html('');
+		this.m_options.html('');
+		m_complect.html('');
+		m_packblock.html('')
+		m_colorsblock.html('')
+	}
+
+	totalPrice()//подсчёт полной цены
+	{
+		this.total = parseInt(this.base)+parseInt(this.pack)+parseInt(this.dops);
+		this.m_fullPrice.html(number_format(this.total,0,'',' ')+' р.');
+	}
+
+	checkPack(){
+		this.pack = 0;
+		let link = this;
+		m_carModal.find('.car-pack-block input').each(function(i,item){			
+			if($(this).prop('checked')){
+				link.pack += parseInt($(this).attr('price'));
+			}
+		})
+		this.pack = link.pack;
+		this.totalPrice();
+	}
 }
 
+var info = new carInfo();
+
+let m_packblock 			= m_carModal.find('.pack-block');//блок в котором находятся пакеты
+let m_colorsblock			= m_carModal.find('#car-color'); //блок в котором находятся цвета
+
+
+/***************************************************************************/
+
+
+//изменение модели
+m_model.change(function(){
+	val = m_model.val();
+	getComplects(val);
+})
+//изменение комплектации
+m_complect.change(function(){
+	val = m_complect.val();
+	InfoCar(val);
+	getMotor(val);
+	getPacks(val);
+	getColor(val);	
+})
+//кнопка подробнее
+m_carmore.click(function(){
+	getComplectInfo();
+})
+//выбираем цвет
+m_carModal.on('click','.color-btn',function(){
+	info.m_modelImg.css('background',$(this).attr('color-code'));
+})
+//выбираем пакет
+m_carModal.on('change','.car-pack-block input',function(){
+	info.checkPack();
+})
 
 
 
 
+/***************************************************************************/
 
-function number_format(number,decimals,dec_point,thousands_sep)
+
+function getComplectInfo()
 {
-	var i,j,kw,kd,km;
-	if(isNaN(decimals=Math.abs(decimals))){
-		decimals=2;
-	}
+	var parameters = m_complect.val();
+	var url = '/complect/option'
+	$.when(
+		ajax(parameters,url)
+			.then(function(data){
 
-	if(dec_point==undefined){
-		dec_point=",";
-	}
-	
-	if(thousands_sep==undefined){
-		thousands_sep=".";
-	}
-
-	i=parseInt(number=(+number||0).toFixed(decimals))+"";
-	
-	if((j=i.length)>3){
-		j=j%3;
-	}
-	else{
-		j=0;
-	}
-
-	km=(j?i.substr(0,j)+thousands_sep:"");
-	kw=i.substr(j).replace(/(\d{3})(?=\d)/g,"$1"+thousands_sep);
-	kd=(decimals?dec_point+Math.abs(number-i).toFixed(decimals).replace(/-/,0).slice(2):"");
-	return km+kw+kd;
+			}
+		)
+	)
 }
-
-
-
-
-
-
-
-
-
-function getComplects(elem,pastle=0)
+function InfoCar(val)
 {	
-	var model_id = elem.val();
-	$.ajax({
-		type: "GET",
-		url: "/getcomplects",
-		data: {'model_id':model_id},
-		success: function(param){
-			var objs = JSON.parse(param);
-			if(pastle==0) $('[name="complect_id"]').html('');
-			else pastle.html("");
-			var str = '';
-			str += '<option selected disabled>Укажите параметр</option>';
-			objs.forEach(function(obj,i){
-				str += '<option value="'+obj.id+'">';
-					str += obj.fullname;
-				str += '</option>';
-			});
-			if(pastle==0) $('[name="complect_id"]').html(str);
-			else pastle.html(str);
-		},
-		error: function(param)
-		{
-			log('error');
-		}
-	})
+	var parameters = {'id':val};
+	var url = '/complectprice';
+	$.when(
+		ajax(parameters,url)
+			.then(function(data){
+				complect = JSON.parse(data);
+				info.base = complect.price;
+				info.m_fullPrice.html(number_format(complect.price,0,'',' ')+' р.');
+				info.m_modelName.html(complect.model.name);
+				info.m_complectCode.html(complect.code);
+				info.m_complectName.html(complect.name);
+				info.m_complectPrice.html(number_format(complect.price,0,'',' ')+' р.');
+				info.m_modelImg.attr('src','/storage/images/'+complect.model.link+'/'+complect.model.alpha);
+			})
+	)
 }
-
-function modelObj(val)
+function InfoCarLoader(val)
+{	
+	var parameters = {'id':val};
+	var url = '/complectprice';
+	$.when(
+		ajax(parameters,url)
+			.then(function(data){
+				complect = JSON.parse(data);
+				//info.base = complect.price;
+				//info.m_fullPrice.html(number_format(complect.price,0,'',' ')+' р.');
+				info.m_modelName.html(complect.model.name);
+				info.m_complectCode.html(complect.code);
+				info.m_complectName.html(complect.name);
+				info.m_complectPrice.html(number_format(complect.price,0,'',' ')+' р.');
+				info.m_modelImg.attr('src','/storage/images/'+complect.model.link+'/'+complect.model.alpha);
+			})
+	)
+}
+//получение мотора
+function getMotor(val)
 {
-	var result = '';
-	var formData = new FormData();
-	formData.append('id',val);
-	$.ajax({
-		async: false,
-        type: "POST",
-        url: '/getmodel',
-        dataType : "json", 
-        cache: false,
-        contentType: false,
-        processData: false, 
-        data: formData,
-        headers: {
-	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	    },
-		success: function(param){
-			$("#car-model").html(param.name);
-			$("#car-img").attr('src','/storage/images/'+param.link+'/'+param.alpha);
-			result = param;
-		},
-		error: function(param)
-		{
-			log('Не смог получить стоимость пакетов id = '+val);
-		}
-	});
-	return result;
+	var parameters = {'complect_id':val};
+	var url = '/getmotor';
+	$.when(
+		ajax(parameters,url)
+			.then(function(data) {
+				makeMotorInfo(JSON.parse(data))
+			})
+	)
 }
-
-
-
-function getColor(id)//вернёт плитку цветов с инпутом 
+//получение комплектаций
+function getComplects(val)
 {
-	var formData = new FormData();
-	formData.append('complect_id',id)
-    $.ajax({
-        type: "POST",
-        url: '/getcolor',
-        dataType : "json", 
-        cache: false,
-        contentType: false,
-        processData: false, 
-        data: formData,
-        headers: {
-	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	    },
-        success: function(param)
-        {	var mother = $("#car-color");
-        	var str = '';
-        	mother.html("");
-        	param.forEach(function(obj,i){
-	        	
-	        	str += '<button style="width:30px;height:30px;background:'+obj.web_code+'" class="btn" color-name="'+obj.name+'" type="button" color-id="'+obj.id+'" color-code="'+obj.web_code+'">&nbsp</button>';
-	        	
-        	})
-            mother.html(str);
-        },
-        error: function(msg){
-            console.log('error');
-        }
-    });
+	var parameters = {'id':val};
+	var url = '/getcomplects';
+	$.when(
+		ajax(parameters,url)
+			.then(function(data) {
+				makeOption(JSON.parse(data),m_complect)
+			})
+	)
+}
+//получение пакетов
+function getPacks(val)
+{
+	var parameters = {'complect_id':val};
+	var url = '/getpacks';
+	$.when(
+		ajax(parameters,url)
+			.then(function(data){
+				makePacks(JSON.parse(data))
+			})
+	)
+}
+//получение цаетов
+function getColor(val)
+{
+	var parameters = {'complect_id':val};
+	var url = '/getcolor';
+	$.when(
+		ajax(parameters,url)
+			.then(function(data){
+				makeColors(JSON.parse(data))
+			})
+	)
 }
 
 
+/*********************************************************************************************/
 
+
+//рисуем мотор
+function makeMotorInfo(data)
+{
+	for(i in data)
+	{
+		info.m_motorType.html('Двигатель '+data[i].type.name+' '+data[i].valve+'-клапанный');
+		info.m_motorSize.html('Рабочий объем '+data[i].size+'л. ('+data[i].power+'л.с.)');
+		info.m_motorTransmission.html('КПП '+data[i].transmission.name);
+		info.m_motorWheel.html('Привод '+data[i].wheel.name);
+	}
+}
+//рисуем цвета
+function makeColors(data)
+{	
+	m_colorsblock.html('');
+	let str = '';
+	for(i in data)
+		str += getcolorString(data[i])
+	m_colorsblock.append(str);
+}
+//возвращает html кнопку с цветов указаным в параметре
+function getcolorString(obj)
+{
+	str = '<input '+ 
+		'style="background:'+obj.web_code+'" '+
+		'value="'+obj.id+'" '+
+		'name="color_id" '+
+		'class="color-btn"'+
+		'color-name="'+obj.name+'" '+
+		'type="radio" '+
+		'color-id="'+obj.id+'" '+
+		'color-code="'+obj.web_code+'">'
+	return str;
+}
+//рисуем пакеты
+function makePacks(data)
+{
+	m_packblock.html('');
+	var str = '';
+	for(obj in data)
+		str += getPackString(data[obj]);
+	$('.pack-block').html(str);
+}
+//возвращает строку html с указанным пакетом
 function getPackString(obj){
 	var str = '<div class="input-group no-gutters">';
 
@@ -157,7 +262,7 @@ function getPackString(obj){
 
 		str += '<div class="col-12 d-flex no-gutters">';
 			str += '<div class="col-2">';
-				str += '<div class="check">';
+				str += '<div class="check car-pack-block">';
 					str += '<label><input type="checkbox" code="'+obj.code+'" price="'+obj.price+'" name="packs[]" value="'+obj.id+'"></label>';
 				str += '</div>';
 			str += '</div>';
@@ -173,229 +278,44 @@ function getPackString(obj){
 	str += '</div>';
 	return str;
 }
+//рисует опшоны у селекта, объекта указанного в параметре обж
+function makeOption(data,obj)
+{	
+	obj.html('');
+	for(i in data)
+		obj.append('<option value="'+data[i].id+'">'+data[i].name+' '+data[i].fullname);
+}
 
-
-
-function getPacks(elem)
+function ajax(parameters,url)
 {
-	var formData = new FormData();
-	formData.append('complect_id',elem.val());
-    $.ajax({
-        type: "POST",
-        url: '/getpacks',
-        dataType : "json", 
-        cache: false,
-        contentType: false,
-        processData: false, 
-        data: formData,
-        headers: {
-	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	    },
-		success: function(param){
-			$('.pack-block').html('');
-			var str = '';
-			param.forEach(function(obj,i){
-				str += getPackString(obj);
-			});
-			$('.pack-block').html(str);
-			/*изменение подсветки стилизованых чекбоксов*/
-			$(document).on('click','.pack-block input',function(){
-				if($(this).prop('checked')){
-					$(this).closest('label').addClass('green-check');
-					pack += parseInt($(this).attr('price'));
-					totalPrice();
-				}
-				else{
-					$(this).closest('label').removeClass('green-check');
-					pack -= parseInt($(this).attr('price'));
-					totalPrice();
-				}
-			})
-
-		},
-		error: function(param)
-		{
-			log('error');
-		}
+	return $.ajax({
+		url: url,
+	    type: 'POST',
+	    data: parameters,
+	    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 	})
 }
 
-
-
-function getMotor(id)
+function zeroVal()
 {
-	var formData = new FormData();
-	formData.append('id',id);
-	$.ajax({
-        type: "POST",
-        url: '/getmotor',
-        dataType : "json", 
-        cache: false,
-        contentType: false,
-        processData: false, 
-        data: formData,
-        headers: {
-	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	    },
-	    success: function(data){
-	    	$("#car-motor-type").html('Двигатель '+data.type.name+' '+data.valve+'-клапанный');
-	    	$("#car-motor-size").html('Рабочий объем '+data.size+'л. ('+data.power+'л.с.)');
-	    	$("#car-motor-transmission").html('КПП '+data.transmission.name);
-	    	$("#car-motor-wheel").html('Привод '+data.wheel.name);
-	    },
-	    error: function(){
-	    	log('Не смог получить стоимость комплектации id = '+id);
-	    }
-	})
+	info = new carInfo();
 }
 
+m_model.on('change',function(){
+	zeroVal();
+})
 
-
-
-
-function complectPrice(id)
-{
-	var result = '';
-	var formData = new FormData();
-	formData.append('id',id);
-	$.ajax({
-		async: false,
-        type: "POST",
-        url: '/complectprice',
-        dataType : "json", 
-        cache: false,
-        contentType: false,
-        processData: false, 
-        data: formData,
-        headers: {
-	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	    },
-		success: function(param){
-			getMotor(param.motor_id);
-			$("#car-complect-code").html('Исполнение '+param.code);
-			$("#car-complect-name").html('Комплектация '+param.name);
-			$("#car-base-price").html(number_format(param.price,0,'',' '));
-			$("#car-option").html(0);
-			result = param.price;
-		},
-		error: function(param)
-		{
-			log('Не смог получить стоимость комплектации id = '+id);
-		}
-	});
-	return result;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//клик по цветам
-$(document).on('click','#car-color button',function(){
-	$('#car-img').css('background',$(this).attr('color-code'));
-	$('#color_id').val($(this).attr('color-id'));
-	$("#car-color button").each(function(){$(this).removeClass('active')})
-	$(this).addClass('active');
+m_complect.on('change',function(){
+	zeroVal();
 })
 
 
 
 
-
-
-
-/*клик по кнопке подробнее*/
-$(document).on('click','#car-more',function(){
-	if(!$(this).attr('action')){
-		var current_complect = $(this).closest('form').find('[name="complect_id"]').val();
-		var formData = new FormData();
-		$(this).attr('action','1');
-		$(this).html('Закрыть');
-		formData.append('complect_id',current_complect);
-		$.ajax({
-			type: "POST",
-	        url: '/complect/option',
-	        dataType : "json", 
-	        cache: false,
-	        contentType: false,
-	        processData: false, 
-	        data: formData,
-	        headers: {
-		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		    },
-			success: function(param){
-				$("#complect-option").html("");
-				param.forEach(function(item,i){
-					$("#complect-option").append("<div>"+item.name+"</div>")
-				})
-			},
-			error: function(){
-
-			}
-		})
-	}
-	else{
-		$(this).html('Открыть');
-		$("#complect-option").html("");
-		$(this).removeAttr('action');
-	}
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*получаем комплектации от модели*/
-$('select[name="model_id"]').change(function(){//
-	getComplects($(this));
-	modelObj($(this).val());
-});
-
-
-
-
-
-/*получаем пакеты цвета и цену стартовую*/
-$(document).on('change','select[name="complect_id"]',function(){
-	pack = 0;
-	dops = 0;
-	$("#pack-block input").each(function(){
-		$(this).prop('checked',false);
-	})
-	base = complectPrice($(this).val());
-	totalPrice();
-	getPacks($(this));
-	getColor($(this).val());			
-});
-
-
-
+//сохранение машины
 $(document).on('click','#savecar',function(){
-	var data = $("#autocardModal form").serialize();
+	var data = $("#autocardModal form").serializeArray();
+	log(data)
 	$.ajax({
 		type: 'POST',
 		url: '/create/car',
@@ -404,10 +324,112 @@ $(document).on('click','#savecar',function(){
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 	    success: function(data){
-	    	log(data);
+	    	getContent($('#stock-tab'));
 	    },
 	    error: function(){
 
 	    }
 	})
 })
+
+m_carModal.on('shown.bs.modal',function(){
+	info.clear();
+	m_carModal.find('form').trigger('reset');
+})
+
+//открыть машину
+$(document).on('click','.opencar',function(){
+	info = new carInfo();
+	
+	m_carModal.modal('show');
+	var parameters = {'id':$(this).attr('car-id')};
+	var url = '/car/open';
+	$.when(
+		ajax(parameters,url)
+			.then(function(data){
+				data = JSON.parse(data)
+
+				makeOption(data.complects,m_complect)
+				InfoCarLoader(data.car.complect_id);
+				info.base = parseInt(data.car.complect.price);
+				info.pack = parseInt(data.car.packprice);
+				info.dops = (data.car.dopprice!=null)?parseInt(data.car.dopprice):0;
+				info.totalPrice();
+				getMotor(data.car.complect_id);
+				makePacks(data.packs);
+				makeColors(data.colors);
+				for (i in data.car)
+				{
+					var current = data.car[i]
+					var elem = m_carModal.find('[name="'+i+'"]')
+					var tag = '';
+					if(elem[0]) 
+						tag = elem[0].tagName.toLowerCase();
+
+					if (typeof(current)=='string' || typeof(current)=='number')
+					{
+						if(tag=='input'){//если инпут
+							if(elem.attr('type')=='text' || elem.attr('type')=='hidden')
+								if(~i.indexOf('date'))
+									elem.val(timeConverter(current,'d.m.y'))
+								else
+									elem.val(current);//записываю в него
+
+							if(elem.attr('type')=='time')
+								elem.val(current);//записываю в него
+
+							if(elem.attr('type') == 'radio')
+								$('[name="'+i+'"]').each(function(){
+									if($(this).val()==current)
+										$(this).click()
+								})
+						}
+
+						if(tag=='select')
+						{
+							elem.val(current);
+						}
+					}
+					if(typeof(current)=='object' || typeof(current)=='array')
+					{
+						if(~i.indexOf('get_'))
+						{
+							elem = m_carModal.find('[name="'+i.substring(4)+'"]')
+							if(elem[0]) 
+								tag = elem[0].tagName.toLowerCase();
+
+							if(tag == 'input' && elem.attr('type') == 'text')
+							{
+								if(~i.indexOf('date'))
+								{
+									elem.val(timeConverter(current.date,'d.m.y'))
+								}
+							}
+						}
+						if(i=='packs')
+						{
+							$('[name="packs[]"]').each(function(){
+								for (k in current)
+									if($(this).val()==current[k].pack_id)
+									{
+										$(this).trigger('click');
+									}
+							})
+							info.totalPrice()
+						}
+						if(i=='dops')
+						{
+							$('[name="dops[]"]').each(function(){
+								for (k in current)
+									if($(this).val()==current[k].dop_id)
+										$(this).prop('checked',true);	
+							})
+						}
+					}
+				}
+			}
+		)
+	)
+})
+
+})();

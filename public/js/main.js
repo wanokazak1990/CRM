@@ -1,4 +1,4 @@
-var URI = document.location.pathname;
+/*var URI = document.location.pathname;
 url = URI.split('/');
 
 
@@ -491,6 +491,7 @@ function getComplects(elem,pastle=0)
 {	log(pastle)
 	var model_id = elem.val();
 	$.ajax({
+		async:false,
 		type: "GET",
 		url: "/getcomplects",
 		data: {'model_id':model_id},
@@ -1199,3 +1200,4 @@ switch (url[1])
 	default:
 	break;
 }
+*/

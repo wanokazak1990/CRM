@@ -31,10 +31,10 @@ $(document).ready(function() {
 		e.preventDefault();
 		var content_area = $("#crmTabPanels").find("div[aria-labelledby='"+$(this).attr('id')+"']");//текущая вкладка
 		var content_table = content_area.find('table');//таблица во вкладке
-		if(content_table.html()=='' || content_table.html()===undefined)//если во вкладке пусто, то достаём контент
-		{
+		//if(content_table.html()=='' || content_table.html()===undefined)//если во вкладке пусто, то достаём контент
+		//{
 			getContent($(this));
-		}
+		//}
 	})
 
 
