@@ -630,6 +630,136 @@ class CarController extends Controller
                 ]);
             }
         }
+        else{
+            $avacar = avacar::find($request->id);
+            $avacar->update($request->input());
+            if($avacar->date_storage!='')
+                $avacar->date_storage = strtotime($request->date_storage);
+            if($avacar->date_preparation!='')
+                $avacar->date_preparation = strtotime($request->date_preparation);
+            if($avacar->receipt_date!='')
+                $avacar->receipt_date = strtotime($request->receipt_date);
+            if($avacar->pts_datepay!='')
+                $avacar->pts_datepay = strtotime($request->pts_datepay);
+            if($avacar->pts_datereception!='')
+                $avacar->pts_datereception = strtotime($request->pts_datereception);
+            if($avacar->debited_date!='')
+                $avacar->debited_date = strtotime($request->debited_date);
+            $avacar->brand_id = oa_model::find($request->model_id)->brand_id;
+            $avacar->provision = $request->st_provision;
+            $avacar->save();
+
+            ava_pack::where('avacar_id',$avacar->id)->delete();
+            if($request->has('packs'))//записываю пакеты выбранные
+                foreach ($request->packs as $key => $item)
+                    $pack = ava_pack::create(['avacar_id'=>$avacar->id,'pack_id'=>$item]);
+
+            ava_dop::where('avacar_id',$avacar->id)->delete();
+            if($request->has('dops'))//записываю допы выбранные
+                foreach ($request->dops as $key => $item) 
+                    $dop = ava_dop::create(['avacar_id'=>$avacar->id,'dop_id'=>$item]);
+
+            ava_date_order::where('car_id',$avacar->id)->delete();
+            if($request->has('date_order'))//дата заявки
+            {
+                $date = strtotime($request->date_order);
+                $order = ava_date_order::create(['car_id'=>$avacar->id,'date'=>$date]);
+            }
+
+            //ПЕРЕДЕЛАТЬ ПОД МАССИВ (ТАК КАК ДАТ ПЛАНИРУЕМОЙ СБОРКИ МОЖЕТ БЫТЬ МНОГО)
+            ava_date_planned::where('car_id',$avacar->id)->delete();
+            if($request->has('date_planned'))//планируемая дата сборки
+            {
+                $date = strtotime($request->date_planned);
+                $order = ava_date_planned::create(['car_id'=>$avacar->id,'date'=>$date]);
+            }
+
+            ava_date_notification::where('car_id',$avacar->id)->delete();
+            if($request->has('date_notification'))//уведомление о сборке
+            {
+                $date = strtotime($request->date_notification);
+                $order = ava_date_notification::create(['car_id'=>$avacar->id,'date'=>$date]);
+            }
+            
+            ava_date_build::where('car_id',$avacar->id)->delete();
+            if($request->has('date_build'))//дата сборки фактическая
+            {
+                $date = strtotime($request->date_build);
+                $order = ava_date_build::create(['car_id'=>$avacar->id,'date'=>$date]);
+            }
+
+            ava_date_ready::where('car_id',$avacar->id)->delete();
+            if($request->has('date_ready'))//готовность к отгрузке
+            {
+                $date = strtotime($request->date_ready);
+                $order = ava_date_ready::create(['car_id'=>$avacar->id,'date'=>$date]);
+            }
+
+            //ПЕРЕДЕЛАТЬ ПОД МАССИВ (ТАК КАК ДАТ ОТГРУЗКИ МОЖЕТ БЫТЬ МНОГО)
+            ava_date_ship::where('car_id',$avacar->id)->delete();
+            if($request->has('date_ship'))//дата отгрузки
+            {
+                $date = strtotime($request->date_ship);
+                $order = ava_date_ship::create(['car_id'=>$avacar->id,'date'=>$date]);
+            }
+
+            ava_shipterm::where('car_id',$avacar->id)->delete();
+            if($request->has('st_provision'))
+            {
+                $res = ava_shipterm::create([
+                    'car_id'=>$avacar->id,
+                    'delay'=>$request->st_delay
+                ]);
+            }
+
+            ava_discount::where('car_id',$avacar->id)->delete();
+            if($request->has('dc_type'))
+            {
+                $res = ava_discount::create([
+                    'car_id'=>$avacar->id,
+                    'type'=>$request->dc_type,
+                    'sale'=>$request->dc_sale
+                ]);
+            }
+        }
+    }
+
+    public function open(Request $request )
+    {
+        $car = avacar::with('getAuthor')
+            ->with('getDateOrder')
+            ->with('getDatePlanned')
+            ->with('getDateBuild')
+            ->with('getDateReady')
+            ->with('getDateShip')
+            ->with('getDateNotification')
+            ->with('brand')
+            ->with('model')
+            ->with('complect')
+            ->with('color')
+            ->with('dops')
+            ->find($request->id);
+        
+        $car->packprice = $car->packPrice();
+        $packs = pack::select('packs.*')
+            ->join('complect_packs','complect_packs.pack_id','=','packs.id')
+            ->where('complect_packs.complect_id',$car->complect_id)
+            ->get();
+        $colors = oa_color::select('oa_colors.*')
+            ->join('complect_colors','complect_colors.color_id','=','oa_colors.id')
+            ->where('complect_colors.complect_id',$car->complect_id)
+            ->get();
+        $complects = oa_complect::where('model_id',$car->model_id)->get();
+        foreach ($complects as $key => $complect) {
+            if($complect->motor)
+                $complects[$key]->fullname = $complect->name.' '.$complect->motor->getEasyName();
+        }
+        echo json_encode([
+                'car'=>$car,
+                'complects'=>$complects,
+                'colors'=>$colors,
+                'packs'=>$packs
+        ]);
     }
     
 }

@@ -33,7 +33,7 @@ Route::get('/getmotors',		'AjaxController@getmotors')			->name('getmotors');
 
 Route::post('/getpacks',		'AjaxController@getpacks')			->name('getpacks');
 
-Route::get('/getcomplects',		'AjaxController@getcomplects')		->name('getcomplects');
+Route::post('/getcomplects',	'AjaxController@getcomplects')	->name('getcomplects');
 
 Route::post('/complectprice',	'AjaxController@complectprice')		->name('complectprice');
 
@@ -235,6 +235,8 @@ Route::post('/caredit/{id}',	'CarController@update')		->name('caredit');
 Route::get('/cardel/{id}',		'CarController@delete')		->name('cardelete');
 
 Route::delete('/cardel/{id}',	'CarController@destroy')	->name('cardelete');
+
+Route::post('/car/open',		'CarController@open')		->name('caropen');
 
 /*РОУТЫ ДЛЯ СОЗДАНИЯ СТАТУСОВ АВТОМОБИЛЯ*/
 

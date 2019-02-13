@@ -27,6 +27,7 @@
 				<!-- Основной контент карточки автомобиля -->
 				<div>
 					<div class="input-group">
+						{!! Form::hidden('id')!!}
 						{!! Form::label('title', 'Тип поставки: *',['class' => 'col-4']) !!}
 						{!! Form::label('title', 'Автор заказа: *',['class' => 'col-4']) !!}
 						{!! Form::label('title', 'Дата (чего?): *',['class' => 'col-3']) !!}
@@ -129,7 +130,7 @@
 								<div class="col-6">
 									
 									<img id="car-img" src='' style="width: 100%;height: auto;">
-									{!! Form::hidden('color_id','',['id'=>'color_id'])!!}
+									
 									<div class="input-group d-flex justify-content-center" id="car-color">
 										
 									</div>
