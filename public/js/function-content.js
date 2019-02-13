@@ -77,9 +77,9 @@ function getTitleContent(parent,array,str='')
 //аррай-массив заголовков которые передал аякс из функции гетКонтент
 {
 	str += '<tr>';
-	array.forEach(function(item,i){
-		str += '<th>'+item.name+'</th>';		    		
-	});
+	for (i in array){
+		str += '<th>'+array[i]+'</th>';		    		
+	};
 	str += '</tr>';
 	parent.find('table').append(str);
 }
@@ -155,8 +155,9 @@ function getContent(obj,get_param='')//отдаёт контент вкладо�
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 	    success:function(param){
+	    	log((param.titles))
 	    	parent.find('table').html("");
-	    	getTitleContent(parent,param['titles']);		    
+	    	getTitleContent(parent,param.titles);		    
 	    	getDataContent(parent,param['list']);		    	
 	    	getPaginationContent(parent,param['links']);	    	
 	    },

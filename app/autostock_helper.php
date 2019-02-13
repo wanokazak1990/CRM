@@ -30,6 +30,7 @@ Class autostock_helper {
 	private function dataForTable($item,$array = array())
 	{
         	$array['id'] = $item->id;
+                $array['checkbox'] = '<input type="checkbox" value="'.$item->id.'" class="check-car" name="checkcar[]">';
                 //Этап сделки
                 $array['stage_deal'] =          $item->getStageDeal();
                 //ПТС
