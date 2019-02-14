@@ -364,7 +364,7 @@
 							Пробная поездка
 							Контент 
 							-->
-							<div id="wsparam1" class="collapse">
+							<div id="wsparam1" class="py-3 collapse">
 								<a href="#" class="text-primary" data-toggle="modal" data-target="#addTestdriveModal"><i class="fas fa-plus-circle"></i> Добавить</a>
 								<div class="input-group" id="testdriveCars">
 								</div>								
@@ -383,7 +383,7 @@
 							Подбор по потребностям
 							Контент 
 							-->
-							<div class="collapse" id="wsparam2">
+							<div class="py-3 collapse" id="wsparam2">
 								<a href="#" class="text-primary" id="addSelectedCar"><i class="fas fa-plus-circle"></i> Добавить</a>
 
 								<div class="input-group" id="carsByNeeds">
@@ -425,8 +425,8 @@
 									<input type="text" id="wl_need_sum" class="col-3 form-control" placeholder="Сумма, р.">
 								</div>
 								<div class="input-group">
-									<input type="button" class="col-3 offset-6 btn btn-outline-success" id="getListByNeeds" value="Найти в автоскладе">
-									<input type="button" class="col-3 btn btn-outline-primary" value="Резервировать">
+									<input type="button" class="col-3 offset-6 btn btn-primary" id="getListByNeeds" value="Найти в автоскладе">
+									<input type="button" id="wl_need_reserve" class="col-3 btn btn-success" value="Зарезервировать">
 								</div>
 							</div>
 							<!-- 
@@ -443,7 +443,7 @@
 							Конфигуратор
 							Контент 
 							-->
-							<div id="wsparam3" class="collapse">
+							<div id="wsparam3" class="py-3 collapse">
 								<div class="input-group">
 									<div class="col-4"><label>Модель</label></div>
 									<div class="flex-grow-1"><label>Комплектация</label></div>
@@ -519,7 +519,7 @@
 							Дополнительное оборудование
 							Контент 
 							-->
-							<div id="wsparam4" class="collapse">
+							<div id="wsparam4" class="py-3 collapse">
 								<div class="input-group">
 									<label class="col-3">Установлено</label>
 									<label class="col-3">Предложено</label>
@@ -593,7 +593,7 @@
 							АВТОМОБИЛЬ КЛИЕНТА
 							КОНТЕНТ
 							-->
-							<div id="wsparam5" class="collapse">
+							<div id="wsparam5" class="py-3 collapse">
 								<div class="input-group">
 									<div class="col-3"><input type="checkbox"> Нет авто</div>
 									<div class="col-3"><input type="checkbox"> Есть авто</div>
@@ -693,7 +693,7 @@
 							ПРОГРАММА ЛОЯЛЬНОСТИ
 							КОНТЕНТ
 							-->
-							<div id="wsparam6" class="collapse">
+							<div id="wsparam6" class="py-3 collapse">
 								<div class="input-group">
 									<label class="col-6 font-weight-bold">Скидки:</label>
 									<label class="col-3">Скидка</label>
@@ -838,7 +838,7 @@
 							КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ
 							КОНТЕНТ
 							-->
-							<div id="wsparam7" class="collapse">
+							<div id="wsparam7" class="py-3 collapse">
 								<table class="table table-bordered table-sm table-striped" style="table-layout: fixed;" width="100%">
 									<tr>
 										<td>20.01.2017 16:31</td>
@@ -865,7 +865,7 @@
 							<p class="h3">комментарии</p>
 						</div>
 						<!-- Рабочий лист Вкладка  Автомобиль -->
-						<div class="tab-pane" id="worksheet-auto" role="tabpanel" aria-labelledby="worksheet-auto-tab">
+						<div class="py-3 tab-pane" id="worksheet-auto" role="tabpanel" aria-labelledby="worksheet-auto-tab">
 							
 							<div class="input-group d-flex justify-content-center">
 								<div style="width: 300px; height: 200px; background-color: #eee;" class="d-flex align-items-center justify-content-center">
@@ -1018,7 +1018,7 @@
 							ПЛАТЕЖИ
 							КОНТЕНТ
 							-->
-							<div id="wsdesign1" class="collapse">
+							<div id="wsdesign1" class="py-3 collapse">
 								<div class="input-group">
 									<span class="col-3">Сумма платежа</span>
 									<span class="col-3">Дата платежа</span>
@@ -1070,7 +1070,7 @@
 							ОФОРМЛЕНИЕ
 							КОНТЕНТ
 							-->
-							<div id="wsdesign2" class="collapse">
+							<div id="wsdesign2" class="py-3 collapse">
 								<div class="input-group">
 									<span class="col-3">Оформитель</span>
 									<span class="col-3">Номер договора</span>

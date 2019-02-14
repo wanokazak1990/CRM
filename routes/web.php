@@ -428,6 +428,9 @@ Route::post('/wldeltestdrive', 'WorklistController@deleteTestDrive')->name('wlde
 // Показать машины по потребностям (Кнопка "Найти в автоскладе" в РЛ)
 Route::post('/crmgetcarsbyneeds', 'CRMAjaxController@getCarsByNeeds')->name('crmgetcarsbyneeds');
 
+// Зарезервировать машину за клиентом (Кнопка "Резервировать" в РЛ)
+Route::post('/wlreservecar', 'WorklistController@reserveCar')->name('wlreservecar');
+
 
 
 

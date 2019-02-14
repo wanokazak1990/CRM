@@ -16,7 +16,7 @@ function wl_save_changes(){
     	success: function(data){
     		if (data == 1)
     		{
-    			log('ok');
+    			log('Рабочий лист обновлен');
     			alert('Рабочий лист обновлен');	
     		}
     	},
@@ -274,6 +274,65 @@ $(document).on('click', '#getListByNeeds', function() {
 	});
 
 
+});
+
+
+/**
+ * ПОДБОР ПО ПОТРЕБНОСТЯМ
+ * Кнопка "Зарезервировать"
+ */
+$(document).on('click', '#wl_need_reserve', function() {
+	$(this).blur();
+
+	var wl_id = $('span[name="wl_id"]').html();
+
+	if (wl_id == '-')
+		alert('Рабочий лист не загружен!');
+	else
+	{
+		if ($('.check-car:checked').length != 1)
+			alert('Необходимо выбрать одну машину!');
+		else
+		{
+			var car_id = $('.check-car:checked').val();
+			
+			var formData = new FormData();
+			formData.append('car_id', car_id);
+			formData.append('wl_id', wl_id);
+			$.ajax({
+				url: '/wlreservecar',
+				type: 'POST',
+			    data: formData,
+			    dataType : "json", 
+			    cache: false,
+			    contentType: false,
+			    processData: false, 
+				headers: {
+			    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				success: function(data){
+					if (data == 'OK')
+					{
+						alert('Автомобиль зарезервирован.');
+						wl_save_changes(); // Обновляем данные в рабочем листе
+					}
+					else
+						alert('Не удалось зарезервировать автомобиль.');
+				},
+				error:function(xhr, ajaxOptions, thrownError){
+					log('Автомобиль не зарезервирован');
+			    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+			    	log(xhr.responseText);
+			    	log(ajaxOptions);
+			    }
+			});
+		}
+	}
+});
+
+
+$(document).on('click', '#worksheetTabs a[href="#worksheet-auto"]', function() {
+	alert('Открыта вкладка "Автомобиль"');
 });
 
 
