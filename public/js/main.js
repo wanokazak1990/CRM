@@ -1,3 +1,26 @@
+$(document).ready(function() {
+
+
+	/**
+	* Нажатие на чекбокс в таблице во вкладке "Автосклад"
+	* Подсвечивает отмеченную строку приятненьким, как летнее утро в выходной, цветом
+	*/
+	$(document).on('click', '.check-car', function() {
+		if ($(this).is(':checked'))
+		{
+			$(this).closest('tr').css('background-color', '#fffa9e');
+		}
+		else
+		{
+			$(this).closest('tr').removeAttr('style');
+		}
+	});
+
+
+
+});
+
+
 /*var URI = document.location.pathname;
 url = URI.split('/');
 

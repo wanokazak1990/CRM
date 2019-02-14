@@ -8,6 +8,7 @@ use App\crm_worklist;
 use App\crm_client;
 use App\crm_client_contact;
 use App\crm_testdrive;
+use App\crm_car_selection;
 
 class WorklistController extends Controller
 {
@@ -196,7 +197,21 @@ class WorklistController extends Controller
     }
 
 
+    /**
+     * Резервировать машину в Пробной поездке (Кнопка "Резервировать")
+     */
+    public function reserveCar(Request $request)
+    {
+        $client = crm_worklist::find($request->wl_id)->client_id;
 
+        $car = new crm_car_selection();
+        $car->client_id = $client;
+        $car->worklist_id = $request->wl_id;
+        $car->car_id = $request->car_id;
+        $car->save();
+        
+        echo json_encode('OK');
+    }
 
 
 
