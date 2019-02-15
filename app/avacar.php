@@ -148,6 +148,20 @@ class avacar extends Model
         return $this->hasOne('App\crm_logist_marker','id','logist_marker');
     }
 
+    public function carSelection()
+    {
+        return $this->hasOne('App\crm_car_selection','car_id','id');
+    }
+
+    public function getWorklistId()
+    {
+        $res = $this->carSelection;
+        if($res)
+            return $res->worklist_id;
+        else
+            return '';
+    }
+
     public function getStageDelivery($str = '')
     {
         if(@$this->getAuthor->role = 2)

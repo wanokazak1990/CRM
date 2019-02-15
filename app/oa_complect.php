@@ -40,4 +40,6 @@ class oa_complect extends Model
     {
         return avacar::where('complect_id',$this->id)->count();
     }
+
+    
 }
