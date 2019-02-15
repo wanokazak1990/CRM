@@ -431,10 +431,15 @@ Route::post('/crmgetcarsbyneeds', 'CRMAjaxController@getCarsByNeeds')->name('crm
 // Зарезервировать машину за клиентом (Кнопка "Резервировать" в РЛ)
 Route::post('/wlreservecar', 'WorklistController@reserveCar')->name('wlreservecar');
 
+
+// Получить доп. оборудование при открытии вкладки "Дополнительное оборудование" в РЛ
+Route::post('/wlgetdops', 'WorklistController@getDops')->name('wlgetdops');
+
 //Вывод блока "Автомобиль клиента"
 Route::post('/worklist/client/oldcar','WorklistController@getOldClientCar')->name('clientoldcar');
 
-
+// Получить машину, закрепленную за рабочим листом
+Route::post('/wlgetcar', 'WorklistController@getCarByWorklistId')->name('wlgetcar');
 
 
 
