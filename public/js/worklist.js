@@ -331,9 +331,119 @@ $(document).on('click', '#wl_need_reserve', function() {
 });
 
 
+/**
+ * Получение данных о привязанном автомобиле при нажатии на вкладку "Автомобиль"
+ * в Рабочем листе
+ */
 $(document).on('click', '#worksheetTabs a[href="#worksheet-auto"]', function() {
-	alert('Открыта вкладка "Автомобиль"');
+	//alert('Открыта вкладка "Автомобиль"');
+	var wl_id = $('span[name="wl_id"]').html();
+
+	if (wl_id == '-')
+	{
+		//alert('Рабочий лист не загружен!');
+	}
+	else
+	{
+		var formData = new FormData();
+		formData.append('wl_id', wl_id);
+		$.ajax({
+			url: '/wlgetcar',
+			type: 'POST',
+	        data: formData,
+	        dataType : "json", 
+	        cache: false,
+	        contentType: false,
+	        processData: false, 
+			headers: {
+	        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    	},
+	    	success: function(data){
+	    		//log(data);
+	    		$('#wl_car_vin').html(data.car_vin);	    	
+	    		$('#wl_car_name').html(data.car_name);	    	
+	    		$('.wl_car_complect_name').html(data.complect_name);	    	
+	    		$('#wl_car_complect_code').html(data.complect_code);	    	
+	    		$('#wl_car_info').html(data.car_info);	    	
+	    		$('#wl_car_img').attr('src', data.img);	    	
+	    		$('#wl_car_img').css('background-color', data.color_code);	    	
+	    		$('#wl_car_color_name').html(data.color_name);	    	
+	    		$('#wl_car_color_example').css('background', data.color_code);
+	    		$('#wl_car_rn_code').html(data.color_rn_code);
+	    		$('#wl_car_dops').html(data.dops);
+	    		$('#wl_car_dopprice').html(data.car_dopprice);
+	    		$('#wl_car_installed').html(data.installed);
+	    		$('#wl_car_complect_price').html(data.complect_price);
+	    		$('#wl_car_options').html(data.options);
+	    		$('#wl_car_fullprice').html(data.fullprice);
+	    	},
+	    	error:function(xhr, ajaxOptions, thrownError){
+	    		log('Не удалось автомобиль');
+		    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+		    	log(xhr.responseText);
+		    	log(ajaxOptions);
+		    }
+		});
+	}
 });
+
+
+/**
+ * Открытие блока "Дополнительное оборудование" в рабочем листе
+ * 
+ */
+$(document).on('click', 'a[href="#wsparam4"]', function() {
+	if (!$(this).hasClass('collapsed'))
+	{
+		// Блок открыт
+		var wl_id = $('span[name="wl_id"]').html();
+
+		if (wl_id == '-')
+		{
+			//alert('Рабочий лист не загружен!');
+		}
+		else
+		{
+			var formData = new FormData();
+			formData.append('wl_id', wl_id);
+			$.ajax({
+				url: '/wlgetdops',
+				type: 'POST',
+		        data: formData,
+		        dataType : "json", 
+		        cache: false,
+		        contentType: false,
+		        processData: false, 
+				headers: {
+		        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    	},
+		    	success: function(data){
+		    		log(data);
+		    		$('#wl_dops_dopprice').val(data.dopprice);		    	
+		    		$('#wl_dops_list').html(data.dops);		    	
+		    		$('#wl_dops_all').html(data.all_dops);		    	
+		    	},
+		    	error:function(xhr, ajaxOptions, thrownError){
+		    		log('Не удалось получить данные о доп. оборудовании автомобиля');
+			    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+			    	log(xhr.responseText);
+			    	log(ajaxOptions);
+			    }
+			});
+		}
+	}
+	else
+	{
+		// Блок закрыт
+	}
+});
+
+
+$(document).on('keyup', '#wl_dops_offered', function() {
+	$('#wl_dops_sum').val(Number($(this).val()) + Number($('#wl_dops_dopprice').val()));
+});
+
+
 
 
 /**

@@ -527,16 +527,10 @@
 								</div>
 
 								<div class="input-group">
-									<div class="col-3">
-										<input type="text" class="form-control" value="21 500" disabled>
-									</div>
-									<div class="col-3">
-										<input type="text" class="form-control" placeholder="Введи" value="25 000">
-									</div>
-									<div class="col-3">
-										<input type="text" class="form-control" value="37 200" disabled>
-									</div>
-									<div class="col-3 bg-light d-flex align-items-center">
+									<input type="text" id="wl_dops_dopprice" class="col-3 form-control" value="0" disabled>
+									<input type="text" id="wl_dops_offered" class="col-3 form-control" placeholder="Сумма, р.">
+									<input type="text" id="wl_dops_sum" class="col-3 form-control" value="0" disabled>
+									<div class="col-3 d-flex align-items-center">
 										<span><input type="checkbox"> Разделить в КП</span>
 									</div>
 								</div>
@@ -547,13 +541,7 @@
 									<label class="col-12">Установленное оборудование:</label>
 								</div>
 
-								<div class="input-group">
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
+								<div class="input-group" id="wl_dops_list">
 								</div>
 
 								<hr>
@@ -563,19 +551,7 @@
 									<a href="#" class="col-3 text-primary">Установить</a>
 								</div>
 
-								<div class="input-group">
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
-									<span class="col-3"><input type="checkbox"> Оборудование</span>
+								<div class="input-group" id="wl_dops_all">
 								</div>
 
 							</div>
@@ -779,20 +755,18 @@
 						</div>
 						<!-- Рабочий лист Вкладка  Автомобиль -->
 						<div class="py-3 tab-pane" id="worksheet-auto" role="tabpanel" aria-labelledby="worksheet-auto-tab">
-							
-							<div class="input-group d-flex justify-content-center">
-								<div style="width: 300px; height: 200px; background-color: #eee;" class="d-flex align-items-center justify-content-center">
-									Типа картинка с машиной
-								</div>
+							<div class="col-6 offset-3">
+								<img id="wl_car_img" src='' style="width: 100%;height: auto;">	
 							</div>
 
 							<div class="input-group border-bottom">
-								<div class="col-4 text-secondary">
-									X7LHSRGA561473715
+								<div class="col-4 text-secondary" id="wl_car_vin">
 								</div>
+
 								<div class="col-4 text-secondary">
 									Этап поставки
 								</div>
+
 								<div class="col-4 text-secondary">
 									Цена продажи
 								</div>
@@ -800,99 +774,59 @@
 
 							<div class="input-group">
 								<div class="col-4 h5">
-									Renault Duster<br>
-									Expression
+									<span id="wl_car_name"></span>
+									<br>
+									<span class="wl_car_complect_name"></span>
 								</div>
 								<div class="col-4 h5">
 									А/м в наличии<br>
 									Склад Овен-авто
 								</div>
 								<div class="col-4 h5">
-									910 000 руб.<br>
-									<span class="text-warning">- 20 000 руб.</span>
+									<div id="wl_car_fullprice"></div>
+									<div class="text-warning">- 20 000 руб.</div>
 								</div>
 							</div>
 
 							<div class="input-group">
 								<div class="col-4">
-									<div>
-										<label>Исполнение E1FB2JA</label>
-										<ul class="list-unstyled text-secondary">
-											<li>Двигатель бензиновый 16-клапанный</li>
-											<li>Рабочий объем 1.6 л. (114 л. с.)</li>
-											<li>КПП механическая, пятиступенчатая</li>
-											<li>Привод передний</li>
-										</ul>
-									</div>
-									<div>
-										<label>Комплектация Expression</label>
-										<ul class="list-unstyled text-secondary">
-											<li>Бамперы, окрашенные в цвет кузова</li>
-											<li>Брызговики задние</li>
-											<li>Брызговики передние</li>
-											<li>Диски колес R16 штампованные стальные</li>
-											<li>Защита картера двигателя</li>
-										</ul>
-									</div>
-								</div>
-								<div class="col-4">
-									<ul class="list-unstyled text-secondary border-bottom">
-										<li>Адаптация к запуску в холодном климате</li>
-										<li>Аудиосистема (FM, USB, AUX, Bluetooth)</li>
-										<li>Зеркала заднего вида с электроприводом и электроподогревом</li>
-										<li>Иммобилайзер</li>
-										<li>Рулевая колонка с регулировкой по высоте</li>
-										<li>Рулевая колонка с усилителем управления</li>
-										<li>Сиденье заднее с раздельной спинкой</li>
-										<li>Стеклоподъемники передние с электроприводом</li>
-										<li>Центральный замок с дистанционным управлением</li>
-										<li>Антиблокировочная система тормозов (ABS)</li>
+									<label>Исполнение <span id="wl_car_complect_code"></span></label>
+									<ul class="list-unstyled text-secondary" id="wl_car_info">
 									</ul>
-									<div class="text-right h5 text-secondary">
+								</div>
+
+								<div class="col-4">
+									<label>Комплектация <span class="wl_car_complect_name"></span></label>
+									<ul class="list-unstyled text-secondary border-bottom" id="wl_car_installed">
+									</ul>
+									<div class="text-right h5 text-secondary" id="wl_car_complect_price">
 										849 990 руб.
 									</div>
 								</div>
+
 								<div class="col-4">
-									
 									<label>Цвет автомобиля</label>
 									<div class="input-group text-secondary no-gutters">
-										<div class="col-12 border-bottom border-warning">
-											Темный каштан
+										<div class="col-12 border-bottom border-warning" id="wl_car_color_name">
 										</div>
+
 										<div class="col-12 d-flex">
-											<div class="flex-grow-1">
-												D17
+											<div class="flex-grow-1" id="wl_car_rn_code">
 											</div>
-											<div>
-												Кружок с цветом
+											<div id="wl_car_color_example" style="width: 20px; height: 20px; border-radius: 100%;">
 											</div>
 										</div>
 									</div>
 
 									<label>Опционное оборудование</label>
-									<div class="input-group text-secondary no-gutters">
-										<div class="col-12 border-bottom">
-											Окраска кузова металлик
-										</div>
-										<div class="col-12 d-flex">
-											<div class="flex-grow-1">
-												PM
-											</div>
-											<div class="h5">
-												15 990 руб.
-											</div>
-										</div>
+									<div id="wl_car_options">
 									</div>
 
 									<label>Дополнительное оборудование</label>
-									<ul class="list-unstyled text-secondary border-bottom">
-										<li>Защитная сетка на решетку радиатора</li>
-										<li>Коврики салона резиновые</li>
-										<li>Коврик багажника резиновый</li>
+									<ul class="list-unstyled text-secondary border-bottom" id="wl_car_dops">
 									</ul>
 
-									<div class="text-right h5 text-secondary">
-										44 120 руб.
+									<div class="text-right h5 text-secondary" id="wl_car_dopprice">
 									</div>
 
 								</div>
@@ -911,10 +845,6 @@
 								<div class="col-3">
 									<button type="button" class="btn btn-danger btn-block">Снять резерв</button>
 								</div>
-								<!-- <button type="button" class="col-3 btn btn-warning">Открыть карточку</button>
-								<button type="button" class="col-3 btn btn-success">Отложить еще один</button>
-								<button type="button" class="col-3 btn btn-primary">Отложить другой</button>
-								<button type="button" class="col-3 btn btn-danger">Снять резерв</button> -->
 							</div>
 
 						</div>
