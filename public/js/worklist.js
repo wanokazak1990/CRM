@@ -3,13 +3,13 @@
  */
 function wl_save_changes(){
 	var wl_id = $('span[name=wl_id]').html();
-	var workstr = $("#worksheet").find("form").serialize()+'&wl_id='+wl_id;
-	var worksheet = JSON.stringify(workstr);
+	var workstr = $("#worksheet").find("form").serializeArray();
+	workstr.push({'name':'wl_id','value':wl_id});
 
 	$.ajax({
 		url: '/wlsavechanges',
 		type: 'POST',
-        data: {'worksheet': worksheet},
+        data: workstr,
 		headers: {
         	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     	},
@@ -449,10 +449,10 @@ $(document).on('keyup', '#wl_dops_offered', function() {
 /**
  * ТЕСТОВАЯ ЗАГРУЗКА РАБОЧЕГО ЛИСТА ПО НАЖАНИЮ НА БОЛЬШУЮ КРАСНУЮ КНОПКУ В ШАПКЕ САЙТА
  */
- $(document).on('click', '#test_load_worklist', function() {
+ $(document).on('click', '.car-worklist', function() {
  	$(this).blur();
 	
-	var wl_id = 69;
+	var wl_id = $(this).attr('worklist-id');
 	var formData = new FormData();
 	formData.append('wl_id', wl_id);
 	$.ajax({
@@ -494,3 +494,15 @@ $(document).on('keyup', '#wl_dops_offered', function() {
 	    }
 	});
  });
+
+ $(document).on('click','#old-car',function(){
+ 	var parameters = {'wl_id':$('span[name=wl_id]').html()};
+	var url = '/worklist/client/oldcar';
+	$.when(
+		ajax(parameters,url)
+			.then(function(data){
+				$(".old-car").html(data)
+			})
+	)
+
+ })

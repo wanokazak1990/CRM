@@ -14,4 +14,5 @@ class complect_option extends Model
 	{
 		return $this->hasOne('App\oa_option','id','option_id');
 	}
+
 }
