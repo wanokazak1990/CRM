@@ -431,6 +431,9 @@ Route::post('/crmgetcarsbyneeds', 'CRMAjaxController@getCarsByNeeds')->name('crm
 // Зарезервировать машину за клиентом (Кнопка "Резервировать" в РЛ)
 Route::post('/wlreservecar', 'WorklistController@reserveCar')->name('wlreservecar');
 
+//Вывод блока "Автомобиль клиента"
+Route::post('/worklist/client/oldcar','WorklistController@getOldClientCar')->name('clientoldcar');
+
 
 
 

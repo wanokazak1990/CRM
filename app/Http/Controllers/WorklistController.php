@@ -59,42 +59,51 @@ class WorklistController extends Controller
      */
     public function saveChanges(Request $request)
     {
-        $string = json_decode($request->worksheet);
-        parse_str($string, $data);
+        /*$string = json_decode($request->worksheet);
+        parse_str($string, $data);*/
 
-        $worklist = crm_worklist::find($data['wl_id']);
+        $worklist = crm_worklist::find($request->wl_id);
         $traffic = crm_traffic::find($worklist->traffic_id);
         $client = crm_client::find($worklist->client_id);
 
-        $traffic->assigned_action_id = $data['traffic_action'];
-        $traffic->action_date = strtotime($data['traffic_action_date']);
-        $traffic->action_time = strtotime($data['traffic_action_time']);
+        $traffic->assigned_action_id = $request->traffic_action;
+        $traffic->action_date = strtotime($request->traffic_action_date);
+        $traffic->action_time = strtotime($request->traffic_action_time);
         $traffic->save();
 
-        $client->name = $data['client_name'];
-        $client->secondname = $data['client_secondname'];
-        $client->lastname = $data['client_lastname'];
-        $client->type_id = $data['client_type'];
-        $client->area_id = $data['client_area'];
-        $client->address = $data['client_address'];
-        $client->birthday = strtotime($data['client_birthday']);
-        $client->passport_serial = $data['client_passport_serial'];
-        $client->passport_number = $data['client_passport_number'];
-        $client->passport_giveday = strtotime($data['client_passport_giveday']);
-        $client->drive_number = $data['client_drive_number'];
-        $client->drive_giveday = strtotime($data['client_drive_giveday']);
+        $client->name = $request->client_name;
+        $client->secondname = $request->client_secondname;
+        $client->lastname = $request->client_lastname;
+        $client->type_id = $request->client_type;
+        $client->area_id = $request->client_area;
+        $client->address = $request->client_address;
+        $client->birthday = strtotime($request->client_birthday);
+        $client->passport_serial = $request->client_passport_serial;
+        $client->passport_number = $request->client_passport_number;
+        $client->passport_giveday = strtotime($request->client_passport_giveday);
+        $client->drive_number = $request->client_drive_number;
+        $client->drive_giveday = strtotime($request->client_drive_giveday);
         $client->save();
 
         crm_client_contact::where('client_id', $worklist->client_id)->delete();
 
-        foreach ($data['contact_phone'] as $key => $value) 
+        foreach ($request->contact_phone as $key => $value) 
         {
             $contacts = new crm_client_contact();
             $contacts->client_id = $worklist->client_id;
             $contacts->phone = $value;
-            $contacts->email = $data['contact_email'][$key];
-            $contacts->marker = $data['contact_marker'][$key];
+            $contacts->email = $request->contact_email[$key];
+            $contacts->marker = $request->contact_marker[$key];
             $contacts->save();
+        }
+        
+        if($request->has('cc'))//Если указаны данные для старого авто клиента
+        {
+            //проверям есть ли бу авто за этим раб.листом
+            //елси есть то возвращаем объект с данными об бу авто
+            //если авто не было то создаём пустой объект
+            $oldCar = \App\crm_client_old_car::checkOnOldCar($worklist->id);
+            $oldCar->saveOldCar($request->cc,$worklist);
         }
 
         echo 1;
@@ -253,5 +262,13 @@ class WorklistController extends Controller
         }
 
         return $html;
+    }
+
+    /* Вывод блока "Автомобиль клиента" */
+    public function getOldClientCar(Request $request)
+    {
+        $oldCar = \App\crm_client_old_car::checkOnOldCar($request->wl_id);
+        $res = $oldCar->clientCarHtml();
+        echo $res;
     }
 }

@@ -42,7 +42,7 @@ Class autostock_helper {
                 //кнопка карт. машины
                 $array['button_carlist'] = '<button type="button" class="opencar" car-id="'.$item->id.'">CAR</button>';
                 //кнопка раблиста
-                $array['button_worklist'] = '<button type="button">WORK</button>'; 
+                $array['button_worklist'] =     ($item->getWorklistId())?'<button type="button" class="car-worklist" worklist-id="'.$item->getWorklistId().'">WORK</button>':''; 
                 //Маркер логиста
                 $array['logist_marker'] =       @$item->getLogistMarker->name;
                 //Автор заказа
