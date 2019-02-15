@@ -286,15 +286,7 @@ function makeOption(data,obj)
 		obj.append('<option value="'+data[i].id+'">'+data[i].name+' '+data[i].fullname);
 }
 
-function ajax(parameters,url)
-{
-	return $.ajax({
-		url: url,
-	    type: 'POST',
-	    data: parameters,
-	    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-	})
-}
+
 
 function zeroVal()
 {
@@ -315,7 +307,6 @@ m_complect.on('change',function(){
 //сохранение машины
 $(document).on('click','#savecar',function(){
 	var data = $("#autocardModal form").serializeArray();
-	log(data)
 	$.ajax({
 		type: 'POST',
 		url: '/create/car',

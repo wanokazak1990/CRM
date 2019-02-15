@@ -45,4 +45,5 @@ class oa_complect extends Model
     {
         return $this->hasMany('App\complect_option','complect_id','id');
     }
+
 }

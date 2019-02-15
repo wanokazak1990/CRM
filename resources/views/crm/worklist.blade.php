@@ -218,7 +218,7 @@
 
 					<div class="input-group">
 
-						<input name="traffic_type" type="text" class="col-3 form-control" value="-" disabled>
+						<input name="traffic_type" type="text" class="col-3 form-control" value="-" readonly="">
 						<input name="traffic_model" type="text" class="col-3 form-control" value="-" disabled>
 						<input name="wl_manager" type="text" class="col-3 form-control" value="-" disabled>
 						<div class="col-3 trafic_action_block">
@@ -559,102 +559,15 @@
 							АВТОМОБИЛЬ КЛИЕНТА
 							ЗАГОЛОВОК 
 							-->
-							<div class="p-2 bg-info d-flex">
+							<div class="p-2 bg-info d-flex" id="old-car">
 								<span class="flex-grow-1">
 									<a class="text-white" data-toggle="collapse" href="#wsparam5" aria-expanded="false" aria-controls="wsparam5">Автомобиль клиента</a>
 								</span>
 								<span><i class="fas fa-circle text-danger"></i></span>
 							</div>
-							<!-- 
-							АВТОМОБИЛЬ КЛИЕНТА
-							КОНТЕНТ
-							-->
-							<div id="wsparam5" class="py-3 collapse">
-								<div class="input-group">
-									<div class="col-3"><input type="checkbox"> Нет авто</div>
-									<div class="col-3"><input type="checkbox"> Есть авто</div>
-									<div class="col-3"><input type="checkbox"> Трейд-ин</div>
-									<div class="col-3"><input type="checkbox"> Утилизация</div>
-								</div>
-								<div class="input-group">
-									<input type="text" class="col-3 form-control" placeholder="Марка">
-									<input type="text" class="col-3 form-control" placeholder="Модель">
-									<input type="text" class="col-3 form-control" placeholder="Год по ПТС">
-									<input type="text" class="col-3 form-control" placeholder="Пробег">
-								</div>
-								<hr>
-
-								<div class="input-group">
-									<label class="col-3">Владельцы</label>
-									<label class="col-3">Оценка клиента</label>
-								</div>
-								<div class="input-group">
-									<input type="text" class="col-3 form-control" placeholder="Количество" value="2">
-									<input type="text" class="col-3 form-control" placeholder="Руб.">
-									<button type="button" class="col-3 btn btn-success">Фотографии</button>
-									<button type="button" class="col-3 btn btn-primary">Отдать на оценку</button>
-								</div>
-								<br>
-								
-								<div class="input-group">
-									<div class="col-3 offset-3 text-center">
-										<label>Анализ рынка</label>
-									</div>
-									<div class="col-3 text-center">
-										<label>Акт осмотра</label>
-									</div>
-									<div class="col-3 text-center">
-										<label>Акт диагностики</label>
-									</div>
-								</div>
-								<div id="CLIENT_AUTO_NESKOLKO_MASHIN_ANALIZ_VSE_TAKOE">
-									<div id="ANALIZ_111" class="border p-1">
-										<div class="input-group">
-											<div class="col-3 d-flex align-items-center justify-content-end">
-												<a href="#"><i class="fas fa-times"></i></a>
-											</div>
-											<div class="col-3 text-center">
-												<a href="#" class="btn btn-primary"><i class="fas fa-clipboard-list"></i></a>
-											</div>
-											<div class="col-3 text-center">
-												<a href="#" class="btn btn-primary"><i class="fas fa-clipboard-list"></i></a>
-											</div>
-											<div class="col-3 text-center">
-												<a href="#" class="btn btn-primary disabled"><i class="fas fa-clipboard-list"></i></a>
-											</div>
-										</div>
-										<div class="input-group">
-											<input type="text" class="col-3 form-control text-center" value="DUSTER" disabled>
-											<input type="text" class="col-3 form-control-plaintext text-center" value="350 000 руб." disabled>
-											<input type="text" class="col-3 form-control-plaintext text-center" value="345 000 руб." disabled>
-											<input type="text" class="col-3 form-control-plaintext text-center text-secondary" value="Сумма, руб." disabled>
-										</div>
-									</div>
-									<div id="ANALIZ_222" class="border p-1">
-										<div class="input-group">
-											<div class="col-3 d-flex align-items-center justify-content-end">
-												<a href="#"><i class="fas fa-times"></i></a>
-											</div>
-											<div class="col-3 text-center">
-												<a href="#" class="btn btn-primary disabled"><i class="fas fa-clipboard-list"></i></a>
-											</div>
-											<div class="col-3 text-center">
-												<a href="#" class="btn btn-primary disabled"><i class="fas fa-clipboard-list"></i></a>
-											</div>
-											<div class="col-3 text-center">
-												<a href="#" class="btn btn-primary disabled"><i class="fas fa-clipboard-list"></i></a>
-											</div>
-										</div>
-										<div class="input-group">
-											<input type="text" class="col-3 form-control text-center" value="KAPTUR" disabled>
-											<input type="text" class="col-3 form-control-plaintext text-center text-secondary" value="Сумма, руб." disabled>
-											<input type="text" class="col-3 form-control-plaintext text-center text-secondary" value="Сумма, руб." disabled>
-											<input type="text" class="col-3 form-control-plaintext text-center text-secondary" value="Сумма, руб." disabled>
-										</div>
-									</div>
-								</div>
-
-							</div>							
+							<!--АВТОМОБИЛЬ КЛИЕНТА КОНТЕНТ-->
+							<div id="wsparam5" class="old-car py-3 collapse"></div>
+														
 							<!-- 
 							ПРОГРАММА ЛОЯЛЬНОСТИ
 							ЗАГОЛОВОК
