@@ -569,18 +569,16 @@
 							<div id="wsparam5" class="old-car py-3 collapse"></div>
 														
 							<!-- 
-							ПРОГРАММА ЛОЯЛЬНОСТИ
-							ЗАГОЛОВОК
+							ПРОГРАММА ЛОЯЛЬНОСТИ ЗАГОЛОВОК
 							-->
-							<div class="p-2 bg-info d-flex">
+							<div class="p-2 bg-info d-flex" id="loyalty program">
 								<span class="flex-grow-1">
 									<a class="text-white" data-toggle="collapse" href="#wsparam6" aria-expanded="false" aria-controls="wsparam6">Программа лояльности</a>
 								</span>
 								<span><i class="fas fa-circle text-success"></i></span>
 							</div>
 							<!-- 
-							ПРОГРАММА ЛОЯЛЬНОСТИ
-							КОНТЕНТ
+							ПРОГРАММА ЛОЯЛЬНОСТИ КОНТЕНТ
 							-->
 							<div id="wsparam6" class="py-3 collapse">
 								<div class="input-group">

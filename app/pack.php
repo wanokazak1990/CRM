@@ -22,7 +22,7 @@ class pack extends Model
 
     public function option()
     {
-    	return $this->hasMany('App\pack_option','pack_id','id');
+    	return $this->hasMany('App\pack_option','pack_id','id')->with('option');
     }
 
     public function fullName()
