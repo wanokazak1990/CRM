@@ -168,6 +168,8 @@ return [
          * Package Service Providers...
          */
 
+        niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -236,6 +238,8 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
         'Charts' => ConsoleTVs\Charts\Facades\Charts::class,
+
+        'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
     ],
 
 ];
