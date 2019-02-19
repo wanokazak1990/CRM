@@ -17,6 +17,7 @@
 <div class="container-fluid bg-info d-flex align-items-center" id="header">
 	<button class="btn btn-info" onclick="send();">Отправить (ТЕСТ WEBSOCKET)</button>
 	<button type="button" id="test_load_worklist" class="btn btn-danger">Тестовая загрузка РЛ</button>
+	<a href="{{ route('getpdf') }}" target="_blank" class="btn btn-warning">Test PDF</a>
 
     @guest
         <li><a href="{{ route('login') }}">Login</a></li>

@@ -742,14 +742,32 @@
 								<div class="input-group">
 									<div class="col-3 d-flex align-items-center"><span><input type="checkbox"> My Renault</span></div>
 									<div class="col-6">
-										<button type="button" class="btn btn-outline-success btn-block">Создать Коммерческое предложение</button>
+										<button type="button" id="create_offer" class="btn btn-primary btn-block">Создать Коммерческое предложение</button>
 									</div>
 								</div>
 							</div>
 						</div>
 						<!-- Рабочий лист Вкладка  Комментарии -->
-						<div class="tab-pane" id="worksheet-comments" role="tabpanel" aria-labelledby="worksheet-comments-tab">
-							<p class="h3">комментарии</p>
+						<div class="py-3 tab-pane" id="worksheet-comments" role="tabpanel" aria-labelledby="worksheet-comments-tab">
+							
+							<div class="input-group">
+								<span class="col-12 font-weight-bold">Новая запись</span>
+								<textarea id="wl_new_comment" class="form-control col-12" style="resize: none;" placeholder="Введите текст комментария"></textarea>
+							</div>
+
+							<div class="input-group mb-3">
+								<button type="button" class="col-3 offset-6 btn btn-primary" disabled>Новая команда</button>
+								<button id="wl_create_comment" type="button" class="col-3 btn btn-primary">Задача</button>
+							</div>
+
+							<div class="input-group">
+								<div class="col-12 d-flex">
+									<span class="flex-grow-1 font-weight-bold">Комментарии</span>
+									<a href="#"><i class="fa fa-print"></i></a>
+								</div>
+								<textarea id="wl_comments_list" class="form-control col-12" rows="20" style="resize: none; overflow-y: scroll;" readonly></textarea>
+							</div>
+
 						</div>
 						<!-- Рабочий лист Вкладка  Автомобиль -->
 						<div class="py-3 tab-pane" id="worksheet-auto" role="tabpanel" aria-labelledby="worksheet-auto-tab">
