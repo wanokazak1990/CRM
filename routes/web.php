@@ -438,6 +438,9 @@ Route::post('/wlgetdops', 'WorklistController@getDops')->name('wlgetdops');
 //Вывод блока "Автомобиль клиента"
 Route::post('/worklist/client/oldcar','WorklistController@getOldClientCar')->name('clientoldcar');
 
+//Добавление фото старого авто клиента
+Route::post('/worklist/client/oldcar/photo','WorklistController@addoldcarphoto')->name('addoldcarphoto');
+
 // Получить машину, закрепленную за рабочим листом
 Route::post('/wlgetcar', 'WorklistController@getCarByWorklistId')->name('wlgetcar');
 

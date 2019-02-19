@@ -16,6 +16,7 @@ use App\pack;
 use App\oa_color;
 use App\oa_complect;
 use App\oa_option;
+use App\complect_pack;
 use DB;
 use Excel;
 
@@ -741,10 +742,22 @@ class CarController extends Controller
             ->find($request->id);
         
         $car->packprice = $car->packPrice();
+
         $packs = pack::select('packs.*')
+            ->with('option')
             ->join('complect_packs','complect_packs.pack_id','=','packs.id')
+            ->join('pack_options','pack_options.pack_id','=','packs.id')
+            ->join('oa_options','oa_options.id','=','pack_options.option_id')
             ->where('complect_packs.complect_id',$car->complect_id)
+            ->groupBy('packs.id')
             ->get();
+
+        /*foreach ($packs as $key => $value) {
+            foreach ($value->option as $t => $opt) {
+                dump($opt->option->name);
+            }
+        }*/
+
         $colors = oa_color::select('oa_colors.*')
             ->join('complect_colors','complect_colors.color_id','=','oa_colors.id')
             ->where('complect_colors.complect_id',$car->complect_id)

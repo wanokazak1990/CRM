@@ -12,6 +12,7 @@ use App\crm_car_selection;
 use App\avacar;
 use App\oa_dop;
 use App\ava_pack;
+use Storage;
 
 class WorklistController extends Controller
 {
@@ -384,5 +385,21 @@ class WorklistController extends Controller
         $oldCar = \App\crm_client_old_car::checkOnOldCar($request->wl_id);
         $res = $oldCar->clientCarHtml();
         echo $res;
+    }
+
+    public function addoldcarphoto(Request $request,$mas = array())
+    {   
+        if($request->has('wl_id'))
+        {
+            foreach ($request->file() as $key=>$file) {
+                $name = $file->getClientOriginalName().'.'.pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+                $str = (string)$file->move(storage_path('app/public/worklist/'.$request->wl_id.'/oldcar'), $name);
+                $str = str_replace('/home/it/www/new1.loc', '', $str);
+                $str = str_replace('app/public/', '', $str);
+                
+                $mas[] = $str;
+            } 
+        }
+        echo json_encode($mas);
     }
 }
