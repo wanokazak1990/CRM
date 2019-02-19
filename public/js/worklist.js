@@ -504,5 +504,51 @@ $(document).on('keyup', '#wl_dops_offered', function() {
 				$(".old-car").html(data)
 			})
 	)
+ });
 
- })
+(function(){
+
+	let wl_id = ''
+	let modal = ''
+	let photoContainer = ''
+
+	$(document).on('click','.oldcar-photo',function(){
+		wl_id = $('span[name=wl_id]').html()
+		modal = $(this).closest('form').find('.photo-load')
+		photoContainer = modal.find('.old-photo')
+		modal.css('display','block')
+		log(modal.attr('class'))
+	})
+
+	$(document).on('click','.close',function(){
+		$(this).parent().css('display','none')
+	})
+	$(document).on('click','.search-photo',function(){
+		$(this).parent().find('input').click();
+	})
+	$(document).on('click','.load',function(){		
+		var formData = new FormData();
+		var input = modal.find('[name="photo"]')
+		files = input[0].files
+		$.each( files, function( key, value ){
+			formData.append( key, value );
+			log('---------------')
+			log(key)
+			log(value)
+			log('---------------')
+		});
+		formData.append('wl_id',wl_id)
+		var parameters = formData
+		var url = '/worklist/client/oldcar/photo'
+		$.when(
+			ajaxWithFiles(parameters,url)
+				.then(function(data){
+					for (i in data)
+						photoContainer.append('<img src="'+data[i]+'">')
+					
+				})
+		)
+	})
+})();
+
+

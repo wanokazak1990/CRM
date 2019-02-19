@@ -90,7 +90,16 @@ m_complect.change(function(){
 })
 //кнопка подробнее
 m_carmore.click(function(){
-	getComplectInfo();
+	if(!m_carmore.attr('status')){
+		getComplectInfo();
+		m_carmore.attr('status',1)
+		m_carmore.html("Закрыть")
+	}
+	else{
+		info.m_options.html("")
+		m_carmore.removeAttr('status')
+		m_carmore.html("Подробнее")
+	}
 })
 //выбираем цвет
 m_carModal.on('click','.color-btn',function(){
@@ -109,12 +118,15 @@ m_carModal.on('change','.car-pack-block input',function(){
 
 function getComplectInfo()
 {
-	var parameters = m_complect.val();
+	var parameters = {'complect_id':m_complect.val()}
 	var url = '/complect/option'
 	$.when(
 		ajax(parameters,url)
 			.then(function(data){
-
+				info.m_options.html("")
+				var opts = JSON.parse(data)
+				for(i in opts)
+					info.m_options.append(opts[i].name+"<br>")
 			}
 		)
 	)
@@ -244,7 +256,7 @@ function getcolorString(obj)
 }
 //рисуем пакеты
 function makePacks(data)
-{
+{	
 	m_packblock.html('');
 	var str = '';
 	for(obj in data)
@@ -253,12 +265,15 @@ function makePacks(data)
 }
 //возвращает строку html с указанным пакетом
 function getPackString(obj){
-	var str = '<div class="input-group no-gutters">';
+	var str = '<div class="input-group no-gutters pack-area">';
 
-		if(obj.name!=null) str += '<div class="col-12">'+obj.name+'</div>';
+		if(obj.name!=null) str += '<div class="col-12 pack-name">'+obj.name+'</div>';
 		else str += '<div class="col-12"></div>';
 
-		str += '<div class="pack-desc">'+obj.optionlist+'</div>';
+		str += '<div class="pack-desc">';
+			for(i in obj.option)
+				str += obj.option[i].option.name+', '
+		str += '</div>';
 
 		str += '<div class="col-12 d-flex no-gutters">';
 			str += '<div class="col-2">';
@@ -267,7 +282,7 @@ function getPackString(obj){
 				str += '</div>';
 			str += '</div>';
 
-			str += '<div class="col-2">';
+			str += '<div class="col-4">';
 				str += obj.code;
 			str += "</div>";
 
@@ -391,7 +406,7 @@ $(document).on('click','.opencar',function(){
 
 							if(tag == 'input' && elem.attr('type') == 'text')
 							{
-								if(~i.indexOf('date'))
+								if(~i.indexOf('date') && current != undefined)
 								{
 									elem.val(timeConverter(current.date,'d.m.y'))
 								}
@@ -401,10 +416,12 @@ $(document).on('click','.opencar',function(){
 						{
 							$('[name="packs[]"]').each(function(){
 								for (k in current)
+								{
 									if($(this).val()==current[k].pack_id)
 									{
 										$(this).trigger('click');
 									}
+								}
 							})
 							info.totalPrice()
 						}

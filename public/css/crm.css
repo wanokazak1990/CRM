@@ -202,9 +202,40 @@ b.green{background: #0f0;height: 20px;width: 20px;border-radius: 100%;display: b
 .table  tr:hover{
 	background: #eaeaea;
 }
+.photo-load{
+	display: none;
+	width: 80%;
+	position: absolute;
+	left: 10%;
+	top:100px; 
+	background: #fff;
+	box-shadow: 0 0 15px #000;
+	padding: 15px;
+	border-radius: 10px;
+	box-sizing: padding-box;
+	z-index: 1000;
+}
+.photo-load .old-photo{
+	min-height: 300px;
+}
+.photo-load button{
+	width: 200px;
+}
+.old-photo{
+	position: relative;
+}
+.photo-load img{
+	width: 24%;
+	height: auto;
+	display: inline-block;
+}
 
 
-
+/*КАРТОЧКА МАШИНЫ*/
+.pack-area{border-bottom: 1px #dcdcdc solid;}
+.pack-name{padding-top: 10px;}
+.pack-desc{font-size: 12px; padding: 10px 0;}
+#complect-option{font-size: 12px;background: #eee;}
 
 
 
@@ -217,6 +248,7 @@ b.green{background: #0f0;height: 20px;width: 20px;border-radius: 100%;display: b
 /*CHECKBOX*/
 .check {
 	position: relative;
+	padding-top: 5px;
 }
 
 .check input[type="checkbox"],
@@ -248,7 +280,7 @@ b.green{background: #0f0;height: 20px;width: 20px;border-radius: 100%;display: b
 	z-index: 1;
 	width: .8rem;
 	height: .8rem;
-	top: .1rem;
+	top: .4rem;
 	left: .1rem;
 	background: linear-gradient(45deg, #dedede, #ffffff);
 	box-shadow: 0 6px 7px rgba(0,0,0,0.3);

@@ -8,6 +8,20 @@ function ajax(parameters,url)
 	})
 }
 
+function ajaxWithFiles(parameters,url)
+{
+	return $.ajax({
+		url: url,
+	    type: 'POST',
+	    data: parameters,
+	    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+	    cache       : false,
+		dataType    : 'json',
+		processData : false,
+		contentType : false,
+	})	
+}
+
 $(document).ready(function() {
 
 
@@ -31,7 +45,7 @@ $(document).ready(function() {
 });
 
 
-/*var URI = document.location.pathname;
+var URI = document.location.pathname;
 url = URI.split('/');
 
 
@@ -1233,4 +1247,3 @@ switch (url[1])
 	default:
 	break;
 }
-*/

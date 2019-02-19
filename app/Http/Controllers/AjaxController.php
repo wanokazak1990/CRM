@@ -279,7 +279,8 @@ class AjaxController extends Controller
                     ->orderBy('oa_options.parent_id')
                     ->orderBy('oa_options.name')
                     ->get();
-            return $options->toJson();
+            
+            echo $options->toJson();
         }
     }
 }
