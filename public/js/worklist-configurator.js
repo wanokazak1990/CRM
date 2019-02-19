@@ -43,10 +43,14 @@ function cfg_number_format(number,decimals,dec_point,thousands_sep)
 function getComplectsCfg(elem,pastle=0)
 {	
 	var model_id = elem.val();
+	log(model_id);
 	$.ajax({
-		type: "GET",
+		type: "POST",
 		url: "/getcomplects",
 		data: {'model_id':model_id},
+		headers: {
+	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    },
 		success: function(param){
 			var objs = JSON.parse(param);
 			if(pastle==0) $('[name="cfg_complect"]').html('');
@@ -63,7 +67,7 @@ function getComplectsCfg(elem,pastle=0)
 		},
 		error: function(param)
 		{
-			log('error');
+			log('error123');
 		}
 	})
 }
@@ -204,7 +208,7 @@ function getPacksCfg(elem)
 function getMotorCfg(id)
 {
 	var formData = new FormData();
-	formData.append('id',id);
+	formData.append('complect_id',id);
 	$.ajax({
         type: "POST",
         url: '/getmotor',
@@ -217,10 +221,10 @@ function getMotorCfg(id)
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 	    success: function(data){
-	    	$("#cfg-motor-type").html('Двигатель '+data.type.name+' '+data.valve+'-клапанный');
-	    	$("#cfg-motor-size").html('Рабочий объем '+data.size+'л. ('+data.power+'л.с.)');
-	    	$("#cfg-motor-transmission").html('КПП '+data.transmission.name);
-	    	$("#cfg-motor-wheel").html('Привод '+data.wheel.name);
+	    	$("#cfg-motor-type").html('Двигатель '+data[0].type.name+' '+data[0].valve+'-клапанный');
+	    	$("#cfg-motor-size").html('Рабочий объем '+data[0].size+'л. ('+data[0].power+'л.с.)');
+	    	$("#cfg-motor-transmission").html('КПП '+data[0].transmission.name);
+	    	$("#cfg-motor-wheel").html('Привод '+data[0].wheel.name);
 	    },
 	    error: function(){
 	    	log('Не смог получить стоимость комплектации id = '+id);
@@ -246,7 +250,7 @@ function complectPriceCfg(id)
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 		success: function(param){
-			getMotorCfg(param.motor_id);
+			getMotorCfg(param.id);
 			$("#cfg-complect-code").html('Исполнение '+param.code);
 			$("#cfg-complect-name").html('Комплектация '+param.name);
 			$("#cfg-base-price").html(cfg_number_format(param.price,0,'',' '));

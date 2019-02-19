@@ -272,7 +272,7 @@ class WorklistController extends Controller
         $car = avacar::find($car_id);
 
         $data['car_vin'] = $car->vin;
-        $data['car_name'] = $car->model->name;
+        $data['car_name'] = $car->brand->name.' '.$car->model->name;
         $data['complect_code'] = $car->complect->code;
         $data['complect_name'] = $car->complect->name;
         $data['complect_price'] = $car->complect->price;
@@ -307,7 +307,7 @@ class WorklistController extends Controller
         $data['installed'] = '';
         foreach ($car->complect->installoption as $key => $item)
         {
-            $data['installed'] .= '<li>'.$item->option->name.'</li>';
+            $data['installed'] .= '<li>- '.$item->option->name.'</li>';
         }
 
         $packs = ava_pack::where('avacar_id', $car_id)->get();

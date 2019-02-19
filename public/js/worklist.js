@@ -444,6 +444,30 @@ $(document).on('keyup', '#wl_dops_offered', function() {
 });
 
 
+$(document).on('click', '#wl_create_comment', function(){
+	$(this).blur();
+	var text = $('#wl_new_comment').val();
+	if (text != '')
+	{
+		$('#wl_comments_list').val($.trim("01.01.2019 в 00:00 Пупкин\n" + text + "\n" + $('#wl_comments_list').val()));
+		$('#wl_new_comment').val('');
+	}
+});
+
+
+/**
+ * Создание Коммерческого предложения в рабочем листе
+ * id - идентификатор рабочего листа
+ */
+$(document).on('click', '#create_offer', function() {
+	var id = $('span[name="wl_id"]').html();
+	if (id != '-')
+	{
+		var url = document.location.protocol + '//' + document.location.host + '/createoffer/' + id;
+		window.open(url, '_blank');
+	}
+});
+
 
 
 /**
@@ -506,3 +530,4 @@ $(document).on('keyup', '#wl_dops_offered', function() {
 	)
 
  })
+

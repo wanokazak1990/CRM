@@ -451,3 +451,11 @@ Route::get('/testim', function(){
 	echo $param;
 	echo "string";
 });
+
+
+// Тест ПДФ
+Route::get('/getpdf', 'PdfController@test')->name('getpdf');
+
+
+// Создать коммерческое предложение
+Route::get('/createoffer/{id}', 'PdfController@createOffer')->name('createoffer');
