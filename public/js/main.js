@@ -23,8 +23,6 @@ function ajaxWithFiles(parameters,url)
 }
 
 $(document).ready(function() {
-
-
 	/**
 	* Нажатие на чекбокс в таблице во вкладке "Автосклад"
 	* Подсвечивает отмеченную строку приятненьким, как летнее утро в выходной, цветом
@@ -39,10 +37,13 @@ $(document).ready(function() {
 			$(this).closest('tr').removeAttr('style');
 		}
 	});
-
-
-
 });
+
+function nonSpace(str)
+{
+	str = str.replace(' ','')
+	return str;
+}
 
 
 var URI = document.location.pathname;
@@ -1116,6 +1117,24 @@ switch (url[1])
 				$('.data').html(str);
 			}
 		});
+		$('body').on('change','[name="reparation"]',function(){
+			$('.reparation_type').html("")
+			if($(this).val()==1)
+				$('.reparation_type').html('<label>Тип</label><select class="form-control" name="reparation_type"><option value="1">Расчёт</option><option value="2">Бюджет</option></select>')
+		})
+		$(document).on('change','[name="reparation_type"]',function(){
+			$('.reparation_param').html("")
+			if($(this).val()==1)
+			{
+				var str = 	'<label>База: <input type="checkbox" name="reparation_base" value="1">'
+				str += 		'<label>Опции: <input type="checkbox" name="reparation_pack" value="1">'
+				str += 		'<label>Допы: <input type="checkbox" name="reparation_dops" value="1">'
+				str += 		'<label>Процент % <input type="text" name="reparation_value"></label>'
+				$('.reparation_param').append(str)
+			}
+			else if($(this).val()==2)
+				$('.reparation_param').append('<label>Бюджет <input type="text" name="reparation_bydget"></label>')
+		})
 		//выбор модели подгрузит комплектации для этой модели
 		$('body').on('change','.model',function(){
 			getComplects($(this),$(this).closest('.exep').find('.complect'));

@@ -452,9 +452,14 @@ Route::post('/worklist/client/oldcar','WorklistController@getOldClientCar')->nam
 //Добавление фото старого авто клиента
 Route::post('/worklist/client/oldcar/photo','WorklistController@addoldcarphoto')->name('addoldcarphoto');
 
+//Вывод блока "Программа лояльности"
+Route::post('/worklist/loyalty/program','WorklistController@getLoyaltyProgram')->name('loyaltyprogram');
+
 // Получить машину, закрепленную за рабочим листом
 Route::post('/wlgetcar', 'WorklistController@getCarByWorklistId')->name('wlgetcar');
 
+//Получить цену машины в разрезе закрепленую за РЛ
+Route::post('/worklist/car/price','CarController@getPriceCarByWLId');
 
 
 

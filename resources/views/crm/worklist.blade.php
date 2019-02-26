@@ -555,11 +555,13 @@
 								</div>
 
 							</div>
-							<!-- 
-							АВТОМОБИЛЬ КЛИЕНТА
-							ЗАГОЛОВОК 
-							-->
-							<div class="p-2 bg-info d-flex">
+
+
+							<!-------------------------------->
+							<!--АВТОМОБИЛЬ КЛИЕНТА ЗАГОЛОВОК-->
+							<!-------------------------------->
+							<div class="p-2 bg-info d-flex" id="old-car">
+
 								<span class="flex-grow-1">
 									<a class="text-white" data-toggle="collapse" href="#wsparam5" aria-expanded="false" aria-controls="wsparam5">Автомобиль клиента</a>
 								</span>
@@ -567,150 +569,32 @@
 							</div>
 							<!--АВТОМОБИЛЬ КЛИЕНТА КОНТЕНТ-->
 							<div id="wsparam5" class="old-car py-3 collapse ws-param"></div>
-														
-							<!-- 
-							ПРОГРАММА ЛОЯЛЬНОСТИ ЗАГОЛОВОК
-							-->
-							<div class="p-2 bg-info d-flex" id="loyalty program">
+							<!-------------------------------->
+							<!-------------------------------->
+							<!-------------------------------->
+							
+							
+
+							<!---------------------------------->														
+							<!--ПРОГРАММА ЛОЯЛЬНОСТИ ЗАГОЛОВОК-->
+							<!---------------------------------->
+							<div class="p-2 bg-info d-flex" id="loyalty_program">
 								<span class="flex-grow-1">
 									<a class="text-white" data-toggle="collapse" href="#wsparam6" aria-expanded="false" aria-controls="wsparam6">Программа лояльности</a>
 								</span>
-								<span><i class="fas fa-circle text-success"></i></span>
+								<span>
+									<a id="open-pv-vidget">Виджет</a>
+									<i class="fas fa-circle text-success"></i>
+								</span>
 							</div>
-							<!-- 
-							ПРОГРАММА ЛОЯЛЬНОСТИ КОНТЕНТ
-							-->
-							<div id="wsparam6" class="py-3 collapse ws-param">
-								<div class="input-group">
-									<label class="col-6 font-weight-bold">Скидки:</label>
-									<label class="col-3">Скидка</label>
-									<label class="col-3">Возмещение</label>
-								</div>
-								
-								<div>
-									<div class="input-group">
-										<div class="col-6 d-flex align-items-center">
-											<span class="flex-grow-1 text-success"><input type="checkbox" checked> Скидка 13 000 р. (PromoPTS18)</span>
-											<a href="#"><i class="fas fa-question-circle"></i></a>
-										</div>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="- 13 000 р.">
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
-									</div>
+							<!--ПРОГРАММА ЛОЯЛЬНОСТИ КОНТЕНТ-->
+							<div id="wsparam6" class="py-3 collapse loyalty_program container ws-param"></div>							
+							<!---------------------------------->
+							<!---------------------------------->
+							<!---------------------------------->
 
-									<div class="input-group">
-										<div class="col-6 d-flex align-items-center">
-											<span class="flex-grow-1 text-success"><input type="checkbox" checked> Скидка Renault Finance 33 000 р.</span>
-											<a href="#"><i class="fas fa-question-circle"></i></a>
-										</div>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="- 28 519 р.">
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="28 519 р.">
-									</div>
 
-									<div class="input-group">
-										<div class="col-6 d-flex align-items-center">
-											<span class="flex-grow-1 text-secondary"><input type="checkbox" disabled> Скидка 15 000 р. (Sale1218)</span>
-											<a href="#"><i class="fas fa-question-circle"></i></a>
-										</div>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
-									</div>
-								</div>
-								
-								<div class="input-group">
-									<label class="col-6 font-weight-bold">Подарки:</label>
-									<label class="col-3">Скидка</label>
-									<label class="col-3">Возмещение</label>
-								</div>
 
-								<div>
-									<div class="input-group">
-										<div class="col-6 d-flex align-items-center">
-											<span class="flex-grow-1 text-success"><input type="checkbox" checked> Зимняя резина в подарок (Gift1218)</span>
-											<a href="#"><i class="fas fa-question-circle"></i></a>
-										</div>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="- 22 630 р.">
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="22 630 р.">
-									</div>
-								</div>
-
-								<div class="input-group">
-									<label class="col-6 font-weight-bold">Акции:</label>
-									<label class="col-3">Скидка</label>
-									<label class="col-3">Возмещение</label>
-								</div>
-								
-								<div>
-									<div class="input-group">
-										<div class="col-6 d-flex align-items-center">
-											<span class="flex-grow-1 text-success"><input type="checkbox" checked> Скидка на заказ-наряд 1 654 р.</span>
-											<a href="#"><i class="fas fa-question-circle"></i></a>
-										</div>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="- 1 500 р.">
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
-									</div>
-
-									<div class="input-group">
-										<div class="col-6 d-flex align-items-center">
-											<span class="flex-grow-1 text-success"><input type="checkbox" checked> Дорога до автосалона</span>
-											<a href="#"><i class="fas fa-question-circle"></i></a>
-										</div>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="- 2 548 р.">
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
-									</div>
-
-									<div class="input-group">
-										<div class="col-6 d-flex align-items-center">
-											<span class="flex-grow-1"><input type="checkbox"> Выгода по Trade-In 40 000 р.</span>
-											<a href="#"><i class="fas fa-question-circle"></i></a>
-										</div>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="40000" disabled>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
-									</div>
-
-									<div class="input-group">
-										<div class="col-6 d-flex align-items-center justify-content-end">
-											<span>Скидка и возмещение по сделке</span>
-										</div>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="- 68 197 р." disabled>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="51 149 р." disabled>
-									</div>
-
-									<div class="input-group">
-										<div class="col-6 d-flex align-items-center justify-content-end">
-											<span>Изменение и остаток маржи</span>
-										</div>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="- 17 148 р." disabled>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="5 245 р." disabled>
-									</div>
-								</div>
-
-								<div class="input-group">
-									<label class="col-6 font-weight-bold">Сервисы:</label>
-									<label class="col-3">Стоимость</label>
-									<label class="col-3">Возмещение</label>
-								</div>
-
-								<div>
-									<div class="input-group">
-										<div class="col-6 d-flex align-items-center">
-											<span class="flex-grow-1 text-success"><input type="checkbox" checked> Разумное КАСКО за 30 900 р.</span>
-											<a href="#"><i class="fas fa-question-circle"></i></a>
-										</div>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="30 900 р.">
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
-									</div>
-
-									<div class="input-group">
-										<div class="col-6 d-flex align-items-center">
-											<span class="flex-grow-1"><input type="checkbox"> Гарантия Renault Extra (5 лет)</span>
-											<a href="#"><i class="fas fa-question-circle"></i></a>
-										</div>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="12 900 р." disabled>
-										<input type="text" class="col-3 form-control" placeholder="Сумма, р." disabled>
-									</div>
-								</div>
-
-							</div>
 							<!-- 
 							КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ
 							ЗАГОЛОВОК
