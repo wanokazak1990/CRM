@@ -142,6 +142,18 @@
 			</div>
 		</div>
 
+
+		<div class="col-sm-12"><h4>Возмещение</h4></div>
+		<div class="col-sm-2">
+			<label>Участие завода</label>
+			<select name="reparation" class="form-control">
+				<option value="0">не учавствует</option>
+				<option value="1">учавствует</option>
+			</select>
+		</div>
+		<div class="col-sm-2 reparation_type"></div>
+		<div class="col-sm-2 reparation_param"></div>
+
 		<div class="clearfix"></div>
 
 		<div class='pos_exeptions'>

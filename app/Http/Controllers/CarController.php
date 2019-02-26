@@ -28,6 +28,7 @@ use App\ava_date_ready;
 use App\ava_date_ship;
 use App\ava_discount;
 use App\ava_shipterm;
+use App\crm_car_selection;
 
 /*
 $all = avacar::get();
@@ -775,4 +776,20 @@ class CarController extends Controller
         ]);
     }
     
+    public function getPriceCarByWLId(Request $request, $array = array())
+    {
+        if(!$request->has('wl_id')) return false;
+        $selectCar = crm_car_selection::where('worklist_id',$request->wl_id)->first();
+        if($selectCar->id)
+        {   
+            $car = avacar::with('complect')->find($selectCar->car_id);
+            $array = [
+                'base' => $car->complect->price,
+                'pack' => $car->packPrice(),
+                'dops' => $car->dopprice,
+                'total' => $car->totalPrice()
+            ];
+        }
+        echo json_encode($array);
+    }
 }

@@ -316,6 +316,41 @@
 </div>
 
 
+<div id="pv-modal">
+	<a class="close fa fa-times"></a>
+	<div class="pv-price">
+		<div class="row">
+			<h4 class="col-12 text-center">
+				Ваш автомобиль
+			</h4>
+		</div>
+		<div class="pv-list row">
+			<div class="col-6">Комплектация:</div>
+			<div class="col-6 text-right"><span id="pv-base">0</span> руб.</div>
+		</div>
+		<div class="pv-list row">
+			<div class="col-6">Опции:</div>
+			<div class="col-6 text-right"><span id="pv-pack">0</span> руб.</div>
+		</div>
+		<div class="pv-list row">
+			<div class="col-6">Аксессуары:</div>
+			<div class="col-6 text-right"><span id="pv-dops">0</span> руб.</div>
+		</div>
+		<div class="row">
+			<div class="col text-right"><span id="pv-total">0</span> руб.</div>
+		</div>
+	</div>
+	<div class="pv-programms">
+		<div class="row">
+			<h4 class="col text-center">Персональные условия</h4>
+		</div>
+		<div class="default row">
+			<div class="col-10 pv-name"></div>
+			<div class="col-2 icon text-right"><i class="fa fa-check"></i></div>
+		</div>
+	</div>
+</div>
+
 
 
 
