@@ -428,12 +428,23 @@ Route::post('/wldeltestdrive', 'WorklistController@deleteTestDrive')->name('wlde
 // Показать машины по потребностям (Кнопка "Найти в автоскладе" в РЛ)
 Route::post('/crmgetcarsbyneeds', 'CRMAjaxController@getCarsByNeeds')->name('crmgetcarsbyneeds');
 
+// Записать в БД выбранные машины клиента в Подборе по потребностям
+Route::post('/wlsaveneedcars', 'WorklistController@saveNeedCars')->name('wlsaveneedcars');
+
+// Получить выбранные машины клиента в Подборе по потребностям
+Route::post('/wlgetneedcars', 'WorklistController@getNeedCars')->name('wlgetneedcars');
+
 // Зарезервировать машину за клиентом (Кнопка "Резервировать" в РЛ)
 Route::post('/wlreservecar', 'WorklistController@reserveCar')->name('wlreservecar');
 
+// Снять резерв (кнопка "Снять резерв" во вкладке Автомобиль в РЛ)
+Route::post('/wlremovereserved', 'WorklistController@removeReserved')->name('wlremovereserved');
 
 // Получить доп. оборудование при открытии вкладки "Дополнительное оборудование" в РЛ
 Route::post('/wlgetdops', 'WorklistController@getDops')->name('wlgetdops');
+
+// Установить выбранное доп. оборудование
+Route::post('/wlinstalldops', 'WorklistController@installDops')->name('wlinstalldops');
 
 //Вывод блока "Автомобиль клиента"
 Route::post('/worklist/client/oldcar','WorklistController@getOldClientCar')->name('clientoldcar');
@@ -467,3 +478,6 @@ Route::get('/getpdf', 'PdfController@test')->name('getpdf');
 
 // Создать коммерческое предложение
 Route::get('/createoffer/{id}', 'PdfController@createOffer')->name('createoffer');
+
+// Создать коммерческое предложение для нескольких машин
+Route::post('/createoffer/{id?}', 'PdfController@createOffer')->name('createoffer');
