@@ -12,6 +12,8 @@ use App\crm_car_selection;
 use App\avacar;
 use App\oa_dop;
 use App\ava_pack;
+use App\crm_need_car;
+use App\ava_dop;
 use Storage;
 
 class WorklistController extends Controller
@@ -248,6 +250,7 @@ class WorklistController extends Controller
             foreach ($car->dops as $key => $value) 
             {
                 $data['dops'] .= '<span class="col-3"><input type="checkbox" checked disabled> '.$value->dop->name.'</span>';
+                $notIn[] = $value->dop_id;
             }
         }
         else
@@ -255,7 +258,7 @@ class WorklistController extends Controller
             $data['dops'] .= '<span class="font-italic">Доп. оборудование не установлено</span>';
         }
 
-        $all_dops = oa_dop::pluck('name', 'id');
+        $all_dops = oa_dop::whereNotIn('id', $notIn)->pluck('name', 'id');
         $data['all_dops'] = '';
         foreach ($all_dops as $key => $dop) 
         {
@@ -266,83 +269,120 @@ class WorklistController extends Controller
     }
 
 
+    public function installDops(Request $request)
+    {
+        $car_id = crm_car_selection::where('worklist_id', $request->wl_id)->first()->car_id;
+
+        $car = avacar::find($car_id);
+        $car->dopprice = $car->dopprice + (int)$request->wl_dops_sum;
+        $car->save();
+
+        $dops = explode(',', $request->wl_dops);
+        foreach ($dops as $key => $dop_id)
+        {
+            $ava_dop = new ava_dop();
+            $ava_dop->avacar_id = $car_id;
+            $ava_dop->dop_id = $dop_id;
+            $ava_dop->save();
+        }
+        
+        echo json_encode('done');
+    }
+
+
+    /**
+     * Получение данных об автомобиле, привязанном к рабочему листу
+     * return - массив данных для вкладки Автомобиль в Рабочем листе
+     */
     public function getCarByWorklistId(Request $request)
     {
         $car_id = crm_car_selection::where('worklist_id', $request->wl_id)->first()->car_id;
 
         $car = avacar::find($car_id);
 
-        $data['car_vin'] = $car->vin;
-        $data['car_name'] = $car->brand->name.' '.$car->model->name;
-        $data['complect_code'] = $car->complect->code;
-        $data['complect_name'] = $car->complect->name;
-        $data['complect_price'] = $car->complect->price;
-        $data['img'] = '/storage/images/'.$car->model->link.'/'.$car->model->alpha;
-        $data['color_code'] = $car->color->web_code;
-        $data['color_rn_code'] = $car->color->rn_code;
-        $data['color_name'] = $car->color->name;
-        $data['car_info'] = '
-            <li>Двигатель '.$car->complect->motor->type->name." ".$car->complect->motor->valve.'-клапанный</li>
-            <li>Рабочий объем '.$car->complect->motor->size.'л. ('.$car->complect->motor->power.'л.с.)</li>
-            <li>КПП '.$car->complect->motor->transmission->name.'</li>
-            <li>Привод '.$car->complect->motor->wheel->name.'</li>';
-
-        $data['dops'] = '';
-        if (count($car->dops) > 0)
-        {
-            foreach ($car->dops as $key => $value) 
-            {
-                $data['dops'] .= '<li>'.$value->dop->name.'</li>';
-            }
-        }
+        if ($car == null)
+            echo 'null';
         else
         {
-            $data['dops'] .= '<li>Доп. оборудование не установлено</li>';
-        }
+            $data['car_id'] = $car->id;
+            $data['car_vin'] = $car->vin;
+            $data['car_name'] = $car->brand->name.' '.$car->model->name;
+            $data['complect_code'] = $car->complect->code;
+            $data['complect_name'] = $car->complect->name;
+            $data['complect_price'] = $car->complect->price;
+            $data['img'] = '/storage/images/'.$car->model->link.'/'.$car->model->alpha;
+            $data['color_code'] = $car->color->web_code;
+            $data['color_rn_code'] = $car->color->rn_code;
+            $data['color_name'] = $car->color->name;
+            $data['car_info'] = '
+                <li>Двигатель '.$car->complect->motor->type->name." ".$car->complect->motor->valve.'-клапанный</li>
+                <li>Рабочий объем '.$car->complect->motor->size.'л. ('.$car->complect->motor->power.'л.с.)</li>
+                <li>КПП '.$car->complect->motor->transmission->name.'</li>
+                <li>Привод '.$car->complect->motor->wheel->name.'</li>';
 
-        if ($car->dopprice == null)
-            $data['car_dopprice'] = 0;
-        else
-            $data['car_dopprice'] = $car->dopprice;
-
-        $data['installed'] = '';
-        foreach ($car->complect->installoption as $key => $item)
-        {
-            $data['installed'] .= '<li>- '.$item->option->name.'</li>';
-        }
-
-        $packs = ava_pack::where('avacar_id', $car_id)->get();
-        
-        $data['fullprice'] = (int)$data['car_dopprice'] + (int)$data['complect_price'];
-
-        $data['options'] = '';
-        foreach ($packs as $key => $value) 
-        {
-            $data['options'] .= '<div class="input-group text-secondary no-gutters">
-            <div class="col-12 border-bottom">'.$value->pack->name.'<div>';
-
-            foreach ($value->pack->option as $k => $val) 
+            $data['dops'] = '';
+            if (count($car->dops) > 0)
             {
-                $data['options'] .= $val->option->name;
+                foreach ($car->dops as $key => $value) 
+                {
+                    $data['dops'] .= '<li>'.$value->dop->name.'</li>';
+                }
+            }
+            else
+            {
+                $data['dops'] .= '<li>Доп. оборудование не установлено</li>';
             }
 
-            $data['options'] .= '</div>
-                </div>
-                <div class="col-12 d-flex">
-                    <div class="flex-grow-1">'
-                    .$value->pack->code.  
-                    '</div>
-                    <div class="h5">'.$value->pack->price.'</div>
-                </div>
-            </div>';
+            if ($car->dopprice == null)
+                $data['car_dopprice'] = 0;
+            else
+                $data['car_dopprice'] = $car->dopprice;
 
-            $data['fullprice'] = $data['fullprice'] + (int)$value->pack->price;
+            $data['installed'] = '';
+            foreach ($car->complect->installoption as $key => $item)
+            {
+                $data['installed'] .= '<li>- '.$item->option->name.'</li>';
+            }
+
+            $packs = ava_pack::where('avacar_id', $car_id)->get();
+            
+            $data['fullprice'] = (int)$data['car_dopprice'] + (int)$data['complect_price'];
+
+            $data['options'] = '';
+            foreach ($packs as $key => $value) 
+            {
+                $data['options'] .= '<div class="input-group text-secondary no-gutters">
+                <div class="col-12 border-bottom">'.$value->pack->name.'<div>';
+
+                foreach ($value->pack->option as $k => $val) 
+                {
+                    $data['options'] .= $val->option->name;
+                }
+
+                $data['options'] .= '</div>
+                    </div>
+                    <div class="col-12 d-flex">
+                        <div class="flex-grow-1">'
+                        .$value->pack->code.  
+                        '</div>
+                        <div class="h5">'.$value->pack->price.'</div>
+                    </div>
+                </div>';
+
+                $data['fullprice'] = $data['fullprice'] + (int)$value->pack->price;
+            }
+
+            echo json_encode($data);
         }
-
-        echo json_encode($data);
     } 
 
 
+    public function removeReserved(Request $request)
+    {
+        crm_car_selection::where('worklist_id', $request->wl_id)->delete();
+
+        echo json_encode('done');
+    }
 
 
     /**
@@ -378,6 +418,46 @@ class WorklistController extends Controller
 
         return $html;
     }
+
+
+    /**
+     * Получить блоки машин в Подборе по потребностям
+     */
+    public function getNeedCars(Request $request)
+    {
+        $data['blocks'] = crm_need_car::getCarBlocks($request->wl_id);
+        $data['options'] = crm_need_car::getCarOptions($request->wl_id);
+
+        echo json_encode($data);
+    }
+
+    /**
+     * Сохранить выбранные машины в БД в Подборе по потребностям
+     */
+    public function saveNeedCars(Request $request)
+    {
+        crm_need_car::where('worklist_id', $request->wl_id)->delete();
+
+        $needcars = json_decode($request->data);
+
+        foreach ($needcars as $key => $val) 
+        {
+            $car = new crm_need_car();
+            $car->worklist_id = $request->wl_id;
+            $car->model_id = $val->model;
+            $car->wheel_id = $val->wheel;
+            $car->transmission_id = $val->transmission;
+            if ($request->wl_need_option != null)
+                $car->options = json_encode($request->wl_need_option);
+            $car->save();
+        }
+
+        $data['blocks'] = crm_need_car::getCarBlocks($request->wl_id);
+        $data['options'] = crm_need_car::getCarOptions($request->wl_id);
+
+        echo json_encode($data);
+    }
+
 
     /* Вывод блока "Автомобиль клиента" */
     public function getOldClientCar(Request $request)

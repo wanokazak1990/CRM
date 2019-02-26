@@ -16,12 +16,13 @@ function wl_save_changes(){
     	success: function(data){
     		if (data == 1)
     		{
+				$('.ws-param').collapse('hide');
     			log('Рабочий лист обновлен');
     			alert('Рабочий лист обновлен');	
     		}
     	},
     	error:function(xhr, ajaxOptions, thrownError){
-    		log('Не могу принять трафик');
+    		log('Не удалось сохранить рабочий лист');
 	    	log("Ошибка: code-"+xhr.status+" "+thrownError);
 	    	log(xhr.responseText);
 	    	log(ajaxOptions)
@@ -182,6 +183,60 @@ $(document).on('click', '.wl_del_testdrive', function() {
 
 /**
  * ПОДБОР ПО ПОТРЕБНОСТЯМ
+ * Загрузка и отрисовка блоков сохраненных моделей при открытии блока
+ * Если нет - отрисовка начального блока выбора модели
+ */
+$(document).on('click', 'a[href="#wsparam2"]', function() {
+	if (!$(this).hasClass('collapsed'))
+	{
+		/* Блок открыт */
+		$('#selectCarOptions input:checkbox').prop('checked', false);
+
+		var wl_id = $('span[name="wl_id"]').html();
+
+		if (wl_id != '-')
+		{
+			var formData = new FormData();
+			formData.append('wl_id', wl_id);
+
+			$.ajax({
+				url: '/wlgetneedcars',
+				type: 'POST',
+		        data: formData,
+		        dataType : "json", 
+		        cache: false,
+		        contentType: false,
+		        processData: false, 
+				headers: {
+		        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    	},
+		    	success: function(data){
+		    		$('#carsByNeeds').html(data.blocks);
+		    		if (data.options != null)
+		    		{
+		    			for (var i = 0; i < data.options.length; i++)
+			    		{
+			    			$('#selectCarOptions input[type="checkbox"][value="'+data.options[i]+'"]').prop('checked', true);
+			    		}
+		    		}
+		    	},
+		    	error:function(xhr, ajaxOptions, thrownError){
+		    		log('Не удалось загрузить машины по потребностям');
+			    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+			    	log(xhr.responseText);
+			    	log(ajaxOptions);
+			    }
+			});
+		}
+	}
+	else
+	{
+		/* Блок закрыт */
+	}
+});
+
+/**
+ * ПОДБОР ПО ПОТРЕБНОСТЯМ
  * Добавление новой модели 
  */
 $(document).on('click', '#addSelectedCar', function() {
@@ -237,9 +292,47 @@ $(document).on('click', '#getListByNeeds', function() {
 	var wl_need_sum = $('#wl_need_sum').val();
 
 	var formData = new FormData();
-	formData.append('wl_need_option', wl_need_option);
-	formData.append('wl_need_sum', wl_need_sum);
 	formData.append('data', data);
+
+	var wl_id = $('span[name="wl_id"]').html();
+
+	if (wl_id != '-')
+	{
+		formData.append('wl_id', wl_id);
+		formData.append('wl_need_option', wl_need_option);
+
+		$.ajax({
+			url: '/wlsaveneedcars',
+			type: 'POST',
+	        data: formData,
+	        dataType : "json", 
+	        cache: false,
+	        contentType: false,
+	        processData: false, 
+			headers: {
+	        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    	},
+	    	success: function(data){
+	    		//log(data);
+	    		$('#carsByNeeds').html(data.blocks);
+	    		if (data.options != null)
+	    		{
+	    			for (var i = 0; i < data.options.length; i++)
+		    		{
+		    			$('#selectCarOptions input[type="checkbox"][value="'+data.options[i]+'"]').prop('checked', true);
+		    		}
+	    		}
+	    	},
+	    	error:function(xhr, ajaxOptions, thrownError){
+	    		log('Не удалось записать в БД машины по потребностям');
+		    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+		    	log(xhr.responseText);
+		    	log(ajaxOptions);
+		    }
+		});
+	}
+
+	formData.append('wl_need_sum', wl_need_sum);
 
 	$.ajax({
 		url: '/crmgetcarsbyneeds',
@@ -266,7 +359,7 @@ $(document).on('click', '#getListByNeeds', function() {
 	    	getPaginationContent(parent,data['links']);  
     	},
     	error:function(xhr, ajaxOptions, thrownError){
-    		log('Не удалось загрузить данные рабочего листа');
+    		log('Не удалось подобрать автомобили по потребностям');
 	    	log("Ошибка: code-"+xhr.status+" "+thrownError);
 	    	log(xhr.responseText);
 	    	log(ajaxOptions);
@@ -332,18 +425,13 @@ $(document).on('click', '#wl_need_reserve', function() {
 
 
 /**
- * Получение данных о привязанном автомобиле при нажатии на вкладку "Автомобиль"
- * в Рабочем листе
+ * ВКЛАДКА "АВТОМОБИЛЬ"
+ * Получение данных о привязанном автомобиле при открытии вкладки
  */
 $(document).on('click', '#worksheetTabs a[href="#worksheet-auto"]', function() {
-	//alert('Открыта вкладка "Автомобиль"');
 	var wl_id = $('span[name="wl_id"]').html();
 
-	if (wl_id == '-')
-	{
-		//alert('Рабочий лист не загружен!');
-	}
-	else
+	if (wl_id != '-')
 	{
 		var formData = new FormData();
 		formData.append('wl_id', wl_id);
@@ -359,26 +447,38 @@ $(document).on('click', '#worksheetTabs a[href="#worksheet-auto"]', function() {
 	        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    	},
 	    	success: function(data){
-	    		//log(data);
-	    		$('#wl_car_vin').html(data.car_vin);	    	
-	    		$('#wl_car_name').html(data.car_name);	    	
-	    		$('.wl_car_complect_name').html(data.complect_name);	    	
-	    		$('#wl_car_complect_code').html(data.complect_code);	    	
-	    		$('#wl_car_info').html(data.car_info);	    	
-	    		$('#wl_car_img').attr('src', data.img);	    	
-	    		$('#wl_car_img').css('background-color', data.color_code);	    	
-	    		$('#wl_car_color_name').html(data.color_name);	    	
-	    		$('#wl_car_color_example').css('background', data.color_code);
-	    		$('#wl_car_rn_code').html(data.color_rn_code);
-	    		$('#wl_car_dops').html(data.dops);
-	    		$('#wl_car_dopprice').html(data.car_dopprice);
-	    		$('#wl_car_installed').html(data.installed);
-	    		$('#wl_car_complect_price').html(data.complect_price);
-	    		$('#wl_car_options').html(data.options);
-	    		$('#wl_car_fullprice').html(data.fullprice);
+	    		if (data == 'null')
+	    		{
+	    			$("#wl_car_empty").css('display', 'block');
+	    			$("#wl_car").css('display', 'none');
+	    		}
+	    		else
+	    		{
+	    			$("#wl_car_empty").css('display', 'none');
+	    			$("#wl_car").css('display', 'block');
+		    		$('#wl_car_vin').html(data.car_vin);	    	
+		    		$('#wl_car_name').html(data.car_name);	    	
+		    		$('.wl_car_complect_name').html(data.complect_name);	    	
+		    		$('#wl_car_complect_code').html(data.complect_code);	    	
+		    		$('#wl_car_info').html(data.car_info);	    	
+		    		$('#wl_car_img').attr('src', data.img);	    	
+		    		$('#wl_car_img').css('background-color', data.color_code);	    	
+		    		$('#wl_car_color_name').html(data.color_name);	    	
+		    		$('#wl_car_color_example').css('background', data.color_code);
+		    		$('#wl_car_rn_code').html(data.color_rn_code);
+		    		$('#wl_car_dops').html(data.dops);
+		    		$('#wl_car_dopprice').html(data.car_dopprice);
+		    		$('#wl_car_installed').html(data.installed);
+		    		$('#wl_car_complect_price').html(data.complect_price);
+		    		$('#wl_car_options').html(data.options);
+		    		$('#wl_car_fullprice').html(data.fullprice);
+
+		    		$('#wl_car_opencard').addClass('opencar');
+		    		$('#wl_car_opencard').attr('car-id', data.car_id);
+		    	}
 	    	},
 	    	error:function(xhr, ajaxOptions, thrownError){
-	    		log('Не удалось автомобиль');
+	    		log('Не удалось загрузить информацию об автомобиле');
 		    	log("Ошибка: code-"+xhr.status+" "+thrownError);
 		    	log(xhr.responseText);
 		    	log(ajaxOptions);
@@ -389,25 +489,20 @@ $(document).on('click', '#worksheetTabs a[href="#worksheet-auto"]', function() {
 
 
 /**
- * Открытие блока "Дополнительное оборудование" в рабочем листе
- * 
+ * Кнопка "Снять резерв" во вкладке Автомобиль в Рабочем листе
  */
-$(document).on('click', 'a[href="#wsparam4"]', function() {
-	if (!$(this).hasClass('collapsed'))
-	{
-		// Блок открыт
-		var wl_id = $('span[name="wl_id"]').html();
+$(document).on('click', '#wl_car_remove', function() {
+	var wl_id = $('span[name="wl_id"]').html();
 
-		if (wl_id == '-')
-		{
-			//alert('Рабочий лист не загружен!');
-		}
-		else
+	if (wl_id != '-')
+	{
+		var answer = confirm('Вы действительно хотите снять машину с резерва?');
+		if (answer == true)
 		{
 			var formData = new FormData();
 			formData.append('wl_id', wl_id);
 			$.ajax({
-				url: '/wlgetdops',
+				url: '/wlremovereserved',
 				type: 'POST',
 		        data: formData,
 		        dataType : "json", 
@@ -418,13 +513,17 @@ $(document).on('click', 'a[href="#wsparam4"]', function() {
 		        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		    	},
 		    	success: function(data){
-		    		log(data);
-		    		$('#wl_dops_dopprice').val(data.dopprice);		    	
-		    		$('#wl_dops_list').html(data.dops);		    	
-		    		$('#wl_dops_all').html(data.all_dops);		    	
+		    		if (data == 'done') {
+		    			$("#wl_car_empty").css('display', 'block');
+		    			$("#wl_car").css('display', 'none');
+		    			$('#crmTabs a[href="#stock"]').click();
+		    		} else {
+		    			$("#wl_car_empty").css('display', 'none');
+		    			$("#wl_car").css('display', 'block');
+		    		}
 		    	},
 		    	error:function(xhr, ajaxOptions, thrownError){
-		    		log('Не удалось получить данные о доп. оборудовании автомобиля');
+		    		log('Не удалось снять резерв');
 			    	log("Ошибка: code-"+xhr.status+" "+thrownError);
 			    	log(xhr.responseText);
 			    	log(ajaxOptions);
@@ -432,11 +531,120 @@ $(document).on('click', 'a[href="#wsparam4"]', function() {
 			});
 		}
 	}
+});
+
+
+/**
+ * Дополнительное оборудование
+ * Открытие блока
+ */
+$(document).on('click', 'a[href="#wsparam4"]', function() {
+	if (!$(this).hasClass('collapsed'))
+	{
+		// Блок открыт
+		var wl_id = $('span[name="wl_id"]').html();
+
+		if (wl_id != '-')
+		{
+			wlGetDops(wl_id);
+		}
+	}
 	else
 	{
 		// Блок закрыт
 	}
 });
+
+/**
+ * Дополнительное оборудование
+ * Кнопка "Установить"
+ */
+$(document).on('click', '#wl_dops_install', function() {
+	var wl_id = $('span[name="wl_id"]').html();
+	if (wl_id != '-')
+	{
+		var checked = [];
+		$('#wl_dops_all input:checkbox:checked').each(function () {
+			checked.push($(this).val());
+		});
+
+		if (checked.length > 0)
+		{
+			var sum = $('#wl_dops_offered').val();
+			if (sum == '')
+			{
+				alert('Введите сумму предложенного оборудования!');
+			}
+			else
+			{
+				var answer = confirm('Вы уверены, что хотите установить выбранное оборудование в автомобиль?');
+				if (answer == true)
+				{
+					var formData = new FormData();
+					formData.append('wl_id', wl_id);
+					formData.append('wl_dops', checked);
+					formData.append('wl_dops_sum', sum);
+					$.ajax({
+						url: '/wlinstalldops',
+						type: 'POST',
+				        data: formData,
+				        dataType : "json", 
+				        cache: false,
+				        contentType: false,
+				        processData: false, 
+						headers: {
+				        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    	},
+				    	success: function(data){
+				    		if (data == 'done')
+				    		{
+				    			$('#wl_dops_offered').val('');
+				    			wlGetDops(wl_id);
+				    		}
+				    	},
+				    	error:function(xhr, ajaxOptions, thrownError){
+				    		log('Не удалось установить доп. оборудование');
+					    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+					    	log(xhr.responseText);
+					    	log(ajaxOptions);
+					    }
+					});
+				}
+			}
+		}
+	}
+	
+});
+
+
+function wlGetDops(wl_id)
+{
+	var formData = new FormData();
+	formData.append('wl_id', wl_id);
+	$.ajax({
+		url: '/wlgetdops',
+		type: 'POST',
+        data: formData,
+        dataType : "json", 
+        cache: false,
+        contentType: false,
+        processData: false, 
+		headers: {
+        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    	},
+    	success: function(data){
+    		$('#wl_dops_dopprice').val(data.dopprice);		    	
+    		$('#wl_dops_list').html(data.dops);		    	
+    		$('#wl_dops_all').html(data.all_dops);
+    	},
+    	error:function(xhr, ajaxOptions, thrownError){
+    		log('Не удалось получить данные о доп. оборудовании автомобиля');
+	    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+	    	log(xhr.responseText);
+	    	log(ajaxOptions);
+	    }
+	});
+}
 
 
 $(document).on('keyup', '#wl_dops_offered', function() {
@@ -456,22 +664,36 @@ $(document).on('click', '#wl_create_comment', function(){
 
 
 /**
- * Создание Коммерческого предложения в рабочем листе
+ * КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ
+ * Создание Коммерческого предложения по кнопке
  * id - идентификатор рабочего листа
  */
 $(document).on('click', '#create_offer', function() {
 	var id = $('span[name="wl_id"]').html();
 	if (id != '-')
 	{
-		var url = document.location.protocol + '//' + document.location.host + '/createoffer/' + id;
-		window.open(url, '_blank');
+		if ($('.check-car:checked').length > 0)
+		{
+			let form = $('#get-pdf')
+			form.html('')
+			form.append('<input name="_token" value="'+$('meta[name="csrf-token"]').attr('content')+'" type="hidden">')
+			$('.check-car:checked').each(function(){
+			    form.append('<input type="hidden" name="pdf_cars[]" value="'+$(this).val()+'">');
+			});
+			form.submit()
+		}
+		else
+		{
+			var url = '/createoffer/' + id;
+			window.open(url);
+		}
 	}
 });
 
 
 
 /**
- * ТЕСТОВАЯ ЗАГРУЗКА РАБОЧЕГО ЛИСТА ПО НАЖАНИЮ НА БОЛЬШУЮ КРАСНУЮ КНОПКУ В ШАПКЕ САЙТА
+ * Загрузка рабочего листа из Автосклада
  */
  $(document).on('click', '.car-worklist', function() {
  	$(this).blur();
@@ -495,6 +717,9 @@ $(document).on('click', '#create_offer', function() {
     		$('#hidden_panel').css('right', '0');
 			$('#disableContent').css('display', 'block');
 			$('#hiddenTab a[href="#worksheet"]').tab('show');
+
+			$('.ws-param').collapse('hide');
+
 	    	worklistData(data);
 
 	    	// Очистка лишних блоков в Подборе по потребностям
@@ -519,16 +744,39 @@ $(document).on('click', '#create_offer', function() {
 	});
  });
 
- $(document).on('click','#old-car',function(){
- 	var parameters = {'wl_id':$('span[name=wl_id]').html()};
-	var url = '/worklist/client/oldcar';
-	$.when(
-		ajax(parameters,url)
-			.then(function(data){
-				$(".old-car").html(data)
-			})
-	)
- });
+
+
+/**
+ * Загрузка инфо об автомобиле клиента при открытии 
+ * блока "Автомобиль клиента" в Рабочем листе (вкладка Параметры)
+ */
+$(document).on('click', 'a[href="#wsparam5"]', function() {
+	if (!$(this).hasClass('collapsed'))
+	{
+		/* Блок открыт */
+
+		var wl_id = $('span[name=wl_id]').html();
+
+		// Если рабочий лист загружен, то получаем данные об автомобиле
+		if (wl_id != '-')
+		{
+			var parameters = {'wl_id':wl_id};
+			var url = '/worklist/client/oldcar';
+			$.when(
+				ajax(parameters,url)
+					.then(function(data){
+						$(".old-car").html(data)
+					})
+			)
+		}
+	}
+	else
+	{
+		/* Блок закрыт */
+	}
+});
+
+
 
 (function(){
 

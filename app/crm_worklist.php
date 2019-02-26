@@ -14,6 +14,11 @@ class crm_worklist extends Model
     	return $this->hasOne('App\user','id','manager_id');
     }
 
+    public function traffic()
+    {
+        return $this->hasOne('App\crm_traffic','id','traffic_id');
+    }
+
     public function selectedModel($carModel = array())
     {
     	$selCar = crm_car_selection::with('avacar')->where('worklist_id',$this->id)->first();

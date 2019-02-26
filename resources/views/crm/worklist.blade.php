@@ -364,7 +364,7 @@
 							Пробная поездка
 							Контент 
 							-->
-							<div id="wsparam1" class="py-3 collapse">
+							<div id="wsparam1" class="py-3 collapse ws-param">
 								<a href="#" class="text-primary" data-toggle="modal" data-target="#addTestdriveModal"><i class="fas fa-plus-circle"></i> Добавить</a>
 								<div class="input-group" id="testdriveCars">
 								</div>								
@@ -383,7 +383,7 @@
 							Подбор по потребностям
 							Контент 
 							-->
-							<div class="py-3 collapse" id="wsparam2">
+							<div class="py-3 collapse ws-param" id="wsparam2">
 								<a href="#" class="text-primary" id="addSelectedCar"><i class="fas fa-plus-circle"></i> Добавить</a>
 
 								<div class="input-group" id="carsByNeeds">
@@ -425,7 +425,7 @@
 									<input type="text" id="wl_need_sum" class="col-3 form-control" placeholder="Сумма, р.">
 								</div>
 								<div class="input-group">
-									<input type="button" class="col-3 offset-6 btn btn-primary" id="getListByNeeds" value="Найти в автоскладе">
+									<input type="button" id="getListByNeeds" class="col-3 offset-6 btn btn-primary" value="Поиск на складе">
 									<input type="button" id="wl_need_reserve" class="col-3 btn btn-success" value="Зарезервировать">
 								</div>
 							</div>
@@ -443,7 +443,7 @@
 							Конфигуратор
 							Контент 
 							-->
-							<div id="wsparam3" class="py-3 collapse">
+							<div id="wsparam3" class="py-3 collapse ws-param">
 								<div class="input-group">
 									<div class="col-4"><label>Модель</label></div>
 									<div class="flex-grow-1"><label>Комплектация</label></div>
@@ -519,7 +519,7 @@
 							Дополнительное оборудование
 							Контент 
 							-->
-							<div id="wsparam4" class="py-3 collapse">
+							<div id="wsparam4" class="py-3 collapse ws-param">
 								<div class="input-group">
 									<label class="col-3">Установлено</label>
 									<label class="col-3">Предложено</label>
@@ -528,7 +528,7 @@
 
 								<div class="input-group">
 									<input type="text" id="wl_dops_dopprice" class="col-3 form-control" value="0" disabled>
-									<input type="text" id="wl_dops_offered" class="col-3 form-control" placeholder="Сумма, р.">
+									<input type="number" min="0" id="wl_dops_offered" class="col-3 form-control" placeholder="Сумма, р.">
 									<input type="text" id="wl_dops_sum" class="col-3 form-control" value="0" disabled>
 									<div class="col-3 d-flex align-items-center">
 										<span><input type="checkbox"> Разделить в КП</span>
@@ -548,7 +548,7 @@
 
 								<div class="input-group">
 									<label class="col-9">Предложенное оборудование:</label>
-									<a href="#" class="col-3 text-primary">Установить</a>
+									<a href="#" id="wl_dops_install" class="col-3 text-primary">Установить</a>
 								</div>
 
 								<div class="input-group" id="wl_dops_all">
@@ -559,14 +559,14 @@
 							АВТОМОБИЛЬ КЛИЕНТА
 							ЗАГОЛОВОК 
 							-->
-							<div class="p-2 bg-info d-flex" id="old-car">
+							<div class="p-2 bg-info d-flex">
 								<span class="flex-grow-1">
 									<a class="text-white" data-toggle="collapse" href="#wsparam5" aria-expanded="false" aria-controls="wsparam5">Автомобиль клиента</a>
 								</span>
 								<span><i class="fas fa-circle text-danger"></i></span>
 							</div>
 							<!--АВТОМОБИЛЬ КЛИЕНТА КОНТЕНТ-->
-							<div id="wsparam5" class="old-car py-3 collapse"></div>
+							<div id="wsparam5" class="old-car py-3 collapse ws-param"></div>
 														
 							<!-- 
 							ПРОГРАММА ЛОЯЛЬНОСТИ ЗАГОЛОВОК
@@ -580,7 +580,7 @@
 							<!-- 
 							ПРОГРАММА ЛОЯЛЬНОСТИ КОНТЕНТ
 							-->
-							<div id="wsparam6" class="py-3 collapse">
+							<div id="wsparam6" class="py-3 collapse ws-param">
 								<div class="input-group">
 									<label class="col-6 font-weight-bold">Скидки:</label>
 									<label class="col-3">Скидка</label>
@@ -725,8 +725,8 @@
 							КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ
 							КОНТЕНТ
 							-->
-							<div id="wsparam7" class="py-3 collapse">
-								<table class="table table-bordered table-sm table-striped" style="table-layout: fixed;" width="100%">
+							<div id="wsparam7" class="py-3 collapse ws-param">
+								<table class="table table-bordered table-sm" style="table-layout: fixed;" width="100%">
 									<tr>
 										<td>20.01.2017 16:31</td>
 										<td>X7LHSRGAN59685351</td>
@@ -738,8 +738,8 @@
 										<td><a href="#">Открыть</a></td>
 									</tr>
 								</table>
-								<hr>
-								<div class="input-group">
+								
+								<div class="input-group mt-3">
 									<div class="col-3 d-flex align-items-center"><span><input type="checkbox"> My Renault</span></div>
 									<div class="col-6">
 										<button type="button" id="create_offer" class="btn btn-primary btn-block">Создать Коммерческое предложение</button>
@@ -771,98 +771,103 @@
 						</div>
 						<!-- Рабочий лист Вкладка  Автомобиль -->
 						<div class="py-3 tab-pane" id="worksheet-auto" role="tabpanel" aria-labelledby="worksheet-auto-tab">
-							<div class="col-6 offset-3">
-								<img id="wl_car_img" src='' style="width: 100%;height: auto;">	
+							
+							<div id="wl_car_empty" class="alert alert-info">
+								Нет зарезервированного автомобиля, либо не загружен рабочий лист.
 							</div>
 
-							<div class="input-group border-bottom">
-								<div class="col-4 text-secondary" id="wl_car_vin">
+							<div id="wl_car" style="display: none;">
+								<div class="col-6 offset-3">
+									<img id="wl_car_img" src='' style="width: 100%;height: auto;">	
 								</div>
 
-								<div class="col-4 text-secondary">
-									Этап поставки
-								</div>
+								<div class="input-group border-bottom">
+									<div class="col-4 text-secondary" id="wl_car_vin">
+									</div>
 
-								<div class="col-4 text-secondary">
-									Цена продажи
-								</div>
-							</div>
+									<div class="col-4 text-secondary">
+										Этап поставки
+									</div>
 
-							<div class="input-group">
-								<div class="col-4 h5">
-									<span id="wl_car_name"></span>
-									<br>
-									<span class="wl_car_complect_name"></span>
-								</div>
-								<div class="col-4 h5">
-									А/м в наличии<br>
-									Склад Овен-авто
-								</div>
-								<div class="col-4 h5">
-									<div id="wl_car_fullprice"></div>
-									<div class="text-warning">- 20 000 руб.</div>
-								</div>
-							</div>
-
-							<div class="input-group">
-								<div class="col-4">
-									<label>Исполнение <span id="wl_car_complect_code"></span></label>
-									<ul class="list-unstyled text-secondary" id="wl_car_info">
-									</ul>
-								</div>
-
-								<div class="col-4">
-									<label>Комплектация <span class="wl_car_complect_name"></span></label>
-									<ul class="list-unstyled text-secondary border-bottom" id="wl_car_installed">
-									</ul>
-									<div class="text-right h5 text-secondary" id="wl_car_complect_price">
-										849 990 руб.
+									<div class="col-4 text-secondary">
+										Цена продажи
 									</div>
 								</div>
 
-								<div class="col-4">
-									<label>Цвет автомобиля</label>
-									<div class="input-group text-secondary no-gutters">
-										<div class="col-12 border-bottom border-warning" id="wl_car_color_name">
-										</div>
+								<div class="input-group">
+									<div class="col-4 h5">
+										<span id="wl_car_name"></span>
+										<br>
+										<span class="wl_car_complect_name"></span>
+									</div>
+									<div class="col-4 h5">
+										А/м в наличии<br>
+										Склад Овен-авто
+									</div>
+									<div class="col-4 h5">
+										<div id="wl_car_fullprice"></div>
+										<div class="text-warning">- 20 000 руб.</div>
+									</div>
+								</div>
 
-										<div class="col-12 d-flex">
-											<div class="flex-grow-1" id="wl_car_rn_code">
-											</div>
-											<div id="wl_car_color_example" style="width: 20px; height: 20px; border-radius: 100%;">
-											</div>
+								<div class="input-group">
+									<div class="col-4">
+										<label>Исполнение <span id="wl_car_complect_code"></span></label>
+										<ul class="list-unstyled text-secondary" id="wl_car_info">
+										</ul>
+									</div>
+
+									<div class="col-4">
+										<label>Комплектация <span class="wl_car_complect_name"></span></label>
+										<ul class="list-unstyled text-secondary border-bottom" id="wl_car_installed">
+										</ul>
+										<div class="text-right h5 text-secondary" id="wl_car_complect_price">
 										</div>
 									</div>
 
-									<label>Опционное оборудование</label>
-									<div id="wl_car_options">
+									<div class="col-4">
+										<label>Цвет автомобиля</label>
+										<div class="input-group text-secondary no-gutters">
+											<div class="col-12 border-bottom border-warning" id="wl_car_color_name">
+											</div>
+
+											<div class="col-12 d-flex">
+												<div class="flex-grow-1" id="wl_car_rn_code">
+												</div>
+												<div id="wl_car_color_example" style="width: 20px; height: 20px; border-radius: 100%;">
+												</div>
+											</div>
+										</div>
+
+										<label>Опционное оборудование</label>
+										<div id="wl_car_options">
+										</div>
+
+										<label>Дополнительное оборудование</label>
+										<ul class="list-unstyled text-secondary border-bottom" id="wl_car_dops">
+										</ul>
+
+										<div class="text-right h5 text-secondary" id="wl_car_dopprice">
+										</div>
+
 									</div>
+								</div>
 
-									<label>Дополнительное оборудование</label>
-									<ul class="list-unstyled text-secondary border-bottom" id="wl_car_dops">
-									</ul>
-
-									<div class="text-right h5 text-secondary" id="wl_car_dopprice">
+								<div class="input-group">
+									<div class="col-3">
+										<button type="button" id="wl_car_opencard" class="btn btn-warning btn-block">Открыть карточку</button>
 									</div>
-
+									<div class="col-3">
+										<button type="button" class="btn btn-success btn-block">Отложить еще один</button>
+									</div>
+									<div class="col-3">
+										<button type="button" class="btn btn-primary btn-block">Отложить другой</button>
+									</div>
+									<div class="col-3">
+										<button type="button" id="wl_car_remove" class="btn btn-danger btn-block">Снять резерв</button>
+									</div>
 								</div>
 							</div>
-
-							<div class="input-group">
-								<div class="col-3">
-									<button type="button" class="btn btn-warning btn-block">Открыть карточку</button>
-								</div>
-								<div class="col-3">
-									<button type="button" class="btn btn-success btn-block">Отложить еще один</button>
-								</div>
-								<div class="col-3">
-									<button type="button" class="btn btn-primary btn-block">Отложить другой</button>
-								</div>
-								<div class="col-3">
-									<button type="button" class="btn btn-danger btn-block">Снять резерв</button>
-								</div>
-							</div>
-
 						</div>
 						<!-- Рабочий лист Вкладка  Оформление -->
 						<div class="tab-pane" id="worksheet-design" role="tabpanel" aria-labelledby="worksheet-design-tab">
@@ -1341,4 +1346,6 @@
 	</div>
 </div>
 </div>
+
+<form id="get-pdf" target="_blank" method="POST" action="/createoffer"></form>
 @endsection
