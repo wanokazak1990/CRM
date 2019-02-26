@@ -123,6 +123,11 @@
 				color:#fff;
 			}
 			.fixed-count-price tr:hover{color: #000}
+
+			.reparation_param label{
+				display: block;
+				width: 100%
+			}
 		</style>
 		@show
 	</head>
