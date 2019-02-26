@@ -8,6 +8,8 @@ use App\oa_complect;
 class company_data extends Model
 {
     //
+    protected $valCounter = ['vin','complect_id','model_id','transmission_id','wheel_id','pricestart','pricefinish'];//свойства которые не учитываются при подсчёте количества параметров в исключении
+
     protected $fillable = ['type','company_id','vin','model_id','complect_id','transmission_id','wheel_id','location_id','pricestart','pricefinish'];
 
     public function checkEmpty()
@@ -18,6 +20,15 @@ class company_data extends Model
     				return 1;
     	}
     	return 0;
+    }
+
+    public function countFields($k=0)
+    {
+        foreach ($this->toArray() as $key => $item) {
+            if(!empty($item) && in_array($key, $this->valCounter))
+                $k++;
+        }
+        return $k;
     }
 
     public function complect()

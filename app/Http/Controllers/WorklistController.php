@@ -12,6 +12,9 @@ use App\crm_car_selection;
 use App\avacar;
 use App\oa_dop;
 use App\ava_pack;
+use App\company;
+use App\crm_worklist_company;
+
 use Storage;
 
 class WorklistController extends Controller
@@ -108,6 +111,22 @@ class WorklistController extends Controller
             //если авто не было то создаём пустой объект
             $oldCar = \App\crm_client_old_car::checkOnOldCar($worklist->id);
             $oldCar->saveOldCar($request->cc,$worklist);
+        }
+
+        //удалить все компании выбранные для рл до этого момента
+        crm_worklist_company::where('wl_id',$worklist->id)->delete();
+        if($request->has('loyalty'))//если выбрана хотябы одна компания
+        {
+            foreach ($request->loyalty['company_id'] as $key => $item) //то проходимся по массиву из id компаний
+            {
+                $wl_company = new crm_worklist_company([
+                    'wl_id'=>$worklist->id,
+                    'company_id'=>$item,
+                    'sum'=>str_replace(' ', '', $request->loyalty['sum'][$item]),
+                    'rep'=>str_replace(' ', '', $request->loyalty['rep'][$item])
+                ]);
+                $wl_company->save();
+            }
         }
 
         echo 1;
@@ -401,5 +420,16 @@ class WorklistController extends Controller
             } 
         }
         echo json_encode($mas);
+    }
+
+    public function getLoyaltyProgram(Request $request)//получить подходящие программы лояльности, для выбранного авто
+    {
+        if(!$request->has('wl_id')) return;//если нет ид ворклиста уходим
+        $selectionCar = crm_car_selection::where('worklist_id',$request->wl_id)->first();//выбранная машина
+        if(isset($selectionCar->car_id) && !empty($selectionCar->car_id))//если есть выбранная мащина
+        {
+            $company = company::clientCompanyForHtml($selectionCar);
+            echo json_encode($company);
+        }
     }
 }
