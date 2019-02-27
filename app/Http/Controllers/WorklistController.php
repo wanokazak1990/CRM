@@ -125,7 +125,8 @@ class WorklistController extends Controller
                     'wl_id'=>$worklist->id,
                     'company_id'=>$item,
                     'sum'=>str_replace(' ', '', $request->loyalty['sum'][$item]),
-                    'rep'=>str_replace(' ', '', $request->loyalty['rep'][$item])
+                    'rep'=>str_replace(' ', '', $request->loyalty['rep'][$item]),
+                    'razdel'=>$request->loyalty['razdel'][$item]
                 ]);
                 $wl_company->save();
             }
