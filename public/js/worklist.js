@@ -1088,6 +1088,8 @@ $(document).on('click', 'a[href="#wsparam5"]', function() {
 			            		str += 'disabled value="'+ number_format(data[i][k].sum,0,'',' ')+'" '
 		            	str += '>'
 
+		            	str += '<input type="hidden" value="'+data[i][k].razdel+'" name="loyalty[razdel]['+data[i][k].id+']" >'
+
 		                str += '<input name="loyalty[rep]['+data[i][k].id+']" type="text" class="col-3 form-control return" placeholder="" '
 			            	if(data[i][k].selected!=null)
 			            		str += " value = '"+number_format(data[i][k].selected.rep,0,'',' ')+"' "
