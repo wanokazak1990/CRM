@@ -16,6 +16,7 @@ use App\crm_need_car;
 use App\ava_dop;
 use App\company;
 use App\crm_worklist_company;
+use App\crm_offered_dop;
 use Storage;
 
 class WorklistController extends Controller
@@ -129,6 +130,17 @@ class WorklistController extends Controller
                 ]);
                 $wl_company->save();
             }
+        }
+
+        if ($request->has('wl_dops_check'))
+        {
+            crm_offered_dop::where('worklist_id', $request->wl_id)->delete();
+            $dops = new crm_offered_dop();
+            $dops->worklist_id = $request->wl_id;
+            $dops->options = json_encode($request->wl_dops_check);
+            if ($request->has('wl_dops_offered'))
+                $dops->price = $request->wl_dops_offered;
+            $dops->save();
         }
 
         echo 1;
@@ -283,6 +295,14 @@ class WorklistController extends Controller
         {
             $data['all_dops'] .= '<span class="col-6"><input type="checkbox" name="wl_dops_check[]" value="'.$key.'"> '.$dop.'</span>';
         }
+
+        $offered_dops = crm_offered_dop::where('worklist_id', $request->wl_id)->first();
+        if ($offered_dops != null)
+        {
+            $data['offered_dops'] = json_decode($offered_dops->options, true);
+            if ($offered_dops->price != null)
+                $data['offered_price'] = $offered_dops->price;
+        }
         
         echo json_encode($data);
     }
@@ -319,6 +339,8 @@ class WorklistController extends Controller
 
         $car = avacar::find($car_id);
 
+        $sale = crm_worklist_company::where('wl_id', $request->wl_id)->get();
+
         if ($car == null)
             echo 'null';
         else
@@ -338,6 +360,12 @@ class WorklistController extends Controller
                 <li>Рабочий объем '.$car->complect->motor->size.'л. ('.$car->complect->motor->power.'л.с.)</li>
                 <li>КПП '.$car->complect->motor->transmission->name.'</li>
                 <li>Привод '.$car->complect->motor->wheel->name.'</li>';
+
+            // $data['car_sale'] = $sale->filter(function($item) {
+            //     if ($item->razdel == )
+            // });
+
+            // $data['dop_sale'] = 
 
             $data['dops'] = '';
             if (count($car->dops) > 0)
