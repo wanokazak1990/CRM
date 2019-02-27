@@ -528,7 +528,7 @@
 
 								<div class="input-group">
 									<input type="text" id="wl_dops_dopprice" class="col-3 form-control" value="0" disabled>
-									<input type="number" min="0" id="wl_dops_offered" class="col-3 form-control" placeholder="Сумма, р.">
+									<input type="number" min="0" id="wl_dops_offered" name="wl_dops_offered" class="col-3 form-control" placeholder="Сумма, р.">
 									<input type="text" id="wl_dops_sum" class="col-3 form-control" value="0" disabled>
 									<div class="col-3 d-flex align-items-center">
 										<span><input type="checkbox"> Разделить в КП</span>
@@ -690,7 +690,7 @@
 									</div>
 									<div class="col-4 h5">
 										<div id="wl_car_fullprice"></div>
-										<div class="text-warning">- 20 000 руб.</div>
+										<div id="wl_car_sale" class="text-warning">- 20 000 руб.</div>
 									</div>
 								</div>
 

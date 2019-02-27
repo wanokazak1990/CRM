@@ -552,6 +552,8 @@ $(document).on('click', 'a[href="#wsparam4"]', function() {
 
 		if (wl_id != '-')
 		{
+			$('#wl_dops_offered').val('');
+			$('#wl_dops_all input:checkbox').prop('checked', false);
 			wlGetDops(wl_id);
 		}
 	}
@@ -642,6 +644,17 @@ function wlGetDops(wl_id)
     		$('#wl_dops_dopprice').val(data.dopprice);		    	
     		$('#wl_dops_list').html(data.dops);		    	
     		$('#wl_dops_all').html(data.all_dops);
+    		if (data.offered_dops != null)
+    		{
+    			for (var i = 0; i < data.offered_dops.length; i++)
+	    		{
+	    			$('#wl_dops_all input[type="checkbox"][value="'+data.offered_dops[i]+'"]').prop('checked', true);
+	    		}
+    		}
+    		if (data.offered_price != null)
+    		{
+    			$('#wl_dops_offered').val(data.offered_price);
+    		}
     	},
     	error:function(xhr, ajaxOptions, thrownError){
     		log('Не удалось получить данные о доп. оборудовании автомобиля');
