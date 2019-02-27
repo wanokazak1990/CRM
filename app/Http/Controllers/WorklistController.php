@@ -339,7 +339,7 @@ class WorklistController extends Controller
 
         $car = avacar::find($car_id);
 
-        $sale = crm_worklist_company::where('wl_id', $request->wl_id)->get();
+        $sale = crm_worklist_company::with('company')->where('wl_id', $request->wl_id)->where('razdel', '<>', 3)->get();
 
         if ($car == null)
             echo 'null';
@@ -361,11 +361,17 @@ class WorklistController extends Controller
                 <li>КПП '.$car->complect->motor->transmission->name.'</li>
                 <li>Привод '.$car->complect->motor->wheel->name.'</li>';
 
-            // $data['car_sale'] = $sale->filter(function($item) {
-            //     if ($item->razdel == )
-            // });
+            $data['car_sale'] = $sale->filter(function($item){
+                if ($item->razdel == 1 || $item->razdel == 4)
+                    return $item;
+            })->sum('sum');
 
-            // $data['dop_sale'] = 
+            $data['dop_sale'] = $sale->filter(function($item){
+                if ($item->razdel == 2)
+                    return $item;
+            })->sum('sum');
+
+            $data['company'] = $sale;
 
             $data['dops'] = '';
             if (count($car->dops) > 0)

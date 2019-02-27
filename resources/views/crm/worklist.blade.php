@@ -734,6 +734,10 @@
 										<div class="text-right h5 text-secondary" id="wl_car_dopprice">
 										</div>
 
+										<label>Компании</label>
+										<ul id="wl_car_company" class="list-unstyled text-secondary">
+										</ul>
+
 									</div>
 								</div>
 
