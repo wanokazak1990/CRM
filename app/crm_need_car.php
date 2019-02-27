@@ -35,13 +35,20 @@ class crm_need_car extends Model
     	return $blocks;
     }
 
-
+    /**
+     * Получить список опций автомобиля клиента в Подборе по потребностям
+     */
     public static function getCarOptions($worklist_id)
     {
     	$car = crm_need_car::where('worklist_id', $worklist_id)->first();
 
-    	if ($car->options != null)
-    		return json_decode($car->options, true);
+    	if ($car != null)
+    	{
+    		if ($car->options != null)
+    			return json_decode($car->options, true);
+    		else
+    			return null;
+    	}
     	else
     		return null;
     }
