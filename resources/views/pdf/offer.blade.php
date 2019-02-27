@@ -1,93 +1,60 @@
-<h3>{{ $item['car_name'] }}</h3>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Коммерческое предложение</title>
+</head>
+<body>
 
-<div style="width: 100%;">
-	<img src="{{ $item['img'] }}" style="width: 50%; height: auto; background-color: {{ $item['color_code'] }};">	
+@foreach($cars as $key => $car)
+<div>
+	<h3>{{ $car['car_name'] }}</h3>
+
+	<div style="width: 100%;">
+		<img src="{{ $car['img'] }}" style="width: 50%; height: auto; background-color: {{ $car['color_code'] }};">	
+	</div>
+
+	<div style="width: 100%; margin-bottom: 20px;">
+		<span><b>VIN номер:</b> {{ $car['car_vin'] }}</span><br>
+		<span><b>Комплектация:</b> {{ $car['complect_name'] }}</span><br>
+		<span><b>Исполнение:</b> {{ $car['complect_code'] }}</span><br>
+		<span><b>Цвет:</b> {{ $car['color_name'] }}</span><br>
+		<span><b>Образец цвета:</b> <span style="color: {{ $car['color_code'] }};">{{ $car['color_name'] }}</span></span><br>
+		<span><b>Код цвета:</b> {{ $car['color_rn_code'] }}</span><br>
+		
+		<span><b>Информация о машине:</b></span><br>
+		<ol style="margin-bottom: 20px;">
+			@foreach($car['car_info'] as $key => $value)
+			<li>{{ $value }}</li>
+			@endforeach
+		</ol>
+
+		<span><b>Установленное оборудование:</b></span><br>
+		<ol style="margin-bottom: 20px;">
+			@foreach($car['installed'] as $key => $value)
+			<li>{{ $value }}</li>
+			@endforeach
+		</ol>
+
+		<span><b>Цена автомобиля:</b> {{ $car['complect_price'] }}</span><br>
+
+		<span><b>Доп. оборудование:</b></span><br>
+		<ol style="margin-bottom: 20px;">
+			@foreach($car['dops'] as $key => $value)
+			<li>{{ $value }}</li>
+			@endforeach
+		</ol>
+
+		<span><b>Цена доп. оборудования:</b> {{ $car['car_dopprice'] }}</span><br>
+
+		<span><b>Опции:</b></span><br>
+		{!! $car['options'] !!}
+		<br>
+
+		<span><b>Итоговая цена автомобиля:</b> {{ $car['fullprice'] }}</span>
+	</div>
+	<hr>
 </div>
+@endforeach
 
-<table>
-	<tr>
-		<td>VIN номер</td>
-		<td>{{ $item['car_vin'] }}</td>
-	</tr>
-
-	<tr>
-		<td>Комплектация</td>
-		<td>{{ $item['complect_name'] }}</td>
-	</tr>
-
-	<tr>
-		<td>Исполнение</td>
-		<td>{{ $item['complect_code'] }}</td>
-	</tr>
-
-	<tr>
-		<td>Цена комплектации</td>
-		<td>{{ $item['complect_price'] }}</td>
-	</tr>
-
-	<tr>
-		<td>Цвет</td>
-		<td>{{ $item['color_name'] }}</td>
-	</tr>
-
-	<tr>
-		<td>Образец цвета</td>
-		<td style="background-color: {{ $item['color_code'] }}"></td>
-	</tr>
-
-	<tr>
-		<td>Код цвета</td>
-		<td>{{ $item['color_rn_code'] }}</td>
-	</tr>
-
-	<tr>
-		<td>Информация о машине</td>
-		<td>
-			@foreach($item['car_info'] as $key => $value)
-			<div>{{ $value }}</div>
-			@endforeach
-		</td>
-	</tr>
-
-	<tr>
-		<td>Установленное оборудование</td>
-		<td>
-			@foreach($item['installed'] as $key => $value)
-			<div>{{ $value }}</div>
-			@endforeach
-		</td>
-	</tr>
-
-	<tr>
-		<td>Доп. оборудование</td>
-		<td>
-			@foreach($item['dops'] as $key => $value)
-			<div>{{ $value }}</div>
-			@endforeach
-		</td>
-	</tr>
-
-	<tr>
-		<td>Цена доп. оборудования</td>
-		<td>{{ $item['car_dopprice'] }}</td>
-	</tr>
-
-	<tr>
-		<td>Опции</td>
-		<td>{!! $item['options'] !!}</td>
-	</tr>
-
-	<tr>
-		<td>Итоговая цена автомобиля</td>
-		<td>{{ $item['fullprice'] }}</td>
-	</tr>
-</table>
-
-<style>
-	table {
-		background-color: #eee;
-	}
-	td {
-		background-color: #fff;
-	}
-</style>
+</body>
+</html>

@@ -47,7 +47,7 @@ function getComplectsCfg(elem,pastle=0)
 	$.ajax({
 		type: "POST",
 		url: "/getcomplects",
-		data: {'model_id':model_id},
+		data: {'id':model_id},
 		headers: {
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
