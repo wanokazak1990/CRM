@@ -471,10 +471,16 @@ $(document).on('click', '#worksheetTabs a[href="#worksheet-auto"]', function() {
 		    		$('#wl_car_installed').html(data.installed);
 		    		$('#wl_car_complect_price').html(data.complect_price);
 		    		$('#wl_car_options').html(data.options);
-		    		$('#wl_car_fullprice').html(data.fullprice);
+		    		$('#wl_car_fullprice').html(data.fullprice + ' ['+ data.car_sale +'] ['+data.dop_sale+']');
 
 		    		$('#wl_car_opencard').addClass('opencar');
 		    		$('#wl_car_opencard').attr('car-id', data.car_id);
+
+		    		$('#wl_car_company').html('');
+		    		for (i in data.company)
+		    		{
+			    		$('#wl_car_company').append('<li>'+data.company[i].company.name+'</li>');
+		    		}
 		    	}
 	    	},
 	    	error:function(xhr, ajaxOptions, thrownError){
