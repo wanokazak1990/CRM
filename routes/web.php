@@ -45,6 +45,10 @@ Route::post('/getmodel',		'AjaxController@getmodel')			->name('getmodel');
 
 Route::post('/complect/option', 'AjaxController@getcomplectoption')	->name('getcomplectoption');
 
+Route::post('/get/car/packs',	'AjaxController@getPacksByCarId');
+
+Route::post('/get/car/dops',	'AjaxController@getDopsByCarId');
+
 
 /*РОУТЫ ДЛЯ РЕДАКТИРОВАНИЯ БРЕНДОВ*/
 
