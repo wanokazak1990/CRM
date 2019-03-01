@@ -41,8 +41,6 @@ Class autostock_helper {
                 $array['monitor'] =             $item->getStageDelivery()['monitor'];
                 //кнопка карт. машины
                 $array['button_carlist'] = '<a href="#" class="opencar" car-id="'.$item->id.'"><i class="fas fa-car"></i></a>';
-                //кнопка раблиста
-                $array['button_worklist'] =     ($item->getWorklistId())?'<a href="#" class="car-worklist" worklist-id="'.$item->getWorklistId().'"><i class="fas fa-clipboard-list"></i></a>':''; 
                 //Маркер логиста
                 $array['logist_marker'] =       @$item->getLogistMarker->name;
                 //Автор заказа
@@ -96,8 +94,8 @@ Class autostock_helper {
                 $array['complect_code']    =    @$item->complect->code;
                 $array['complect'] =            @$item->complect->name.' '.@$item->complect->motor->getEasyName();
                 $array['pack_code'] =           $item->stringPackName();
-                $array['pack'] =                '<button type="button">PACKS</button>';
-                $array['dops'] =                '<button type="button">DOPS</button>';
+                $array['pack'] =                '<button class="stock-button" type="button" mind="pack" car-id="'.$item->id.'">PACKS</button>';
+                $array['dops'] =                '<button class="stock-button" type="button" mind="dop" car-id="'.$item->id.'">DOPS</button>';
                 $array['color_code'] =          $item->color->rn_code;
                 $array['color_name'] =          $item->color->name;
                 $array['vin'] =                 $item->vin;
@@ -109,6 +107,12 @@ Class autostock_helper {
                 $array['price_dops_2'] =        number_format($item->dopprice,0,'',' ').' руб.';
                 $array['price_discount'] =      'СКИДКА';
                 $array['price_sell'] =          'Цена продажи';
+                $array['dop_sale'] ='';
+                $array['dop_price'] ='';
+                $array['total'] = '';
+
+                //кнопка раблиста
+                $array['button_worklist'] =     ($item->getWorklistId())?'<a href="#" class="car-worklist" worklist-id="'.$item->getWorklistId().'"><i class="fas fa-clipboard-list"></i></a>':''; 
 
                 return $array;
         }
