@@ -281,8 +281,8 @@
 							!!}
 							
 							<div class="col-3 d-flex align-items-center">
-								<a href="#" class="col-6" id="wl_contacts_delete"><i class="fas fa-times text-danger"></i></a>
-								<a href="#" class="col-6" id="wl_contacts_add"><i class="fas fa-plus-circle text-primary"></i></a>
+								<a href="javascript://" class="col-6" id="wl_contacts_delete"><i class="fas fa-times text-danger"></i></a>
+								<a href="javascript://" class="col-6" id="wl_contacts_add"><i class="fas fa-plus-circle text-primary"></i></a>
 							</div>
 						</div>
 					</div>
@@ -365,7 +365,7 @@
 							Контент 
 							-->
 							<div id="wsparam1" class="py-3 collapse ws-param">
-								<a href="#" class="text-primary" data-toggle="modal" data-target="#addTestdriveModal"><i class="fas fa-plus-circle"></i> Добавить</a>
+								<a href="javascript://" class="text-primary" data-toggle="modal" data-target="#addTestdriveModal"><i class="fas fa-plus-circle"></i> Добавить</a>
 								<div class="input-group" id="testdriveCars">
 								</div>								
 							</div>
@@ -384,13 +384,13 @@
 							Контент 
 							-->
 							<div class="py-3 collapse ws-param" id="wsparam2">
-								<a href="#" class="text-primary" id="addSelectedCar"><i class="fas fa-plus-circle"></i> Добавить</a>
+								<a href="javascript://" class="text-primary" id="addSelectedCar"><i class="fas fa-plus-circle"></i> Добавить</a>
 
 								<div class="input-group" id="carsByNeeds">
 									<div class="col-3 border">
 										<div class="d-flex">
 											<label class="flex-grow-1">Выберите модель</label>
-											<a href="#" class="removeSelectedCar"><i class="fas fa-trash-alt text-danger"></i></a>
+											<a href="javascript://" class="removeSelectedCar"><i class="fas fa-trash-alt text-danger"></i></a>
 										</div>
 										{!! Form::select('wl_need_model',App\oa_model::pluck('name','id'),'', ['class' => 'wl_need_model form-control'])!!}
 										{!! Form::select('wl_need_transmission',App\type_transmission::pluck('name','id'),'', ['class' => 'wl_need_transmission form-control'])!!}
@@ -444,65 +444,99 @@
 							Контент 
 							-->
 							<div id="wsparam3" class="py-3 collapse ws-param">
-								<div class="input-group">
-									<div class="col-4"><label>Модель</label></div>
-									<div class="flex-grow-1"><label>Комплектация</label></div>
-									<a href="#"><i class="fas fa-times"></i></a>
+								<div class="input-group mb-3">
+									<div class="col-12 d-flex">
+										<span class="flex-grow-1 font-weight-bold">
+											Виртуальный автомобиль (<span id="wl_cfg_count">0</span>):
+										</span>
+										<a href="javascript://" id="wl_cfg_add"><i class="fas fa-plus-circle"></i></a>
+									</div>
 								</div>
-								<div class="input-group">
-									{!! Form::select('cfg_model',App\oa_model::pluck('name','id'),'', ['class' => 'col-4 form-control'])!!}
-									{!! Form::select('cfg_complect',array(),'', ['class' => 'col-8 form-control'])!!}
-								</div>
-								<hr>
-								<div class="input-group">
-									<!-- Левый блок -->
-									<div class="col-6">
-										<img id="cfg-img" src='' style="width: 100%;height: auto;">
-										{!! Form::hidden('cfg_color_id','',['id'=>'cfg_color_id'])!!}
-										<div class="input-group d-flex justify-content-center" id="cfg-color">
-										</div>
-										<hr>
-										<div class="input-group no-gutters">
-											<div class="col-12 font-weight-bold" id="cfg-complect-code"></div>
-											<div class="text-secondary">
-												<div id="cfg-motor-type"></div>
-												<div id="cfg-motor-size"></div>
-												<div id="cfg-motor-transmission"></div>
-												<div id="cfg-motor-wheel"></div>
+
+								<div id="wl_cfg_car_blocks">
+									<div class="wl_cfg_cars border-bottom border-dark mb-3">
+
+										<input type="hidden" id="price" base="0" pack="0" dops="0">
+
+										<div class="input-group">
+											<div class="col-4"><label>Модель</label></div>
+											<div class="col-8 d-flex">
+												<div class="flex-grow-1"><label>Комплектация</label></div>
+												<a href="javascript://" class="wl_cfg_del"><i class="fas fa-times"></i></a>
 											</div>
 										</div>
 
-									</div>
-									<!-- Правый блок -->
-									<div class="col-6">
-										<div class="d-flex align-items-center justify-content-center">
-											<div align="center" class="h5">
-												<div id="cfg-model"></div>
-												<div id="cfg-full-price"></div>
-												Прогноз 02.01.2019
+										<div class="input-group mb-2">
+											<div class="col-12">
+												<div class="input-group">
+													{!! Form::select('cfg_model',App\oa_model::pluck('name','id'),'', ['class' => 'col-4 form-control cfg_model'])!!}
+													{!! Form::select('cfg_complect',array(),'', ['class' => 'col-8 form-control cfg_complect'])!!}
+												</div>
 											</div>
 										</div>
 
-										<div class="d-flex border-bottom">
-											<label class="flex-grow-1 font-weight-bold" id="cfg-complect-name"></label>
-											<a href="#" id="cfg-more">Подробнее</a>
+										<div class="input-group mb-3 display" style="display: none;">
+											<div class="col-4 wl_cfg_checkbox">
+												<span><input type="checkbox"> Выбрать</span>
+											</div>
+											<div class="col-8 wl_cfg_res">
+												Ресурсы автосклада: 8 автомобилей, <a href="javascript://">показать</a>?
+											</div>
 										</div>
 
-										<div id="cfg-complect-option"></div>
+										<div class="input-group wl_cfg_carinfo display" style="display: none;">
+											<!-- Левый блок -->
+											<div class="col-6">
+												<img id="cfg-img" src='' style="width: 100%;height: auto;">
+												{!! Form::hidden('cfg_color_id','',['id'=>'cfg_color_id'])!!}
+												<div class="input-group d-flex justify-content-center clear-html" id="cfg-color">
+												</div>
+												<hr>
+												<div class="input-group no-gutters">
+													<div class="col-12 font-weight-bold clear-html" id="cfg-complect-code"></div>
+													<div class="text-secondary">
+														<div id="cfg-motor-type" class="clear-html"></div>
+														<div id="cfg-motor-size" class="clear-html"></div>
+														<div id="cfg-motor-transmission" class="clear-html"></div>
+														<div id="cfg-motor-wheel" class="clear-html"></div>
+													</div>
+												</div>
 
-										<div class="h5 text-right" id="cfg-base-price"></div>
+											</div>
+											<!-- Правый блок -->
+											<div class="col-6">
+												<div class="d-flex align-items-center justify-content-center">
+													<div align="center" class="h5">
+														<div id="cfg-model" class="clear-html"></div>
+														<div id="cfg-full-price" class="clear-html"></div>
+														Прогноз 02.01.2019
+													</div>
+												</div>
 
-										<div class="border-bottom font-weight-bold">
-											Выберите опционное оборудование
+												<div class="d-flex border-bottom">
+													<label class="flex-grow-1 font-weight-bold clear-html" id="cfg-complect-name"></label>
+													<a href="javascript://" class="cfg-more">Подробнее</a>
+												</div>
+
+												<div id="cfg-complect-option" class="clear-html" style="font-size: 12px; background-color: #eee;"></div>
+
+												<div class="h5 text-right clear-html" id="cfg-base-price"></div>
+
+												<div class="border-bottom font-weight-bold">
+													Выберите опционное оборудование
+												</div>
+												<div id="cfg-pack-block" class="clear-html"></div>
+											</div>
 										</div>
-										<div id="cfg-pack-block"></div>
-										
-										
 									</div>
 								</div>
+
+								
+
 								<div class="input-group">
-									<button type="button" class="col-3 offset-6 btn btn-outline-success">Сравнить еще один</button>
-									<button type="button" class="col-3 btn btn-outline-primary">Создать заявку</button>
+									<div class="col-3 offset-9">
+										<button type="button" class="btn btn-primary btn-block">Создать заявку</button>
+									</div>
 								</div>
 							</div>
 							<!-- 
@@ -548,7 +582,7 @@
 
 								<div class="input-group">
 									<label class="col-9">Предложенное оборудование:</label>
-									<a href="#" id="wl_dops_install" class="col-3 text-primary">Установить</a>
+									<a href="javascript://" id="wl_dops_install" class="col-3 text-primary">Установить</a>
 								</div>
 
 								<div class="input-group" id="wl_dops_all">
@@ -614,12 +648,12 @@
 									<tr>
 										<td>20.01.2017 16:31</td>
 										<td>X7LHSRGAN59685351</td>
-										<td><a href="#">Открыть</a></td>
+										<td><a href="javascript://">Открыть</a></td>
 									</tr>
 									<tr>
 										<td>18.01.2017 12:45</td>
 										<td>X7LHSRGAN59685587, X7L5SRAT6335…</td>
-										<td><a href="#">Открыть</a></td>
+										<td><a href="javascript://">Открыть</a></td>
 									</tr>
 								</table>
 								
@@ -647,7 +681,7 @@
 							<div class="input-group">
 								<div class="col-12 d-flex">
 									<span class="flex-grow-1 font-weight-bold">Комментарии</span>
-									<a href="#"><i class="fa fa-print"></i></a>
+									<a href="javascript://"><i class="fa fa-print"></i></a>
 								</div>
 								<textarea id="wl_comments_list" class="form-control col-12" rows="20" style="resize: none; overflow-y: scroll;" readonly></textarea>
 							</div>
@@ -786,7 +820,7 @@
 											<span><input type="checkbox" checked></span>
 										</div>
 										<div class="col-1 d-flex align-items-center">
-											<a href="#" class="text-danger"><i class="fas fa-times"></i></a>
+											<a href="javascript://" class="text-danger"><i class="fas fa-times"></i></a>
 										</div>
 									</div>
 
@@ -798,10 +832,10 @@
 											<span><input type="checkbox"></span>
 										</div>
 										<div class="col-1 d-flex align-items-center">
-											<a href="#" class="text-danger"><i class="fas fa-times"></i></a>
+											<a href="javascript://" class="text-danger"><i class="fas fa-times"></i></a>
 										</div>
 										<div class="col-1 d-flex align-items-center">
-											<a href="#" class="text-success"><i class="fas fa-plus-circle"></i></a>
+											<a href="javascript://" class="text-success"><i class="fas fa-plus-circle"></i></a>
 										</div>
 									</div>
 								</div>
@@ -890,7 +924,7 @@
 								<div class="input-group">
 									<div class="col-12 d-flex">
 										<span class="flex-grow-1 font-weight-bold">Выявленные потребности</span>
-										<a href="#"><i class="fas fa-comment-dots"></i></a>
+										<a href="javascript://"><i class="fas fa-comment-dots"></i></a>
 									</div>
 								</div>
 
@@ -914,7 +948,7 @@
 								<div class="input-group">
 									<div class="col-12 d-flex">
 										<span class="flex-grow-1 font-weight-bold">Работа с заявками (2)</span>
-										<a href="#"><i class="fas fa-plus-circle"></i></a>
+										<a href="javascript://"><i class="fas fa-plus-circle"></i></a>
 									</div>
 								</div>
 
@@ -1056,7 +1090,7 @@
 									<span class="col-3">Стоимость</span>
 									<div class="col-3 d-flex">
 										<span class="flex-grow-1">Возмещение</span>
-										<a href="#"><i class="fas fa-comment-dots"></i></a>
+										<a href="javascript://"><i class="fas fa-comment-dots"></i></a>
 									</div>
 								</div>
 
@@ -1066,7 +1100,7 @@
 											<span class="flex-grow-1">
 												<input type="checkbox"> Разумное КАСКО за 30 900 р.
 											</span>
-											<a href="#">
+											<a href="javascript://">
 												<i class="fas fa-question-circle"></i>
 											</a>
 										</div>
@@ -1079,7 +1113,7 @@
 											<span class="flex-grow-1 text-success">
 												<input type="checkbox" checked> Гарантия Renault Extra (5 лет)
 											</span>
-											<a href="#">
+											<a href="javascript://">
 												<i class="fas fa-question-circle"></i>
 											</a>
 										</div>
@@ -1092,7 +1126,7 @@
 											<span class="flex-grow-1 text-success">
 												<input type="checkbox" checked> ОСАГО
 											</span>
-											<a href="#">
+											<a href="javascript://">
 												<i class="fas fa-question-circle"></i>
 											</a>
 										</div>
@@ -1104,7 +1138,7 @@
 								<div class="input-group">
 									<div class="col-12 d-flex">
 										<span class="flex-grow-1 font-weight-bold">Работа с продуктами (2)</span>
-										<a href="#"><i class="fas fa-plus-circle"></i></a>
+										<a href="javascript://"><i class="fas fa-plus-circle"></i></a>
 									</div>
 								</div>
 
@@ -1192,14 +1226,14 @@
 								</div>
 
 								<div class="input-group mb-3">
-									<a href="#" class="col-3">Анкета</a>
+									<a href="javascript://" class="col-3">Анкета</a>
 									<div class="col-6">
 										Тут типа результат анкеты в звездочках от 1 до 10
 									</div>
 								</div>
 
 								<div class="input-group">
-									<a href="#" class="col-3">Скрипт VOC</a>
+									<a href="javascript://" class="col-3">Скрипт VOC</a>
 									<span class="col-3">Дата опроса</span>
 									<span class="col-3">Решение РОП</span>
 								</div>
@@ -1215,7 +1249,7 @@
 										<option>1</option>
 										<option>2</option>
 									</select>
-									<a href="#" class="col-3">Подать апелляцию</a>
+									<a href="javascript://" class="col-3">Подать апелляцию</a>
 								</div>
 
 							</div>

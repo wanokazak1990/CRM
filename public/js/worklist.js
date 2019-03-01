@@ -495,7 +495,8 @@ $(document).on('click', '#worksheetTabs a[href="#worksheet-auto"]', function() {
 
 
 /**
- * Кнопка "Снять резерв" во вкладке Автомобиль в Рабочем листе
+ * ВКЛАДКА "АВТОМОБИЛЬ"
+ * Кнопка "Снять резерв"
  */
 $(document).on('click', '#wl_car_remove', function() {
 	var wl_id = $('span[name="wl_id"]').html();
@@ -519,7 +520,6 @@ $(document).on('click', '#wl_car_remove', function() {
 		        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		    	},
 		    	success: function(data){
-
 		    		if (data == 'done') {
 		    			$("#wl_car_empty").css('display', 'block');
 		    			$("#wl_car").css('display', 'none');
@@ -528,11 +528,6 @@ $(document).on('click', '#wl_car_remove', function() {
 		    			$("#wl_car_empty").css('display', 'none');
 		    			$("#wl_car").css('display', 'block');
 		    		}
-            /*
-		    		$('#wl_dops_dopprice').val(data.dopprice);		    	
-		    		$('#wl_dops_list').html(data.dops);		    	
-		    		$('#wl_dops_all').html(data.all_dops);		    	
-            */
 		    	},
 		    	error:function(xhr, ajaxOptions, thrownError){
 		    		log('Не удалось снять резерв');
@@ -630,7 +625,10 @@ $(document).on('click', '#wl_dops_install', function() {
 	
 });
 
-
+/**
+ * Дополнительное оборудование
+ * Функция получения сохраненной информации по доп. оборудованию 
+ */
 function wlGetDops(wl_id)
 {
 	var formData = new FormData();
@@ -853,24 +851,40 @@ $(document).on('click', 'a[href="#wsparam5"]', function() {
 	let dopsale = 0;
 	let doprepartion = 0;
 
-	$(document).on('click','#loyalty_program',function(){
-		wl_id = $('span[name=wl_id]').html() //беру ид раблиста
-		let url = '/worklist/loyalty/program'
-		let parameters = {'wl_id':wl_id}
-		$.when(
-			ajax(parameters,url)
-				.then(function(data){
-					sale = 0;
-					repartion = 0;
-					dopsale = 0;
-					doprepartion = 0;
-					loyalty.html('')
-					modal.find(".pv-action").remove()
-					writeProgram(JSON.parse(data))
-					priceVidget()
-				})
-		)
+	$(document).on('click','a[href="#wsparam6"]',function(){
+		if (!$(this).hasClass('collapsed'))
+		{
+			// Блок открыт
+			wl_id = $('span[name=wl_id]').html(); //беру ид раблиста
+			if (wl_id != '' && wl_id != '-')
+			{
+				let url = '/worklist/loyalty/program'
+				let parameters = {'wl_id':wl_id}
+				$.when(
+					ajax(parameters,url)
+						.then(function(data){
+							sale = 0;
+							repartion = 0;
+							dopsale = 0;
+							doprepartion = 0;
+							loyalty.html('')
+							modal.find(".pv-action").remove()
+							writeProgram(JSON.parse(data))
+							priceVidget()
+						})
+				)
+			}
+		}
+		else
+		{
+			// Блок закрыт
+		}
 	});
+
+	$(document).on('click','#open-pv-vidget',function(){
+		priceVidget();
+	});
+
 	function priceVidget()
 	{
 		url = '/worklist/car/price'

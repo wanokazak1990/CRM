@@ -40,9 +40,9 @@ Class autostock_helper {
                 //Монитор состояния
                 $array['monitor'] =             $item->getStageDelivery()['monitor'];
                 //кнопка карт. машины
-                $array['button_carlist'] = '<a href="#" class="opencar" car-id="'.$item->id.'"><i class="fas fa-car"></i></a>';
+                $array['button_carlist'] = '<a href="javascript://" class="opencar" car-id="'.$item->id.'"><i class="fas fa-car"></i></a>';
                 //кнопка раблиста
-                $array['button_worklist'] =     ($item->getWorklistId())?'<a href="#" class="car-worklist" worklist-id="'.$item->getWorklistId().'"><i class="fas fa-clipboard-list"></i></a>':''; 
+                $array['button_worklist'] =     ($item->getWorklistId())?'<a href="javascript://" class="car-worklist" worklist-id="'.$item->getWorklistId().'"><i class="fas fa-clipboard-list"></i></a>':''; 
                 //Маркер логиста
                 $array['logist_marker'] =       @$item->getLogistMarker->name;
                 //Автор заказа

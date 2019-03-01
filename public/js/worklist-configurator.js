@@ -1,13 +1,15 @@
-var cfg_base = 0;//база
-var cfg_pack = 0;//пакеты
-var cfg_dops = 0;//допы
-var cfg_total = 0;
+// var cfg_base = 0;//база
+// var cfg_pack = 0;//пакеты
+// var cfg_dops = 0;//допы
+// var cfg_total = 0;
 
 
-function totalPriceCfg()//подсчёт полной цены
+function totalPriceCfg(obj)//подсчёт полной цены
 {
-	cfg_total = parseInt(cfg_base)+parseInt(cfg_pack)+parseInt(cfg_dops);
-	$("#cfg-full-price").html(cfg_number_format(cfg_total,0,'',' '));
+	var price = obj.closest('.wl_cfg_cars').find("#price");
+	//cfg_total = parseInt(cfg_base)+parseInt(cfg_pack)+parseInt(cfg_dops);
+	cfg_total = parseInt(price.attr('base'))+parseInt(price.attr('pack'))+parseInt(price.attr('dops'));
+	obj.closest('.wl_cfg_cars').find("#cfg-full-price").html(cfg_number_format(cfg_total,0,'',' '));
 }
 
 function cfg_number_format(number,decimals,dec_point,thousands_sep)
@@ -53,7 +55,8 @@ function getComplectsCfg(elem,pastle=0)
 	    },
 		success: function(param){
 			var objs = JSON.parse(param);
-			if(pastle==0) $('[name="cfg_complect"]').html('');
+			//if(pastle==0) $('[name="cfg_complect"]').html('');
+			if(pastle==0) elem.closest('.wl_cfg_cars').find('.cfg_complect').html('');
 			else pastle.html("");
 			var str = '';
 			str += '<option selected disabled>Укажите параметр</option>';
@@ -62,7 +65,8 @@ function getComplectsCfg(elem,pastle=0)
 					str += obj.fullname;
 				str += '</option>';
 			});
-			if(pastle==0) $('[name="cfg_complect"]').html(str);
+			//if(pastle==0) $('[name="cfg_complect"]').html(str);
+			if(pastle==0) elem.closest('.wl_cfg_cars').find('.cfg_complect').html(str);
 			else pastle.html(str);
 		},
 		error: function(param)
@@ -72,11 +76,11 @@ function getComplectsCfg(elem,pastle=0)
 	})
 }
 
-function modelObjCfg(val)
+function modelObjCfg(obj)
 {
 	var result = '';
 	var formData = new FormData();
-	formData.append('id',val);
+	formData.append('id',obj.val());
 	$.ajax({
 		async: false,
         type: "POST",
@@ -90,8 +94,8 @@ function modelObjCfg(val)
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 		success: function(param){
-			$("#cfg-model").html(param.name);
-			$("#cfg-img").attr('src','/storage/images/'+param.link+'/'+param.alpha);
+			obj.closest('.wl_cfg_cars').find("#cfg-model").html(param.name);
+			obj.closest('.wl_cfg_cars').find("#cfg-img").attr('src','/storage/images/'+param.link+'/'+param.alpha);
 			result = param;
 		},
 		error: function(param)
@@ -102,10 +106,10 @@ function modelObjCfg(val)
 	return result;
 }
 
-function getColorCfg(id)//вернёт плитку цветов с инпутом 
+function getColorCfg(elem)//вернёт плитку цветов с инпутом 
 {
 	var formData = new FormData();
-	formData.append('complect_id',id)
+	formData.append('complect_id',elem.val());
     $.ajax({
         type: "POST",
         url: '/getcolor',
@@ -118,7 +122,7 @@ function getColorCfg(id)//вернёт плитку цветов с инпуто
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
         success: function(param)
-        {	var mother = $("#cfg-color");
+        {	var mother = elem.closest('.wl_cfg_cars').find("#cfg-color");
         	var str = '';
         	mother.html("");
         	param.forEach(function(obj,i){
@@ -177,23 +181,28 @@ function getPacksCfg(elem)
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 		success: function(param){
-			$('#cfg-pack-block').html('');
+			elem.closest('.wl_cfg_cars').find('#cfg-pack-block').html('');
 			var str = '';
 			param.forEach(function(obj,i){
 				str += getPackStringCfg(obj);
 			});
-			$('#cfg-pack-block').html(str);
+			elem.closest('.wl_cfg_cars').find('#cfg-pack-block').html(str);
 			/*изменение подсветки стилизованых чекбоксов*/
 			$(document).on('click','#cfg-pack-block input',function(){
-				if($(this).prop('checked')){
+				if($(this).prop('checked')) {
 					$(this).closest('label').addClass('green-check');
-					cfg_pack += parseInt($(this).attr('price'));
-					totalPriceCfg();
-				}
-				else{
+					//cfg_pack += parseInt($(this).attr('price'));
+					price = elem.closest('.wl_cfg_cars').find('#price');
+					sum = parseInt(price.attr('pack')) + parseInt($(this).attr('price'));
+					price.attr('pack', sum); 
+					totalPriceCfg(elem);
+				} else {
 					$(this).closest('label').removeClass('green-check');
-					cfg_pack -= parseInt($(this).attr('price'));
-					totalPriceCfg();
+					//cfg_pack -= parseInt($(this).attr('price'));
+					price = elem.closest('.wl_cfg_cars').find('#price');
+					diff = parseInt(price.attr('pack')) - parseInt($(this).attr('price'));
+					price.attr('pack', diff); 
+					totalPriceCfg(elem);
 				}
 			})
 
@@ -205,7 +214,7 @@ function getPacksCfg(elem)
 	})
 }
 
-function getMotorCfg(id)
+function getMotorCfg(obj, id)
 {
 	var formData = new FormData();
 	formData.append('complect_id',id);
@@ -221,10 +230,10 @@ function getMotorCfg(id)
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 	    success: function(data){
-	    	$("#cfg-motor-type").html('Двигатель '+data[0].type.name+' '+data[0].valve+'-клапанный');
-	    	$("#cfg-motor-size").html('Рабочий объем '+data[0].size+'л. ('+data[0].power+'л.с.)');
-	    	$("#cfg-motor-transmission").html('КПП '+data[0].transmission.name);
-	    	$("#cfg-motor-wheel").html('Привод '+data[0].wheel.name);
+	    	obj.closest('.wl_cfg_cars').find("#cfg-motor-type").html('Двигатель '+data[0].type.name+' '+data[0].valve+'-клапанный');
+	    	obj.closest('.wl_cfg_cars').find("#cfg-motor-size").html('Рабочий объем '+data[0].size+'л. ('+data[0].power+'л.с.)');
+	    	obj.closest('.wl_cfg_cars').find("#cfg-motor-transmission").html('КПП '+data[0].transmission.name);
+	    	obj.closest('.wl_cfg_cars').find("#cfg-motor-wheel").html('Привод '+data[0].wheel.name);
 	    },
 	    error: function(){
 	    	log('Не смог получить стоимость комплектации id = '+id);
@@ -232,11 +241,11 @@ function getMotorCfg(id)
 	})
 }
 
-function complectPriceCfg(id)
+function complectPriceCfg(obj)
 {
 	var result = '';
 	var formData = new FormData();
-	formData.append('id',id);
+	formData.append('id',obj.val());
 	$.ajax({
 		async: false,
         type: "POST",
@@ -250,10 +259,10 @@ function complectPriceCfg(id)
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 		success: function(param){
-			getMotorCfg(param.id);
-			$("#cfg-complect-code").html('Исполнение '+param.code);
-			$("#cfg-complect-name").html('Комплектация '+param.name);
-			$("#cfg-base-price").html(cfg_number_format(param.price,0,'',' '));
+			getMotorCfg(obj, param.id);
+			obj.closest('.wl_cfg_cars').find("#cfg-complect-code").html('Исполнение '+param.code);
+			obj.closest('.wl_cfg_cars').find("#cfg-complect-name").html('Комплектация '+param.name);
+			obj.closest('.wl_cfg_cars').find("#cfg-base-price").html(cfg_number_format(param.price,0,'',' '));
 			result = param.price;
 		},
 		error: function(param)
@@ -268,20 +277,21 @@ function complectPriceCfg(id)
 
 //клик по цветам
 $(document).on('click','#cfg-color button',function(){
-	$('#cfg-img').css('background',$(this).attr('color-code'));
-	$('#cfg_color_id').val($(this).attr('color-id'));
-	$("#cfg-color button").each(function(){$(this).removeClass('active')})
+	$(this).closest('.wl_cfg_cars').find('#cfg-img').css('background',$(this).attr('color-code'));
+	$(this).closest('.wl_cfg_cars').find('#cfg_color_id').val($(this).attr('color-id'));
+	$(this).closest('.wl_cfg_cars').find("#cfg-color button").each(function(){$(this).removeClass('active')})
 	$(this).addClass('active');
 })
 
 
 /*клик по кнопке подробнее*/
-$(document).on('click','#cfg-more',function(){
-	if(!$(this).attr('action')){
-		var current_complect = $(this).closest('form').find('[name="cfg_complect"]').val();
+$(document).on('click','.cfg-more',function(){
+	var obj = $(this);
+	if(!obj.attr('action')){
+		var current_complect = obj.closest('.wl_cfg_cars').find('.cfg_complect').val();
 		var formData = new FormData();
-		$(this).attr('action','1');
-		$(this).html('Закрыть');
+		obj.attr('action','1');
+		obj.html('Закрыть');
 		formData.append('complect_id',current_complect);
 		$.ajax({
 			type: "POST",
@@ -295,9 +305,9 @@ $(document).on('click','#cfg-more',function(){
 		        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		    },
 			success: function(param){
-				$("#cfg-complect-option").html("");
+				obj.closest('.wl_cfg_cars').find("#cfg-complect-option").html("");
 				param.forEach(function(item,i){
-					$("#cfg-complect-option").append("<div>"+item.name+"</div>")
+					obj.closest('.wl_cfg_cars').find("#cfg-complect-option").append("<div>"+item.name+"</div>")
 				})
 			},
 			error: function(){
@@ -306,28 +316,68 @@ $(document).on('click','#cfg-more',function(){
 		})
 	}
 	else{
-		$(this).html('Подробнее');
-		$("#cfg-complect-option").html("");
-		$(this).removeAttr('action');
+		obj.html('Подробнее');
+		obj.closest('.wl_cfg_cars').find("#cfg-complect-option").html("");
+		obj.removeAttr('action');
 	}
 })
 
 
 /*получаем комплектации от модели*/
-$('select[name="cfg_model"]').change(function(){
+$(document).on('change', '.cfg_model', function(){
 	getComplectsCfg($(this));
-	modelObjCfg($(this).val());
+	modelObjCfg($(this));
 });
 
 /*получаем пакеты цвета и цену стартовую*/
-$(document).on('change','select[name="cfg_complect"]',function(){
-	cfg_pack = 0;
-	cfg_dops = 0;
-	$("#cfg-pack-block input").each(function(){
+$(document).on('change','.cfg_complect',function(){
+	$(this).closest('.wl_cfg_cars').find("#price").attr('pack', 0);
+	$(this).closest('.wl_cfg_cars').find("#price").attr('dops', 0);
+
+	$(this).closest('.wl_cfg_cars').find("#cfg-pack-block input").each(function(){
 		$(this).prop('checked',false);
-	})
-	cfg_base = complectPriceCfg($(this).val());
-	totalPriceCfg();
+	});
+	$(this).closest('.wl_cfg_cars').find('#price').attr('base', complectPriceCfg($(this)));
+	totalPriceCfg($(this));
 	getPacksCfg($(this));
-	getColorCfg($(this).val());			
+	getColorCfg($(this));
+
+	$(this).closest('.wl_cfg_cars').find('.display').removeAttr('style');
+
+	$('#wl_cfg_count').html($('.wl_cfg_cars').length);
+});
+
+// Добавление нового блока
+$(document).on('click', '#wl_cfg_add', function() {
+	clone = $('#wl_cfg_car_blocks').find('.wl_cfg_cars').first().clone();
+	clone.find('.display').css('display', 'none');
+	clone.find('#cfg-img').attr('src', '');
+	clone.find('#cfg-img').css('background-color', '');
+	clone.find('.clear-html').html('');
+	clone.find('.cfg_model option:first').prop('selected', true);
+	var option = clone.find('.cfg_complect option:first').clone();
+	clone.find('.cfg_complect option').remove();
+	clone.find('.cfg_complect').append(option);
+	clone.appendTo('#wl_cfg_car_blocks');
+});
+
+// Удаление блока
+$(document).on('click', '.wl_cfg_del', function() {
+	if ($('.wl_cfg_cars').length > 1)
+	{
+		$(this).closest('.wl_cfg_cars').remove();
+		$('#wl_cfg_count').html($('.wl_cfg_cars').length);
+	}
+	else
+	{
+		$(this).closest('.wl_cfg_cars').find('.display').css('display', 'none');
+		$(this).closest('.wl_cfg_cars').find('#cfg-img').attr('src', '');
+		$(this).closest('.wl_cfg_cars').find('#cfg-img').css('background-color', '');
+		$(this).closest('.wl_cfg_cars').find('.clear-html').html('');
+		$(this).closest('.wl_cfg_cars').find('.cfg_model option:first').prop('selected', true);
+		var option = $(this).closest('.wl_cfg_cars').find('.cfg_complect option:first').clone();
+		$(this).closest('.wl_cfg_cars').find('.cfg_complect option').remove();
+		$(this).closest('.wl_cfg_cars').find('.cfg_complect').append(option);
+		$('#wl_cfg_count').html('0');
+	}
 });

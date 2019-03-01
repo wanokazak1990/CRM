@@ -10,7 +10,7 @@
 				</h5>
 
 				<div class="col-1 d-flex align-items-center justify-content-center">
-					<a href="#" class="text-dark">
+					<a href="javascript://" class="text-dark">
 						<i class="fas fa-save"></i>
 					</a>
 				</div>
@@ -32,7 +32,7 @@
 						{!! Form::label('title', 'Автор заказа: *',['class' => 'col-4']) !!}
 						{!! Form::label('title', 'Дата (чего?): *',['class' => 'col-3']) !!}
 						<div class="col-1 text-right">
-							<a href="#"><i class="fas fa-times"></i></a>
+							<a href="javascript://"><i class="fas fa-times"></i></a>
 						</div>
 					</div>
 
@@ -83,7 +83,7 @@
 						{!! Form::label('title', '№ заказа:',['class' => 'col-2']) !!}
 						{!! Form::label('title', 'Обмен:',['class' => 'col-1']) !!}
 						<div class="col-1 text-right">
-							<a href="#"><i class="far fa-caret-square-right"></i></a>
+							<a href="javascript://"><i class="far fa-caret-square-right"></i></a>
 						</div>
 					</div>
 					<div class="input-group">
@@ -158,7 +158,7 @@
 
 									<div class="d-flex border-bottom" >
 										<label class="flex-grow-1 font-weight-bold" id="car-complect-name"></label>
-										<a href="#" id="car-more">Подробнее</a>
+										<a href="javascript://" id="car-more">Подробнее</a>
 									</div>
 
 									<div id="complect-option"></div>
@@ -190,7 +190,7 @@
 							<div class="input-group p-2 border-bottom">
 								<div class="col-8 d-flex">
 									<label class="flex-grow-1">Дата сборки планируемамя</label>
-									<a href="#" class="text-dark">
+									<a href="javascript://" class="text-dark">
 										<i class="fas fa-plus-circle"></i>
 									</a>
 								</div>
@@ -230,7 +230,7 @@
 							<div class="input-group p-2">
 								<div class="col-8 d-flex">
 									<label class="flex-grow-1">Дата отгрузки</label>
-									<a href="#" class="text-dark">
+									<a href="javascript://" class="text-dark">
 										<i class="fas fa-plus-circle"></i>
 									</a>
 								</div>
@@ -289,7 +289,7 @@
 									<label class="col-4 offset-4">Обеспечение</label>
 									<div class="col-4 d-flex">
 										<label class="flex-grow-1">Отсрочка платежа</label>
-										<a href="#">
+										<a href="javascript://">
 											<i class="fas fa-plus-circle"></i>
 										</a>
 									</div>
@@ -331,7 +331,7 @@
 							<div class="input-group p-2 border-bottom">
 								<div class="col-4 d-flex">
 									<label class="flex-grow-1">Детализация скидки</label>
-									<a href="#">
+									<a href="javascript://">
 										<i class="fas fa-plus-circle"></i>
 									</a>
 								</div>
@@ -405,7 +405,7 @@
 			<div class="modal-footer">
 				<div class="input-group">
 					<div class="col-1 d-flex align-items-center justify-content-center">
-						<a href="#" class="text-dark">
+						<a href="javascript://" class="text-dark">
 							<i class="fas fa-trash-alt"></i>
 						</a>
 					</div>
