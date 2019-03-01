@@ -310,6 +310,8 @@ class WorklistController extends Controller
 
     public function installDops(Request $request)
     {
+        crm_offered_dop::where('worklist_id', $request->wl_id)->delete();
+        
         $car_id = crm_car_selection::where('worklist_id', $request->wl_id)->first()->car_id;
 
         $car = avacar::find($car_id);
