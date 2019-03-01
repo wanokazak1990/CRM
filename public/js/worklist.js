@@ -1006,6 +1006,7 @@ $(document).on('click', 'a[href="#wsparam5"]', function() {
 	function disabledOther(itemElem)
 	{
 		let all = $('.loyalty-block input[type="checkbox"]');
+		log(all)
 		if(itemElem.attr('main')==1)
 			all.each(function(){
 				var current = $(this)
@@ -1020,8 +1021,10 @@ $(document).on('click', 'a[href="#wsparam5"]', function() {
 					current.prop('checked', false)					
 					current.closest('label').removeClass('green-check')
 					current.closest('label').addClass('red-check')
-					modal.find('[data-id="'+current.val()+'"]').remove()
+					modal.find('[data-id="'+current.val()+'"]').remove()	
+					//log('disabled')				
 				}
+				//log(current.closest('.loyalty-block').find('a').attr('title'))
 			})
 	}
 	function enabledOther(itemElem)
@@ -1133,12 +1136,96 @@ $(document).on('click', 'a[href="#wsparam5"]', function() {
 		            str += '</div>'
 		        str += '</div>'
 		        loyalty.append(str)
-
-		        if(data[i][k].selected!=null)
-		        	$('.loyalty-block input[value="'+data[i][k].id+'"]').click()
 		    }
 		}
 
+		for( i in data)
+		{
+			for(k in data[i])
+			{
+				if(data[i][k].selected!=null)
+		        	$('.loyalty-block input[value="'+data[i][k].id+'"]').click()
+			}
+		}
+
+	}
+
+})();
+
+(function(){
+	let modal = $("#car-option-modal")
+	let content = modal.find('.car-option-content')
+	let title = modal.find('.title-option-modal')
+
+	$(document).on('click','.stock-button[mind="pack"]',function(){
+		let mind = $(this).attr('mind')
+		let id = $(this).attr('car-id')
+		let url = '/get/car/packs'
+			
+		let parameters = {'id':id,'mind':mind}
+		$.when(
+			ajax(parameters,url)
+				.then(function(data){					
+					str = ''
+					title.html('Опционное оборудование')
+					data = JSON.parse(data)
+					for(i in data){
+						var pack = data[i].pack
+						str += '<b>Код пакета:</b> '+pack.code+'<br>'
+						for(k in pack.option)
+						{
+							str += (parseInt(k)+parseInt(1)) +') '+pack.option[k].option.name + '<br>'
+						}
+						if(i<(data.length-1))
+							str += '<hr>'
+					}
+					beginFade(modal)
+					if(!str)
+						str = '<div class="text-center">На автомобиле не установлено опционного оборудования</div>'
+					content.html(str)
+				})
+		)
+	})
+
+	$(document).on('click','.stock-button[mind="dop"]',function(){
+		let mind = $(this).attr('mind')
+		let id = $(this).attr('car-id')
+		let url = '/get/car/dops'
+		title.html('Дополнительное оборудование')
+			
+		let parameters = {'id':id,'mind':mind}
+		$.when(
+			ajax(parameters,url)
+				.then(function(data){
+					str = ''
+					data = JSON.parse(data)
+					for(i in data){
+						str += (parseInt(i)+parseInt(1)) +') '+data[i].dop.name+'<br>'
+					}
+					beginFade(modal)
+					if(!str)
+						str = '<div class="text-center">На автомобиле не установлено дополнительного оборудования</div>'
+					content.html(str)
+				})
+		)
+	})
+
+	function beginFade() {
+		if(modal.attr('timer'))
+		{
+			modal.attr('timer',parseFloat(modal.attr('timer'))+0.03)
+		}
+		else 
+		{
+			modal.css('display','block')
+			modal.attr('timer',0)
+		}
+		let interval= parseFloat(modal.attr('timer'))
+		modal.css('opacity',interval)
+		if(interval<1.03)
+			setTimeout(beginFade,1)
+		else
+			modal.removeAttr('timer')
 	}
 
 })();
