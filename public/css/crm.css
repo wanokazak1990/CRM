@@ -272,6 +272,39 @@ b.green{background: #0f0;height: 20px;width: 20px;border-radius: 100%;display: b
 	display: none;
 }
 
+#car-option-modal{
+	width: 30%;
+	position: fixed;
+	left: 35%;
+	top: 200px;
+	display: none;
+	background: #fff;
+	border-radius: 10px;
+	box-shadow: 0 0 15px #333;
+	opacity: 0;
+}
+
+#car-option-modal .close{
+	position: absolute;
+	right: 15px;
+	top: 15px;
+}
+.title-option-modal{
+	background: #077;
+	color: #fff;
+	text-shadow: 0 0 3px #000;
+	padding: 15px;
+	border-radius: 10px 10px 0 0;
+}
+.car-option-content{
+	padding: 15px;
+}
+#car-option-modal .footer-modal{
+	border-radius: 0 0 10px 10px;
+	background: #055;
+	width: 100%;
+	height: 30px;
+}
 
 
 

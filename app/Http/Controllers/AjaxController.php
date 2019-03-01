@@ -15,6 +15,8 @@ use App\oa_complect;
 use App\option_parent;
 use App\oa_brand;
 use App\complect_option;
+use App\ava_pack;
+use App\ava_dop;
 
 class AjaxController extends Controller
 {
@@ -281,6 +283,28 @@ class AjaxController extends Controller
                     ->get();
             
             echo $options->toJson();
+        }
+    }
+
+    public function getPacksByCarId(Request $request)
+    {
+        if($request->has('id')){
+            $list = ava_pack::with('pack')->where('avacar_id',$request->id)->get();
+            foreach ($list as $key => $item) {
+                if($item->pack)
+                    $item->pack->option;
+            }
+            echo $list->toJson();
+        }
+
+    }
+
+    public function getDopsByCarId(Request $request)
+    {
+        if($request->has('id')){
+            $list = ava_dop::with('dop')->where('avacar_id',$request->id)->get();
+            
+            echo $list->toJson();
         }
     }
 }
