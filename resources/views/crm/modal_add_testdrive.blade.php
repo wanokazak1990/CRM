@@ -47,7 +47,7 @@
 							<label class="flex-grow-1 font-weight-bold">
 								Комплектация {{ $car->complect->name }}
 							</label>
-							<a href="#">Подробнее</a>
+							<a href="javascript://">Подробнее</a>
 						</div>
 
 						<div class="input-group">
