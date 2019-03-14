@@ -21,18 +21,13 @@ class oa_color extends Model
     {
     	$mas = explode(',', $this->web_code);
     	if(count($mas)>1)
-    		return '<div style="
-    					border:1px solid #ccc; 
-    					width: 30px; 
-    					height: 30px; 
+    		return '<span class="v_color" style="
+    					
     					background: linear-gradient('.$mas[0].' 50%,  '.$mas[1].' 50%)">
-				</div>';
+				</span>';
 		else 
-			return '<div style="
-    					border:1px solid #ccc; 
-    					width: 30px; 
-    					height: 30px; 
+			return '<span class="v_color" style="
     					background: '.$this->web_code.'">
-				</div>';		
+				</span>';		
     }
 }

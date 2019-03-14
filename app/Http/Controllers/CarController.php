@@ -29,7 +29,7 @@ use App\ava_date_ship;
 use App\ava_discount;
 use App\ava_shipterm;
 use App\crm_car_selection;
-
+use App\ava_data_provision;
 /*
 $all = avacar::get();
 foreach ($all as $key => $car) 
@@ -551,10 +551,9 @@ class CarController extends Controller
     }
 
     public function ajaxput(Request $request)
-    {  
-        if(!$request->has('id'))
+    {   
+        if(!$request->id)
         {   
-            
             $avacar = new avacar($request->input());
 
             if($avacar->date_storage!='')
@@ -571,6 +570,11 @@ class CarController extends Controller
                 $avacar->debited_date = strtotime($request->debited_date);
             $avacar->brand_id = oa_model::find($request->model_id)->brand_id;
             $avacar->provision = $request->st_provision;
+
+            $avacar->estimated_purchase    = str_replace(' ', '', $request->estimated_purchase);
+            $avacar->actual_purchase       = str_replace(' ', '', $request->actual_purchase);
+            $avacar->shipping_discount     = str_replace(' ', '', $request->shipping_discount);
+
             $avacar->save();
 
             if($request->has('packs'))//записываю пакеты выбранные
@@ -590,8 +594,10 @@ class CarController extends Controller
             //ПЕРЕДЕЛАТЬ ПОД МАССИВ (ТАК КАК ДАТ ПЛАНИРУЕМОЙ СБОРКИ МОЖЕТ БЫТЬ МНОГО)
             if($request->has('date_planned'))//планируемая дата сборки
             {
-                $date = strtotime($request->date_planned);
-                $order = ava_date_planned::create(['car_id'=>$avacar->id,'date'=>$date]);
+                foreach ($request->date_planned as $key => $value) {
+                    $date = strtotime($value);
+                    $order = ava_date_planned::create(['car_id'=>$avacar->id,'date'=>$date]);
+                }
             }
 
             if($request->has('date_notification'))//уведомление о сборке
@@ -612,26 +618,38 @@ class CarController extends Controller
             //ПЕРЕДЕЛАТЬ ПОД МАССИВ (ТАК КАК ДАТ ОТГРУЗКИ МОЖЕТ БЫТЬ МНОГО)
             if($request->has('date_ship'))//дата отгрузки
             {
-                $date = strtotime($request->date_ship);
-                $order = ava_date_ship::create(['car_id'=>$avacar->id,'date'=>$date]);
+                foreach ($request->date_ship as $key => $value) {
+                    $date = strtotime($value);
+                    $order = ava_date_ship::create(['car_id'=>$avacar->id,'date'=>$date]);
+                }
             }
 
             if($request->has('st_provision'))
             {
-                $res = ava_shipterm::create([
-                    'car_id'=>$avacar->id,
-                    'delay'=>$request->st_delay
-                ]);
+                foreach ($request->st_delay as $key => $value) {
+                    $res = ava_data_provision::create([
+                        'car_id'=>$avacar->id,
+                        'count_days'=>$request->st_delay[$key],
+                        'date_provision'=>strtotime($request->st_date[$key])
+                    ]);
+                }
             }
+
             if($request->has('dc_type'))
-            {
-                $res = ava_discount::create([
-                    'car_id'=>$avacar->id,
-                    'type'=>$request->dc_type,
-                    'sale'=>$request->dc_sale
-                ]);
+            {   
+                if(count($request->dc_type) == count($request->dc_sale))
+                {
+                    foreach ($request->dc_type as $key => $value) {
+                        $res = ava_discount::create([
+                            'car_id'=>$avacar->id,
+                            'type'=>$request->dc_type[$key],
+                            'sale'=>$request->dc_sale[$key]
+                        ]);
+                    }
+                }
             }
         }
+
         else{
             $avacar = avacar::find($request->id);
             $avacar->update($request->input());
@@ -649,6 +667,11 @@ class CarController extends Controller
                 $avacar->debited_date = strtotime($request->debited_date);
             $avacar->brand_id = oa_model::find($request->model_id)->brand_id;
             $avacar->provision = $request->st_provision;
+
+            $avacar->estimated_purchase    = str_replace(' ', '', $request->estimated_purchase);
+            $avacar->actual_purchase       = str_replace(' ', '', $request->actual_purchase);
+            $avacar->shipping_discount     = str_replace(' ', '', $request->shipping_discount);
+            
             $avacar->save();
 
             ava_pack::where('avacar_id',$avacar->id)->delete();
@@ -672,8 +695,10 @@ class CarController extends Controller
             ava_date_planned::where('car_id',$avacar->id)->delete();
             if($request->has('date_planned'))//планируемая дата сборки
             {
-                $date = strtotime($request->date_planned);
-                $order = ava_date_planned::create(['car_id'=>$avacar->id,'date'=>$date]);
+                foreach ($request->date_planned as $key => $value) {
+                    $date = strtotime($value);
+                    $order = ava_date_planned::create(['car_id'=>$avacar->id,'date'=>$date]);
+                }
             }
 
             ava_date_notification::where('car_id',$avacar->id)->delete();
@@ -700,28 +725,38 @@ class CarController extends Controller
             //ПЕРЕДЕЛАТЬ ПОД МАССИВ (ТАК КАК ДАТ ОТГРУЗКИ МОЖЕТ БЫТЬ МНОГО)
             ava_date_ship::where('car_id',$avacar->id)->delete();
             if($request->has('date_ship'))//дата отгрузки
-            {
-                $date = strtotime($request->date_ship);
-                $order = ava_date_ship::create(['car_id'=>$avacar->id,'date'=>$date]);
+            {   
+                foreach ($request->date_ship as $key => $value) {
+                    $date = strtotime($value);
+                    $order = ava_date_ship::create(['car_id'=>$avacar->id,'date'=>$date]);
+                }
             }
 
-            ava_shipterm::where('car_id',$avacar->id)->delete();
+            ava_data_provision::where('car_id',$avacar->id)->delete();
             if($request->has('st_provision'))
-            {
-                $res = ava_shipterm::create([
-                    'car_id'=>$avacar->id,
-                    'delay'=>$request->st_delay
-                ]);
+            {   print_r($request->st_date);
+                foreach ($request->st_delay as $key => $value) {
+                    $res = ava_data_provision::create([
+                        'car_id'=>$avacar->id,
+                        'count_days'=>$request->st_delay[$key],
+                        'date_provision'=>strtotime($request->st_date[$key])
+                    ]);
+                }
             }
 
             ava_discount::where('car_id',$avacar->id)->delete();
             if($request->has('dc_type'))
-            {
-                $res = ava_discount::create([
-                    'car_id'=>$avacar->id,
-                    'type'=>$request->dc_type,
-                    'sale'=>$request->dc_sale
-                ]);
+            {   
+                if(count($request->dc_type) == count($request->dc_sale))
+                {
+                    foreach ($request->dc_type as $key => $value) {
+                        $res = ava_discount::create([
+                            'car_id'=>$avacar->id,
+                            'type'=>$request->dc_type[$key],
+                            'sale'=>$request->dc_sale[$key]
+                        ]);
+                    }
+                }
             }
         }
     }
@@ -730,18 +765,20 @@ class CarController extends Controller
     {
         $car = avacar::with('getAuthor')
             ->with('getDateOrder')
-            ->with('getDatePlanned')
+            ->with('getDatePlannedAll')
             ->with('getDateBuild')
             ->with('getDateReady')
-            ->with('getDateShip')
+            ->with('getDateShipAll')
             ->with('getDateNotification')
             ->with('brand')
             ->with('model')
             ->with('complect')
             ->with('color')
             ->with('dops')
+            ->with('getDateProvision')
+            ->with('getDiscount')
             ->find($request->id);
-        
+            
         $car->packprice = $car->packPrice();
 
         $packs = pack::select('packs.*')
@@ -753,12 +790,6 @@ class CarController extends Controller
             ->groupBy('packs.id')
             ->get();
 
-        /*foreach ($packs as $key => $value) {
-            foreach ($value->option as $t => $opt) {
-                dump($opt->option->name);
-            }
-        }*/
-
         $colors = oa_color::select('oa_colors.*')
             ->join('complect_colors','complect_colors.color_id','=','oa_colors.id')
             ->where('complect_colors.complect_id',$car->complect_id)
@@ -768,6 +799,7 @@ class CarController extends Controller
             if($complect->motor)
                 $complects[$key]->fullname = $complect->name.' '.$complect->motor->getEasyName();
         }
+
         echo json_encode([
                 'car'=>$car,
                 'complects'=>$complects,
