@@ -113,9 +113,15 @@ class avacar extends Model
         return $this->hasOne('App\ava_date_order','car_id','id');
     }
 
+    //ПЛАНИРУЕМАЯ ДАТА СБОРКИ В ОДНОМ ЭКЗЕМПЛЯРЕ
     public function getDatePlanned()
     {
         return $this->hasOne('App\ava_date_planned','car_id','id');
+    }
+    //ПЛАНИРУЕМАЯ ДАТА СБОРКИ ВСЁ
+    public function getDatePlannedAll()
+    {
+        return $this->hasMany('App\ava_date_planned','car_id','id');
     }
 
     public function getDateBuild()
@@ -128,10 +134,18 @@ class avacar extends Model
         return $this->hasOne('App\ava_date_ready','car_id','id');
     }
 
+
+
     public function getDateShip()
     {
         return $this->hasOne('App\ava_date_ship','car_id','id');
     }
+    public function getDateShipAll()
+    {
+        return $this->hasMany('App\ava_date_ship','car_id','id');
+    }
+
+
 
     public function getDateNotification()
     {
@@ -153,6 +167,34 @@ class avacar extends Model
         return $this->hasOne('App\crm_car_selection','car_id','id');
     }
 
+    public function getDateProvision()
+    {
+        return $this->hasMany('App\ava_data_provision','car_id','id');
+    }
+    public function getDateProvisionLast()
+    {
+        return $this->hasOne('App\ava_data_provision','car_id','id')->orderBy('id','DESC');
+    }
+
+    public function getProvision()
+    {
+        return $this->hasOne('App\crm_list_provision','id','provision');
+    }
+
+    public function getDiscount()
+    {
+        return $this->hasMany('App\ava_discount','car_id','id');
+    }
+    public function sumDiscount($sum=0)
+    {
+        if(!empty($this->getDiscount))
+            foreach ($this->getDiscount as $key => $value) {
+                $sum+=$value->sale;
+            }
+        return $sum;
+    }
+
+
     public function getWorklistId()
     {
         $res = $this->carSelection;
@@ -161,6 +203,18 @@ class avacar extends Model
         else
             return '';
     }
+
+    public function getClient()
+    {
+        $worklist = new crm_client();
+        $res = $this->carSelection;
+        if($res)
+        {
+            $worklist = crm_client::with('contact')->where('id',$res->client_id)->first();
+        }
+        return $worklist;
+    }
+
 
     public function getStageDelivery($str = '')
     {

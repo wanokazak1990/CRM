@@ -343,6 +343,109 @@ m_carModal.on('shown.bs.modal',function(){
 	m_carModal.find('form').trigger('reset');
 })
 
+//добавить детализацию скидки
+m_carModal.on('click','#discount-adder',function(){
+	var newBlock = $(this).closest('.discount-block').find('.item').clone();
+	newBlock.removeClass('item')
+	newBlock.find('[name="dc_type[]"]').val('')
+	newBlock.find('[name="dc_sale[]"]').val('')
+	$(this).closest('.discount-block').find('.discount-content').append(newBlock)
+})
+
+//добавить отсрочку обеспечения
+m_carModal.on('click','#provision-adder',function(){
+	var newBlock = $(this).closest('.provision-block').find('.item').clone();
+	newBlock.removeClass('item')
+	newBlock.find('input').val('')
+	newBlock.find('.calendar').remove()
+	newBlock.append('<input type="text" name="st_date[]" class="form-control col-9">')
+	newBlock.find('[name="st_date[]"]').datepicker()
+	$(this).closest('.provision-block').find('.provision-content').append(newBlock)
+})
+
+m_carModal.on('click','#add-plan-date',function(){
+	var newInput = '<input type="text" name="date_planned[]" class="form-control">'
+	var parent = $(this).closest('.input-group').find('.item').parent()
+	parent.append(newInput)
+	parent.find('input').datepicker()
+})
+
+m_carModal.on('click','#add-ship-date',function(){
+	var newInput = '<input type="text" name="date_ship[]" class="form-control">'
+	var parent = $(this).closest('.input-group').find('.item').parent()
+	parent.append(newInput)
+	parent.find('input').datepicker()
+})
+
+m_carModal.on('keyup','[name="st_delay[]"]',function(e){
+	let text = 0
+	if(e.which>=96 && e.which<=105)
+		text = text
+	else
+		$(this).val($(this).val().substring(0,$(this).val().length-1))
+	if($(this).val().length>0)
+		text = $(this).val()
+	var date
+	if($("[name='receipt_date']").val().length==0)
+		date = new Date()
+	else
+	{
+		var str = $("[name='receipt_date']").val()
+		str = str.split('.')
+		date = new Date(str[2],(str[1]-1),str[0])
+	}
+	
+	date.setDate(date.getDate() + parseInt(text));
+	var day = date.getDate()
+	var mon = date.getMonth()+1
+	var year = date.getFullYear()
+	if(day<10)
+		day='0'+day
+	if(mon<10)
+		mon='0'+mon
+	var strDate = [day,mon,year].join('.')
+	$(this).closest('.row').find('[name="st_date[]"]').val(strDate)
+})
+
+
+
+m_carModal.on('click','[name="st_date[]"]',function(){
+	let obj = $(this)
+	var countDays = obj.parent().find('[name="st_delay[]"]')
+
+	var start_date = $("[name='receipt_date']").val()
+	start_date = start_date.split('.')
+	let SDate = new Date(start_date[2],start_date[1]-1,start_date[0])
+
+	var mutationObserver = new MutationObserver(function(mutations) {
+	  mutations.forEach(function(mutation) {
+	    var check_date = obj.val()
+	    check_date = check_date.split('.')
+	    let CDate = new Date(check_date[2],check_date[1]-1,check_date[0])
+
+	    countDays.val((CDate-SDate)/1000/60/60/24)
+
+	  });
+	});
+
+	mutationObserver.observe(document.documentElement, {
+	  attributes: true,
+	  characterData: true,
+	  childList: true,
+	  subtree: true,
+	  attributeOldValue: true,
+	  characterDataOldValue: true
+	});
+})
+
+m_carModal.on('keyup','[name="actual_purchase"]',function(){
+	var text = nonSpace($(this).val())
+	var format = number_format(text,0,'',' ')
+	var estimated = nonSpace($('[name="estimated_purchase"]').val())
+	$(this).val(format)
+	$('[name="shipping_discount"]').val(number_format((estimated-text),0,'',' '))
+})
+
 //открыть машину
 $(document).on('click','.opencar',function(){
 	info = new carInfo();
@@ -354,7 +457,10 @@ $(document).on('click','.opencar',function(){
 		ajax(parameters,url)
 			.then(function(data){
 				data = JSON.parse(data)
-
+				/**/
+				var estimated_purchase = ( (data.car.complect.price+data.car.packprice) - (data.car.complect.price+data.car.packprice) / 100 * data.car.complect.percent)
+				$('[name="estimated_purchase"]').val(number_format(estimated_purchase,0,'',' '))
+				/**/
 				makeOption(data.complects,m_complect)
 				InfoCarLoader(data.car.complect_id);
 				info.base = parseInt(data.car.complect.price);
@@ -365,10 +471,14 @@ $(document).on('click','.opencar',function(){
 				makePacks(data.packs);
 				makeColors(data.colors);
 				for (i in data.car)
-				{
+				{	
 					var current = data.car[i]
 					var elem = m_carModal.find('[name="'+i+'"]')
 					var tag = '';
+
+					if(i=='provision')
+						m_carModal.find('[name="st_provision"]').val(current)
+
 					if(elem[0]) 
 						tag = elem[0].tagName.toLowerCase();
 
@@ -378,6 +488,8 @@ $(document).on('click','.opencar',function(){
 							if(elem.attr('type')=='text' || elem.attr('type')=='hidden')
 								if(~i.indexOf('date'))
 									elem.val(timeConverter(current,'d.m.y'))
+								else if(~i.indexOf('purchase') || (i=='shipping_discount'))
+									elem.val(number_format(current,0,'',' '));
 								else
 									elem.val(current);//записываю в него
 
@@ -397,9 +509,9 @@ $(document).on('click','.opencar',function(){
 						}
 					}
 					if(typeof(current)=='object' || typeof(current)=='array')
-					{
+					{	
 						if(~i.indexOf('get_'))
-						{
+						{	
 							elem = m_carModal.find('[name="'+i.substring(4)+'"]')
 							if(elem[0]) 
 								tag = elem[0].tagName.toLowerCase();
@@ -409,6 +521,98 @@ $(document).on('click','.opencar',function(){
 								if(~i.indexOf('date') && current != undefined)
 								{
 									elem.val(timeConverter(current.date,'d.m.y'))
+								}
+							}
+							if(i=="get_date_planned_all")
+							{	
+								var parent = m_carModal.find('[name="date_planned[]"]').parent()
+								for(z in current)
+								{	
+									if(z==0)
+									{	log(1)
+										var bl = '<input type="text" name="date_planned[]" class="form-control item" value="'+timeConverter(current[z].date)+'">'										
+										parent.find('input').remove()
+										parent.append(bl)
+										parent.find('input').datepicker()
+									}
+									else
+									{	
+										var bl = '<input type="text" name="date_planned[]" class="form-control" value="'+timeConverter(current[z].date)+'">'																				
+										parent.append(bl)
+										parent.find('input').datepicker()
+									}
+								}
+							}
+
+							if(i=="get_date_ship_all")
+							{
+								var parent = m_carModal.find('[name="date_ship[]"]').parent()
+								for(z in current)
+								{	
+									if(z==0)
+									{
+										var bl = '<input type="text" name="date_ship[]" class="form-control item" value="'+timeConverter(current[z].date)+'">'										
+										parent.find('input').remove()
+										parent.append(bl)
+										parent.find('input').datepicker()
+									}
+									else
+									{	
+										var bl = '<input type="text" name="date_ship[]" class="form-control" value="'+timeConverter(current[z].date)+'">'																				
+										parent.append(bl)
+										parent.find('input').datepicker()
+									}
+								}
+							}
+
+							if(i=='get_date_provision')
+							{	
+								if(current.length)
+								{
+									var newBlock = m_carModal.find('.provision-block').find('.item').clone();
+									m_carModal.find('.provision-content').find('div').remove()
+									
+									for(z in current)
+									{
+										if(z==0)
+										{
+											newBlock.find('[name="st_delay[]"]').val(current[z].count_days)
+											newBlock.find('[name="st_date[]"]').val(timeConverter(current[z].date_provision,'d.m.y'))
+											m_carModal.find('.provision-block').find('.provision-content').append(newBlock)
+										}
+										else{
+											var secondBlock = m_carModal.find('.provision-block').find('.item').clone()
+											secondBlock.removeClass('item')
+											secondBlock.find('[name="st_delay[]"]').val(current[z].count_days)
+											secondBlock.find('[name="st_date[]"]').val(timeConverter(current[z].date_provision,'d.m.y'))
+											m_carModal.find('.provision-block').find('.provision-content').append(secondBlock)
+										}
+									}
+								}
+							}
+							if(i=='get_discount')
+							{	
+								if(current.length)
+								{
+									var newBlock = m_carModal.find('.discount-block').find('.item').clone();
+									m_carModal.find('.discount-content').find('div').remove()
+									for(z in current)
+									{
+										if(z==0)
+										{
+											newBlock.find('[name="dc_type[]"]').val(current[z].type)
+											newBlock.find('[name="dc_sale[]"]').val(number_format(current[z].sale,0,'',' '))
+											m_carModal.find('.discount-block').find('.discount-content').append(newBlock)
+										}
+										else
+										{
+											var newBlock = m_carModal.find('.discount-block').find('.item').clone();
+											newBlock.removeClass('item')
+											newBlock.find('[name="dc_type[]"]').val(current[z].type)
+											newBlock.find('[name="dc_sale[]"]').val(number_format(current[z].sale,0,'',' '))
+											m_carModal.find('.discount-block').find('.discount-content').append(newBlock)
+										}
+									}
 								}
 							}
 						}

@@ -30,4 +30,14 @@ class crm_worklist extends Model
 				$carModel[] = $test->model;
 		return $carModel;
 	}
+
+    public function pays()
+    {
+        return $this->hasMany('App\crm_client_pay','worklist_id','id');
+    }
+
+    public function selectedCompanies()
+    {
+        return $this->hasMany('App\crm_worklist_company','wl_id','id');
+    }
 }
