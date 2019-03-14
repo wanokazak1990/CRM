@@ -6,10 +6,11 @@ function wl_save_changes(){
 	var workstr = $("#worksheet").find("form").serializeArray();
 	workstr.push({'name':'wl_id','value':wl_id});
 
+
 	var cfg_cars = getCfgCars();
 	if (cfg_cars != null)
 		workstr.push({'name':'cfg_cars','value':cfg_cars});
-
+	//log(workstr)
 	$.ajax({
 		url: '/wlsavechanges',
 		type: 'POST',
@@ -1516,7 +1517,7 @@ $(document).on('click', 'a[href="#wsparam5"]', function() {
 
 })();
 
-(function(){
+(function(){//КНОПКИ ПАКЕТ и ДОПЫ В ТАБЛИЦУ АВТОСКЛАД
 	let modal = $("#car-option-modal")
 	let content = modal.find('.car-option-content')
 	let title = modal.find('.title-option-modal')
@@ -1562,10 +1563,22 @@ $(document).on('click', 'a[href="#wsparam5"]', function() {
 			ajax(parameters,url)
 				.then(function(data){
 					str = ''
-					data = JSON.parse(data)
-					for(i in data){
-						str += (parseInt(i)+parseInt(1)) +') '+data[i].dop.name+'<br>'
+					data = JSON.parse(data);log(data)
+					if(data.install)
+					{
+						str += '<div><b>Установлено</b></div>'						
+						for(i in data.install){
+							str += (parseInt(i)+parseInt(1)) +') '+data.install[i].dop.name+'<br>'
+						}
 					}
+					if(data.offered)
+					{
+						str += '<hr><div><b>Предложено</b></div>'
+						for(i in data.offered){
+							str += (parseInt(i)+parseInt(1)) +') '+data.offered[i].name+'<br>'
+						}
+					}
+
 					beginFade(modal)
 					if(!str)
 						str = '<div class="text-center">На автомобиле не установлено дополнительного оборудования</div>'
@@ -1593,4 +1606,134 @@ $(document).on('click', 'a[href="#wsparam5"]', function() {
 	}
 
 })();
+
+(function(){//ВСЁ ДЛЯ ВКЛАДКИ ПЛАТЕЖИ В МЕНЮ ОФОРМЛЕНИЕ
+	let link = $(document).find('#client_pays')
+	let block = $(document).find('.client_pays')
+
+	
+	
+	//нажатие на заголовок вкладки ПЛАТЕЖИ
+	link.on('click',function(){
+		block.html('')
+		let worklist_id = $('span[name=wl_id]').html() //беру ид раблиста
+		let parameters = {'worklist_id':worklist_id}
+		let url = '/get/worklist/pays'
+		$.when(
+			ajax(parameters,url)
+				.then(function(data){
+					block.append(data)
+					block.find('[name="wl_pay_date[]"]').datepicker()
+				})
+			)
+	})
+
+	//добавление новой строки с вводом суммы даты и платежа
+	block.on('click','#adder_pay',function(){
+		var content = $(this).closest('.pay_content')
+		var line = $(this).closest('.item').clone()
+		if(line.find('[name="wl_pay_sum[]"]').val()){
+			line.removeClass('item')
+			line.find('#adder_pay').remove()
+			line.find('input').val('')
+			line.find('[type="checkbox"]').prop('checked',false)
+			line.find('[name="wl_pay_date[]"]').datepicker()
+			content.append(line)
+		}
+	})
+
+	//Проверка что все поля заполнены нажатие на чекбокс
+	block.on('change','[type="checkbox"]',function(){
+		if($(this).prop('checked')==true)
+		{
+			var check = $(this)
+			var line = check.closest('.input-group')
+			line.find('[type="text"]').each(function(){
+				if($(this).val()=='')
+				{
+					alert('Не заполненны поля')
+					check.prop('checked',false)
+					return false
+				}
+			})
+		}
+	})
+
+	//удаление строки с инпутами
+	block.on('click','.fa-times',function(){
+		var line = $(this).closest('.input-group')
+		if(line.find("#adder_pay").length)
+		{
+			line.find('input').val('')
+			line.find('[type="checkbox"]').prop('checked',false)
+		}
+		else
+			line.remove()
+	})
+
+	block.on('keyup','[name="wl_pay_sum[]"]',function(e){
+		var text = 0
+		var sum =0
+		var total = block.find("#wl_pay_carprice").attr('data-price')
+		
+		if( (e.which>=96 && e.which<=105) || (e.which>=48 && e.which<=57) )
+			text = text
+		else
+			$(this).val($(this).val().substring(0,$(this).val().length-1))
+
+		block.find('[name="wl_pay_sum[]"]').each(function(){
+			if($(this).val())
+				sum+=parseInt($(this).val())
+		})
+
+		$(this).closest('.input-group').find('[name="wl_pay_debt[]"]').val(total-sum)
+		block.find('#wl_pay_client').html(sum+' р.')
+	})
+
+	block.on('click','#adder_pay_pts',function(){log(1)
+		var parent = $(this).closest('.info')
+		var newInput = parent.find('.item').clone().removeClass('item')
+		parent.append(newInput)
+	})
+})();
+
+//////////////////////////////////////////
+//БЛОК ДЛЯ ВКЛАДКИ ОФОРМЛЕНИЕ->КОНТРАКТЫ//
+//////////////////////////////////////////
+(function(){
+	let link = $(document).find('#client_contract')
+	let block = $(document).find('.client_contract')
+
+	link.on('click',function(){
+		block.html('')
+		let worklist_id = $('span[name=wl_id]').html() //беру ид раблиста
+		let parameters = {'worklist_id':worklist_id}
+		let url = '/get/worklist/contracts'
+		$.when(
+			ajax(parameters,url)
+				.then(function(data){
+					block.append(data)
+					block.find('.calendar').datepicker()
+				})
+			)
+	})
+
+	block.on('click','#adder_ship',function(){
+		var parent = $(this).closest('.input-group')
+		var newBlock = '<input type="text" class="form-control col-3 calendar" name="contract[ship][]">'
+		parent.append(newBlock)
+		$('[name="contract[ship][]"]').datepicker()
+	})
+
+	block.on('change','[name="contract[crash]"]',function(){
+		if($(this).prop('checked')==true)
+			$('[name="contract[date_crash]"]').prop('disabled',false)
+		else
+			$('[name="contract[date_crash]"]').prop('disabled',true)
+	})
+
+})();
+
+
+
 

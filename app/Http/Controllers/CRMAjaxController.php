@@ -174,6 +174,8 @@ class CRMAjaxController extends Controller
                         ->with('model')
                         ->with('complect')
                         ->with('color')
+                        ->with('getProvision')
+                        ->with('getDateProvisionLast')
                         ->orderBy('id','DESC')
                         ->get();
                     

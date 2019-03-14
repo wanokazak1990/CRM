@@ -465,6 +465,7 @@ Route::post('/wlgetcar', 'WorklistController@getCarByWorklistId')->name('wlgetca
 // Получить цену машины в разрезе закрепленую за РЛ
 Route::post('/worklist/car/price','CarController@getPriceCarByWLId');
 
+
 // Получить сохраненные машины из конфигуратора в РЛ
 Route::post('/wlgetcfgcars', 'WorklistController@getCfgCars')->name('wlgetcfgcars');
 
@@ -479,6 +480,13 @@ Route::post('/cfgcreaterequest', 'WorklistController@cfgCreateRequest')->name('c
 
 // Проверить, привязан ли автомобиль к рабочему листу
 Route::post('/wlcheckselectedcar', 'WorklistController@checkSelectedCar')->name('wlcheckselectedcar');
+
+//Получить все платежи закреплённые за РЛ
+Route::post('/get/worklist/pays','WorklistController@getPays');
+
+//Получить вкладку контракты РЛ
+Route::post('/get/worklist/contracts','WorklistController@getContracts');
+
 
 
 
