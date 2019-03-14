@@ -480,7 +480,6 @@
 												<span><input type="checkbox"> Выбрать</span>
 											</div>
 											<div class="col-8 wl_cfg_res">
-												Ресурсы автосклада: 8 автомобилей, <a href="javascript://">показать</a>?
 											</div>
 										</div>
 
@@ -489,7 +488,7 @@
 											<div class="col-6">
 												<img id="cfg-img" src='' style="width: 100%;height: auto;">
 												{!! Form::hidden('cfg_color_id','',['id'=>'cfg_color_id'])!!}
-												<div class="input-group d-flex justify-content-center clear-html" id="cfg-color">
+												<div class="input-group d-flex justify-content-center cfg-color">
 												</div>
 												<hr>
 												<div class="input-group no-gutters">
@@ -525,7 +524,7 @@
 												<div class="border-bottom font-weight-bold">
 													Выберите опционное оборудование
 												</div>
-												<div id="cfg-pack-block" class="clear-html"></div>
+												<div class="clear-html cfg-pack-block"></div>
 											</div>
 										</div>
 									</div>
@@ -535,7 +534,7 @@
 
 								<div class="input-group">
 									<div class="col-3 offset-9">
-										<button type="button" class="btn btn-primary btn-block">Создать заявку</button>
+										<button type="button" id="wl_cfg_create_request" class="btn btn-primary btn-block">Создать заявку</button>
 									</div>
 								</div>
 							</div>
@@ -644,17 +643,7 @@
 							КОНТЕНТ
 							-->
 							<div id="wsparam7" class="py-3 collapse ws-param">
-								<table class="table table-bordered table-sm" style="table-layout: fixed;" width="100%">
-									<tr>
-										<td>20.01.2017 16:31</td>
-										<td>X7LHSRGAN59685351</td>
-										<td><a href="javascript://">Открыть</a></td>
-									</tr>
-									<tr>
-										<td>18.01.2017 12:45</td>
-										<td>X7LHSRGAN59685587, X7L5SRAT6335…</td>
-										<td><a href="javascript://">Открыть</a></td>
-									</tr>
+								<table id="wl_offers_list" class="table table-bordered table-sm" style="table-layout: fixed; width: 100%;">
 								</table>
 								
 								<div class="input-group mt-3">
@@ -1269,5 +1258,5 @@
 </div>
 </div>
 
-<form id="get-pdf" target="_blank" method="POST" action="/createoffer"></form>
+<form id="get-pdf" target="_blank" method="POST"></form>
 @endsection

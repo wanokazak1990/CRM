@@ -19,8 +19,8 @@ Class autostock_helper {
 		if(empty($this->collection)) 
 			return array();
 		
-		elseif(count($this->collection)==1)
-			$this->response[] = $this->dataForTable($this->collection);
+		/*elseif(count($this->collection)==1)
+			$this->response[] = $this->dataForTable($this->collection);*/
 
 		else
 			foreach ($this->collection as $key=>$item) 

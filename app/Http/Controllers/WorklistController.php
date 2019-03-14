@@ -10,6 +10,7 @@ use App\crm_client_contact;
 use App\crm_testdrive;
 use App\crm_car_selection;
 use App\avacar;
+use App\crm_all_field;
 use App\oa_dop;
 use App\ava_pack;
 use App\crm_need_car;
@@ -17,6 +18,8 @@ use App\ava_dop;
 use App\company;
 use App\crm_worklist_company;
 use App\crm_offered_dop;
+use App\crm_configurator;
+use App\crm_commercial_offer;
 use Storage;
 
 class WorklistController extends Controller
@@ -132,6 +135,7 @@ class WorklistController extends Controller
             }
         }
 
+        // Сохранение отмеченного оборудования из блока "Дополнительное оборудование" в РЛ
         if ($request->has('wl_dops_check'))
         {
             crm_offered_dop::where('worklist_id', $request->wl_id)->delete();
@@ -141,6 +145,24 @@ class WorklistController extends Controller
             if ($request->has('wl_dops_offered'))
                 $dops->price = $request->wl_dops_offered;
             $dops->save();
+        }
+
+        // Сохранение данных автомобилей из блока "Конфигуратор" в РЛ
+        if ($request->has('cfg_cars'))
+        {
+            crm_configurator::where('worklist_id', $request->wl_id)->delete();
+
+            $cfg_cars = json_decode($request->cfg_cars);
+            foreach ($cfg_cars as $key => $car) 
+            {
+                $cfg = new crm_configurator();
+                $cfg->worklist_id = $request->wl_id;
+                $cfg->model_id = $car->cfg_model;
+                $cfg->complect_id = $car->cfg_complect;
+                $cfg->color_id = $car->cfg_color_id;
+                $cfg->options = json_encode($car->options);
+                $cfg->save();
+            }
         }
 
         echo 1;
@@ -289,7 +311,11 @@ class WorklistController extends Controller
             $data['dops'] .= '<span class="font-italic">Доп. оборудование не установлено</span>';
         }
 
-        $all_dops = oa_dop::whereNotIn('id', $notIn)->pluck('name', 'id');
+        if (isset($notIn))
+            $all_dops = oa_dop::whereNotIn('id', $notIn)->pluck('name', 'id');
+        else
+            $all_dops = oa_dop::pluck('name', 'id');
+
         $data['all_dops'] = '';
         foreach ($all_dops as $key => $dop) 
         {
@@ -330,6 +356,53 @@ class WorklistController extends Controller
         echo json_encode('done');
     }
 
+    /**
+     * Получить архив коммерческих предложений
+     *
+     */
+    public function getOffersList(Request $request)
+    {
+        $offers = crm_commercial_offer::where('worklist_id', $request->wl_id)->orderBy('id', 'desc')->get();
+
+        if (count($offers) != 0)
+        {
+            foreach ($offers as $offer_key => $offer) 
+            {
+                $car_vin = [];
+                
+                if ($offer->cars_ids != null)
+                {
+                    foreach(explode(',', $offer->cars_ids) as $key => $car_id)
+                    {
+                        $car_vin[] = avacar::find($car_id)->vin;
+                    }
+                }
+
+                if ($offer->cfg_cars != null)
+                {
+                    $car_vin[] = 'Конфигуратор (' . count(explode(',', $offer->cfg_cars)) . ' шт.)';
+                }
+
+                if ($offer->cars_ids == null && $offer->cfg_cars == null)
+                {
+                    $car_id = crm_car_selection::where('worklist_id', $request->wl_id)->first()->car_id;
+
+                    $car_vin[] = avacar::find($car_id)->vin;
+                }
+
+
+                $data[] = array(
+                    'creation_date' => date('d.m.Y H:i', $offer->creation_date),
+                    'vins' => implode(', ', $car_vin),
+                    'offer_id' => $offer->id
+                );
+            }
+
+            echo json_encode($data);
+        }
+        else
+            echo '0';
+    }
 
     /**
      * Получение данных об автомобиле, привязанном к рабочему листу
@@ -337,16 +410,15 @@ class WorklistController extends Controller
      */
     public function getCarByWorklistId(Request $request)
     {
-        $car_id = crm_car_selection::where('worklist_id', $request->wl_id)->first()->car_id;
+        $selected_car = crm_car_selection::where('worklist_id', $request->wl_id)->first();
 
-        $car = avacar::find($car_id);
-
-        $sale = crm_worklist_company::with('company')->where('wl_id', $request->wl_id)->where('razdel', '<>', 3)->get();
-
-        if ($car == null)
-            echo 'null';
+        if ($selected_car == null)
+            echo json_encode('0');
         else
         {
+            $car = avacar::find($selected_car->car_id);
+            $sale = crm_worklist_company::with('company')->where('wl_id', $request->wl_id)->where('razdel', '<>', 3)->get();
+
             $data['car_id'] = $car->id;
             $data['car_vin'] = $car->vin;
             $data['car_name'] = $car->brand->name.' '.$car->model->name;
@@ -399,7 +471,7 @@ class WorklistController extends Controller
                 $data['installed'] .= '<li>- '.$item->option->name.'</li>';
             }
 
-            $packs = ava_pack::where('avacar_id', $car_id)->get();
+            $packs = ava_pack::where('avacar_id', $car->id)->get();
             
             $data['fullprice'] = (int)$data['car_dopprice'] + (int)$data['complect_price'];
 
@@ -429,6 +501,7 @@ class WorklistController extends Controller
 
             echo json_encode($data);
         }
+        
     } 
 
 
@@ -511,6 +584,138 @@ class WorklistController extends Controller
         $data['options'] = crm_need_car::getCarOptions($request->wl_id);
 
         echo json_encode($data);
+    }
+
+    /**
+     * Получить сохраненные машины из Конфигуратора в РЛ
+     */
+    public function getCfgCars(Request $request)
+    {
+        $cfg_cars = crm_configurator::where('worklist_id', $request->wl_id)->get();
+        echo json_encode($cfg_cars);
+    }
+
+    /**
+     * Получить количество машин в автоскладе по модели и комплектации из конфигуратора
+     */
+    public function carCountInStock(Request $request)
+    {
+        $count = avacar::with('getAuthor')
+            ->with('getDateOrder')
+            ->with('getDatePlanned')
+            ->with('getDateBuild')
+            ->with('getDateReady')
+            ->with('brand')
+            ->with('model')
+            ->with('complect')
+            ->with('color')
+            ->where('model_id', $request->model_id)
+            ->where('complect_id', $request->complect_id)
+            ->orderBy('id','DESC')
+            ->count();
+        
+        echo $count;
+    }
+
+    /**
+     * Показать машины в автоскладе по модели и комплектации из конфигуратора
+     */
+    public function showCfgCars(Request $request)
+    {
+        $list = avacar::with('getAuthor')
+            ->with('getDateOrder')
+            ->with('getDatePlanned')
+            ->with('getDateBuild')
+            ->with('getDateReady')
+            ->with('brand')
+            ->with('model')
+            ->with('complect')
+            ->with('color')
+            ->where('model_id', $request->model_id)
+            ->where('complect_id', $request->complect_id)
+            ->get();
+
+        $tr = new \App\autostock_helper($list);
+        $tr->makeTableData();
+
+        $titles = crm_all_field::where('type_id',3)->pluck('name','id')->toArray();
+
+        $links = '';
+        echo json_encode([
+            'list'=>$tr->response,
+            'links'=>$links,
+            'titles'=>array_merge(['&nbsp'],$titles)
+        ]);
+    }
+
+    /**
+     *
+     *
+     */
+    public function checkSelectedCar(Request $request)
+    {
+        $cars = crm_car_selection::where('worklist_id', $request->worklist_id)->get();
+        if (count($cars) == 1)
+            echo '1';
+        else
+            echo '0';
+    }
+
+    /**
+     * Конфигуратор
+     * Кнопка "Создать заявку"
+     * Создает автомобиль и резервирует его за РЛ
+     */
+    public function cfgCreateRequest(Request $request)
+    {
+        $worklist_id = $request->wl_id;
+
+        if ($request->has('cfg_car'))
+        {
+            $car = json_decode($request->cfg_car);
+
+            $cfg = new crm_configurator();
+            $cfg->worklist_id = $worklist_id;
+            $cfg->model_id = $car->cfg_model;
+            $cfg->complect_id = $car->cfg_complect;
+            $cfg->color_id = $car->cfg_color_id;
+            $cfg->options = json_encode($car->options);
+            $cfg->save();            
+
+            $find_cfg = crm_configurator::find($cfg->id);
+        }
+        elseif ($request->has('cfg_id'))
+        {
+            $find_cfg = crm_configurator::find($request->cfg_id);
+        }
+
+        $avacar = new avacar();
+        $avacar->model_id = $find_cfg->model_id;
+        $avacar->brand_id = $find_cfg->model->brand->id;
+        $avacar->complect_id = $find_cfg->complect_id;
+        if ($find_cfg->color_id != null)
+            $avacar->color_id = $find_cfg->color_id;
+        $avacar->save();
+
+        if($find_cfg->options != null)
+        {
+            foreach(json_decode($find_cfg->options) as $key => $val)
+            {
+                $ava_pack = new ava_pack();
+                $ava_pack->avacar_id = $avacar->id;
+                $ava_pack->pack_id = $val;
+                $ava_pack->save();
+            }
+        }
+
+        $client_id = crm_worklist::find($worklist_id)->client_id;
+        $selected_car = new crm_car_selection();
+        $selected_car->client_id = $client_id;
+        $selected_car->worklist_id = $worklist_id;
+        $selected_car->car_id = $avacar->id;
+        $selected_car->save();
+
+        echo json_encode('done');
     }
 
 
