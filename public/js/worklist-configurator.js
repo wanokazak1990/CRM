@@ -45,8 +45,9 @@ function cfg_number_format(number,decimals,dec_point,thousands_sep)
 function getComplectsCfg(elem,pastle=0)
 {	
 	var model_id = elem.val();
-	log(model_id);
+
 	$.ajax({
+		async: false,
 		type: "POST",
 		url: "/getcomplects",
 		data: {'id':model_id},
@@ -59,7 +60,7 @@ function getComplectsCfg(elem,pastle=0)
 			if(pastle==0) elem.closest('.wl_cfg_cars').find('.cfg_complect').html('');
 			else pastle.html("");
 			var str = '';
-			str += '<option selected disabled>Укажите параметр</option>';
+			str += '<option value="off">Укажите параметр</option>';
 			objs.forEach(function(obj,i){
 				str += '<option value="'+obj.id+'">';
 					str += obj.fullname;
@@ -111,6 +112,7 @@ function getColorCfg(elem)//вернёт плитку цветов с инпут
 	var formData = new FormData();
 	formData.append('complect_id',elem.val());
     $.ajax({
+    	async: false,
         type: "POST",
         url: '/getcolor',
         dataType : "json", 
@@ -122,15 +124,16 @@ function getColorCfg(elem)//вернёт плитку цветов с инпут
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
         success: function(param)
-        {	var mother = elem.closest('.wl_cfg_cars').find("#cfg-color");
+        {	var mother = elem.closest('.wl_cfg_cars').find(".cfg-color");
         	var str = '';
         	mother.html("");
         	param.forEach(function(obj,i){
 	        	
-	        	str += '<button style="width:30px;height:30px;background:'+obj.web_code+'" class="btn" color-name="'+obj.name+'" type="button" color-id="'+obj.id+'" color-code="'+obj.web_code+'">&nbsp</button>';
+	        	//str += '<button style="width:30px;height:30px;background:'+obj.web_code+'" class="btn" color-name="'+obj.name+'" type="button" color-id="'+obj.id+'" color-code="'+obj.web_code+'">&nbsp</button>';
+	        	mother.append('<button style="width:30px;height:30px;background:'+obj.web_code+'" class="btn cfg-color-btn" color-name="'+obj.name+'" type="button" color-id="'+obj.id+'" color-code="'+obj.web_code+'">&nbsp</button>');
 	        	
         	})
-            mother.html(str);
+            //mother.html(str);
         },
         error: function(msg){
             console.log('error');
@@ -170,6 +173,7 @@ function getPacksCfg(elem)
 	var formData = new FormData();
 	formData.append('complect_id',elem.val());
     $.ajax({
+    	async: false,
         type: "POST",
         url: '/getpacks',
         dataType : "json", 
@@ -181,31 +185,12 @@ function getPacksCfg(elem)
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 		success: function(param){
-			elem.closest('.wl_cfg_cars').find('#cfg-pack-block').html('');
+			elem.closest('.wl_cfg_cars').find('.cfg-pack-block').html('');
 			var str = '';
 			param.forEach(function(obj,i){
 				str += getPackStringCfg(obj);
 			});
-			elem.closest('.wl_cfg_cars').find('#cfg-pack-block').html(str);
-			/*изменение подсветки стилизованых чекбоксов*/
-			$(document).on('click','#cfg-pack-block input',function(){
-				if($(this).prop('checked')) {
-					$(this).closest('label').addClass('green-check');
-					//cfg_pack += parseInt($(this).attr('price'));
-					price = elem.closest('.wl_cfg_cars').find('#price');
-					sum = parseInt(price.attr('pack')) + parseInt($(this).attr('price'));
-					price.attr('pack', sum); 
-					totalPriceCfg(elem);
-				} else {
-					$(this).closest('label').removeClass('green-check');
-					//cfg_pack -= parseInt($(this).attr('price'));
-					price = elem.closest('.wl_cfg_cars').find('#price');
-					diff = parseInt(price.attr('pack')) - parseInt($(this).attr('price'));
-					price.attr('pack', diff); 
-					totalPriceCfg(elem);
-				}
-			})
-
+			elem.closest('.wl_cfg_cars').find('.cfg-pack-block').html(str);
 		},
 		error: function(param)
 		{
@@ -273,18 +258,41 @@ function complectPriceCfg(obj)
 	return result;
 }
 
+/**
+ * Выбор доступной опции для машины
+ * Изменяет подсветку нажатого чекбокса, высчитывает итоговую стоимость автомобиля
+ */
+$(document).on('click','.cfg-pack-block input',function(){
+	if($(this).prop('checked')) {
+		$(this).closest('label').addClass('green-check');
+		price = $(this).closest('.wl_cfg_cars').find('input[type="hidden"][id="price"]');
+		sum = parseInt(price.attr('pack')) + parseInt($(this).attr('price'));
+		price.attr('pack', sum); 
+		totalPriceCfg($(this));
+	} else {
+		$(this).closest('label').removeClass('green-check');
+		price = $(this).closest('.wl_cfg_cars').find('input[type="hidden"][id="price"]');
+		diff = parseInt(price.attr('pack')) - parseInt($(this).attr('price'));
+		price.attr('pack', diff); 
+		totalPriceCfg($(this));
+	}
+});
 
-
-//клик по цветам
-$(document).on('click','#cfg-color button',function(){
+/**
+ * Нажатие на кнопку цвета автомобиля
+ * Устанавливает выбранный цвет для конфигурируемой машины (неожиданно, правда?)
+ */
+$(document).on('click','.cfg-color button',function(){
 	$(this).closest('.wl_cfg_cars').find('#cfg-img').css('background',$(this).attr('color-code'));
 	$(this).closest('.wl_cfg_cars').find('#cfg_color_id').val($(this).attr('color-id'));
-	$(this).closest('.wl_cfg_cars').find("#cfg-color button").each(function(){$(this).removeClass('active')})
+	$(this).closest('.wl_cfg_cars').find(".cfg-color button").each(function(){$(this).removeClass('active')})
 	$(this).addClass('active');
-})
+});
 
-
-/*клик по кнопке подробнее*/
+/**
+ * Кнопка "Подробнее" в конфигураторе
+ * Отображает или скрывает установленное в комплекте оборудование
+ */
 $(document).on('click','.cfg-more',function(){
 	var obj = $(this);
 	if(!obj.attr('action')){
@@ -322,62 +330,209 @@ $(document).on('click','.cfg-more',function(){
 	}
 })
 
-
-/*получаем комплектации от модели*/
+/**
+ * Выбор модели в конфигураторе
+ * Получение комплектации выбранной модели
+ */
 $(document).on('change', '.cfg_model', function(){
 	getComplectsCfg($(this));
 	modelObjCfg($(this));
 });
 
-/*получаем пакеты цвета и цену стартовую*/
+/**
+ * Выбор комплектации в конфигураторе
+ * Вызов функции получения пакетов, цвета и стартовой цены
+ */
 $(document).on('change','.cfg_complect',function(){
-	$(this).closest('.wl_cfg_cars').find("#price").attr('pack', 0);
-	$(this).closest('.wl_cfg_cars').find("#price").attr('dops', 0);
-
-	$(this).closest('.wl_cfg_cars').find("#cfg-pack-block input").each(function(){
-		$(this).prop('checked',false);
-	});
-	$(this).closest('.wl_cfg_cars').find('#price').attr('base', complectPriceCfg($(this)));
-	totalPriceCfg($(this));
-	getPacksCfg($(this));
-	getColorCfg($(this));
-
-	$(this).closest('.wl_cfg_cars').find('.display').removeAttr('style');
-
+	carCountInStock($(this));
+	selectComplect($(this));
 	$('#wl_cfg_count').html($('.wl_cfg_cars').length);
 });
 
-// Добавление нового блока
+/**
+ * Функция подсчета автомобилей на складе по модели и комплектации
+ */
+function carCountInStock(object) {
+	var formData = new FormData();
+	formData.append('model_id', object.closest('.wl_cfg_cars').find('.cfg_model').val());
+	formData.append('complect_id', object.val());
+
+	$.ajax({
+		async: false,
+		type: "POST",
+        url: '/getcountcfgcar',
+        dataType : "json", 
+        cache: false,
+        contentType: false,
+        processData: false, 
+        data: formData,
+        headers: {
+	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    },
+		success: function(data){
+			object.closest('.wl_cfg_cars').find('.wl_cfg_res').html('');
+			if (data != 0)
+			{
+				var str = 'Ресурсы автосклада: ' + carCountString(data) + ', <a href="javascript://" class="wl_cfg_show">показать</a>?';
+				object.closest('.wl_cfg_cars').find('.wl_cfg_res').append(str);
+			}
+			else
+			{
+				var str = 'Ресурсы автосклада: ' + carCountString(data);
+				object.closest('.wl_cfg_cars').find('.wl_cfg_res').append(str);
+			}
+		},
+		error:function(xhr, ajaxOptions, thrownError){
+    		log('Не удалось получить количество автомобилей на складе по модели и комплектации');
+	    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+	    	log(xhr.responseText);
+	    	log(ajaxOptions);
+	    }
+	});
+}
+
+/**
+ * Показать машины в автоскладе по модели и комплектации
+ */
+$(document).on('click', '.wl_cfg_show', function() {
+	var formData = new FormData();
+	formData.append('model_id', $(this).closest('.wl_cfg_cars').find('.cfg_model').val());
+	formData.append('complect_id', $(this).closest('.wl_cfg_cars').find('.cfg_complect').val());
+	$.ajax({
+		async: false,
+		type: "POST",
+        url: '/showcfgcars',
+        dataType : "json", 
+        cache: false,
+        contentType: false,
+        processData: false, 
+        data: formData,
+        headers: {
+	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    },
+		success: function(data){
+			// Закрываем боковую панель
+			$('#hidden_panel').css('right', '-50%');
+			$('#disableContent').css('display', 'none');
+			// Переходим на вкладку Автосклад
+			$('#crmTabs a[href="#stock"]').tab('show');
+			// Вставляем полученные данные в таблицу
+    		var parent = $("#crmTabPanels").find("div[aria-labelledby='stock-tab']");
+    		parent.find('table').html("");
+	    	getTitleContent(parent,data['titles']);		    
+	    	getDataContent(parent,data['list']);		    	
+	    	getPaginationContent(parent,data['links']); 
+		},
+		error:function(xhr, ajaxOptions, thrownError){
+    		log('Не удалось показать автомобили на складе по модели и комплектации');
+	    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+	    	log(xhr.responseText);
+	    	log(ajaxOptions);
+	    }
+	});
+});
+
+/**
+ * Формирование строки вида "n автомобилей"
+ */
+function carCountString(count) {
+	if (count >= 5 && count <= 20)
+		return count + ' автомобилей';
+	else
+	{
+		count = count.toString();
+		switch (count.substr(count.length - 1, 1)) {
+			case '2':
+			case '3':
+			case '4':
+				return count + ' автомобиля';
+				break;
+
+			case '5': 
+			case '6': 
+			case '7': 
+			case '8': 
+			case '9': 
+			case '0': 
+				return count + ' автомобилей';
+				break;
+
+			default:
+				return count + ' автомобиль';
+		}
+	}
+}
+
+/**
+ * Функция получения пакетов, цвета и стартовой цены
+ */
+function selectComplect(object) {
+	if (object.val() != 'off')
+	{
+		object.closest('.wl_cfg_cars').find("#price").attr('pack', 0);
+		object.closest('.wl_cfg_cars').find("#price").attr('dops', 0);
+
+		object.closest('.wl_cfg_cars').find(".cfg-pack-block input").each(function(){
+			object.prop('checked',false);
+		});
+
+		object.closest('.wl_cfg_cars').find('#price').attr('base', complectPriceCfg(object));
+
+		totalPriceCfg(object);
+		getPacksCfg(object);
+		getColorCfg(object);
+
+		object.closest('.wl_cfg_cars').find('.display').removeAttr('style');
+	}
+}
+
+/**
+ * Добавление нового блока для конфигурации еще одного автомобиля
+ */
 $(document).on('click', '#wl_cfg_add', function() {
 	clone = $('#wl_cfg_car_blocks').find('.wl_cfg_cars').first().clone();
-	clone.find('.display').css('display', 'none');
-	clone.find('#cfg-img').attr('src', '');
-	clone.find('#cfg-img').css('background-color', '');
-	clone.find('.clear-html').html('');
-	clone.find('.cfg_model option:first').prop('selected', true);
-	var option = clone.find('.cfg_complect option:first').clone();
-	clone.find('.cfg_complect option').remove();
-	clone.find('.cfg_complect').append(option);
+	clearCfgBlock(clone);
 	clone.appendTo('#wl_cfg_car_blocks');
 });
 
-// Удаление блока
+/**
+ * Удаление блока сконфигурированной машины
+ */
 $(document).on('click', '.wl_cfg_del', function() {
+	var car = $(this).closest('.wl_cfg_cars');
+	deleteCfgBlocks(car);
+});
+
+/**
+ * Функция удаления блока сконфигурированной машины
+ * Если блоков несколько, то удаляет; если один - очистка от параметров
+ */
+function deleteCfgBlocks(object) {
 	if ($('.wl_cfg_cars').length > 1)
 	{
-		$(this).closest('.wl_cfg_cars').remove();
+		object.remove();
 		$('#wl_cfg_count').html($('.wl_cfg_cars').length);
 	}
 	else
 	{
-		$(this).closest('.wl_cfg_cars').find('.display').css('display', 'none');
-		$(this).closest('.wl_cfg_cars').find('#cfg-img').attr('src', '');
-		$(this).closest('.wl_cfg_cars').find('#cfg-img').css('background-color', '');
-		$(this).closest('.wl_cfg_cars').find('.clear-html').html('');
-		$(this).closest('.wl_cfg_cars').find('.cfg_model option:first').prop('selected', true);
-		var option = $(this).closest('.wl_cfg_cars').find('.cfg_complect option:first').clone();
-		$(this).closest('.wl_cfg_cars').find('.cfg_complect option').remove();
-		$(this).closest('.wl_cfg_cars').find('.cfg_complect').append(option);
-		$('#wl_cfg_count').html('0');
+		clearCfgBlock(object);
 	}
-});
+}
+
+/**
+ * Функция очистки блока сконфигурированной машины
+ */
+function clearCfgBlock(object) {
+	object.find('.display').css('display', 'none');
+	object.find('#cfg-img').attr('src', '');
+	object.find('#cfg-img').css('background-color', '');
+	object.find('.clear-html').html('');
+	object.find('.cfg_model option:first').prop('selected', true);
+	object.find('.wl_cfg_checkbox input[type="checkbox"]').prop('checked', false);
+	object.find('.wl_cfg_checkbox input[type="checkbox"]').removeAttr('cfg-id');
+	object.find('.wl_cfg_checkbox input[type="checkbox"]').removeClass('cfg_check_car');
+	var option = object.find('.cfg_complect option:first').clone();
+	object.find('.cfg_complect option').remove();
+	object.find('.cfg_complect').append(option);
+	$('#wl_cfg_count').html('0');
+}

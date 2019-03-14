@@ -37,6 +37,7 @@
 
 		<span><b>Цена автомобиля:</b> {{ $car['complect_price'] }}</span><br>
 
+		@isset($car['dops'])
 		<span><b>Доп. оборудование:</b></span><br>
 		<ol style="margin-bottom: 20px;">
 			@foreach($car['dops'] as $key => $value)
@@ -45,8 +46,14 @@
 		</ol>
 
 		<span><b>Цена доп. оборудования:</b> {{ $car['car_dopprice'] }}</span><br>
+		@endisset
 
-		<span><b>Опции:</b></span><br>
+		@if($car['car_vin'] == 'КОНФИГУРАТОР')
+		<span><b>Предложенные опции:</b></span><br>
+		@else
+		<span><b>Установленные опции:</b></span><br>
+		@endif
+
 		{!! $car['options'] !!}
 		<br>
 

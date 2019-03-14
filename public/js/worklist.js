@@ -5,6 +5,11 @@ function wl_save_changes(){
 	var wl_id = $('span[name=wl_id]').html();
 	var workstr = $("#worksheet").find("form").serializeArray();
 	workstr.push({'name':'wl_id','value':wl_id});
+
+
+	var cfg_cars = getCfgCars();
+	if (cfg_cars != null)
+		workstr.push({'name':'cfg_cars','value':cfg_cars});
 	//log(workstr)
 	$.ajax({
 		url: '/wlsavechanges',
@@ -29,6 +34,43 @@ function wl_save_changes(){
 	    	log('ddd')
 	    }
 	});
+}
+
+/**
+ * Функция получения данных о машинах в конфигураторе
+ * Используется при сохранении Рабочего листа
+ */
+function getCfgCars() {
+	if ($('.wl_cfg_cars').length > 0)
+	{
+		var cfg_cars = [];
+		$('.wl_cfg_cars').each(function (index) {
+			var model_id = $(this).find('.cfg_model').val();
+			var complect_id = $(this).find('.cfg_complect').val();
+
+			if (model_id != null && complect_id != null)
+			{
+				var options = [];
+
+				$(this).find('input[name="packs[]"]:checkbox:checked').each(function() {
+					options.push($(this).val());
+				});
+
+				cfg_cars[index] = {
+					'cfg_model':model_id,
+					'cfg_complect':complect_id,
+					'cfg_color_id':$(this).find('#cfg_color_id').val(),
+					'options':options
+				};
+			}
+			else 
+				return null;
+		});
+
+		return JSON.stringify(cfg_cars);
+	}
+	else
+		return null;
 }
 
 
@@ -263,7 +305,7 @@ $(document).on('click', '.removeSelectedCar', function() {
 
 /**
  * ПОДБОР ПО ПОТРЕБНОСТЯМ
- * Кнопка "Найти в автоскладе"
+ * Кнопка "Поиск на складе"
  */
 $(document).on('click', '#getListByNeeds', function() {
 	$(this).blur();
@@ -383,17 +425,73 @@ $(document).on('click', '#wl_need_reserve', function() {
 		alert('Рабочий лист не загружен!');
 	else
 	{
-		if ($('.check-car:checked').length != 1)
-			alert('Необходимо выбрать одну машину!');
+		var check_selected_car = checkSelectedCar(wl_id);
+		if (check_selected_car == true)
+		{
+			alert('У текущего рабочего листа уже зарезервирован автомобиль!');
+		}
 		else
 		{
-			var car_id = $('.check-car:checked').val();
-			
+			if ($('.check-car:checked').length != 1)
+			alert('Необходимо выбрать одну машину!');
+			else
+			{
+				var car_id = $('.check-car:checked').val();
+				
+				var formData = new FormData();
+				formData.append('car_id', car_id);
+				formData.append('wl_id', wl_id);
+				$.ajax({
+					url: '/wlreservecar',
+					type: 'POST',
+				    data: formData,
+				    dataType : "json", 
+				    cache: false,
+				    contentType: false,
+				    processData: false, 
+					headers: {
+				    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: function(data){
+						if (data == 'OK')
+						{
+							alert('Автомобиль зарезервирован.');
+							wl_save_changes(); // Обновляем данные в рабочем листе
+						}
+						else
+							alert('Не удалось зарезервировать автомобиль.');
+					},
+					error:function(xhr, ajaxOptions, thrownError){
+						log('Автомобиль не зарезервирован');
+				    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+				    	log(xhr.responseText);
+				    	log(ajaxOptions);
+				    }
+				});
+			}
+		}
+	}
+});
+
+
+/**
+ * Конфигуратор
+ * Открытие блока
+ */
+$(document).on('click', 'a[href="#wsparam3"]', function() {
+	if (!$(this).hasClass('collapsed'))
+	{
+		// Блок открыт
+
+		var wl_id = $('span[name="wl_id"]').html();
+
+		if (wl_id != '-')
+		{
 			var formData = new FormData();
-			formData.append('car_id', car_id);
 			formData.append('wl_id', wl_id);
 			$.ajax({
-				url: '/wlreservecar',
+				//async: false,
+				url: '/wlgetcfgcars',
 				type: 'POST',
 			    data: formData,
 			    dataType : "json", 
@@ -404,25 +502,210 @@ $(document).on('click', '#wl_need_reserve', function() {
 			    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
 				success: function(data){
-					if (data == 'OK')
+					
+					var block = $('.wl_cfg_cars').first().clone();
+					clearCfgBlock(block);
+
+					if (data.length == 0)
 					{
-						alert('Автомобиль зарезервирован.');
-						wl_save_changes(); // Обновляем данные в рабочем листе
+						$('#wl_cfg_car_blocks').html(block);
 					}
 					else
-						alert('Не удалось зарезервировать автомобиль.');
+					{
+						$('#wl_cfg_car_blocks').html('');
+						var color_btns = [];
+						var all_options = [];
+
+						for (i = 0; i < data.length; i++)
+						{
+							var car = block.clone();
+							
+							var car_model = car.find('.cfg_model');
+							car_model.val(data[i].model_id);
+							getComplectsCfg(car_model);
+							modelObjCfg(car_model);
+
+							var car_complect = car.find('.cfg_complect');
+							car_complect.val(data[i].complect_id);
+							carCountInStock(car_complect);
+							selectComplect(car_complect);
+
+							var car_checkbox = car.find('.wl_cfg_checkbox input[type="checkbox"]');
+							car_checkbox.addClass('cfg_check_car');
+							car_checkbox.attr('cfg-id', data[i].id);
+
+							if (data[i].color_id != null)
+								color_btns.push(car.find('.cfg-color button[color-id="'+data[i].color_id+'"]'));
+
+							var options = JSON.parse(data[i].options);
+							if (options.length != 0)
+							{
+								options.forEach(function(val, index) {
+									all_options.push(car.find('input[value="'+val+'"]'));
+								});
+							}
+
+							$('#wl_cfg_car_blocks').append(car);
+						}
+
+						if (color_btns.length != 0)
+						{
+							color_btns.forEach(function(elem, index) {
+								elem.trigger('click');
+							});
+						}
+
+						if (all_options.length != 0)
+						{
+							all_options.forEach(function(elem, index) {
+								elem.trigger('click');
+							});
+						}
+
+						$('#wl_cfg_count').html($('.wl_cfg_cars').length);
+					}
+
 				},
 				error:function(xhr, ajaxOptions, thrownError){
-					log('Автомобиль не зарезервирован');
+					log('Не удалось получить сохраненные в Конфигураторе машины');
 			    	log("Ошибка: code-"+xhr.status+" "+thrownError);
 			    	log(xhr.responseText);
 			    	log(ajaxOptions);
 			    }
 			});
 		}
+
+	}
+	else
+	{
+		// Блок закрыт
 	}
 });
 
+
+/**
+ * Конфигуратор
+ * Создание заявки на автомобиль
+ */
+$(document).on('click', '#wl_cfg_create_request', function() {
+	var wl_id = $('span[name="wl_id"]').html();
+
+	if (wl_id != '-')
+	{
+		var check_selected_car = checkSelectedCar(wl_id);
+		if (check_selected_car == true)
+		{
+			alert('У текущего рабочего листа уже зарезервирован автомобиль!');
+		}
+		else
+		{
+			if ($('.wl_cfg_checkbox input[type="checkbox"]:checked').length != 1)
+			{
+				alert('Необходимо выбрать один автомобиль для создания заявки');
+			}
+			else
+			{
+				var checked_car = $('.wl_cfg_checkbox input[type="checkbox"]:checked').first();
+				var formData = new FormData();
+				formData.append('wl_id', wl_id);
+				
+			    if (checked_car.hasClass('cfg_check_car'))
+			    {
+			    	var cfg_id = checked_car.attr('cfg-id');
+					formData.append('cfg_id', cfg_id);
+			    }
+			    else
+			    {
+			    	var car = checked_car.closest('.wl_cfg_cars');
+					var model_id = car.find('.cfg_model').val();
+					var complect_id = car.find('.cfg_complect').val();
+
+					if (model_id != null && complect_id != null)
+					{
+						var options = [];
+
+						car.find('input[name="packs[]"]:checkbox:checked').each(function() {
+							options.push($(this).val());
+						});
+
+						var cfg_car = {
+							'cfg_model':model_id,
+							'cfg_complect':complect_id,
+							'cfg_color_id':car.find('#cfg_color_id').val(),
+							'options':options
+						};
+
+						formData.append('cfg_car', JSON.stringify(cfg_car));
+					}
+			    }
+
+				$.ajax({
+					url: '/cfgcreaterequest',
+					type: 'POST',
+					data: formData,
+					dataType : "json", 
+					cache: false,
+					contentType: false,
+					processData: false, 
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					success: function(data){
+						if (data == 'done')
+						{
+							$('.ws-param').collapse('hide');
+							alert("Заявка создана\nАвтомобиль зарезервирован");
+						}
+					},
+					error:function(xhr, ajaxOptions, thrownError){
+						log('Не удалось создать заявку на автомобиль');
+						log("Ошибка: code-"+xhr.status+" "+thrownError);
+						log(xhr.responseText);
+						log(ajaxOptions);
+					}
+				});
+			}
+		}
+	}
+});
+
+/**
+ * Функция проверки, есть ли у рабочего листа привязанный (зарезервированный) автомобиль
+ */
+function checkSelectedCar(worklist_id) {
+	var formData = new FormData();
+	formData.append('worklist_id', worklist_id);
+	
+	var result = false;
+
+	$.ajax({
+		async: false,
+		url: '/wlcheckselectedcar',
+		type: 'POST',
+		data: formData,
+		dataType : "json", 
+		cache: false,
+		contentType: false,
+		processData: false, 
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		},
+		success: function(data){
+			if (data == '1')
+				result = true;
+			else
+				result = false;
+		},
+		error:function(xhr, ajaxOptions, thrownError){
+			log('Не удалось проверить рабочий лист на наличие привязанного автомобиля');
+			log("Ошибка: code-"+xhr.status+" "+thrownError);
+			log(xhr.responseText);
+			log(ajaxOptions);
+		}
+	});
+
+	return result;
+};
 
 /**
  * ВКЛАДКА "АВТОМОБИЛЬ"
@@ -447,7 +730,7 @@ $(document).on('click', '#worksheetTabs a[href="#worksheet-auto"]', function() {
 	        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    	},
 	    	success: function(data){
-	    		if (data == 'null')
+	    		if (data == '0')
 	    		{
 	    			$("#wl_car_empty").css('display', 'block');
 	    			$("#wl_car").css('display', 'none');
@@ -688,6 +971,65 @@ $(document).on('click', '#wl_create_comment', function(){
 
 /**
  * КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ
+ * Открытие блока
+ */
+$(document).on('click', 'a[href="#wsparam7"]', function() {
+	if (!$(this).hasClass('collapsed'))
+	{
+		// Блок открыт
+		var wl_id = $('span[name="wl_id"]').html();
+		if (wl_id != '-')
+		{
+			var formData = new FormData();
+			formData.append('wl_id', wl_id);
+			$.ajax({
+				url: '/wlgetoffers',
+				type: 'POST',
+		        data: formData,
+		        dataType : "json", 
+		        cache: false,
+		        contentType: false,
+		        processData: false, 
+				headers: {
+		        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		    	},
+		    	success: function(data){
+		    		if (data != '0')
+		    		{
+		    			var table = $('#wl_offers_list');
+		    			table.html('');
+
+		    			data.forEach(function(item, index) {
+		    				str = '<tr><td style="width: 20%;">'+item.creation_date+'</td><td>'+item.vins
+		    					+'</td><td style="width: 20%;"><a href="javascript://" id="'+item.offer_id+'" class="open-offer">Открыть</a></td></tr>';
+			    			table.append(str);
+		    			});
+		    		}
+		    		else
+		    		{
+		    			var table = $('#wl_offers_list');
+		    			table.html('');
+		    			table.html('Коммерческих предложений еще не создавалось');
+		    		}
+		    	},
+		    	error:function(xhr, ajaxOptions, thrownError){
+		    		log('Не удалось получить архив коммерческих предложений');
+			    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+			    	log(xhr.responseText);
+			    	log(ajaxOptions);
+			    }
+			});
+		}
+	}
+	else
+	{
+		// Блок закрыт
+	}
+});
+
+
+/**
+ * КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ
  * Создание Коммерческого предложения по кнопке
  * id - идентификатор рабочего листа
  */
@@ -695,22 +1037,45 @@ $(document).on('click', '#create_offer', function() {
 	var id = $('span[name="wl_id"]').html();
 	if (id != '-')
 	{
+		let form = $('#get-pdf')
+		let action = '/createoffer/' + id;
+		form.attr('action', action);
+		form.html('');
+		form.append('<input name="_token" value="'+$('meta[name="csrf-token"]').attr('content')+'" type="hidden">');
+
 		if ($('.check-car:checked').length > 0)
-		{
-			let form = $('#get-pdf')
-			form.html('')
-			form.append('<input name="_token" value="'+$('meta[name="csrf-token"]').attr('content')+'" type="hidden">')
+		{	
 			$('.check-car:checked').each(function(){
-			    form.append('<input type="hidden" name="pdf_cars[]" value="'+$(this).val()+'">');
+			    form.append('<input type="hidden" name="cars_ids[]" value="'+$(this).val()+'">');
 			});
-			form.submit()
 		}
-		else
+
+		if ($('.cfg_check_car:checked').length > 0)
 		{
-			var url = '/createoffer/' + id;
-			window.open(url);
+			$('.cfg_check_car:checked').each(function() {
+			    form.append('<input type="hidden" name="cfg_cars[]" value="'+$(this).attr('cfg-id')+'">');
+			});
 		}
+
+		form.submit();
 	}
+});
+
+/**
+ * КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ
+ * Открытие Коммерческого предложения из списка (архива) коммерческих предложений
+ * в Рабочем листе
+ */
+$(document).on('click', '.open-offer', function() {
+	var offer_id = $(this).attr('id');
+
+	let form = $('#get-pdf')
+	let action = '/openoffer';
+	form.attr('action', action);
+	form.html('');
+	form.append('<input name="_token" value="'+$('meta[name="csrf-token"]').attr('content')+'" type="hidden">');
+	form.append('<input type="hidden" name="offer_id" value="'+offer_id+'">');
+	form.submit();
 });
 
 
