@@ -450,26 +450,43 @@ Route::post('/wlgetdops', 'WorklistController@getDops')->name('wlgetdops');
 // Установить выбранное доп. оборудование
 Route::post('/wlinstalldops', 'WorklistController@installDops')->name('wlinstalldops');
 
-//Вывод блока "Автомобиль клиента"
+// Вывод блока "Автомобиль клиента"
 Route::post('/worklist/client/oldcar','WorklistController@getOldClientCar')->name('clientoldcar');
 
-//Добавление фото старого авто клиента
+// Добавление фото старого авто клиента
 Route::post('/worklist/client/oldcar/photo','WorklistController@addoldcarphoto')->name('addoldcarphoto');
 
-//Вывод блока "Программа лояльности"
+// Вывод блока "Программа лояльности"
 Route::post('/worklist/loyalty/program','WorklistController@getLoyaltyProgram')->name('loyaltyprogram');
 
 // Получить машину, закрепленную за рабочим листом
 Route::post('/wlgetcar', 'WorklistController@getCarByWorklistId')->name('wlgetcar');
 
-//Получить цену машины в разрезе закрепленую за РЛ
+// Получить цену машины в разрезе закрепленую за РЛ
 Route::post('/worklist/car/price','CarController@getPriceCarByWLId');
+
+
+// Получить сохраненные машины из конфигуратора в РЛ
+Route::post('/wlgetcfgcars', 'WorklistController@getCfgCars')->name('wlgetcfgcars');
+
+// Получить количество машин в автоскладе по модели и комплектации из конфигуратора
+Route::post('/getcountcfgcar', 'WorklistController@carCountInStock')->name('getcountcfgcar');
+
+// Показать машины в автоскладе по модели и комплектации из конфигуратора
+Route::post('/showcfgcars', 'WorklistController@showCfgCars')->name('showcfgcars');
+
+// Создать заявку на автомобиль из конфигуратора
+Route::post('/cfgcreaterequest', 'WorklistController@cfgCreateRequest')->name('cfgcreaterequest');
+
+// Проверить, привязан ли автомобиль к рабочему листу
+Route::post('/wlcheckselectedcar', 'WorklistController@checkSelectedCar')->name('wlcheckselectedcar');
 
 //Получить все платежи закреплённые за РЛ
 Route::post('/get/worklist/pays','WorklistController@getPays');
 
 //Получить вкладку контракты РЛ
 Route::post('/get/worklist/contracts','WorklistController@getContracts');
+
 
 
 
@@ -490,4 +507,10 @@ Route::get('/getpdf', 'PdfController@test')->name('getpdf');
 Route::get('/createoffer/{id}', 'PdfController@createOffer')->name('createoffer');
 
 // Создать коммерческое предложение для нескольких машин
-Route::post('/createoffer/{id?}', 'PdfController@createOffer')->name('createoffer');
+Route::post('/createoffer/{id}', 'PdfController@createOffer')->name('createoffer');
+
+// Получить архив коммерческих предложений для РЛ
+Route::post('/wlgetoffers', 'WorklistController@getOffersList')->name('wlgetoffers');
+
+// Открыть коммерческое предложение из архива
+Route::post('/openoffer', 'PdfController@openOffer')->name('openoffer');
