@@ -190,12 +190,12 @@
 							<div class="input-group p-2 border-bottom">
 								<div class="col-8 d-flex">
 									<label class="flex-grow-1">Дата сборки планируемамя</label>
-									<a href="javascript://" class="text-dark">
+									<a href="javascript://" class="text-dark" id="add-plan-date">
 										<i class="fas fa-plus-circle"></i>
 									</a>
 								</div>
 								<div class="col-4">
-									<input type="text" class="form-control calendar" name="date_planned">
+									<input type="text" class="form-control calendar item" name="date_planned[]">
 								</div>
 							</div>
 
@@ -230,12 +230,12 @@
 							<div class="input-group p-2">
 								<div class="col-8 d-flex">
 									<label class="flex-grow-1">Дата отгрузки</label>
-									<a href="javascript://" class="text-dark">
+									<a href="javascript://" class="text-dark" id="add-ship-date">
 										<i class="fas fa-plus-circle"></i>
 									</a>
 								</div>
 								<div class="col-4">
-									<input type="text" class="form-control calendar" name="date_ship">
+									<input type="text" class="form-control calendar item" name="date_ship[]">
 								</div>
 							</div>
 						</div>
@@ -284,23 +284,36 @@
 								</div>
 							</div>
 
-							<div class="p-2 border-bottom">
+							<div class="p-2 border-bottom provision-block">
 								<div class="input-group">
 									<label class="col-4 offset-4">Обеспечение</label>
 									<div class="col-4 d-flex">
 										<label class="flex-grow-1">Отсрочка платежа</label>
 										<a href="javascript://">
-											<i class="fas fa-plus-circle"></i>
+											<i class="fas fa-plus-circle" id="provision-adder"></i>
 										</a>
 									</div>
 								</div>
 								<div class="input-group">
 									<label class="col-4">Условия отгрузки</label>
 									<div class="col-4">
-										{!! Form::select('st_provision', [1,2,3],'',['class' => 'form-control']) !!}
+										{!! Form::select('st_provision', App\crm_list_provision::pluck('name','id'),'',['class' => 'form-control']) !!}
 									</div>
-									<div class="col-4">
-										<input type="text" class="form-control" name="st_delay">
+									<div class="col-4 provision-content">
+										<div class="row  item" style="padding: 0 15px">
+											<input 
+												type="text" 
+												class="form-control col-3" 
+												style="border-right: 0px; border-radius: 3px 0 0 3px" 
+												name="st_delay[]"
+											>
+											<input 
+												type="text" 
+												class="form-control col-9 calendar" 
+												name="st_date[]"  
+												style="border-radius:0 3px 3px 0 !important"
+											>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -313,7 +326,7 @@
 								<div class="input-group">
 									<label class="col-4">Себестоимость</label>
 									<div class="col-4">
-										<input type="text" class="form-control" disabled name="estimated_purchase">
+										<input type="text" class="form-control" name="estimated_purchase" style="pointer-events: none;">
 									</div>
 									<div class="col-4">
 										<input type="text" class="form-control" name="actual_purchase">
@@ -324,20 +337,26 @@
 							<div class="input-group p-2 border-bottom">
 								<label class="col-8">Скидка при отгрузке</label>
 								<div class="col-4">
-									<input type="text" class="form-control" disabled name="shipping_discount">
+									<input type="text" class="form-control" name="shipping_discount" style="pointer-events: none;">
 								</div>
 							</div>
 
-							<div class="input-group p-2 border-bottom">
+							<div class="input-group p-2 border-bottom discount-block">
 								<div class="col-4 d-flex">
 									<label class="flex-grow-1">Детализация скидки</label>
 									<a href="javascript://">
-										<i class="fas fa-plus-circle"></i>
+										<i class="fas fa-plus-circle" id="discount-adder"></i>
 									</a>
 								</div>
-								<div class="col-8 row">
-									{!! Form::select('dc_type', [1,2,3],'',['class' => 'form-control col-6']) !!}
-									<input type="text" class="form-control col-6" name="dc_sale">
+								<div class="col-8  discount-content">
+									<div class="item row"> 
+										<div class="col-6">
+											{!! Form::select('dc_type[]', App\crm_discount_detail::pluck('name','id'),'',['class' => 'form-control']) !!}
+										</div>
+										<div class="col-6">
+											<input type="text" class="form-control " name="dc_sale[]">
+										</div>
+									</div>
 								</div>
 							</div>
 							

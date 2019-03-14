@@ -465,6 +465,12 @@ Route::post('/wlgetcar', 'WorklistController@getCarByWorklistId')->name('wlgetca
 //Получить цену машины в разрезе закрепленую за РЛ
 Route::post('/worklist/car/price','CarController@getPriceCarByWLId');
 
+//Получить все платежи закреплённые за РЛ
+Route::post('/get/worklist/pays','WorklistController@getPays');
+
+//Получить вкладку контракты РЛ
+Route::post('/get/worklist/contracts','WorklistController@getContracts');
+
 
 
 /*ТЕСТОВЫЕ МАРШРУТЫ*/

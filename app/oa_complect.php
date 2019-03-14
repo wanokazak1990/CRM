@@ -18,7 +18,8 @@ class oa_complect extends Model
     	'parent'=>0,
     	'sort'=>0,
     	'status'=>0,
-    	'motor_id'=>null
+    	'motor_id'=>null,
+        'percent'=>null
     ];
 
     public function brand()

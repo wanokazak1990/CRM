@@ -17,6 +17,9 @@ use App\oa_brand;
 use App\complect_option;
 use App\ava_pack;
 use App\ava_dop;
+use App\crm_worklist;
+use App\crm_offered_dop;
+use App\crm_car_selection;
 
 class AjaxController extends Controller
 {
@@ -299,12 +302,18 @@ class AjaxController extends Controller
 
     }
 
-    public function getDopsByCarId(Request $request)
+    public function getDopsByCarId(Request $request,$offered_dops='',$array=array())
     {
         if($request->has('id')){
-            $list = ava_dop::with('dop')->where('avacar_id',$request->id)->get();
-            
-            echo $list->toJson();
+            $list = ava_dop::with('dop')->where('avacar_id',$request->id)->get()->toArray();
+            if($list)
+                $array['install'] = $list;
+            $worklist = crm_car_selection::where('car_id',$request->id)->first();
+            if($worklist)
+                $offered_dops = crm_offered_dop::where('worklist_id',$worklist->worklist_id)->first();
+            if($offered_dops)
+                $array['offered']=$offered_dops->getDops();
+            echo json_encode($array);
         }
     }
 }

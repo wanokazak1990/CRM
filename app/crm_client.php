@@ -42,7 +42,7 @@ class crm_client extends Model
 
     public function contact()
     {
-        return $this->hasOne('App\crm_client_contact','client_id','id');
+        return $this->hasOne('App\crm_client_contact','client_id','id')->with('getMarker')->orderBy('id','DESC');
     }
 
     public function getFullName()

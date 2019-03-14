@@ -793,126 +793,34 @@
 						</div>
 						<!-- Рабочий лист Вкладка  Оформление -->
 						<div class="tab-pane" id="worksheet-design" role="tabpanel" aria-labelledby="worksheet-design-tab">
-							<!-- 
-							ПЛАТЕЖИ
-							ЗАГОЛОВОК
-							-->
-							<div class="p-2 bg-info d-flex">
+							
+							<!----------------------------->
+							<!-- ПЛАТЕЖИ ЗАГОЛОВОК НАЧАЛО-->
+							<!----------------------------->
+							<div class="p-2 bg-info d-flex" id="client_pays">
 								<a class="text-white" data-toggle="collapse" href="#wsdesign1" aria-expanded="false" aria-controls="wsdesign1">Платежи</a>
 							</div>
-							<!-- 
-							ПЛАТЕЖИ
-							КОНТЕНТ
-							-->
-							<div id="wsdesign1" class="py-3 collapse">
-								<div class="input-group">
-									<span class="col-3">Сумма платежа</span>
-									<span class="col-3">Дата платежа</span>
-									<span class="col-6">Сумма остатка</span>
-								</div>
+							<div id="wsdesign1" class="py-3 collapse client_pays"></div>
+							<!----------------------------->
+							<!-- ПЛАТЕЖИ ЗАГОЛОВОК КОНЕЦ -->
+							<!----------------------------->
 
-								<div>
-									<div class="input-group">
-										<input type="text" class="form-control col-3" placeholder="Сумма платежа" value="10 000">
-										<input type="text" class="form-control col-3" placeholder="Дата платежа" value="01.01.2019">
-										<input type="text" class="form-control col-3" value="690 000" disabled>
-										<div class="col-1 d-flex align-items-center">
-											<span><input type="checkbox" checked></span>
-										</div>
-										<div class="col-1 d-flex align-items-center">
-											<a href="javascript://" class="text-danger"><i class="fas fa-times"></i></a>
-										</div>
-									</div>
 
-									<div class="input-group">
-										<input type="text" class="form-control col-3" placeholder="Сумма платежа" value="240 000">
-										<input type="text" class="form-control col-3" placeholder="Дата платежа" value="05.01.2019">
-										<input type="text" class="form-control col-3" value="450 000" disabled>
-										<div class="col-1 d-flex align-items-center">
-											<span><input type="checkbox"></span>
-										</div>
-										<div class="col-1 d-flex align-items-center">
-											<a href="javascript://" class="text-danger"><i class="fas fa-times"></i></a>
-										</div>
-										<div class="col-1 d-flex align-items-center">
-											<a href="javascript://" class="text-success"><i class="fas fa-plus-circle"></i></a>
-										</div>
-									</div>
-								</div>
 
-								<div class="input-group">
-									<span class="col-12">График оплаты ПТС</span>
-									<input type="text" class="col-3 form-control" placeholder="Дата" value="25.01.2019">
-								</div>
-							</div>
-							<!-- 
-							ОФОРМЛЕНИЕ
-							ЗАГОЛОВОК
-							-->
-							<div class="p-2 bg-info d-flex">
+
+
+							<!-------------------------------->
+							<!-- ОФОРМЛЕНИЕ ЗАГОЛОВОК НАЧАЛО-->
+							<!-------------------------------->
+							<div class="p-2 bg-info d-flex" id="client_contract">
 								<a class="text-white" data-toggle="collapse" href="#wsdesign2" aria-expanded="false" aria-controls="wsdesign2">Оформление</a>
 							</div>
-							<!-- 
-							ОФОРМЛЕНИЕ
-							КОНТЕНТ
-							-->
-							<div id="wsdesign2" class="py-3 collapse">
-								<div class="input-group">
-									<span class="col-3">Оформитель</span>
-									<span class="col-3">Номер договора</span>
-									<span class="col-3">Дата договора</span>
-									<span class="col-3">Тип договора</span>
-								</div>
+							<div id="wsdesign2" class="py-3 collapse client_contract"></div>
+							<!-------------------------------->
+							<!-- ОФОРМЛЕНИЕ ЗАГОЛОВОК НАЧАЛО-->
+							<!-------------------------------->
 
-								<div class="input-group">
-									<select class="form-control col-3">
-										<option>Выбрать</option>
-										<option selected>Вася</option>
-										<option>Петя</option>
-									</select>
-									<input type="text" class="form-control col-3" placeholder="Номер договора" value="ДПс00123">
-									<input type="text" class="form-control col-3" placeholder="Дата" value="01.01.2019">
-									<input type="text" class="form-control col-3" placeholder="Тип" value="Предварительный">
-								</div>
-								
-								<div class="input-group">
-									<span class="col-12">Срок поставки</span>
-									<input type="text" class="form-control col-3" value="15.02.2018">
-								</div>
 
-								<div class="input-group">
-									<span class="col-3">Задолженность</span>
-									<span class="col-3"><input type="checkbox" checked> Акцептовано</span>
-								</div>
-
-								<div class="input-group">
-									<input type="text" class="col-3 form-control" value="450 000 р." disabled>
-									<input type="text" class="col-9 form-control" style="font-style: italic;" value="Кредитный менеджер Вася 25.01.2019 16.37" disabled>
-								</div>
-
-								<div class="input-group">
-									<span class="col-3">Оформитель</span>
-									<span class="col-3">Дата выдачи</span>
-									<span class="col-3">Дата продажи</span>
-									<span class="col-3">Дата списания</span>
-								</div>
-
-								<div class="input-group">
-									<select class="form-control col-3">
-										<option>Выбрать</option>
-										<option selected>Вася</option>
-										<option>Петя</option>
-									</select>
-									<input type="text" class="form-control col-3" placeholder="Дата выдачи" value="25.01.2019">
-									<input type="text" class="form-control col-3" placeholder="Дата продажи" value="25.01.2019">
-									<input type="text" class="form-control col-3" placeholder="Дата списания" disabled>
-								</div>
-
-							</div>
-							<!-- 
-							КРЕДИТОВАНИЕ
-							ЗАГОЛОВОК
-							-->
 							<div class="p-2 bg-info d-flex">
 								<a class="text-white" data-toggle="collapse" href="#wsdesign3" aria-expanded="false" aria-controls="wsdesign3">Кредитование</a>
 							</div>

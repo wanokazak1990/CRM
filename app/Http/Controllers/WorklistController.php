@@ -17,6 +17,9 @@ use App\ava_dop;
 use App\company;
 use App\crm_worklist_company;
 use App\crm_offered_dop;
+use App\crm_client_pay;
+use App\crm_worklist_contract;
+use App\crm_contract_ship;
 use Storage;
 
 class WorklistController extends Controller
@@ -67,10 +70,11 @@ class WorklistController extends Controller
      * Сохранить изменения в Рабочем листе
      */
     public function saveChanges(Request $request)
-    {
+    {   
+
         /*$string = json_decode($request->worksheet);
         parse_str($string, $data);*/
-
+        //print_r($request->all());
         $worklist = crm_worklist::find($request->wl_id);
         $traffic = crm_traffic::find($worklist->traffic_id);
         $client = crm_client::find($worklist->client_id);
@@ -143,7 +147,52 @@ class WorklistController extends Controller
             $dops->save();
         }
 
-        echo 1;
+
+        //СОХРАНЕНИЕ ВКЛАДКИ ОФОРМЛЕНИЕ -> ПЛАТЕЖИ
+        crm_client_pay::where('worklist_id',$request->wl_id)->delete();
+        if($request->has('wl_pay_sum'))
+        {
+            foreach ($request->wl_pay_sum as $key => $value) {
+                if($request->wl_pay_sum[$key] && $request->wl_pay_date[$key] && $request->wl_pay_debt[$key])
+                    $id = crm_client_pay::create([
+                        'worklist_id'=>$worklist->id,
+                        'client_id'=>$worklist->client_id,
+                        'pay'=>$request->wl_pay_sum[$key],
+                        'date'=>strtotime($request->wl_pay_date[$key]),
+                        'debt'=>$request->wl_pay_debt[$key],
+                        'status'=>@$request->wl_pay_status[$key]
+                    ]);
+            }
+        }
+
+
+        //СОХРАНЕНИЕ ВКЛАДКИ ОФОРМЛЕНИЕ -> ОФОРМЛЕНИЕ
+        $oldContract = crm_worklist_contract::where('worklist_id',$request->wl_id)->first();
+        $contractId = isset($oldContract->id)?$oldContract->id:'';
+        if($contractId)
+            crm_worklist_contract::where('id',$contractId)->delete();
+        if($request->has('contract'))
+        {
+            if($request->contract['author_id'])
+            {
+                $data = $request->contract;
+                $data['worklist_id'] = $worklist->id;
+                $data['client_id'] = $worklist->client_id;
+                foreach ($data as $key => $value) {
+                    if(substr_count($key,"date"))
+                        $data[$key] = strtotime($value);
+                }
+                $res = crm_worklist_contract::create($data);
+                if($res)
+                    if($data['ship'])
+                        crm_contract_ship::where('contract_id',$contractId)->delete();
+                        foreach ($data['ship'] as $key => $value) {
+                            if($value)
+                                crm_contract_ship::create(['contract_id'=>$res->id,'date'=>strtotime($value)]);
+                        }
+            }
+        }
+        echo "1";
     }
 
     /**
@@ -547,5 +596,39 @@ class WorklistController extends Controller
             $company = company::clientCompanyForHtml($selectionCar);
             echo json_encode($company);
         }
+    }
+
+    public function getPays(Request $request)
+    {   
+        $carSale = 0;
+        $carPrice = 0;
+        if($request->has('worklist_id')) :
+            $worklist = crm_worklist::with('pays')->with('selectedCompanies')->find($request->worklist_id);
+            $selectionCar = crm_car_selection::with('avacar')->where('worklist_id',$request->worklist_id)->first();
+            if(!empty($worklist->selectedCompanies)) :
+                foreach ($worklist->selectedCompanies as $key => $value) :
+                    if(in_array($value->razdel, [1,2,4])) :
+                        $carSale += $value->sum;
+                    endif;
+                endforeach;
+            endif;
+
+            if(!empty($selectionCar->avacar)):
+                $carPrice = $selectionCar->avacar->totalPrice();
+            endif;
+        endif;
+        echo (\App\crm_client_pay::getHtml($worklist->pays,$carPrice-$carSale));
+    }
+
+    public function getContracts(Request $request)
+    {
+        
+
+        if($request->has('worklist_id'))
+            $contract = crm_worklist_contract::where('worklist_id',$request->worklist_id)->first();
+        if(!$contract)
+            $contract= new crm_worklist_contract();
+
+        echo $contract->getHtml();
     }
 }
