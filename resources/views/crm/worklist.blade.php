@@ -875,170 +875,20 @@
 
 							</div>
 
-							<!-- 
-							КРЕДИТЫ
-							ЗАГОЛОВОК
-							-->
-							<div class="p-2 bg-info d-flex">
-								<a class="text-white" data-toggle="collapse" href="#wsdesign4" aria-expanded="false" aria-controls="wsdesign4">Кредиты</a>
-							</div>
-							<!-- 
-							КРЕДИТЫ
-							КОНТЕНТ
-							-->
-							<div id="wsdesign4" class="py-3 collapse ws-registration">
-								<div class="input-group">
-									<div class="col-12 d-flex">
-										<span class="flex-grow-1 font-weight-bold">Выявленные потребности</span>
-										<a href="javascript://"><i class="fas fa-comment-dots"></i></a>
-									</div>
-								</div>
-
-								<div class="input-group">
-									<span class="col-3">Форма оплаты</span>
-									<span class="col-3">Первый взнос</span>
-									<span class="col-3">Цена продажи</span>
-									<span class="col-3">Сумма кредита</span>
-								</div>
-
-								<div class="input-group mb-3">
-									<select class="col-3 form-control">
-										<option>В кредит</option>
-										<option>За почку</option>
-									</select>
-									<input type="text" class="col-3 form-control" placeholder="Сумма, р.">
-									<input type="text" class="col-3 form-control" placeholder="Цена продажи" value="1 028 980 р." disabled>
-									<input type="text" class="col-3 form-control" placeholder="Сумма кредита" value="1 028 980 р." disabled>
-								</div>
-
-								<div class="input-group">
-									<div class="col-12 d-flex">
-										<span class="flex-grow-1 font-weight-bold">Работа с заявками (2)</span>
-										<a href="javascript://"><i class="fas fa-plus-circle"></i></a>
-									</div>
-								</div>
-
-								<div>
-									<div class="mb-3">
-										<div class="input-group">
-											<span class="col-3">Консультант</span>
-											<span class="col-3">Кредитор</span>
-											<span class="col-3">Первый взнос</span>
-											<span class="col-3">Сумма кредита</span>
-										</div>
-
-										<div class="input-group">
-											<select class="col-3 form-control">
-												<option>Вася</option>
-												<option>Петя</option>
-											</select>
-											<select class="col-3 form-control">
-												<option>РНБ</option>
-												<option>Другой</option>
-											</select>
-											<input type="text" class="form-control col-3" placeholder="Первый взнос" value="400 000 р.">
-											<input type="text" class="form-control col-3" value="628 980 р." disabled>
-										</div>
-										
-										<div class="input-group">
-											<span class="col-3">Дата заявки</span>
-											<span class="col-3 text-danger">06.01.2019</span>
-											<span class="col-3">Срок действия</span>
-											<span class="col-3">Дата подписания</span>
-										</div>
-
-										<div class="input-group">
-											<input type="text" class="form-control col-3" placeholder="Дата" value="05.01.2019">
-											<select class="col-3 form-control">
-												<option>Отказ</option>
-											</select>
-											<input type="text" class="form-control col-1" placeholder="Дни">
-											<input type="text" class="form-control col-2" placeholder="Дата">
-											<input type="text" class="form-control col-3" placeholder="Дата подписания">
-										</div>
-
-										<div class="input-group">
-											<div class="col-12">
-												<span><input type="checkbox" checked> КАСКО</span>	
-												<span><input type="checkbox" checked> СЖ</span>	
-												<span><input type="checkbox"> GAP</span>	
-												<span><input type="checkbox" checked> Продленка</span>	
-											</div>
-										</div>
-									</div>
-
-									<div class="mb-3">
-										<div class="input-group">
-											<span class="col-3">Консультант</span>
-											<span class="col-3">Кредитор</span>
-											<span class="col-3">Первый взнос</span>
-											<span class="col-3">Сумма кредита</span>
-										</div>
-
-										<div class="input-group">
-											<select class="col-3 form-control">
-												<option>Вася</option>
-												<option>Петя</option>
-											</select>
-											<select class="col-3 form-control">
-												<option>РНБ</option>
-												<option>Другой</option>
-											</select>
-											<input type="text" class="form-control col-3" placeholder="Первый взнос" value="450 000 р.">
-											<input type="text" class="form-control col-3" value="578 980 р." disabled>
-										</div>
-										
-										<div class="input-group">
-											<span class="col-3">Дата заявки</span>
-											<span class="col-3 text-success">06.01.2019</span>
-											<span class="col-3">Срок действия</span>
-											<span class="col-3">Дата подписания</span>
-										</div>
-
-										<div class="input-group">
-											<input type="text" class="form-control col-3" placeholder="Дата" value="06.01.2019">
-											<select class="col-3 form-control">
-												<option>Одобрен</option>
-											</select>
-											<input type="text" class="form-control col-1" placeholder="Дни" value="100">
-											<input type="text" class="form-control col-2" placeholder="Дата" value="16.04.2019">
-											<input type="text" class="form-control col-3" placeholder="Дата подписания" value="07.01.2019">
-										</div>
-
-										<div class="input-group">
-											<div class="col-12">
-												<span><input type="checkbox" checked> КАСКО</span>	
-												<span><input type="checkbox"> СЖ</span>	
-												<span><input type="checkbox" checked> GAP</span>	
-												<span><input type="checkbox"> Продленка</span>	
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="input-group">
-									<div class="col-12 d-flex align-items-center">
-										<span class="flex-grow-1 font-weight-bold">Комиссионное вознаграждение</span>
-										<span><b>42 500 р.</b> (7,3%)</span>
-									</div>
-								</div>
-
-								<div class="input-group">
-									<span class="col-3">Дата валидации</span>
-									<span class="col-3">КВ за кузов</span>
-									<span class="col-3">КВ за продукты</span>
-									<span class="col-3">Прочее КВ</span>
-								</div>
-
-								<div class="input-group">
-									<input type="text" class="col-3 form-control" placeholder="Дата">
-									<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="7 500 р.">
-									<input type="text" class="col-3 form-control" placeholder="Сумма, р." value="35 000 р.">
-									<input type="text" class="col-3 form-control" placeholder="Сумма, р.">
-								</div>
-
-							</div>
 							
+
+							<!----------------------------> 
+							<!--КРЕДИТЫ ЗАГОЛОВОК НАЧАЛО-->
+							<!---------------------------->
+							<div class="p-2 bg-info d-flex" id="client_kredit">
+								<a class="text-white" data-toggle="collapse" href="#wsdesign4" aria-expanded="false" aria-controls="wsdesign4">
+									Кредиты
+								</a>
+							</div>
+							<div id="wsdesign4" class="py-3 collapse client_kredit ws-registration"></div>
+							<!----------------------------> 
+							<!--КРЕДИТЫ КОНТЕНТ КОНЕЦ----->
+							<!---------------------------->
 						</div>
 
 					</div>
