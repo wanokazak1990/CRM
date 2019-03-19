@@ -255,8 +255,8 @@ class CRMAjaxController extends Controller
                     });
             });
             
-        if($request->wl_need_sum)
-            $query->where('carprice.totalprice', '<=', $request->wl_need_sum);
+        /*if($request->wl_need_sum)
+            $query->where('carprice.totalprice', '<=', $request->wl_need_sum);*/
 
         $query->groupBy('avacars.id');
         if (count($options) > 0)

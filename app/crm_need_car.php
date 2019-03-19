@@ -53,6 +53,45 @@ class crm_need_car extends Model
     		return null;
     }
 
+    public static function getPurchaseType($worklist_id)
+    {
+    	$type = crm_need_car::where('worklist_id', $worklist_id)->first();
+
+    	if ($type != null)
+    	{
+    		if ($type->purchase_type != null)
+    			return $type->purchase_type;
+    	}
+    	else
+    		return null;
+    }
+
+    public static function getPayType($worklist_id)
+    {
+    	$type = crm_need_car::where('worklist_id', $worklist_id)->first();
+
+    	if ($type != null)
+    	{
+    		if ($type->pay_type != null)
+    			return $type->pay_type;
+    	}
+    	else
+    		return null;
+    }
+
+    public static function getFirstPay($worklist_id)
+    {
+    	$firstpay = crm_need_car::where('worklist_id', $worklist_id)->first();
+
+    	if ($firstpay != null)
+    	{
+    		if ($firstpay->firstpay != null)
+    			return $firstpay->firstpay;
+    	}
+    	else
+    		return null;
+    }
+
 
     /**
      * Отрисовка блока машины в Подборе по потребностям
