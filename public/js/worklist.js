@@ -2061,5 +2061,85 @@ $(document).on('click', 'a[href="#wsparam5"]', function() {
 })();
 
 
+/*ОФОРМЛЕНИЕ -> КРЕДИТЫ*/
+(function(){
+	let link = $(document).find('#client_kredit')
+	let block = $(document).find('.client_kredit')
+
+	link.on('click',function(){
+		block.html('')
+		let worklist_id = $('span[name=wl_id]').html() //беру ид раблиста
+		let parameters = {'worklist_id':worklist_id}
+		let url = '/get/worklist/kredit'
+		$.when(
+			ajax(parameters,url)
+				.then(function(data){
+					data = JSON.parse(data)
+					block.append(data.html)
+					for(i in data)
+					{
+						block.find('[name="wl_kredit['+i+']"]').val(data[i])
+					}
+					block.find('[name="wl_kredit[payment]"]').val(number_format(block.find('[name="wl_kredit[payment]"]').val(),0,'',' '))
+					block.find('[name="wl_kredit[sum]"]').val(number_format(block.find('[name="wl_kredit[sum]"]').val(),0,'',' '))
+					block.find('[name="wl_kredit[price]"]').val(number_format(block.find('[name="wl_kredit[price]"]').val(),0,'',' '))
+					block.find('[name="wl_kredit[margin_kredit]"]').val(number_format(block.find('[name="wl_kredit[margin_kredit]"]').val(),0,'',' '))
+					block.find('[name="wl_kredit[margin_product]"]').val(number_format(block.find('[name="wl_kredit[margin_product]"]').val(),0,'',' '))
+					block.find('[name="wl_kredit[margin_other]"]').val(number_format(block.find('[name="wl_kredit[margin_other]"]').val(),0,'',' '))
+				})
+			)
+	})
+
+	block.on('click','#adder_app',function(){
+		var content = block.find('.kredit_app_content');
+		var first = content.find('.app_block:first')
+		var clone = first.clone()
+		clone.find('[type="input"]').val('')
+		clone.find('select').val('')
+		clone.find('[type="checkbox"]').prop('checked',false)
+		clone.addClass('pdt-20')
+		clone.find('input').each(function(){
+			var name = $(this).attr('name')
+			name = name.split(']')
+			name = name.join('')
+			name = name.split('[')
+			name[2] = parseInt(name[2])+1
+			var newName = name[0]+'['+name[1]+']'+'['+name[2]+']'+'['+name[3]+']'
+			if(name[3]=='product')
+				newName += '[]'
+			$(this).attr('name',newName)
+		})
+		content.append(clone)
+	})
+
+	block.on('click','.deleter_app',function(){
+		var delBlock = $(this).closest('.app_block')
+		log(delBlock)
+		if(block.find('.app_block').length>1)
+			delBlock.remove()
+		else
+		{
+			delBlock.find('input').val('')
+			delBlock.find('select').val('')
+			delBlock.removeClass('pdt-20')
+		}
+	})
+
+	block.on('keyup','.kredit_payment',function(e){
+		var text = 0
+		if( (e.which>=96 && e.which<=105) || (e.which>=48 && e.which<=57) )
+			text = text
+		else
+			$(this).val($(this).val().substring(0,$(this).val().length-1))
+
+		var payment = parseInt(nonSpace($(this).val()))
+		var price = parseInt(nonSpace($('.kredit_price').val()))
+		var sum = price-payment
+		$(this).val(number_format(payment,0,'',' '))
+		$('.kredit_sum').val(number_format(sum,0,'',' '))
+	})
+
+})();
+
 
 

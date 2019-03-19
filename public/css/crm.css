@@ -26,6 +26,9 @@ body{
 	height: 56px;
 	z-index: 1; 
 }
+.pdt-20{
+	padding-top: 20px;
+}
 /* Полупрозрачный блок, перекрывающий основной контент при открытии боковой панели */
 #disableContent{
 	position: fixed; 
@@ -332,7 +335,9 @@ b.green{background: #0f0;height: 20px;width: 20px;border-radius: 100%;display: b
 	margin-top: 20px;
 }
 
-
+/*ОФОРМЛЕНИЕ -> КРЕДИТЫ*/
+.client_kredit{}
+.client_kredit label{color: #777;margin: 0px;}
 
 
 

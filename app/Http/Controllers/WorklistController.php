@@ -27,6 +27,9 @@ use App\crm_client_pay;
 use App\crm_worklist_contract;
 use App\crm_contract_ship;
 
+use App\crm_worklist_kredit;
+use App\crm_worklist_kwaiting;
+
 use Storage;
 
 class WorklistController extends Controller
@@ -174,6 +177,7 @@ class WorklistController extends Controller
             }
         }
 
+
         // Сохранение продуктов ОФУ
         crm_ofu_product::where('worklist_id', $request->wl_id)->delete();
         if ($request->has('ofu_products'))
@@ -194,6 +198,9 @@ class WorklistController extends Controller
                 $product->save();
             }
         }
+
+
+
 
         //СОХРАНЕНИЕ ВКЛАДКИ ОФОРМЛЕНИЕ -> ПЛАТЕЖИ
         crm_client_pay::where('worklist_id',$request->wl_id)->delete();
@@ -239,7 +246,46 @@ class WorklistController extends Controller
                         }
             }
         }
-        echo 1;
+
+
+        /*СОХРАНЕНИЕ ВКЛАДКИ ОФОРМЛЕНИЕ -> КРЕДИТЫ*/
+        if($request->has('wl_kredit'))
+        {   
+            if(!empty($request->wl_kredit))
+            {
+                //массив с данными для кредита
+                $dataKredit = $request->wl_kredit;
+                //дописываю в массив кредита ид рабочего листа
+                $dataKredit['worklist_id'] = $request->wl_id;
+                //пробую получить кредит закреплённый за РЛ
+                $kredit = crm_worklist_kredit::where('worklist_id',$request->wl_id)->first();
+                //если кредит получен, то перезаписываю его новыми данными
+                if(isset($kredit->id))
+                {
+                    $kredit->update($dataKredit);
+                    $res = $kredit->id;//ид кредита
+                }
+                //если не получен, значит за РЛ ещё нет РЛ
+                else
+                    //создаю кредит из массива данных
+                    $res = crm_worklist_kredit::create($dataKredit);
+                if(!empty($request->wl_kredit['app']))
+                {
+                    crm_worklist_kwaiting::where('kredit_id',$res)->delete();
+                    foreach ($request->wl_kredit['app'] as $key => $item) {
+                        $data = $item;
+                        if($item['payment'])
+                        {
+                            $data['product'] = implode('|', $item['product']);
+                            $data['kredit_id'] = $res;
+                            crm_worklist_kwaiting::create($data);
+                        }
+                    }
+                }
+            }
+        }
+
+        echo "1";
 
     }
 
@@ -880,6 +926,7 @@ class WorklistController extends Controller
         echo json_encode($mas);
     }
 
+    //Вернёт вкладку с подходящими под авто акциями
     public function getLoyaltyProgram(Request $request)//получить подходящие программы лояльности, для выбранного авто
     {
         if(!$request->has('wl_id')) return;//если нет ид ворклиста уходим
@@ -891,6 +938,7 @@ class WorklistController extends Controller
         }
     }
 
+    //Вернёт html вкладки оформление->Платежи
     public function getPays(Request $request)
     {   
         $carSale = 0;
@@ -913,15 +961,59 @@ class WorklistController extends Controller
         echo (\App\crm_client_pay::getHtml($worklist->pays,$carPrice-$carSale));
     }
 
+    //Вернёт вкладку оформление->оформление
+    //все данные будут сразу записанны в html
     public function getContracts(Request $request)
     {
-        
-
         if($request->has('worklist_id'))
             $contract = crm_worklist_contract::where('worklist_id',$request->worklist_id)->first();
         if(!$contract)
             $contract= new crm_worklist_contract();
 
         echo $contract->getHtml();
+    }
+
+    //Получение html вкладки оформление->кредит
+    //а так же данных о кредите
+    //kredit->содержит данные о кредите
+    //kredit->html содержит html
+    //kredit->getWaitings содержит заявки на кредит
+    public function getKredit(Request $request)
+    {
+        $carPrice = 0;
+        $carSale = 0;
+        if($request->has('worklist_id'))
+        {
+            $kredit = crm_worklist_kredit::where('worklist_id',$request->worklist_id)->first();
+            if(is_object($kredit))
+            {
+               $kredit->getWaitings;
+               $kredit->html = $kredit->getHtml();
+            }
+            else
+            {
+                $kredit = new crm_worklist_kredit();
+                $kredit->html = $kredit->getHtml();
+            }
+
+            $worklist = crm_worklist::with('pays')->with('selectedCompanies')->find($request->worklist_id);
+            $selectionCar = crm_car_selection::with('avacar')->where('worklist_id',$request->worklist_id)->first();
+
+            if(!empty($worklist->selectedCompanies)) :
+                foreach ($worklist->selectedCompanies as $key => $value) :
+                    if(in_array($value->razdel, [1,2,4])) :
+                        $carSale += $value->sum;
+                    endif;
+                endforeach;
+            endif;
+
+            if(!empty($selectionCar->avacar)):
+                $carPrice = $selectionCar->avacar->totalPrice();
+            endif;
+
+            $kredit->price = $carPrice-$carSale;
+            $kredit->sum = $kredit->price-$kredit->payment;
+        }
+        echo $kredit->toJson();
     }
 }

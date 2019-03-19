@@ -499,6 +499,9 @@ Route::post('/get/worklist/pays','WorklistController@getPays');
 //Получить вкладку контракты РЛ
 Route::post('/get/worklist/contracts','WorklistController@getContracts');
 
+//Получить вкладку кредиты РЛ
+Route::post('/get/worklist/kredit','WorklistController@getKredit');
+
 
 
 
