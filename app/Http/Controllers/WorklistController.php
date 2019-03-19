@@ -21,6 +21,7 @@ use App\crm_offered_dop;
 
 use App\crm_configurator;
 use App\crm_commercial_offer;
+use App\crm_ofu_product;
 
 use App\crm_client_pay;
 use App\crm_worklist_contract;
@@ -173,8 +174,26 @@ class WorklistController extends Controller
             }
         }
 
-        echo 1;
-
+        // Сохранение продуктов ОФУ
+        crm_ofu_product::where('worklist_id', $request->wl_id)->delete();
+        if ($request->has('ofu_products'))
+        {
+            $ofu_products = json_decode($request->ofu_products);
+            foreach ($ofu_products as $key => $ofu_product) 
+            {
+                $product = new crm_ofu_product();
+                $product->worklist_id = $request->wl_id;
+                $product->author_id = $ofu_product->author;
+                $product->product_id = $ofu_product->product;
+                $product->partner_id = $ofu_product->partner;
+                $product->price = $ofu_product->price;
+                $product->creation_date = strtotime($ofu_product->creation_date);
+                $product->end_date = strtotime($ofu_product->end_date);
+                $product->profit = $ofu_product->profit;
+                $product->profit_date = strtotime($ofu_product->profit_date);
+                $product->save();
+            }
+        }
 
         //СОХРАНЕНИЕ ВКЛАДКИ ОФОРМЛЕНИЕ -> ПЛАТЕЖИ
         crm_client_pay::where('worklist_id',$request->wl_id)->delete();
@@ -220,7 +239,7 @@ class WorklistController extends Controller
                         }
             }
         }
-        echo "1";
+        echo 1;
 
     }
 
@@ -611,6 +630,9 @@ class WorklistController extends Controller
     {
         $data['blocks'] = crm_need_car::getCarBlocks($request->wl_id);
         $data['options'] = crm_need_car::getCarOptions($request->wl_id);
+        $data['purchase_type'] = crm_need_car::getPurchaseType($request->wl_id);
+        $data['pay_type'] = crm_need_car::getPayType($request->wl_id);
+        $data['firstpay'] = crm_need_car::getFirstPay($request->wl_id);
 
         echo json_encode($data);
     }
@@ -631,6 +653,9 @@ class WorklistController extends Controller
             $car->model_id = $val->model;
             $car->wheel_id = $val->wheel;
             $car->transmission_id = $val->transmission;
+            $car->purchase_type = $request->purchase_type;
+            $car->pay_type = $request->pay_type;
+            $car->firstpay = $request->firstpay;
             if ($request->wl_need_option != null)
                 $car->options = json_encode($request->wl_need_option);
             $car->save();
@@ -705,8 +730,7 @@ class WorklistController extends Controller
     }
 
     /**
-     *
-     *
+     * Проверить, есть ли у Рабочего листа зарезервированный автомобиль
      */
     public function checkSelectedCar(Request $request)
     {
@@ -772,6 +796,63 @@ class WorklistController extends Controller
         $selected_car->save();
 
         echo json_encode('done');
+    }
+
+
+    /**
+     * Вкладка "Оформление"
+     * Продукты ОФУ
+     * Получить список сервисов
+     */
+    public function getServiceList(Request $request)
+    {
+        $services = company::where('razdel', 3)->get();
+        if (count($services) != 0)
+            echo $services;
+        else
+            echo '0';
+    }
+    
+    /**
+     * Вкладка "Оформление"
+     * Продукты ОФУ
+     * Получить список ВЫБРАННЫХ сервисов
+     */
+    public function getWorklistServices(Request $request)
+    {
+        $services = crm_worklist_company::where('wl_id', $request->wl_id)->get();
+
+        if (count($services) > 0)
+            echo json_encode($services);
+        else
+            echo json_encode('0');
+    }
+
+    /**
+     * Вкладка "Оформление"
+     * Продукты ОФУ
+     * Получить сохраненные блоки с Продуктами
+     */
+    public function getOfuBlocks(Request $request)
+    {
+        $blocks = crm_ofu_product::getProductBlock($request->wl_id);
+        
+        if ($blocks == null)
+            echo json_encode('0');
+        else
+            echo json_encode($blocks);
+    }
+
+    /**
+     * Вкладка "Оформление"
+     * Продукты ОФУ
+     * Добавление нового блока продукта для заполнения
+     */
+    public function ofuAddBlock(Request $request)
+    {
+        $block = crm_ofu_product::getProductBlock();
+
+        echo $block;
     }
 
 
