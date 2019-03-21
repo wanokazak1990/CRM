@@ -14,6 +14,7 @@ function wl_save_changes(){
 	var ofu_products = getOfuProducts();
 	if (ofu_products != null)
 		workstr.push({'name':'ofu_products','value':ofu_products});
+
 	
 	$.ajax({
 		url: '/wlsavechanges',
@@ -46,9 +47,10 @@ function wl_save_changes(){
  * Используется при сохранении Рабочего листа
  */
 function getCfgCars() {
+	var cfg_cars = [];
+
 	if ($('.wl_cfg_cars').length > 0)
 	{
-		var cfg_cars = [];
 		$('.wl_cfg_cars').each(function (index) {
 			var model_id = $(this).find('.cfg_model').val();
 			var complect_id = $(this).find('.cfg_complect').val();
@@ -61,21 +63,20 @@ function getCfgCars() {
 					options.push($(this).val());
 				});
 
-				cfg_cars[index] = {
+				cfg_cars.push ({
 					'cfg_model':model_id,
 					'cfg_complect':complect_id,
 					'cfg_color_id':$(this).find('#cfg_color_id').val(),
 					'options':options
-				};
+				});
 			}
-			else 
+			else
 				return null;
-		});
 
-		return JSON.stringify(cfg_cars);
+		});
 	}
-	else
-		return null;
+
+	return JSON.stringify(cfg_cars);
 }
 
 /**
@@ -83,35 +84,36 @@ function getCfgCars() {
  * Используется при сохранении Рабочего листа
  */
 function getOfuProducts() {
-	if ($('.ofu-block').length > 0)
+	if ($('#ofu_products').html() == '')
+		return null;
+	else
 	{
 		var ofu_products = [];
 
-		$('.ofu-block').each(function (index) {
-			var author = $(this).find('.ofu-block-authors').val();
-			var product = $(this).find('.ofu-block-products').val();
+		if ($('.ofu-block').length > 0)
+		{
+			$('.ofu-block').each(function (index) {
+				var author = $(this).find('.ofu-block-authors').val();
+				var product = $(this).find('.ofu-block-products').val();
 
-			if (author != null && product != null)
-			{
-				ofu_products[index] = {
-					'author':author,
-					'product':product,
-					'partner':$(this).find('.ofu-block-partners').val(),
-					'price':$(this).find('.ofu-block-price').val(),
-					'creation_date':$(this).find('.ofu-block-creation-date').val(),
-					'end_date':$(this).find('.ofu-block-end-date').val(),
-					'profit':$(this).find('.ofu-block-profit').val(),
-					'profit_date':$(this).find('.ofu-block-profit-date').val()
-				};
-			}
-			else 
-				return null;
-		});
+				if (author != null && product != null)
+				{
+					ofu_products[index] = {
+						'author':author,
+						'product':product,
+						'partner':$(this).find('.ofu-block-partners').val(),
+						'price':$(this).find('.ofu-block-price').val(),
+						'creation_date':$(this).find('.ofu-block-creation-date').val(),
+						'end_date':$(this).find('.ofu-block-end-date').val(),
+						'profit':$(this).find('.ofu-block-profit').val(),
+						'profit_date':$(this).find('.ofu-block-profit-date').val()
+					};
+				}
+			});
+		}
 
 		return JSON.stringify(ofu_products);
 	}
-	else
-		return null;
 }
 
 
@@ -576,6 +578,7 @@ $(document).on('click', 'a[href="#wsparam3"]', function() {
 						{
 							var car = block.clone();
 							
+
 							var car_model = car.find('.cfg_model');
 							car_model.val(data[i].model_id);
 							getComplectsCfg(car_model);
@@ -1139,110 +1142,66 @@ $(document).on('click', '.open-offer', function() {
  * Продукты ОФУ
  * Открытие блока
  */
-$(document).on('click', 'a[href="#wsdesign3"]', function() {
-	if (!$(this).hasClass('collapsed'))
+$(document).on('shown.bs.collapse', '#wsdesign3', function() {
+	var wl_id = $('span[name="wl_id"]').html();
+	if (wl_id != '-')
 	{
-		// Блок открыт
-
-		// Получение списка всех сервисов
-		$.ajax({
-			async: false,
-			url: '/getservicelist',
-			type: 'POST',
-			headers: {
-	        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	    	},
-	    	success: function(data){
-	    		var services = JSON.parse(data);
-
-	    		$('#services_list').html('');
-	    		services.forEach(function(item, index) {
-	    			var block = getServiceBlock(item);
-					$('#services_list').append(block);
-	    		});
-	    	},
-	    	error:function(xhr, ajaxOptions, thrownError){
-	    		log('Не удалось получить список сервисов для вкладки Продукты ОФУ');
-		    	log("Ошибка: code-"+xhr.status+" "+thrownError);
-		    	log(xhr.responseText);
-		    	log(ajaxOptions);
-		    }
-		});
-
-		var wl_id = $('span[name="wl_id"]').html();
-		if (wl_id != '-')
+		var check_selected_car = checkSelectedCar(wl_id);
+		if (check_selected_car == true)
 		{
 			var formData = new FormData();
 			formData.append('wl_id', wl_id);
 
-			// Получение сервисов, которые были выбраны в Программе лояльности
-			$.ajax({
-				url: '/getwlservices',
-				type: 'POST',
-				data: formData,
-		        dataType : "json", 
-		        cache: false,
-		        contentType: false,
-		        processData: false, 
-				headers: {
-		        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		    	},
-		    	success: function(data){
-		    		if (data != '0')
-		    		{
-		    			data.forEach(function(item, index) {
-		    				var checkbox = $('input[class="wl-service-check"][id="'+item.company_id+'"]');
-		    				checkbox.prop('checked', true);
-		    				checkbox.closest('span').css('color', '#f5770a');
-							checkbox.closest('.input-group').find('input[type="number"]').removeAttr('disabled');
-							checkbox.closest('.input-group').find('input[type="number"]').val(item.sum);
-		    			});
-		    			
-		    			getServiceSum();
-		    		}
-		    	},
-		    	error:function(xhr, ajaxOptions, thrownError){
-		    		log('Не удалось получить список выбранных сервисов');
-			    	log("Ошибка: code-"+xhr.status+" "+thrownError);
-			    	log(xhr.responseText);
-			    	log(ajaxOptions);
-			    }
-			});
+			var parameters = formData 
+			var url = '/getofudata'
+			$.when(ajaxWithFiles(parameters,url).then(function(data){
+				// Вставляем блоки с сервисами, которые подходят к зарезервированной машине
+				if (data.services != '')
+				{
+					data.services.forEach(function(item, index) {
+		    			var block = getServiceBlock(item);
+						$('#services_list').append(block);
+		    		});
+				}
+				else
+					$('#services_list').html('<span class="ofu_empty_services font-weight-bold font-italic text-primary d-flex justify-content-center">Не найдено сервисов для привязанной машины</span>');
 
-			// Получение блоков для Оформления продуктов ОФУ
-			$.ajax({
-				url: '/getofublocks',
-				type: 'POST',
-		        data: formData,
-		        dataType : "json", 
-		        cache: false,
-		        contentType: false,
-		        processData: false, 
-				headers: {
-		        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		    	},
-		    	success: function(data){
-		    		if (data != '0')
-		    		{
-		    			$('#ofu_products').html(data);
-		    			$('#ofu_products_count').html( $('.ofu-block').length );
-		    		}
-		    		else
-		    			$('#ofu_products').html('');
-		    	},
-		    	error:function(xhr, ajaxOptions, thrownError){
-		    		log('Не удалось получить блоки продуктов ОФУ');
-			    	log("Ошибка: code-"+xhr.status+" "+thrownError);
-			    	log(xhr.responseText);
-			    	log(ajaxOptions);
-			    }
-			});
+				// Отмечаем сервисы, которые были выбраны в Программе лояльности
+				if (data.checked_services != '')
+				{
+					data.checked_services.forEach(function(item, index) {
+	    				var checkbox = $('input[class="wl-service-check"][id="'+item.company_id+'"]');
+	    				checkbox.prop('checked', true);
+	    				checkbox.closest('span').css('color', '#f5770a');
+						checkbox.closest('.input-group').find('input[type="number"]').removeAttr('disabled');
+						checkbox.closest('.input-group').find('input[type="number"]').val(item.sum);
+	    			});
+	    			
+	    			getServiceSum();
+				}
+
+				// Вставляем блоки продуктов
+				if ($('.ofu_empty_services').length > 0)
+					$('#ofu_products').html('');
+				else
+				{
+					$('#ofu_products').html(data.ofu_products);
+					$('#ofu_products_count').html( $('.ofu-block').length );
+				}
+			}));
 		}
 	}
-	else
-	{
-		// Блок закрыт
-	}
+});
+
+/**
+ * Продукты ОФУ
+ * Закрытие блока
+ */
+$(document).on('hide.bs.collapse', '#wsdesign3', function() {
+	$('#services_list').html('');
+	$('#ofu_products').html('');
+	$('#ofu_products_count').html('0');
+	$('#wl_service_budget').html('0 р.');
 });
 
 /**
@@ -1250,7 +1209,7 @@ $(document).on('click', 'a[href="#wsdesign3"]', function() {
  */
 function getServiceBlock(item)
 {
-	var block = '<div class="input-group">'
+	var block = '<div class="input-group wl-ofu-services">'
 		 + '<div class="col-9 d-flex align-items-center">'
 			+ '<span class="flex-grow-1">'
 				+ '<input type="checkbox" class="wl-service-check" id="'+ item.id +'"> ' + item.name
@@ -1259,7 +1218,7 @@ function getServiceBlock(item)
 				+ '<i class="fas fa-question-circle"></i>'
 			+ '</a>'
 		+ '</div>'
-		+ '<input type="number" min="0" class="col-3 form-control wl-service-price" value="0" disabled>'
+		+ '<input type="text" class="col-3 form-control wl-service-price" value="0" disabled>'
 	+ '</div>';
 
 	return block;
@@ -1281,7 +1240,7 @@ $(document).on('click', '.wl-service-check', function() {
 	if ($(this).is(':checked'))
 	{
 		$(this).closest('span').css('color', '#f5770a');
-		$(this).closest('.input-group').find('input[type="number"]').removeAttr('disabled');
+		$(this).closest('.input-group').find('input[type="text"]').removeAttr('disabled');
 		var id = $(this).attr('id');
 		
 		var block = ofuAddBlock();
@@ -1293,24 +1252,16 @@ $(document).on('click', '.wl-service-check', function() {
 	else
 	{
 		$(this).closest('span').removeAttr('style');
-		$(this).closest('.input-group').find('input[type="number"]').attr('disabled', 'disabled');
-		$(this).closest('.input-group').find('input[type="number"]').val(0);
+		$(this).closest('.input-group').find('input[type="text"]').attr('disabled', 'disabled');
+		$(this).closest('.input-group').find('input[type="text"]').val(0);
 		getServiceSum();
 	}
 });
 
-/**
- * Продукты ОФУ
- * Подсчет Бюджета Клиента (при вводе суммы с клавиатуры)
- */
-$(document).on('keyup', '.wl-service-price', function() {
-	$(this).val(normalizeNumberValue($(this).val()));
-	getServiceSum();
-});
 
 /**
  * Продукты ОФУ
- * Подсчет Бюджета Клиента (при другом изменении)
+ * Подсчет Бюджета Клиента при изменении полей с ценами сервиса
  */
 $(document).on('change', '.wl-service-price', function() {
 	$(this).val(normalizeNumberValue($(this).val()));
@@ -1345,13 +1296,19 @@ function getServiceSum()
 	$('#wl_service_budget').html(sum + ' р.');
 }
 
-
+/**
+ * Продукты ОФУ
+ * Добавление нового пустого блока
+ */
 $(document).on('click', '#ofu_add_block', function() {
 	var block = ofuAddBlock();
 	$('#ofu_products').append(block);
 	$('#ofu_products_count').html( $('.ofu-block').length );
 });
 
+/**
+ * Функция получения пустого блока для добавления в Продуктах ОФУ
+ */
 function ofuAddBlock()
 {
 	var block = '';
@@ -1377,16 +1334,29 @@ function ofuAddBlock()
 	return block;
 }
 
+/**
+ * Продукты ОФУ
+ * Удаление блока продукта (рассчета)
+ */
 $(document).on('click', '.ofu-remove-block', function() {
-	var answer = confirm('Вы действительно хотите удалить этот рассчет?');
-	
-	if (answer == true)
+	if ($('.ofu-block').length > 1)
 	{
 		$(this).closest('.ofu-block').remove();
 		$('#ofu_products_count').html( $('.ofu-block').length );
 	}
+	else
+	{
+		var block = $(this).closest('.ofu-block');
+		block.find('input[type="text"]').val('');
+		block.find('select').prop('selectedIndex', 0);
+		$('#ofu_products_count').html('0');
+	}
 });
 
+/**
+ * Продукты ОФУ
+ * Выбор продукта в списке Продукт в блоке рассчета
+ */
 $(document).on('change', '.ofu-block-products', function() {
 	var product_id = $(this).val();
 
