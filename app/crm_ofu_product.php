@@ -31,6 +31,11 @@ class crm_ofu_product extends Model
     		return self::createHtmlBlock();
     }
 
+    public static function sumProfit($worklistId)
+    {
+    	return self::where('worklist_id',$worklistId)->sum('profit');
+    }
+
     public static function createHtmlBlock($ofu_product = [])
     {
     	$users = user::pluck('name', 'id');
