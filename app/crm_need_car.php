@@ -53,40 +53,55 @@ class crm_need_car extends Model
     		return null;
     }
 
+    /**
+     * Получить тип (форму) покупки автомобиля клиента в Подборе по потребностям
+     */
     public static function getPurchaseType($worklist_id)
     {
-    	$type = crm_need_car::where('worklist_id', $worklist_id)->first();
+    	$needcar = crm_need_car::where('worklist_id', $worklist_id)->first();
 
-    	if ($type != null)
+    	if ($needcar != null)
     	{
-    		if ($type->purchase_type != null)
-    			return $type->purchase_type;
+    		if ($needcar->purchase_type != null)
+    			return $needcar->purchase_type;
+    		else
+    			return null;
     	}
     	else
     		return null;
     }
 
+    /**
+     * Получить тип (способ) оплаты автомобиля клиента в Подборе по потребностям
+     */
     public static function getPayType($worklist_id)
     {
-    	$type = crm_need_car::where('worklist_id', $worklist_id)->first();
+    	$needcar = crm_need_car::where('worklist_id', $worklist_id)->first();
 
-    	if ($type != null)
+    	if ($needcar != null)
     	{
-    		if ($type->pay_type != null)
-    			return $type->pay_type;
+    		if ($needcar->pay_type != null)
+    			return $needcar->pay_type;
+    		else
+    			return null;
     	}
     	else
     		return null;
     }
 
+    /**
+     * Получить первый взнос за автомобиль клиента в Подборе по потребностям
+     */
     public static function getFirstPay($worklist_id)
     {
-    	$firstpay = crm_need_car::where('worklist_id', $worklist_id)->first();
+    	$needcar = crm_need_car::where('worklist_id', $worklist_id)->first();
 
-    	if ($firstpay != null)
+    	if ($needcar != null)
     	{
-    		if ($firstpay->firstpay != null)
-    			return $firstpay->firstpay;
+    		if ($needcar->firstpay != null)
+    			return $needcar->firstpay;
+    		else
+    			return null;
     	}
     	else
     		return null;

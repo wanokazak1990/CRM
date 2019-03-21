@@ -79,6 +79,7 @@ function getComplectsCfg(elem,pastle=0)
 
 function modelObjCfg(obj)
 {
+	log(obj);
 	var result = '';
 	var formData = new FormData();
 	formData.append('id',obj.val());
