@@ -37,8 +37,15 @@ Class autostock_helper {
                 $offeredDops=0;
                 $dopsSale=0;
                 $pay=0;
+                $contract = 0;
+                $kredit = 0;
+                $kreditProduct = array();
+                $marginService = 0;
+                $worklist = '';
+                $traffic = 0;
                 //id worklist
                 $worklist_id = $item->getWorklistId();
+
                 if($worklist_id)
                 {
                         //хранит инфо о клиенте что бы по сто раз не вызывать
@@ -51,6 +58,17 @@ Class autostock_helper {
                         $dopsSale = crm_worklist_company::where('wl_id',$worklist_id)->where('razdel',2)->sum('sum');
                         //платежи
                         $pay = \App\crm_client_pay::where('worklist_id',$worklist_id)->where('status',1)->get();
+                        //договор
+                        $contract = crm_worklist_contract::with('getAuthor')->with('getCloser')->with('shipdateLast')->where('worklist_id',$worklist_id)->first();
+                        //кредит
+                        $kredit = crm_worklist_kredit::with('getAktualWaiting')->where('worklist_id',$worklist_id)->first();
+
+                        $kreditProduct=kredit_product::pluck('name','id');
+
+                        $marginService = number_format(\App\crm_ofu_product::sumProfit($worklist_id),0,'',' ');
+
+                        $worklist = crm_worklist::with('traffic')->find($worklist_id);
+
                 }
 
         	$array['id'] = $item->id;
@@ -184,6 +202,64 @@ Class autostock_helper {
                 /*      ПЕРСОНАЛЬНЫЕ ДАННЫЕ КЛИЕНТА КОНЕЦ       */
                 /************************************************/
 
+                $array['type_pay'] = '';
+                $array['old_manager'] = '';
+                $array['manager'] = '';
+                $array['assigned_action'] = '';
+                $array['assigned_date'] = '';
+                $array['pay_margin'] = '';
+                $array['client_request'] = '';
+
+                //ДОГОВОР
+                $array['contract_author'] =             isset($contract->getAuthor)?$contract->getAuthor->name:'';
+                $array['contract_number'] =             ($contract)?$contract->number:'';
+                $array['contract_date'] =               isset($contract->date)?date('d.m.Y',$contract->date):'';
+                $array['contract_ship'] =               isset($contract->shipdateLast)?date('d.m.Y',$contract->shipdateLast->date):'';
+                $array['contract_datecrash'] =          isset($contract->date_crash)?date('d.m.Y',$contract->date_crash):'';
+                $array['contract_closeauthor'] =        isset($contract->getCloser)?$contract->getCloser->name:'';
+                $array['contract_close_date_issue'] =   isset($contract->close_date_issue)?date('d.m.Y',$contract->close_date_issue):'';
+                $array['contract_close_date_sale'] =    isset($contract->close_date_sale)?date('d.m.Y',$contract->close_date_sale):'';
+                $array['contract_close_date_offs'] =    isset($contract->close_date_offs)?date('d.m.Y',$contract->close_date_offs):'';
+
+                //КРЕДИТ
+                $array['kredit_bank'] = isset($kredit->getAktualWaiting)        ?$kredit->getAktualWaiting->kreditor_id:'';
+
+                $array['kredit_author'] = isset($kredit->getAktualWaiting)?     $kredit->getAktualWaiting->author_id:'';
+
+                $array['kredit_date_in'] = (isset($kredit->getAktualWaiting) && $kredit->getAktualWaiting->date_in)     ?date('d.m.Y',$kredit->getAktualWaiting->date_in):'';
+
+                $array['kredit_status'] = isset($kredit->getAktualWaiting)      ?$kredit->getAktualWaiting->status_id:'';
+
+                $array['kredit_status_date'] = (isset($kredit->getAktualWaiting) && $kredit->getAktualWaiting->status_date) ?date('d.m.Y',$kredit->getAktualWaiting->status_date):'';
+
+                $array['kredit_date_action'] = (isset($kredit->getAktualWaiting) && $kredit->getAktualWaiting->date_action) ?date('d.m.Y',$kredit->getAktualWaiting->date_action):'';
+
+                $array['kredit_payment'] = isset($kredit->getAktualWaiting)     ?number_format($kredit->getAktualWaiting->payment,0,'',' '):'';
+
+                $array['kredit_sum'] = isset($kredit->getAktualWaiting)         ?number_format($kredit->getAktualWaiting->sum,0,'',' '):'';
+
+                $array['kredit_date_offer'] = (isset($kredit->getAktualWaiting) && $kredit->getAktualWaiting->date_offer)  ?date('d.m.Y',$kredit->getAktualWaiting->date_offer):'';
+
+                $array['kredit_valid'] = (isset($kredit->valid_date) && $kredit->valid_date!=0)             ?date('d.m.Y',$kredit->valid_date):'';
+
+                if(isset($kredit->getAktualWaiting))
+                        $installProduct = explode('|', $kredit->getAktualWaiting->product);
+                else
+                        $installProduct = [];
+                $array['kredit_prod1'] = (in_array(1, $installProduct))?$kreditProduct[1]:'';
+                $array['kredit_prod2'] = (in_array(2, $installProduct))?$kreditProduct[2]:'';
+                $array['kredit_prod3'] = (in_array(3, $installProduct))?$kreditProduct[3]:'';
+
+                $array['margin_kredit'] =       isset($kredit->margin_kredit)   ?number_format($kredit->margin_kredit,0,'',' '):'';
+                $array['margin_prod'] =         isset($kredit->margin_product)  ?number_format($kredit->margin_product,0,'',' '):'';
+                $array['margin_other'] =        isset($kredit->margin_other)    ?number_format($kredit->margin_other,0,'',' '):'';
+                $array['margin_total'] =        isset($kredit->margin_other)    ?number_format($kredit->totalMargin(),0,'',' '):'';
+                $array['margin_service'] =      $marginService;
+
+                $array['worklist_id'] = $worklist_id;
+                $array['worklist_date'] = ($worklist)?$worklist->created_at->format('d.m.Y'):'';
+                $array['traffic_type'] = isset($worklist->traffic->traffic_type)?$worklist->traffic->traffic_type->name:'';
+                $array['traffic_model'] = isset($worklist->traffic->model)?$worklist->traffic->model->name:'';
                 return $array;
         }
 }

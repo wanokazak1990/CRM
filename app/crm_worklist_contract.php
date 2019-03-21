@@ -28,6 +28,16 @@ class crm_worklist_contract extends Model
     		return date('d.m.Y',$date);
     }
 
+    public function getAuthor()
+    {
+    	return $this->hasOne('App\user','id','author_id');
+    }
+
+    public function getCloser()
+    {
+    	return $this->hasOne('App\user','id','close_author');
+    }
+
     public function getHtml($crash=0,$status=0,$disabled='disabled')
     {
 

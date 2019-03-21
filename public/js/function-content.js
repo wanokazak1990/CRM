@@ -31,6 +31,21 @@ function number_format(number,decimals,dec_point,thousands_sep)
 	return km+kw+kd;
 }
 
+
+function getCurrentDate()
+{
+	date = new Date()
+	var day = date.getDate()
+	var mon = date.getMonth()+1
+	var year = date.getFullYear()
+
+	if(day<10)
+		day='0'+day
+	if(mon<10)
+		mon='0'+mon
+	return day+'.'+mon+'.'+year
+}
+
 function timeConverter(UNIX_timestamp,format='d.m.y'){
 	if(UNIX_timestamp==0)
 		return '';

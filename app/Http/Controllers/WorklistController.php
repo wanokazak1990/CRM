@@ -129,21 +129,22 @@ class WorklistController extends Controller
             $oldCar->saveOldCar($request->cc,$worklist);
         }
 
-        //удалить все компании выбранные для рл до этого момента
-        crm_worklist_company::where('wl_id',$worklist->id)->delete();
+        //удалить все компании выбранные для рл до этого момента        
         if($request->has('loyalty'))//если выбрана хотябы одна компания
         {
-            foreach ($request->loyalty['company_id'] as $key => $item) //то проходимся по массиву из id компаний
-            {
-                $wl_company = new crm_worklist_company([
-                    'wl_id'=>$worklist->id,
-                    'company_id'=>$item,
-                    'sum'=>str_replace(' ', '', $request->loyalty['sum'][$item]),
-                    'rep'=>str_replace(' ', '', $request->loyalty['rep'][$item]),
-                    'razdel'=>$request->loyalty['razdel'][$item]
-                ]);
-                $wl_company->save();
-            }
+            crm_worklist_company::where('wl_id',$worklist->id)->delete();
+            if(isset($request->loyalty['company_id']))
+                foreach ($request->loyalty['company_id'] as $key => $item) //то проходимся по массиву из id компаний
+                {
+                    $wl_company = new crm_worklist_company([
+                        'wl_id'=>$worklist->id,
+                        'company_id'=>$item,
+                        'sum'=>str_replace(' ', '', $request->loyalty['sum'][$item]),
+                        'rep'=>str_replace(' ', '', $request->loyalty['rep'][$item]),
+                        'razdel'=>$request->loyalty['razdel'][$item]
+                    ]);
+                    $wl_company->save();
+                }
         }
 
         // Сохранение отмеченного оборудования из блока "Дополнительное оборудование" в РЛ
@@ -206,9 +207,9 @@ class WorklistController extends Controller
 
 
         //СОХРАНЕНИЕ ВКЛАДКИ ОФОРМЛЕНИЕ -> ПЛАТЕЖИ
-        crm_client_pay::where('worklist_id',$request->wl_id)->delete();
         if($request->has('wl_pay_sum'))
         {
+            crm_client_pay::where('worklist_id',$request->wl_id)->delete();
             foreach ($request->wl_pay_sum as $key => $value) {
                 if($request->wl_pay_sum[$key] && $request->wl_pay_date[$key] && $request->wl_pay_debt[$key])
                     $id = crm_client_pay::create([
@@ -223,14 +224,10 @@ class WorklistController extends Controller
         }
 
 
-        //СОХРАНЕНИЕ ВКЛАДКИ ОФОРМЛЕНИЕ -> ОФОРМЛЕНИЕ
-        $oldContract = crm_worklist_contract::where('worklist_id',$request->wl_id)->first();
-        $contractId = isset($oldContract->id)?$oldContract->id:'';
-        if($contractId)
-            crm_worklist_contract::where('id',$contractId)->delete();
+        //СОХРАНЕНИЕ ВКЛАДКИ ОФОРМЛЕНИЕ -> ДОГОВОРЫ
         if($request->has('contract'))
         {
-            if($request->contract['author_id'])
+            if(isset($request->contract['author_id']))
             {
                 $data = $request->contract;
                 $data['worklist_id'] = $worklist->id;
@@ -239,14 +236,25 @@ class WorklistController extends Controller
                     if(substr_count($key,"date"))
                         $data[$key] = strtotime($value);
                 }
-                $res = crm_worklist_contract::create($data);
+                $contract = crm_worklist_contract::where('worklist_id',$request->wl_id)->first();
+                if(isset($contract->id))
+                {
+                    $contract->update($data);
+                    $res = $contract->id;
+                }
+                else
+                {
+                    $res = crm_worklist_contract::create($data);
+                }
                 if($res)
-                    if($data['ship'])
-                        crm_contract_ship::where('contract_id',$contractId)->delete();
+                    if(isset($data['ship']))
+                    {
+                        crm_contract_ship::where('contract_id',$res)->delete();
                         foreach ($data['ship'] as $key => $value) {
                             if($value)
-                                crm_contract_ship::create(['contract_id'=>$res->id,'date'=>strtotime($value)]);
+                                crm_contract_ship::create(['contract_id'=>$res,'date'=>strtotime($value)]);
                         }
+                    }
             }
         }
 
@@ -262,6 +270,12 @@ class WorklistController extends Controller
                 $dataKredit['worklist_id'] = $request->wl_id;
                 //пробую получить кредит закреплённый за РЛ
                 $kredit = crm_worklist_kredit::where('worklist_id',$request->wl_id)->first();
+                foreach ($dataKredit as $key => $value) {
+                    if(substr_count($key,"date"))
+                        $dataKredit[$key] = strtotime($value);
+                    else
+                        $dataKredit[$key] = str_replace(' ', '', $value);
+                }
                 //если кредит получен, то перезаписываю его новыми данными
                 if(isset($kredit->id))
                 {
@@ -279,8 +293,16 @@ class WorklistController extends Controller
                         $data = $item;
                         if($item['payment'])
                         {
-                            $data['product'] = implode('|', $item['product']);
+                            if(isset($data['product']))
+                                $data['product'] = implode('|', $item['product']);
                             $data['kredit_id'] = $res;
+
+                            foreach ($data as $key => $value) {
+                                if(substr_count($key,"date"))
+                                    $data[$key] = strtotime($value);
+                                else
+                                    $data[$key] = str_replace(' ', '', $value);
+                            }
                             crm_worklist_kwaiting::create($data);
                         }
                     }
