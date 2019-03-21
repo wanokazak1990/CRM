@@ -843,7 +843,7 @@
 										Рассчетная маржа ОФУ:
 									</div>
 									<div class="col-12 h2">
-										0
+										0 р.
 									</div>
 								</div>
 
@@ -867,8 +867,8 @@
 										<span class="font-weight-bold" style="color: #75c1ff;">Маржа ОФУ:</span>
 									</div>
 									<div class="col-12 d-flex">
-										<span class="h2 flex-grow-1" style="color: #75c1ff;">5,7%</span>
-										<span class="h2" style="color: #75c1ff;">7 037 р.</span>
+										<span class="h2 flex-grow-1" style="color: #75c1ff;">0%</span>
+										<span class="h2" style="color: #75c1ff;">0 р.</span>
 									</div>
 								</div>
 								

@@ -166,23 +166,28 @@ class WorklistController extends Controller
             crm_configurator::where('worklist_id', $request->wl_id)->delete();
 
             $cfg_cars = json_decode($request->cfg_cars);
-            foreach ($cfg_cars as $key => $car) 
+
+            if (count($cfg_cars) > 0)
             {
-                $cfg = new crm_configurator();
-                $cfg->worklist_id = $request->wl_id;
-                $cfg->model_id = $car->cfg_model;
-                $cfg->complect_id = $car->cfg_complect;
-                $cfg->color_id = $car->cfg_color_id;
-                $cfg->options = json_encode($car->options);
-                $cfg->save();
+                foreach ($cfg_cars as $key => $car) 
+                {
+                    $cfg = new crm_configurator();
+                    $cfg->worklist_id = $request->wl_id;
+                    $cfg->model_id = $car->cfg_model;
+                    $cfg->complect_id = $car->cfg_complect;
+                    $cfg->color_id = $car->cfg_color_id;
+                    $cfg->options = json_encode($car->options);
+                    $cfg->save();
+                }
             }
         }
 
 
         // Сохранение продуктов ОФУ
-        crm_ofu_product::where('worklist_id', $request->wl_id)->delete();
         if ($request->has('ofu_products'))
         {
+            crm_ofu_product::where('worklist_id', $request->wl_id)->delete();
+
             $ofu_products = json_decode($request->ofu_products);
             foreach ($ofu_products as $key => $ofu_product) 
             {
@@ -199,6 +204,7 @@ class WorklistController extends Controller
                 $product->save();
             }
         }
+
 
         //СОХРАНЕНИЕ ВКЛАДКИ ОФОРМЛЕНИЕ -> ПЛАТЕЖИ
         if($request->has('wl_pay_sum'))
@@ -863,51 +869,6 @@ class WorklistController extends Controller
         echo json_encode('done');
     }
 
-
-    /**
-     * Вкладка "Оформление"
-     * Продукты ОФУ
-     * Получить список сервисов
-     */
-    public function getServiceList(Request $request)
-    {
-        $services = company::where('razdel', 3)->get();
-        if (count($services) != 0)
-            echo $services;
-        else
-            echo '0';
-    }
-    
-    /**
-     * Вкладка "Оформление"
-     * Продукты ОФУ
-     * Получить список ВЫБРАННЫХ сервисов
-     */
-    public function getWorklistServices(Request $request)
-    {
-        $services = crm_worklist_company::where('wl_id', $request->wl_id)->get();
-
-        if (count($services) > 0)
-            echo json_encode($services);
-        else
-            echo json_encode('0');
-    }
-
-    /**
-     * Вкладка "Оформление"
-     * Продукты ОФУ
-     * Получить сохраненные блоки с Продуктами
-     */
-    public function getOfuBlocks(Request $request)
-    {
-        $blocks = crm_ofu_product::getProductBlock($request->wl_id);
-        
-        if ($blocks == null)
-            echo json_encode('0');
-        else
-            echo json_encode($blocks);
-    }
-
     /**
      * Вкладка "Оформление"
      * Продукты ОФУ
@@ -918,6 +879,51 @@ class WorklistController extends Controller
         $block = crm_ofu_product::getProductBlock();
 
         echo $block;
+    }
+
+    /**
+     * Вкладка "Оформление"
+     * Продукты ОФУ
+     * Получение всех данных по продуктам ОФУ
+     */
+    public function getOfuData(Request $request)
+    {
+        // Получаем список всех сервисов, подходящих для зарезервированной машины
+        $car_id = crm_car_selection::where('worklist_id', $request->wl_id)->first()->car_id;
+        $car = avacar::find($car_id);
+
+        $services = company::where('razdel', 3)->get();
+        if (count($services) != 0)
+        {
+            $services_array = [];
+
+            foreach ($services as $key => $service) 
+            {
+                if ($service->checkCompany($car) == true)
+                    $services_array[] = $service;
+            }
+
+            if (count($services_array) > 0)
+                $data['services'] = $services_array;
+            else
+                $data['services'] = '';
+        }
+        else
+            $data['services'] = '';
+
+        // Получаем список сервисов, которые были выбраны в Программе лояльности
+        $services = crm_worklist_company::where('wl_id', $request->wl_id)->get();
+
+        if (count($services) > 0)
+            $data['checked_services'] = $services;
+        else
+            $data['checked_services'] = '';
+
+        // Получаем блоки Оформления продуктов
+        $blocks = crm_ofu_product::getProductBlock($request->wl_id);
+        $data['ofu_products'] = $blocks;
+
+        echo json_encode($data);
     }
 
 

@@ -481,14 +481,8 @@ Route::post('/cfgcreaterequest', 'WorklistController@cfgCreateRequest')->name('c
 // Проверить, привязан ли автомобиль к рабочему листу
 Route::post('/wlcheckselectedcar', 'WorklistController@checkSelectedCar')->name('wlcheckselectedcar');
 
-// Получить список сервисов для блока "Продукты ОФУ" во вкладке "Оформление"
-Route::post('/getservicelist', 'WorklistController@getServiceList')->name('getservicelist');
-
-// Получить список ВЫБРАННЫХ сервисов из блока "Программа лояльности" для блока "Продукты ОФУ" во вкладке "Оформление"
-Route::post('/getwlservices', 'WorklistController@getWorklistServices')->name('getwlservices');
-
-// Получить блоки продуктов для блока "Продукты ОФУ" во вкладке "Оформление"
-Route::post('/getofublocks', 'WorklistController@getOfuBlocks')->name('getofublocks');
+// Получить данные для блока "Продукты ОФУ"
+Route::post('/getofudata', 'WorklistController@getOfuData')->name('getofudata');
 
 // Добавить новый блок продукта в "Продуках ОФУ"
 Route::post('/ofuaddblock', 'WorklistController@ofuAddBlock')->name('ofuaddblock');
