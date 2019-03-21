@@ -16,7 +16,7 @@ class crm_worklist extends Model
 
     public function traffic()
     {
-        return $this->hasOne('App\crm_traffic','id','traffic_id');
+        return $this->hasOne('App\crm_traffic','id','traffic_id')->with('traffic_type')->with('model');
     }
 
     public function selectedModel($carModel = array())
