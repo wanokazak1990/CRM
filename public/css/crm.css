@@ -37,7 +37,7 @@ body{
 #footer{
 	width: 100%;
 	height: 56px;
-	z-index: 1; 
+	z-index: 1;
 }
 .pdt-20{
 	padding-top: 20px;
@@ -135,25 +135,40 @@ label.form-control{
 }
 /* Стили основных вкладок */
 #crmTabs li a{
-	color: #888;
-	background-color: #eee;
-	border: 1px #ddd solid;
+	color: #000;
+	background-color: #dbe5f1;
+	border: 1px #fff solid;
 }
 #crmTabs li .active{
 	color: #000;
+	font-weight: bold;
 	background-color: #fff;
-	border: 1px #eee solid;
+	border: 1px #fff solid;
 }
 /* Стили вкладок в боковой панели */
 #hiddenTab li a{
-	color: #888;
-	background-color: #eee;
-	border: 1px #ddd solid;
+	color: #000;
+	background-color: #dbe5f1;
+	border: 1px #fff solid;
 }
 #hiddenTab li .active{
 	color: #000;
+	font-weight: bold;
 	background-color: #fff;
-	border: 1px #eee solid;
+	border: 1px #fff solid;
+}
+/* Стили вкладок в Рабочем листе (Образ клиента, Параметры и т. д.) */
+#worksheetTabs li a{
+	color: #000;
+	background-color: #dbe5f1;
+	border: 1px #fff solid;
+}
+#worksheetTabs li .active{
+	color: #000;
+	font-weight: bold;
+	background-color: #fff;
+	border: 1px #fff solid;
+	border-top: 1px #dbe5f1 solid;
 }
 /* Стили вкладок карточки автомобиля*/
 #autocardModalTabs li a{
@@ -172,6 +187,69 @@ label.form-control{
     outline-width: 0px !important;
     outline-color: none !important;
 }
+/**
+ * Голубой цвет фона из шаблона
+ */
+.bg-ice {
+	background-color: #dbe5f1 !important;
+}
+/**
+ * Оранжевый цвет для нажатых кнопок класса btn-light
+ * Используется в Листе трафика
+ */
+.btn.btn-light.active {
+	background-color: #fc3 !important;
+	border-color: #fc3 !important;
+}
+/**
+ * Оранжевая обводка при фокусе на элементах ввода
+ */
+input[type="text"], input[type="number"], select {
+	box-shadow: none !important;
+}
+input[type="text"]:focus, input[type="number"]:focus, select:focus {
+	border: 1px solid #fc3 !important;
+	box-shadow: 0 0 5px #fc3 !important;
+}
+/**
+ * Стили кнопок по шаблону
+ */
+.btn {
+	border-radius: 0 !important;
+}
+.btn-primary {
+	background-color: #4f81bd !important;
+	border-color: #4f81bd !important;
+}
+.btn-primary:hover {
+	background-color: #3c689e !important;
+	border-color: #3c689e !important;
+}
+.btn-success {
+	background-color: #8ccb5e !important;
+	border-color: #8ccb5e !important;
+}
+.btn-success:hover {
+	background-color: #70ba3c !important;
+	border-color: #70ba3c !important;
+}
+.btn-warning {
+	background-color: #fc3 !important;
+	border-color: #fc3 !important;
+}
+.btn-warning:hover {
+	background-color: #dc9d00 !important;
+	border-color: #dc9d00 !important;
+}
+.btn-danger {
+	background-color: #c0504d !important;
+	border-color: #c0504d !important;
+}
+.btn-danger:hover {
+	background-color: #9e3c39 !important;
+	border-color: #9e3c39 !important;
+}
+
 
 .alert_traffic_block{
 	width: 200px;

@@ -1012,11 +1012,6 @@ function wlGetDops(wl_id)
 }
 
 
-$(document).on('keyup', '#wl_dops_offered', function() {
-	$('#wl_dops_sum').val(Number($(this).val()) + Number($('#wl_dops_dopprice').val()));
-});
-
-
 $(document).on('click', '#wl_create_comment', function(){
 	$(this).blur();
 	var text = $('#wl_new_comment').val();
@@ -2033,10 +2028,10 @@ $(document).on('click', 'a[href="#wsparam5"]', function() {
 
 /*ОФОРМЛЕНИЕ -> КРЕДИТЫ*/
 (function(){
-	let link = $(document).find('#client_kredit')
+	let link = $(document).find('#wsdesign4')
 	let block = $(document).find('.client_kredit')
 
-	link.on('click',function(){
+	link.on('show.bs.collapse',function(){
 		block.html('')
 		let worklist_id = $('span[name=wl_id]').html() //беру ид раблиста
 		let parameters = {'worklist_id':worklist_id}
