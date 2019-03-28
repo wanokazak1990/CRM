@@ -341,3 +341,8 @@ $(document).ready(function() {
 		}
 	});
 
+
+$(document).on('click','[data-action="dialog"]',function(){
+	let modal = $(document).find('#'+$(this).attr('data-type'))
+	modal.css('display','block')
+})

@@ -7,6 +7,7 @@
 	<!-- Font Awesome -->
 	<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
 	<link href='/css/crm.css' rel='stylesheet' type='text/css'>
+	<link href='/fonts/renault/font.css' rel='stylesheet' type='text/css'>
 	<title>{{ $title }}</title>
 </head>
 <body>
@@ -71,6 +72,14 @@
 <!-- МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЕ ПРОБНОЙ ПОЕЗДКИ -->
 @section('modal_add_testdrive')
 @show
+
+<button data-action="dialog" data-type="field-select">ТЕСТ</button>
+<div class="mymodal" id="field-select">
+	<div class="mymodal-close"><i class="fa fa-times"></i></div>
+	<div class="mymodal-header">FFF</div>
+	<div class="mymodal-content"></div>
+	<div class="mymodal-footer"></div>
+</div>
 
 <!-- ОСНОВНОЙ КОНТЕНТ -->
 <div id="main" class="container-fluid">

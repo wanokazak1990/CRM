@@ -230,6 +230,7 @@ class AjaxController extends Controller
     	if($request->has('id'))
     	{
     		$res = oa_complect::with('model')->where('id',$request->id)->first();
+            $res->model->country;
     		echo $res->toJson();
     	}
     }

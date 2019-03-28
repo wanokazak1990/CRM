@@ -11,6 +11,13 @@ html,body{
 body{
 	min-height: 100%;
 	position: relative;
+	font-family: renault-regular !important;
+}
+.table-title{
+	background: #eaeaea;
+}
+.table-title td{
+	font-size: 12px;
 }
 .input-label{
 	border:0px;
@@ -35,6 +42,71 @@ body{
 .pdt-20{
 	padding-top: 20px;
 }
+.pdt-5{
+	padding-top: 20px;
+}
+.pr-0{
+	padding-right: 0px;
+}
+.pad-0{
+	padding: 0px !important;
+}
+.bt-0{
+	border-top: 0px !important;
+}
+
+.form-control{
+	border-radius: 0px !important;
+}
+
+.clearer,.clearer-block{
+	cursor:pointer;position: absolute;top: 11px;right: -5px;color: #aaa;transition: color 0.2s linear, transform 0.2s linear;
+}
+.clearer:hover,.clearer-block:hover{
+	color: #a00;
+	transform: rotate(360deg);
+}
+.input-icon{
+	position: absolute;
+	top: 8px;right: 25px;
+	color: #ddd;
+	font-size: 20px;
+	cursor: pointer;
+}
+.input-icon:hover{
+	color: #333
+}
+
+.disabled{
+	pointer-events: none;
+}
+
+input::placeholder { color: #ddd !important; } 
+label.form-control{
+	border-color: #fff;
+}
+.label-adder{
+	position: absolute;
+	right: -5px;
+	top: 7px;
+	transition: transform 0.3s linear;
+}
+.label-adder:hover{
+	transform: scale(1.2,1.2)
+}
+.sublabel{
+	color: #777;
+	padding: 0px;
+	margin: 0px;
+}
+.cardops-label{
+	font-size: 12px;
+}
+.cardops-label input{
+	position: relative;top: 4px;
+}
+
+
 /* Полупрозрачный блок, перекрывающий основной контент при открытии боковой панели */
 #disableContent{
 	position: fixed; 
@@ -394,13 +466,14 @@ b.green{background: #0f0;height: 20px;width: 20px;border-radius: 100%;display: b
 	height: 30px;
 }
 .v_color{
-	border:1px solid #ccc; 
+	/*border:1px solid #ccc; */
 	width: 25px; 
 	height: 25px; 
 	display: block;	
 	float: left;
 	margin-top: 2px;
 	margin-right: 5px;
+	border-radius: 7px;
 }
 
 
@@ -474,3 +547,27 @@ b.green{background: #0f0;height: 20px;width: 20px;border-radius: 100%;display: b
 .green-check{background: #0f0 !important;}
 .red-check{background: #f00 !important;}
 /*END CHECKBOX*/
+
+
+.mymodal{
+	display: none;
+	position: absolute;
+	width: 50%;
+	left: 25%;
+	top: 150px;
+	background: #fff;
+	min-height: 200px;
+	box-shadow: 0 0 15px #333;
+	border-radius: 5px;
+	z-index: 999;
+
+}
+.mymodal-close{
+	position: absolute;
+	right: 5px;
+	top:5px;
+}
+
+.item-block{
+	position: relative;
+}
