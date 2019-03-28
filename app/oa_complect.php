@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class oa_complect extends Model
 {
     //
-    protected $fillable = ['name','price','brand_id','code','model_id','parent','sort','status','motor_id'];
+    protected $fillable = ['name','price','brand_id','code','model_id','parent','sort','status','motor_id','percent','pack_percent'];
     public $timestamps = false;
     protected $attributes = [
     	'name'=>null,

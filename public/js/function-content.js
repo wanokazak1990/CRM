@@ -91,9 +91,9 @@ function getTitleContent(parent,array,str='')
 //создаст заголовки, парент-это родительская вкладка в которой есть таблица, в которую нужно вставить данные
 //аррай-массив заголовков которые передал аякс из функции гетКонтент
 {
-	str += '<tr>';
+	str += '<tr class="table-title">';
 	for (i in array){
-		str += '<th>'+array[i]+'</th>';		    		
+		str += '<td>'+array[i]+'</td>';		    		
 	};
 	str += '</tr>';
 	parent.find('table').append(str);
@@ -122,6 +122,10 @@ function getDataContent(parent,array,str='')
 		str += '</tr>';
 	});
 	parent.find('table').append(str);
+	if(selcarId)
+	{
+		$(document).find('table tr td .check-car[value="'+selcarId+'"]').closest('tr').css('background','#faa')
+	}
 }
 
 
@@ -170,7 +174,7 @@ function getContent(obj,get_param='')//отдаёт контент вкладо�
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 	    success:function(param){
-	    	log((param.titles))
+	    	/*log((param.titles))*/
 	    	parent.find('table').html("");
 	    	getTitleContent(parent,param.titles);		    
 	    	getDataContent(parent,param['list']);		    	

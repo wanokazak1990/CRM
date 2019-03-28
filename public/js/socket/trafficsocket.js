@@ -1,4 +1,4 @@
-var conn = new WebSocket('ws://new1.loc:8080');
+var conn = new WebSocket('ws://192.168.1.98:8080');
 
 conn.onopen = function (e)
 {

@@ -73,10 +73,10 @@ Class autostock_helper {
 
         	$array['id'] = $item->id;
                 $array['checkbox'] = '<input type="checkbox" value="'.$item->id.'" class="check-car" name="checkcar[]">';
-                //Этап сделки
-                $array['stage_deal'] =          $item->getStageDeal();
                 //ПТС
                 $array['status_pts'] =          $item->getStatusPTS();
+                //Этап сделки
+                $array['stage_deal'] =          $item->getStageDeal();                
                 //Этап поставки
                 $array['stage_delivery'] =      $item->getStageDelivery()['stage'];
                 //Монитор состояния
@@ -89,6 +89,8 @@ Class autostock_helper {
                 $array['author'] =              @$item->getAuthor->name;
                 //Дата заказа в производства
                 $array['date_order'] =          $item->dateFormat('d.m.Y',@$item->getDateOrder->date);
+                //мануфактура
+                $array['manufacture'] =         @$item->model->country->getFlag().' '.@$item->model->country->city;
                 //Дата сборки в планируемая
                 $array['date_planned'] =        $item->dateFormat('d.m.Y',@$item->getDatePlanned->date);
                 //Дата уведомления о сборке
@@ -98,7 +100,7 @@ Class autostock_helper {
                 //Дата готовности к отгрузке
                 $array['date_ready'] =          $item->dateFormat('d.m.Y',@$item->getDateReady->date);
                 //локация отгрузки
-                $array['loc_ship'] =            @$item->model->country->getFlag().' '.@$item->model->country->city;
+                $array['loc_ship'] =            @$item->model->country->storage;
                 //Дата отгрузки
                 $array['date_ship'] =           $item->dateFormat('d.m.Y',@$item->getDateShip->date);
                 //Дата приёмки на склад
@@ -138,8 +140,16 @@ Class autostock_helper {
                 $array['pack_code'] =           $item->stringPackName();
                 $array['pack'] =                '<button class="stock-button" type="button" mind="pack" car-id="'.$item->id.'">PACKS</button>';
                 $array['dops'] =                '<button class="stock-button" type="button" mind="dop" car-id="'.$item->id.'">DOPS</button>';
-                $array['color_code'] =          $item->color->rn_code;
-                $array['color_name'] =          '<span>'.$item->color->getColorIcon().'</span>'.$item->color->name;
+                
+                //CAR COLOR
+                $iconCol = '';
+                if(isset($item->color))
+                        $iconCol = $item->color->getColorIcon();
+
+                $array['color_code'] =          @$item->color->rn_code;
+                $array['color_icon'] =          '<span>'.$iconCol.'</span>';
+                $array['color_name'] =          @$item->color->name;
+                
                 $array['vin'] =                 $item->vin;
                 $array['order_number'] =        $item->order_number;
                 $array['delivery_type'] =       ($item->DeliveryType)?$item->DeliveryType->name:'';
@@ -203,6 +213,7 @@ Class autostock_helper {
                 /************************************************/
 
                 $array['type_pay'] = '';
+                $array['pay_trade'] = '';
                 $array['old_manager'] = '';
                 $array['manager'] = '';
                 $array['assigned_action'] = '';

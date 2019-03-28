@@ -1,3 +1,5 @@
+var selcarId = 0
+
 function ajax(parameters,url)
 {
 	return $.ajax({
@@ -44,6 +46,54 @@ function nonSpace(str)
 	str = str.replace(' ','')
 	return str;
 }
+
+
+$(document).on('click','.clearer',function(){
+	$(this).parent().find('input').val('')
+	$(this).parent().find('input').focus()
+})
+
+$(document).on('click','.clearer-block',function(){
+	var parent = $(this).closest('.item-block').parent()
+	if(parent.find('input').length>1)
+	{
+		$(this).closest('.item-block').remove()
+	}
+	else{
+		$(this).closest('.item-block').addClass('item')
+		parent.find('input').val('')
+	}
+	parent.find('input:first').css('border-top','1px solid #ced4da')
+})
+
+
+$(document).on('click','.checkdate',function(){
+	var parent = $(this).closest('.item-block').parent()
+
+	if($(this).attr('status')==1){
+		$(this).attr('status',2)
+		$(this).removeClass('fa-calendar-plus')
+		$(this).addClass('fa-times')
+		$(this).parent().find('input').focus()
+	}
+	else{
+		if($(this).hasClass('checkdate-block'))
+			if($(this).closest('.item-block').parent().find('.item-block').length>1)
+				$(this).closest('.item-block').remove()
+
+		$(this).attr('status',1)
+		$(this).removeClass('fa-times')
+		$(this).addClass('fa-calendar-plus')
+		$(this).parent().find('input').val('')		
+	}
+	parent.find('.item-block:first').find('input').css('border-top','1px solid #ced4da')
+	if(parent.find('.item').length==0)
+		parent.find('.item-block').addClass('item')
+})
+
+
+
+
 
 
 var URI = document.location.pathname;
@@ -154,6 +204,8 @@ $(".color label").each(function(){
 	if(check.prop("checked"))
 		$(this).addClass('green-tr');
 })
+
+
 
 
 
