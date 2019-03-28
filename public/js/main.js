@@ -25,12 +25,13 @@ function ajaxWithFiles(parameters,url)
 $(document).ready(function() {
 	/**
 	* Нажатие на чекбокс в таблице во вкладке "Автосклад"
-	* Подсвечивает отмеченную строку приятненьким, как летнее утро в выходной, цветом
+	* Подсвечивает отмеченную строку приятненьким, как летнее утро в выходной (уже нет), цветом
 	*/
 	$(document).on('click', '.check-car', function() {
 		if ($(this).is(':checked'))
 		{
-			$(this).closest('tr').css('background-color', '#fffa9e');
+			//$(this).closest('tr').css('background-color', '#fffa9e'); // приятный желтый
+			$(this).closest('tr').css('background-color', '#ebf1dd'); // скучный зеленый
 		}
 		else
 		{
