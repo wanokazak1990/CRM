@@ -1,8 +1,8 @@
 @section('worklist')
-<div id="hidden_panel" class="container border-left border-info">
+<div id="hidden_panel" class="container border-left border-dark">
 <div class="row">
 	<!-- Вкладки боковой панели -->
-	<ul class="nav nav-tabs nav-justified bg-info right-menu" id="hiddenTab" role="tablist" style="width: 100%;">
+	<ul class="nav nav-tabs nav-justified right-menu" id="hiddenTab" role="tablist" style="width: 100%;">
 		<li class="nav-item ">
 			<a class="nav-link active" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="true">Журнал</a>
 		</li>
@@ -68,77 +68,16 @@
 				</div>
 			</div>
 			<!-- Заголовок -->
-			<div class="d-flex">
-				<span class="h3 flex-grow-1">Трафик №138</span>
-				<span class="h3">05 января 2018</span>
+			<div class="d-flex bg-light text-secondary">
+				<span class="h3 flex-grow-1">Новый трафик</span>
+				<span class="h3">{{ date('d F Y') }}</span>
 			</div>
 			<!-- Форма вкладки -->
 
 			{!! Form::open() !!}
 			{{ csrf_field() }}
-			<span class="h4">Тип трафика</span>
-			<div class="input-group btn-group-toggle" data-toggle="buttons">
-				@foreach($traffic_types as $traffic)
-				<div class="col-3 btn btn-outline-info"><input type="radio" name="traffic_type" value="{{ $traffic->id }}" autocomplete="off"> {{ $traffic->name }}</div>
-				@endforeach
-			</div>
-			<hr>
-			
-			<span class="h4">Интересующая модель</span>
-			<div class="input-group btn-group-toggle" data-toggle="buttons">
-				@foreach($models as $key => $model)
-				<div class="col-3 btn btn-outline-info"><input type="radio" name="model" value="{{ $key }}" autocomplete="off"> {{ $model }}</div>
-				@endforeach
-			</div>
-			<hr>
 
-			<span class="h4">Зона контакта</span>
-			<div class="input-group btn-group-toggle" data-toggle="buttons">
-				
-				<div class="col-3 btn btn-outline-info">
-					<input type="radio" name="area_id" autocomplete="off" value="0"> 
-					Неизвестно
-				</div>
-
-				@foreach(App\crm_city_list::pluck('name','id') as $id=>$city)
-				<div class="col-3 btn btn-outline-info">
-					<input type="radio" name="area_id" autocomplete="off" value="{{$id}}"> 
-					{{$city}}
-				</div>
-				@endforeach
-
-			</div>
-
-			<hr>
-
-			<span class="h4">Назначенный менеджер</span>
-			<div class="input-group btn-group-toggle" data-toggle="buttons">
-				@foreach($users as $key => $user)
-					<div class="col-3 btn btn-outline-info" >
-						<input type="radio" name="manager" value="{{ $key }}" autocomplete="off" > 
-						{{ $user }}
-					</div>
-				@endforeach
-			</div>
-			<hr>
-
-			<span class="h4">Назначенное действие</span>
-			<div>
-				<div class="input-group">
-					<input name="action_date" type="text" class="col-3 form-control calendar" title="Назначенная дата">
-					<input name="action_time" type="time" class="col-3 form-control" title="Назначенное время">
-				</div>
-				<div class="input-group btn-group-toggle" data-toggle="buttons">
-					@foreach($assigned_actions as $key => $action)
-					  <div class="col-3 btn btn-outline-info"><input type="radio" name="assigned_action" value="{{ $key }}" autocomplete="off"> {{ $action }}</div>
-					@endforeach
-				</div>
-			</div>
-			<hr>
-
-
-			<span class="h4">Клиент</span>
-			<div>
+			<div class="my-3">
 				<div class="input-group">
 					<input type="text" name="client_name" class="col-4 form-control" placeholder="Имя">
 					<input type="text" name="client_secondname" class="col-4 form-control" placeholder="Отчество">
@@ -153,8 +92,62 @@
 				</div>
 			</div>
 
+			<span class="h4 text-secondary">Канал трафика</span>
+			<div class="input-group btn-group-toggle mb-3" data-toggle="buttons">
+				@foreach($traffic_types as $traffic)
+				<div class="col-3 btn btn-light"><input type="radio" name="traffic_type" value="{{ $traffic->id }}" autocomplete="off"> {{ $traffic->name }}</div>
+				@endforeach
+			</div>
+			
+			<span class="h4 text-secondary">Интересующая модель</span>
+			<div class="input-group btn-group-toggle mb-3" data-toggle="buttons">
+				@foreach($models as $key => $model)
+				<div class="col-3 btn btn-light"><input type="radio" name="model" value="{{ $key }}" autocomplete="off"> {{ $model }}</div>
+				@endforeach
+			</div>
+
+			<span class="h4 text-secondary">Зона контакта</span>
+			<div class="input-group btn-group-toggle mb-3" data-toggle="buttons">
+				
+				<div class="col-3 btn btn-light">
+					<input type="radio" name="area_id" autocomplete="off" value="0"> 
+					Неизвестно
+				</div>
+
+				@foreach(App\crm_city_list::pluck('name','id') as $id=>$city)
+				<div class="col-3 btn btn-light">
+					<input type="radio" name="area_id" autocomplete="off" value="{{$id}}"> 
+					{{$city}}
+				</div>
+				@endforeach
+
+			</div>
+
+			<span class="h4 text-secondary">Назначенный менеджер</span>
+			<div class="input-group btn-group-toggle mb-3" data-toggle="buttons">
+				@foreach($users as $key => $user)
+					<div class="col-3 btn btn-light" >
+						<input type="radio" name="manager" value="{{ $key }}" autocomplete="off" > 
+						{{ $user }}
+					</div>
+				@endforeach
+			</div>
+
+			<span class="h4 text-secondary">Назначенное действие</span>
+			<div>
+				<div class="input-group">
+					<input name="action_date" type="text" class="col-3 form-control calendar" title="Назначенная дата">
+					<input name="action_time" type="time" class="col-3 form-control" title="Назначенное время">
+				</div>
+				<div class="input-group btn-group-toggle" data-toggle="buttons">
+					@foreach($assigned_actions as $key => $action)
+					  <div class="col-3 btn btn-light"><input type="radio" name="assigned_action" value="{{ $key }}" autocomplete="off"> {{ $action }}</div>
+					@endforeach
+				</div>
+			</div>
+
 			<div class="input-group justify-content-center p-3 no-gutters">
-				<button type="button" id="traffic_submit" name="traffic_submit" class="btn btn-outline-success col-4">
+				<button type="button" id="traffic_submit" name="traffic_submit" class="btn btn-primary col-4">
 					Назначить трафик
 				</button>
 			</div>
@@ -205,19 +198,15 @@
 
 			<!-- Основной блок рабочего листа -->
 			<div>
-				<div>
+				<div class="mb-3">
 					<div class="input-group d-flex align-items-center">
-
 						<label class="col-3">Трафик</label>
 						<label class="col-3">Спрос</label>
 						<label class="col-3">Менеджер</label>
-
 						{{Form::select('traffic_action',App\crm_assigned_action::pluck('name','id'),'',['class'=>'col-3 form-control'])}}
-						
 					</div>
 
 					<div class="input-group">
-
 						<input name="traffic_type" type="text" class="col-3 form-control" value="-" readonly="">
 						<input name="traffic_model" type="text" class="col-3 form-control" value="-" disabled>
 						<input name="wl_manager" type="text" class="col-3 form-control" value="-" disabled>
@@ -227,48 +216,31 @@
 								<input name="traffic_action_time" type="time" class="col-6 text-danger form-control" >
 							</div>
 						</div>
-
 					</div>
 				</div>
-
-				<hr>
 				
-				<div>
+				<div class="mb-3">
 					<div class="input-group">
-
 						<label class="col-3">Тип контакта</label>					
 						<label class="col-9">Контакт</label>
-
 					</div>
 
 					<div class="input-group">
 						{{Form::select('client_type',App\crm_client_type::pluck('name','id'),'',['class'=>'col-3 form-control'])}}
-						
 						<input name="client_name" type="text" class="col-3 form-control" placeholder="Имя">
 						<input name="client_secondname" type="text" class="col-3 form-control" placeholder="Отчество">
 						<input name="client_lastname" type="text" class="col-3 form-control" placeholder="Фамилия">
-
 					</div>
 				</div>
 
-				<hr>
-
 				<div>
 					<div class="input-group">
-
 						<label class="col-3">Телефон</label>
 						<label class="col-3">Почта</label>
 						<label class="col-3">Маркер</label>
-
-						<div class="col-3 d-flex align-items-center justify-content-end">
-							<a data-toggle="collapse" href="#worklistMoreInfo" aria-expanded="false" aria-controls="worklistMoreInfo">
-								Еще
-							</a>
-						</div>
-
 					</div>
 
-					<div wl_block='contacts' id="wl_contacts">
+					<div wl_block='contacts' id="wl_contacts" class="mb-3">
 						<div class="input-group">
 							<input type="text" class="col-3 form-control" placeholder="Введите номер" name='contact_phone[]'>
 							<input type="text" class="col-3 form-control" placeholder="Введите Email" name='contact_email[]'>
@@ -281,23 +253,28 @@
 							!!}
 							
 							<div class="col-3 d-flex align-items-center">
-								<a href="javascript://" class="col-6" id="wl_contacts_delete"><i class="fas fa-times text-danger"></i></a>
-								<a href="javascript://" class="col-6" id="wl_contacts_add"><i class="fas fa-plus-circle text-primary"></i></a>
+								<a href="javascript://" class="col-6" id="wl_contacts_delete" title="Удалить контакт"><i class="fas fa-times text-dark"></i></a>
+								<a href="javascript://" class="col-6" id="wl_contacts_add" title="Добавить контакт"><i class="fas fa-plus-circle text-dark"></i></a>
 							</div>
+						</div>
+					</div>
+
+					<div class="input-group">
+						<div class="col-12 d-flex justify-content-between">
+							<a data-toggle="collapse" href="#worklistMoreInfo" aria-expanded="false" aria-controls="worklistMoreInfo">Еще о клиенте</a>
+							<a data-toggle="collapse" href="#worklistDocuments" aria-expanded="false" aria-controls="worklistDocuments">Рабочие документы</a>
 						</div>
 					</div>
 				</div>
 
-				<div id="worklistMoreInfo" class="collapse">
-					<hr>
-
+				<div id="worklistMoreInfo" class="collapse my-3">
 					<div class="input-group">
 						<label class="col-3">Зона контакта</label>
 						<label class="col-6">Адрес прописки</label>
 						<label class="col-3">Дата рождения</label>
 					</div>
 
-					<div class="input-group">
+					<div class="input-group mb-3">
 						{{Form::select('client_area',App\crm_city_list::pluck('name','id'),'',['class'=>'col-3 form-control'])}}
 						<input name="client_address" type="text" class="col-6 form-control" placeholder="Адрес">
 						<input name="client_birthday" type="text" class="col-3 form-control calendar">
@@ -315,7 +292,23 @@
 						<input name="client_drive_number" type="text" class="col-6 form-control" placeholder="Номер">
 						<input name="client_drive_giveday" type="text" class="col-3 form-control calendar" placeholder="Дата выдачи">
 					</div>
+				</div>
 
+				<div id="worklistDocuments" class="collapse my-3">
+					<div class="input-group">
+						<div class="col-6">
+							<a href="javascript://" class="input-group">Доверенность на тест-драйв</a>
+							<a href="javascript://" class="input-group">Направление в гостиницу</a>
+							<a href="javascript://" class="input-group">Приветственная табличка</a>
+							<a href="javascript://" class="input-group">Заявка на сервис</a>
+						</div>
+						<div class="col-6">
+							<a href="javascript://" class="input-group">Заявление на зачет денег</a>
+							<a href="javascript://" class="input-group">Заявление на расторжение договора</a>
+							<a href="javascript://" class="input-group">Заявление на возврат денег</a>
+							<a href="javascript://" class="input-group">Уведомление о задержке поставки</a>
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -354,9 +347,9 @@
 							Пробная поездка
 							Заголовок 
 							-->
-							<div class="p-2 bg-info d-flex">
+							<div class="p-2 bg-ice d-flex">
 								<span class="flex-grow-1">
-									<a class="text-white" data-toggle="collapse" href="#wsparam1" aria-expanded="false" aria-controls="wsparam1">Пробная поездка</a>
+									<a class="text-dark" data-toggle="collapse" href="#wsparam1" aria-expanded="false" aria-controls="wsparam1">Пробная поездка</a>
 								</span>
 								<span><i class="fas fa-circle text-success"></i></span>
 							</div>
@@ -373,9 +366,9 @@
 							Подбор по потребностям
 							Заголовок 
 							-->
-							<div class="p-2 bg-info d-flex">
+							<div class="p-2 bg-ice d-flex">
 								<span class="flex-grow-1">
-									<a class="text-white" data-toggle="collapse" href="#wsparam2" aria-expanded="false" aria-controls="wsparam2">Подбор по потребностям</a>
+									<a class="text-dark" data-toggle="collapse" href="#wsparam2" aria-expanded="false" aria-controls="wsparam2">Подбор по потребностям</a>
 								</span>
 								<span><i class="fas fa-circle text-warning"></i></span>
 							</div>
@@ -438,9 +431,9 @@
 							Конфигуратор
 							Заголовок 
 							-->
-							<div class="p-2 bg-info d-flex">
+							<div class="p-2 bg-ice d-flex">
 								<span class="flex-grow-1">
-									<a class="text-white" data-toggle="collapse" href="#wsparam3" aria-expanded="false" aria-controls="wsparam3">Конфигуратор</a>
+									<a class="text-dark" data-toggle="collapse" href="#wsparam3" aria-expanded="false" aria-controls="wsparam3">Конфигуратор</a>
 								</span>
 								<span><i class="fas fa-circle text-warning"></i></span>
 							</div>
@@ -547,9 +540,9 @@
 							Дополнительное оборудование
 							Заголовок 
 							-->
-							<div class="p-2 bg-info d-flex">
+							<div class="p-2 bg-ice d-flex">
 								<span class="flex-grow-1">
-									<a class="text-white" data-toggle="collapse" href="#wsparam4" aria-expanded="false" aria-controls="wsparam4">Дополнительное оборудование</a>
+									<a class="text-dark" data-toggle="collapse" href="#wsparam4" aria-expanded="false" aria-controls="wsparam4">Дополнительное оборудование</a>
 								</span>
 								<span><i class="fas fa-circle text-warning"></i></span>
 							</div>
@@ -559,24 +552,20 @@
 							-->
 							<div id="wsparam4" class="py-3 collapse ws-param">
 								<div class="input-group">
-									<label class="col-3">Установлено</label>
-									<label class="col-3">Предложено</label>
-									<label class="col-3">Заказ-наряд</label>
-								</div>
-
-								<div class="input-group">
-									<input type="text" id="wl_dops_dopprice" class="col-3 form-control" value="0" disabled>
-									<input type="number" min="0" id="wl_dops_offered" name="wl_dops_offered" class="col-3 form-control" placeholder="Сумма, р.">
-									<input type="text" id="wl_dops_sum" class="col-3 form-control" value="0" disabled>
-									<div class="col-3 d-flex align-items-center">
-										<span><input type="checkbox"> Разделить в КП</span>
+									<div class="col-12 d-flex justify-content-between">
+										<label style="color: #75c1ff;" class="font-weight-bold">Цена комплекта ДО:</label>
+										<label style="color: #75c1ff;" class="font-weight-bold">Маржа ДО:</label>
+									</div>
+									<div class="col-12 d-flex justify-content-between">
+										<span style="color: #75c1ff;" class="h2">46 000 р.</span>
+										<span style="color: #75c1ff;" class="h2">18 400 р.</span>
 									</div>
 								</div>
-								
-								<hr>
 
-								<div class="input-group">
-									<label class="col-12">Установленное оборудование:</label>
+								<div class="input-group d-flex align-items-center">
+									<label class="col-6 font-weight-bold">Установленное оборудование:</label>
+									<input type="text" id="wl_dops_dopprice" class="col-3 form-control" value="0" disabled>
+									<span class="col-3"><input type="checkbox"> Выделить в КП</span>
 								</div>
 
 								<div class="input-group" id="wl_dops_list">
@@ -584,9 +573,10 @@
 
 								<hr>
 
-								<div class="input-group">
-									<label class="col-9">Предложенное оборудование:</label>
-									<a href="javascript://" id="wl_dops_install" class="col-3 text-primary">Установить</a>
+								<div class="input-group d-flex align-items-center">
+									<label class="col-6 font-weight-bold">Предложенное оборудование:</label>
+									<input type="number" min="0" id="wl_dops_offered" name="wl_dops_offered" class="col-3 form-control" placeholder="Сумма, р.">
+									<a href="javascript://" id="wl_dops_install" class="col-3 btn btn-primary">Установить</a>
 								</div>
 
 								<div class="input-group" id="wl_dops_all">
@@ -598,10 +588,10 @@
 							<!-------------------------------->
 							<!--АВТОМОБИЛЬ КЛИЕНТА ЗАГОЛОВОК-->
 							<!-------------------------------->
-							<div class="p-2 bg-info d-flex" id="old-car">
+							<div class="p-2 bg-ice d-flex" id="old-car">
 
 								<span class="flex-grow-1">
-									<a class="text-white" data-toggle="collapse" href="#wsparam5" aria-expanded="false" aria-controls="wsparam5">Автомобиль клиента</a>
+									<a class="text-dark" data-toggle="collapse" href="#wsparam5" aria-expanded="false" aria-controls="wsparam5">Автомобиль клиента</a>
 								</span>
 								<span><i class="fas fa-circle text-danger"></i></span>
 							</div>
@@ -616,9 +606,9 @@
 							<!---------------------------------->														
 							<!--ПРОГРАММА ЛОЯЛЬНОСТИ ЗАГОЛОВОК-->
 							<!---------------------------------->
-							<div class="p-2 bg-info d-flex" id="loyalty_program">
+							<div class="p-2 bg-ice d-flex" id="loyalty_program">
 								<span class="flex-grow-1">
-									<a class="text-white" data-toggle="collapse" href="#wsparam6" aria-expanded="false" aria-controls="wsparam6">Программа лояльности</a>
+									<a class="text-dark" data-toggle="collapse" href="#wsparam6" aria-expanded="false" aria-controls="wsparam6">Программа лояльности</a>
 								</span>
 								<span>
 									<a id="open-pv-vidget">Виджет</a>
@@ -637,9 +627,9 @@
 							КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ
 							ЗАГОЛОВОК
 							-->
-							<div class="p-2 bg-info d-flex">
+							<div class="p-2 bg-ice d-flex">
 								<span class="flex-grow-1">
-									<a class="text-white" data-toggle="collapse" href="#wsparam7" aria-expanded="false" aria-controls="wsparam7">Коммерческое предложение</a>
+									<a class="text-dark" data-toggle="collapse" href="#wsparam7" aria-expanded="false" aria-controls="wsparam7">Коммерческое предложение</a>
 								</span>
 								<span><i class="fas fa-circle text-success"></i></span>
 							</div>
@@ -789,8 +779,8 @@
 						<div class="tab-pane" id="worksheet-design" role="tabpanel" aria-labelledby="worksheet-design-tab">
 							
 							<!-- ПЛАТЕЖИ ЗАГОЛОВОК -->
-							<div class="p-2 bg-info d-flex" id="client_pays">
-								<a class="text-white" data-toggle="collapse" href="#wsdesign1" aria-expanded="false" aria-controls="wsdesign1">Платежи</a>
+							<div class="p-2 bg-ice d-flex" id="client_pays">
+								<a class="text-dark" data-toggle="collapse" href="#wsdesign1" aria-expanded="false" aria-controls="wsdesign1">Платежи</a>
 							</div>
 							<!-- /ПЛАТЕЖИ ЗАГОЛОВОК -->
 
@@ -800,8 +790,8 @@
 
 							
 							<!-- ДОГОВОРЫ ЗАГОЛОВОК-->
-							<div class="p-2 bg-info d-flex" id="client_contract">
-								<a class="text-white" data-toggle="collapse" href="#wsdesign2" aria-expanded="false" aria-controls="wsdesign2">Договоры</a>
+							<div class="p-2 bg-ice d-flex" id="client_contract">
+								<a class="text-dark" data-toggle="collapse" href="#wsdesign2" aria-expanded="false" aria-controls="wsdesign2">Договоры</a>
 							</div>
 							<!-- /ОФОРМЛЕНИЕ ЗАГОЛОВОК-->
 
@@ -813,8 +803,8 @@
 							ПРОДУКТЫ ОФУ
 							ЗАГОЛОВОК
 							-->
-							<div class="p-2 bg-info d-flex">
-								<a class="text-white" data-toggle="collapse" href="#wsdesign3" aria-expanded="false" aria-controls="wsdesign3">Продукты ОФУ</a>
+							<div class="p-2 bg-ice d-flex">
+								<a class="text-dark" data-toggle="collapse" href="#wsdesign3" aria-expanded="false" aria-controls="wsdesign3">Продукты ОФУ</a>
 							</div>
 							<!-- 
 							ПРОДУКТЫ ОФУ
@@ -880,8 +870,8 @@
 							<!----------------------------> 
 							<!--КРЕДИТЫ ЗАГОЛОВОК НАЧАЛО-->
 							<!---------------------------->
-							<div class="p-2 bg-info d-flex" id="client_kredit">
-								<a class="text-white" data-toggle="collapse" href="#wsdesign4" aria-expanded="false" aria-controls="wsdesign4">
+							<div class="p-2 bg-ice d-flex" id="client_kredit">
+								<a class="text-dark" data-toggle="collapse" href="#wsdesign4" aria-expanded="false" aria-controls="wsdesign4">
 									Кредиты
 								</a>
 							</div>

@@ -14,10 +14,10 @@
 <div id="disableContent"></div>
 
 <!-- HEADER -->
-<div class="container-fluid bg-info d-flex align-items-center" id="header">
-	<button class="btn btn-info" onclick="send();">Отправить (ТЕСТ WEBSOCKET)</button>
+<div class="container-fluid bg-ice d-flex align-items-center" id="header">
+	<!-- <button class="btn btn-info" onclick="send();">Отправить (ТЕСТ WEBSOCKET)</button>
 	<button type="button" id="test_load_worklist" class="btn btn-danger">Тестовая загрузка РЛ</button>
-	<a href="{{ route('getpdf') }}" target="_blank" class="btn btn-warning">Test PDF</a>
+	<a href="{{ route('getpdf') }}" target="_blank" class="btn btn-warning">Test PDF</a> -->
 
     @guest
         <li><a href="{{ route('login') }}">Login</a></li>
@@ -27,13 +27,25 @@
     	<!--ID пользователя-->
     	<input type="hidden" id="auth_user_id" value="{{ Auth::user()->id }}">
 
-        <a href="{{ route('logout') }}"
-        	class="btn btn-info"
-            onclick="event.preventDefault();
-                     document.getElementById('logout-form').submit();"
-        >
-            Выход
-        </a>
+    	<div class="input-group d-flex">
+    		<div class="d-flex flex-grow-1 text-dark align-items-center">{{ Auth::user()->name }} on-line</div>
+    		<div class="d-flex align-items-center mr-3">
+    			<a href="javascript://" class="text-dark" onclick="location.reload();" title="Обновить">
+    				<i class="fas fa-undo"></i>
+    			</a>
+    		</div>
+    		<div class="d-flex align-items-center">
+    			<a href="{{ route('logout') }}"
+		        	class="text-dark"
+		        	title="Выход" 
+		            onclick="event.preventDefault();
+		                     document.getElementById('logout-form').submit();"
+		        >
+		            <i class="fas fa-times"></i>
+		        </a>
+    		</div>
+    	</div>
+        
 
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             {{ csrf_field() }}
@@ -65,7 +77,7 @@
 	<div class="row" style="height: 100%; overflow-x: auto;">
 		@section('nav-top')
 			<!-- Основные вкладки -->
-			<ul class="nav nav-tabs nav-justified bg-info" id="crmTabs" role="tablist" style="width: 100%; height: 42px;">
+			<ul class="nav nav-tabs nav-justified bg-ice" id="crmTabs" role="tablist" style="width: 100%; height: 42px;">
 				
 				<li class="nav-item">
 					<a 
@@ -231,8 +243,8 @@
 </div>
 
 <!-- FOOTER -->
-<div id="footer" class="bg-info d-flex align-items-center">
-	<div class="container-fluid text-right text-white">
+<div id="footer" class="bg-ice d-flex align-items-center">
+	<div class="container-fluid text-right text-dark">
 		CRM "Учет"	
 	</div>	
 </div>
