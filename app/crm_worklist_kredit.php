@@ -33,9 +33,9 @@ class crm_worklist_kredit extends Model
 
     	$needs = crm_need_car::where('worklist_id',$this->worklist_id)->first();
     	if(!$this->payment)
-    		$this->payment = ($needs->firstpay)?$needs->firstpay:0;
+    		$this->payment = isset($needs->firstpay)?$needs->firstpay:0;
     	if(!$this->type_id)
-    		$this->type_id = ($needs->pay_type)?$needs->pay_type:0;
+    		$this->type_id = isset($needs->pay_type)?$needs->pay_type:0;
     	
 
 
@@ -86,7 +86,7 @@ class crm_worklist_kredit extends Model
 
 			<!--СТАРТОВЫЙ БЛОК ПАРАМЕТРЫ ЗАЯВКИ НАЧАЛО-->
 			<div class="col-12 kredit_app_content">';
-			if($this->getWaitings) : 
+			if($this->getWaitings->count()) : 
 				foreach ($this->getWaitings as $key => $item) :	
 					$install = explode('|',$item->product);	
 					$status_date = 'Дата одобрения';
@@ -164,6 +164,7 @@ class crm_worklist_kredit extends Model
 						</div>';
 				endforeach;
 			else:
+				$waiting = new crm_worklist_kwaiting();
 				$str .= '
 						<div class="item app_block">
 							<div class="input-group ">
@@ -200,7 +201,7 @@ class crm_worklist_kredit extends Model
 								<input type="text" class="form-control col-3 calendar" name="wl_kredit[app][0][date_in]"  >
 								<select class="form-control col-3 status" name="wl_kredit[app][0][status_id]">
 									<option selected="" disabled="">Ожидает действия</option>';
-									foreach ($item->arrayKreditResult() as $key => $value) {
+									foreach ($waiting->arrayKreditResult() as $key => $value) {
 										$str.= "<option value='{$key}'>{$value}</option>";
 									}
 								$str.='</select>										
