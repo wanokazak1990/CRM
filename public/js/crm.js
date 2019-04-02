@@ -342,7 +342,26 @@ $(document).ready(function() {
 	});
 
 
-$(document).on('click','[data-action="dialog"]',function(){
-	let modal = $(document).find('#'+$(this).attr('data-type'))
-	modal.css('display','block')
+
+
+//ВЫДЕЛЕНЕИЕ СТРОКИ МАШИНЫ В ВКЛАДКЕ АВТОСКЛАД
+$(document).on('click','#stock tr',function(e){
+	if($(this).hasClass('click-tr') || $(this).hasClass('save-tr'))
+		{
+			$(this).removeClass('click-tr')
+			$(this).removeClass('save-tr')
+		}
+	else{
+		if(e.ctrlKey)
+		{
+			$(this).addClass('click-tr')
+		}
+		else{			
+			$(this).closest('table').find('tr').removeClass('click-tr')
+			$(this).addClass('click-tr')
+		}
+	}
 })
+
+
+

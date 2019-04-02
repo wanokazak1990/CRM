@@ -88,8 +88,9 @@
 						href="#clients" 
 						role="tab" 
 						aria-controls="clients" 
-						aria-selected="false"
+						aria-selected="true"
 						model-name="_tab_client"
+						field-id = "1"
 					>
 						Клиенты
 					</a>
@@ -103,8 +104,9 @@
 						href="#traffic" 
 						role="tab" 
 						aria-controls="traffic" 
-						aria-selected="true"
+						aria-selected="false"
 						model-name="_tab_traffic"
+						field-id = "2"
 					>
 						Трафик
 					</a>
@@ -120,6 +122,7 @@
 						aria-controls="stock" 
 						aria-selected="false"
 						model-name="_tab_stock"
+						field-id = "3"
 					>
 						Автосклад
 					</a>
@@ -134,6 +137,7 @@
 						role="tab" 
 						aria-controls="deals" 
 						aria-selected="false"
+						field-id = "4"
 					>
 						Продажи
 					</a>
@@ -148,6 +152,7 @@
 						role="tab" 
 						aria-controls="receipts" 
 						aria-selected="false"
+						field-id = "5"
 					>
 						Поступления
 					</a>
@@ -162,6 +167,7 @@
 						role="tab" 
 						aria-controls="demo" 
 						aria-selected="false"
+						field-id = "6"
 					>
 						Демо
 					</a>
@@ -176,6 +182,7 @@
 						role="tab" 
 						aria-controls="archive" 
 						aria-selected="false"
+						field-id = "7"
 					>
 						Архив
 					</a>
@@ -190,6 +197,7 @@
 						role="tab" 
 						aria-controls="stats" 
 						aria-selected="false"
+						field-id = "8"
 					>
 						Показатели
 					</a>

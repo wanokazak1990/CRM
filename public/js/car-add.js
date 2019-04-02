@@ -343,6 +343,7 @@ $(document).on('click','#savecar',function(){
 })
 
 m_carModal.on('shown.bs.modal',function(){
+	m_carModal.find('input').val('')
 	info.clear();
 	m_carModal.find('form').trigger('reset');
 })
@@ -479,7 +480,7 @@ m_carModal.on('keyup','[name="actual_purchase"]',function(){
 	var format = number_format(text,0,'',' ')
 	var estimated = nonSpace($('[name="estimated_purchase"]').val())
 	$(this).val(format)
-	$('[name="shipping_discount"]').val(number_format((estimated-text),0,'',' '))
+	$('[name="shipping_discount"]').val(number_format(((-1)*(estimated-text)),0,'',' '))
 })
 
 
@@ -683,7 +684,7 @@ $(document).on('click','.opencar',function(){
 											if(current[z].pack_percent)
 												newBlock.find('[name="dc_pack_percent[]"]').val(current[z].pack_percent)
 											else
-												newBlock.find('[name="dc_pack_percent[]"]').val(data.car.complect.pack_percent)
+												newBlock.find('[name="dc_pack_percent[]"]').val(1)
 
 											newBlock.find('[name="dc_type[]"]').val(current[z].type)
 											newBlock.find('[name="dc_sale[]"]').val(number_format(current[z].sale,0,'',' '))
@@ -698,7 +699,7 @@ $(document).on('click','.opencar',function(){
 											if(current[z].pack_percent)
 												clone.find('[name="dc_pack_percent[]"]').val(current[z].pack_percent)
 											else
-												clone.find('[name="dc_pack_percent[]"]').val(data.car.complect.pack_percent)
+												clone.find('[name="dc_pack_percent[]"]').val(1)
 											clone.find('[name="dc_type[]"]').val(current[z].type)
 											clone.find('[name="dc_sale[]"]').val(number_format(current[z].sale,0,'',' '))
 											container.append(clone)
@@ -734,7 +735,7 @@ $(document).on('click','.opencar',function(){
 				var totalSum = data.car.complect.price+data.car.packprice
 				var percentCom = data.car.complect.price/100*data.car.complect.percent
 				var percentPack = data.car.complect.pack_percent/100*data.car.complect.pack_percent
-				var estimated_purchase = totalSum - percentCom - percentPack
+				var estimated_purchase = (totalSum - percentCom - percentPack)
 
 				var masPurch = String(estimated_purchase).split('.')
 				var resPurch = ''
@@ -782,7 +783,7 @@ function makeDiscountDetails(){
 		if($(this).parent().find('[name="dc_pack_percent[]"]').val()=='')
 			percent = 0
 
-		discount += parseFloat(val - val * percent / 100)
+		discount += parseFloat(val * percent)
 		m_carModal.find('[name="detail_discount"]').val(discount)
 	})
 }

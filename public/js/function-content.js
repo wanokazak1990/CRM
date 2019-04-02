@@ -1,3 +1,4 @@
+//ПРОВЕРКА НА СУЩЕСТВОВАНИЕ
 function isset(variable)
 {
 	if(typeof(variable) != "undefined" && variable !== null)
@@ -6,8 +7,22 @@ function isset(variable)
 		return false;
 }
 
+//УДАЛИТ ХТМЛ ТЕГИ ИЗ СТРОКИ
+function cutTegs(str) {
+ 	var regex = /( |<([^>]+)>)/ig,
+    result = str.replace(regex, "");
+	return result;
+}
+
+//РАЗДЕЛИТ НА РАЗРЯДЫ
 function number_format(number,decimals,dec_point,thousands_sep)
 {
+	var znak = ''
+	if(number<0){
+		znak = '-'
+		number*=(-1)
+	}
+
 	var i,j,kw,kd,km;
 	if(isNaN(decimals=Math.abs(decimals))){
 		decimals=2;
@@ -28,10 +43,10 @@ function number_format(number,decimals,dec_point,thousands_sep)
 	km=(j?i.substr(0,j)+thousands_sep:"");
 	kw=i.substr(j).replace(/(\d{3})(?=\d)/g,"$1"+thousands_sep);
 	kd=(decimals?dec_point+Math.abs(number-i).toFixed(decimals).replace(/-/,0).slice(2):"");
-	return km+kw+kd;
+	return znak+km+kw+kd;
 }
 
-
+//ВЕРНЁТ ТЕКУЩУЮ ДАТУ В ФОРМАТЕ Д.М.Г
 function getCurrentDate()
 {
 	date = new Date()
@@ -46,6 +61,7 @@ function getCurrentDate()
 	return day+'.'+mon+'.'+year
 }
 
+//ПЕРЕДЕЛАЕТ ЮНИКСДАТУ В ФОРМАТ УКАЗАНЫЙ ВТОРЫМ ПАРАМЕТРОМ
 function timeConverter(UNIX_timestamp,format='d.m.y'){
 	if(UNIX_timestamp==0)
 		return '';
@@ -86,26 +102,108 @@ function timeConverter(UNIX_timestamp,format='d.m.y'){
   return str;
 }
 
+//ВЕРНЁТ КУКИ ПО ПАРАМЕТРУ
+function getCookie(name) {
+  var matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
 
-function getTitleContent(parent,array,str='')
+function getTitleContent(parent,array,stock="",str='')
 //создаст заголовки, парент-это родительская вкладка в которой есть таблица, в которую нужно вставить данные
 //аррай-массив заголовков которые передал аякс из функции гетКонтент
 {
+	if(activeTab().attr('aria-controls')=='stock')
+		stock = 1
+
 	str += '<tr class="table-title">';
+	if(stock)
+		str += '<td></td>'
 	for (i in array){
-		str += '<td>'+array[i]+'</td>';		    		
+		str += '<td td-id="'+i+'">'+array[i]+'</td>';		    		
 	};
 	str += '</tr>';
 	parent.find('table').append(str);
 }
 
 
+//ЗАПИСЬ В КУКИ ВСЕХ ИД СТОЛБЦОВ КОТОРЫЕ ПОДХОДЯТ К ВЫБРАННОЙ НАСТРОЙКЕ
+$(document).on('click','#currentSettingsList a',function(){
+	var parameters = {'settings_id':$(this).attr("data-id")}
+	var url = '/settings/fields/get'
+	$.when(
+		ajax(parameters,url).
+			then(function(data){
+				data = (JSON.parse(data))
+				document.cookie = data.type + "=" + JSON.stringify(data.list);
+				getContent($('#'+activeTab().attr('id')));
+			})
+	)
+})
+
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
+//КЛИК ПО КНОПКАМ ВЛЕВО ВПРАВО ПЕРЕМОТКИ ТАБЛИЦЫ//
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
+$(document).on('mousedown','.left-remote',function(){
+	var obj = $(this)
+	timeout = setInterval(function() {
+		obj.attr('status',true)
+		var elem = $('#crmTabPanels')
+		var curentLeft = elem.scrollLeft()
+        elem.scrollLeft(curentLeft-50)
+    }, 100);
+}).on('mouseup','.left-remote',function(){
+	clearInterval(timeout)
+    //return false;
+}).on('click','.left-remote',function(e){
+	if($(this).attr('status')!='true'){
+		chick($(this))
+		var elem = $('#crmTabPanels')
+		var curentLeft = elem.scrollLeft()
+		var width = $('body').width()
+		var newScroll = curentLeft-(width/2)
+		elem.scrollLeft(newScroll)
+	}
+	$(this).attr('status',false)
+})
+
+$(document).on('mousedown','.right-remote',function(){
+	var obj = $(this)
+	timeout = setInterval(function() {
+		obj.attr('status',true)
+		var elem = $('#crmTabPanels')
+		var curentLeft = elem.scrollLeft()
+        elem.scrollLeft(curentLeft+50)
+    }, 100);
+}).on('mouseup','.right-remote',function(){
+	clearInterval(timeout)
+    //return false;
+}).on('click','.right-remote',function(e){
+	if($(this).attr('status')!='true'){
+		chick($(this))
+		var elem = $('#crmTabPanels')
+		var curentLeft = elem.scrollLeft()
+		var width = $('body').width()
+		var newScroll = curentLeft+(width/2)
+		elem.scrollLeft(newScroll)
+	}
+	$(this).attr('status',false)
+})
+
+function chick(button){
+	setTimeout(function(){
+		button.css('background','#faa')
+	},100)
+	button.css('background','#944')
+}
 
 
 
 
-
-function getDataContent(parent,array,str='')
+function getDataContent(parent,array,stock="",str='')
 //создаст контент вкладки, парент-это родительская вкладка в которой есть таблица, в которую нужно вставить данные
 //аррай-массив заголовков которые передал аякс из функции гетКонтент
 {
@@ -124,8 +222,24 @@ function getDataContent(parent,array,str='')
 	parent.find('table').append(str);
 	if(selcarId)
 	{
-		$(document).find('table tr td .check-car[value="'+selcarId+'"]').closest('tr').css('background','#faa')
+		$(document).find('table tr td .check-car[value="'+selcarId+'"]').closest('tr').addClass('save-tr')
 	}
+	parent.find('table').parent().append('<div class="left-remote"><i class="fa fa-angle-left curs" aria-hidden="true"></i>')
+	parent.find('table').parent().append('<div class="right-remote"><i class="fa fa-angle-right curs" aria-hidden="true"></i>')
+	log(activeTab().attr('aria-controls'))
+	var seter = JSON.parse(getCookie(activeTab().attr('aria-controls')))
+	var table = parent.find('table')
+	var indexes = []
+	for(i in seter){
+		indexes.push(table.find('[td-id="'+seter[i].field_id+'"]').index())
+	}
+	table.find('tr').each(function(){
+		$(this).find('td').css('display','none')
+		for(i in indexes)
+		{
+			$(this).find('td:eq('+indexes[i]+')').css('display','table-cell')
+		}
+	})
 }
 
 
@@ -144,7 +258,10 @@ function getPaginationContent(parent,str='')
 
 
 
-
+function activeTab()
+{
+	return $("#crmTabs").find("[aria-selected='true']")
+}
 
 
 function getContent(obj,get_param='')//отдаёт контент вкладок crmTabs (клиенты, трафик, автосклад и тд)
@@ -174,7 +291,7 @@ function getContent(obj,get_param='')//отдаёт контент вкладо�
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 	    success:function(param){
-	    	/*log((param.titles))*/
+	    	
 	    	parent.find('table').html("");
 	    	getTitleContent(parent,param.titles);		    
 	    	getDataContent(parent,param['list']);		    	

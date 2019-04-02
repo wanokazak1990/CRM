@@ -412,6 +412,12 @@ Route::post('/crm/get/journal', 'CRMAjaxController@getJournal')->name('getJourna
 
 Route::post('/create/worklist', 'WorklistController@add')->name('createworklist');
 
+
+//NEW FIELDS QUERY
+Route::post('/settings/fields/get','SettingsFieldsController@get');
+
+
+
 // Сохранение изменений в Рабочем листе
 Route::post('/wlsavechanges', 'WorklistController@saveChanges')->name('wlsavechanges');
 

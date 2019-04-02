@@ -9,7 +9,27 @@ class crm_need_car extends Model
 {
     public $timestamps = false;
 
-
+    public function getPayTypeName()
+    {
+        switch ($this->pay_type) {
+            case '1':
+                return 'Неизвестно';
+                break;
+            case '2':
+                return 'Наличными';
+                break;
+            case '3':
+                return 'Кредит';
+                break;
+            case '4':
+                return 'Лизинг';
+                break;
+            
+            default:
+                return '';
+                break;
+        }
+    }
     /**
      * Получить блоки сохраненных машин клиента в Подборе по потребностям
 	 * Если таких нет - получить начальный блок выбора модели

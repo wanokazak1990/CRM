@@ -1214,7 +1214,7 @@ $(document).on('shown.bs.collapse', '#wsparam5', function() {
 		modal = $(this).closest('form').find('.photo-load') //нахжу меню модаль
 		photoContainer = modal.find('.old-photo') //в модали нахожу блок фото
 		modal.css('display','block') //делаю модаль видимой
-		log(modal.attr('class'))
+		log(modal)
 	})
 	$(document).on('click','.close',function(){ //клик по крестику модали
 		$(this).parent().css('display','none') //прячу модаль
@@ -1439,9 +1439,7 @@ $(document).on('shown.bs.collapse', '#wsparam5', function() {
 			})
 	}
 	function writeProgram(data){
-		
-		
-		
+
 		for (i in data) {
 			if(i == 0)
 			{
@@ -1513,7 +1511,8 @@ $(document).on('shown.bs.collapse', '#wsparam5', function() {
 
 		                str += '</div>'
 
-		            	str += '<input name="loyalty[sum]['+data[i][k].id+']" type="text" class="col-3 form-control nomenal" placeholder="" '		   
+		                log(data[i][k].selected)
+		            	str += '<input style="border-right:0px;" name="loyalty[sum]['+data[i][k].id+']" type="text" class="col-3 form-control nomenal" placeholder="" '		   
 			            	if(data[i][k].selected!=null)
 			            		str += " value = '"+number_format(data[i][k].selected.sum,0,'',' ')+"' "
 			            	else
@@ -1522,12 +1521,31 @@ $(document).on('shown.bs.collapse', '#wsparam5', function() {
 
 		            	str += '<input type="hidden" value="'+data[i][k].razdel+'" name="loyalty[razdel]['+data[i][k].id+']" >'
 
-		                str += '<input name="loyalty[rep]['+data[i][k].id+']" type="text" class="col-3 form-control return" placeholder="" '
-			            	if(data[i][k].selected!=null)
-			            		str += " value = '"+number_format(data[i][k].selected.rep,0,'',' ')+"' "
-			            	else
-			            		str += 'disabled value="'+ number_format(data[i][k].repsum,0,'',' ')+'" '
-			            str += '>'
+		            	//если это не подарок
+		            	if(data[i][k].razdel!=2)
+		            	{
+			                str += '<input name="loyalty[rep]['+data[i][k].id+']" type="text" class="col-3 form-control return" placeholder="" '
+				            	if(data[i][k].selected!=null)
+				            		str += " value = '"+number_format(data[i][k].selected.rep,0,'',' ')+"' "
+				            	else
+				            		str += 'disabled value="'+ number_format(data[i][k].repsum,0,'',' ')+'" '
+				            str += '>'
+				        }
+				        //если это подарок
+				        else
+				        {
+				        	if(data[i][k].selected!=null)
+				        		str += '<input name="loyalty[percent]" type="text" class="col-1 form-control" value="'+data[i][k].selected.percent+'">'
+				        	else
+				        		str += '<input name="loyalty[percent]" type="text" class="col-1 form-control" value="'+data[i][k].default_percent+'">'
+
+				        	str += '<input name="loyalty[rep]['+data[i][k].id+']" type="text" class="col-2 form-control return" placeholder="" '
+				            	if(data[i][k].selected!=null)
+				            		str += " value = '"+number_format(data[i][k].selected.rep,0,'',' ')+"' "
+				            	else
+				            		str += 'disabled value="'+ number_format(data[i][k].repsum,0,'',' ')+'" '
+				            str += '>'
+				        }
 
 		            str += '</div>'
 		        str += '</div>'

@@ -141,7 +141,8 @@ class WorklistController extends Controller
                         'company_id'=>$item,
                         'sum'=>str_replace(' ', '', $request->loyalty['sum'][$item]),
                         'rep'=>str_replace(' ', '', $request->loyalty['rep'][$item]),
-                        'razdel'=>$request->loyalty['razdel'][$item]
+                        'razdel'=>$request->loyalty['razdel'][$item],
+                        'percent'=>$request->loyalty['percent']
                     ]);
                     $wl_company->save();
                 }
@@ -779,6 +780,7 @@ class WorklistController extends Controller
      */
     public function saveNeedCars(Request $request)
     {
+        //print_r($request->all());
         crm_need_car::where('worklist_id', $request->wl_id)->delete();
 
         $needcars = json_decode($request->data);
@@ -1019,7 +1021,7 @@ class WorklistController extends Controller
 
     //Вернёт вкладку с подходящими под авто акциями
     public function getLoyaltyProgram(Request $request)//получить подходящие программы лояльности, для выбранного авто
-    {
+    {   
         if(!$request->has('wl_id')) return;//если нет ид ворклиста уходим
         $selectionCar = crm_car_selection::where('worklist_id',$request->wl_id)->first();//выбранная машина
         if(isset($selectionCar->car_id) && !empty($selectionCar->car_id))//если есть выбранная мащина
