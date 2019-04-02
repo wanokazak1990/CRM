@@ -92,14 +92,14 @@
 				</div>
 			</div>
 
-			<span class="h4 text-secondary">Канал трафика</span>
+			<span class="h4 text-secondary">Канал</span>
 			<div class="input-group btn-group-toggle mb-3" data-toggle="buttons">
 				@foreach($traffic_types as $traffic)
 				<div class="col-3 btn btn-light"><input type="radio" name="traffic_type" value="{{ $traffic->id }}" autocomplete="off"> {{ $traffic->name }}</div>
 				@endforeach
 			</div>
 			
-			<span class="h4 text-secondary">Интересующая модель</span>
+			<span class="h4 text-secondary">Спрос</span>
 			<div class="input-group btn-group-toggle mb-3" data-toggle="buttons">
 				@foreach($models as $key => $model)
 				<div class="col-3 btn btn-light"><input type="radio" name="model" value="{{ $key }}" autocomplete="off"> {{ $model }}</div>
@@ -123,17 +123,7 @@
 
 			</div>
 
-			<span class="h4 text-secondary">Назначенный менеджер</span>
-			<div class="input-group btn-group-toggle mb-3" data-toggle="buttons">
-				@foreach($users as $key => $user)
-					<div class="col-3 btn btn-light" >
-						<input type="radio" name="manager" value="{{ $key }}" autocomplete="off" > 
-						{{ $user }}
-					</div>
-				@endforeach
-			</div>
-
-			<span class="h4 text-secondary">Назначенное действие</span>
+			<span class="h4 text-secondary">Действие</span>
 			<div>
 				<div class="input-group">
 					<input name="action_date" type="text" class="col-3 form-control calendar" title="Назначенная дата">
@@ -146,9 +136,19 @@
 				</div>
 			</div>
 
+			<span class="h4 text-secondary">Менеджер</span>
+			<div class="input-group btn-group-toggle mb-3" data-toggle="buttons">
+				@foreach($users as $key => $user)
+					<div class="col-3 btn btn-light" >
+						<input type="radio" name="manager" value="{{ $key }}" autocomplete="off" > 
+						{{ $user }}
+					</div>
+				@endforeach
+			</div>
+
 			<div class="input-group justify-content-center p-3 no-gutters">
 				<button type="button" id="traffic_submit" name="traffic_submit" class="btn btn-primary col-4">
-					Назначить трафик
+					Зарегистрировать трафик
 				</button>
 			</div>
 			{!! Form::close() !!}
@@ -650,24 +650,24 @@
 							</div>
 						</div>
 						<!-- Рабочий лист Вкладка  Комментарии -->
-						<div class="py-3 tab-pane" id="worksheet-comments" role="tabpanel" aria-labelledby="worksheet-comments-tab">
+						<div class="py-3 px-3 tab-pane" id="worksheet-comments" role="tabpanel" aria-labelledby="worksheet-comments-tab">
 							
-							<div class="input-group">
-								<span class="col-12 font-weight-bold">Новая запись</span>
-								<textarea id="wl_new_comment" class="form-control col-12" style="resize: none;" placeholder="Введите текст комментария"></textarea>
+							<div class="input-group mb-3">
+								<span class="col-12 font-weight-bold">Новая запись:</span>
+								<textarea id="wl_new_comment" class="form-control col-12" style="resize: none;" placeholder="Комментарий"></textarea>
 							</div>
 
-							<div class="input-group mb-3">
-								<button type="button" class="col-3 offset-6 btn btn-primary" disabled>Новая команда</button>
-								<button id="wl_create_comment" type="button" class="col-3 btn btn-primary">Задача</button>
+							<div class="input-group mb-3 d-flex justify-content-between">
+								<button type="button" class="col-3 btn btn-success">Задача</button>
+								<button id="wl_create_comment" type="button" class="col-3 btn btn-primary">Записать</button>
 							</div>
 
 							<div class="input-group">
 								<div class="col-12 d-flex">
-									<span class="flex-grow-1 font-weight-bold">Комментарии</span>
+									<span class="flex-grow-1 font-weight-bold">Комментарии:</span>
 									<a href="javascript://"><i class="fa fa-print"></i></a>
 								</div>
-								<textarea id="wl_comments_list" class="form-control col-12" rows="20" style="resize: none; overflow-y: scroll;" readonly></textarea>
+								<div id="wl_comments_list" class="col-12 border" style="min-height: 200px; max-height: 500px; overflow-y: scroll;"></div>
 							</div>
 
 						</div>

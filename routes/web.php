@@ -429,6 +429,9 @@ Route::post('/create/car', 'CarController@ajaxput')->name('createcar');
 // Добавление машины в Пробную поездку
 Route::post('/wladdtestdrive', 'WorklistController@addTestDrive')->name('wladdtestdrive');
 
+// Загрузка доступных для тест-драйва машин в модальное окно добавления при его открытии
+Route::post('/wlgettestdrivecars', 'WorklistController@getTestdriveCars')->name('wlgettestdrivecars');
+
 // Загрузка выбранных машин для тест-драйва из БД в блок Пробная поездка при открытии этого блока
 Route::post('/wlloadtestdrive', 'WorklistController@loadTestDrive')->name('wlloadtestdrive');
 
