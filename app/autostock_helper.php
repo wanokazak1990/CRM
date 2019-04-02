@@ -43,6 +43,7 @@ Class autostock_helper {
                 $marginService = 0;
                 $worklist = '';
                 $traffic = 0;
+                $needcars = 0;
                 //id worklist
                 $worklist_id = $item->getWorklistId();
 
@@ -68,6 +69,8 @@ Class autostock_helper {
                         $marginService = number_format(\App\crm_ofu_product::sumProfit($worklist_id),0,'',' ');
 
                         $worklist = crm_worklist::with('traffic')->find($worklist_id);
+
+                        $needcars = crm_need_car::where('worklist_id',$worklist_id)->first();
 
                 }
 
@@ -211,11 +214,11 @@ Class autostock_helper {
                 /************************************************/
                 /*      ПЕРСОНАЛЬНЫЕ ДАННЫЕ КЛИЕНТА КОНЕЦ       */
                 /************************************************/
-
-                $array['type_pay'] = '';
+                
+                $array['type_pay'] = ($needcars)?$needcars->getPayTypeName():'';
                 $array['pay_trade'] = '';
-                $array['old_manager'] = '';
-                $array['manager'] = '';
+                $array['old_manager'] = isset($worklist->oldManager)?$worklist->oldManager->name:'';
+                $array['manager'] = isset($worklist->manager)?$worklist->manager->name:'';
                 $array['assigned_action'] = '';
                 $array['assigned_date'] = '';
                 $array['pay_margin'] = '';
@@ -233,13 +236,13 @@ Class autostock_helper {
                 $array['contract_close_date_offs'] =    isset($contract->close_date_offs)?date('d.m.Y',$contract->close_date_offs):'';
 
                 //КРЕДИТ
-                $array['kredit_bank'] = isset($kredit->getAktualWaiting)        ?$kredit->getAktualWaiting->kreditor_id:'';
+                $array['kredit_bank'] = isset($kredit->getAktualWaiting)        ?$kredit->getAktualWaiting->kreditor->name:'';
 
-                $array['kredit_author'] = isset($kredit->getAktualWaiting)?     $kredit->getAktualWaiting->author_id:'';
+                $array['kredit_author'] = isset($kredit->getAktualWaiting)      ?$kredit->getAktualWaiting->author->name:'';
 
                 $array['kredit_date_in'] = (isset($kredit->getAktualWaiting) && $kredit->getAktualWaiting->date_in)     ?date('d.m.Y',$kredit->getAktualWaiting->date_in):'';
 
-                $array['kredit_status'] = isset($kredit->getAktualWaiting)      ?$kredit->getAktualWaiting->status_id:'';
+                $array['kredit_status'] = isset($kredit->getAktualWaiting)      ?$kredit->getAktualWaiting->status():'';
 
                 $array['kredit_status_date'] = (isset($kredit->getAktualWaiting) && $kredit->getAktualWaiting->status_date) ?date('d.m.Y',$kredit->getAktualWaiting->status_date):'';
 

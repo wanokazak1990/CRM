@@ -88,7 +88,7 @@ class CRMAjaxController extends Controller
 	    				if ($setting->active == 1)
 	    					$html .= '<td><span class="text-success">Сейчас активна</span></td>';
 	    				else
-	    					$html .= '<td><a href="/crm/setactive/'.$setting->id.'" class="text-dark">Сделать активной</a></td>';
+	    					$html .= '<td><a data-id="'.$setting->id.'" class="text-dark">Сделать активной</a></td>';
 	    			$html .= '</tr>';
 	    		}
 	    		$html .= '</table>';
@@ -188,8 +188,9 @@ class CRMAjaxController extends Controller
                     echo json_encode([
                         'list'=>$tr->response,
                         'links'=>$links,
-                        'titles'=>array_merge(['&nbsp'],$titles)
+                        'titles'=>$titles
                     ]);
+
                     break;
                 
                 default:
