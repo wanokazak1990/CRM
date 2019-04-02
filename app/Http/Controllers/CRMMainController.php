@@ -63,9 +63,6 @@ class CRMMainController extends Controller
         // Детализация скидки (карточка автомобиля)
         $discount_details = crm_discount_detail::pluck('name', 'id');
 
-        //Список доступных для тест-драйва машин (для пробной поездки)
-        $testdrive_cars = avacar::where('delivery_type', 2)->get();
-
         $test = DB::table('crm_tabs')
             ->join('crm_all_fields', 'crm_tabs.field_id', '=', 'crm_all_fields.id')
             ->join('crm_settings', 'crm_tabs.setting_id', '=', 'crm_settings.id')
@@ -89,7 +86,6 @@ class CRMMainController extends Controller
             ->with('delivery_types', $delivery_types)
             ->with('logist_markers', $logist_markers)
             ->with('provide_types', $provide_types)
-            ->with('testdrive_cars', $testdrive_cars)
             ->with('dops',$dops)
             ->with('discount_details', $discount_details)
             ->with('options_list', $options_list);

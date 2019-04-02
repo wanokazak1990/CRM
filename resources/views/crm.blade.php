@@ -73,14 +73,6 @@
 @section('modal_add_testdrive')
 @show
 
-<button data-action="dialog" data-type="field-select">ТЕСТ</button>
-<div class="mymodal" id="field-select">
-	<div class="mymodal-close"><i class="fa fa-times"></i></div>
-	<div class="mymodal-header">FFF</div>
-	<div class="mymodal-content"></div>
-	<div class="mymodal-footer"></div>
-</div>
-
 <!-- ОСНОВНОЙ КОНТЕНТ -->
 <div id="main" class="container-fluid">
 	<div class="row" style="height: 100%; overflow-x: auto;">
