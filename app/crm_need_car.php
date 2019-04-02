@@ -65,7 +65,7 @@ class crm_need_car extends Model
     	if ($car != null)
     	{
     		if ($car->options != null)
-    			return json_decode($car->options, true);
+    			return json_decode($car->options);
     		else
     			return null;
     	}
@@ -143,7 +143,7 @@ class crm_need_car extends Model
     	$block = '<div class="col-3 border">
 			<div class="d-flex">
 				<label class="flex-grow-1">Выберите модель</label>
-				<a href="#" class="removeSelectedCar"><i class="fas fa-trash-alt text-danger"></i></a>
+				<a href="javascript://" class="removeSelectedCar"><i class="fas fa-trash-alt text-danger"></i></a>
 			</div>
 			
 			
