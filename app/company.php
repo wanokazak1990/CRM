@@ -59,7 +59,7 @@ class company extends Model
         if($status == 1 && !empty($this->negative))//если не пусты исключающие условия акции
             foreach ($this->negative as $key => $negative) ://прохожусь по всем исключающим условиям акции
                 $k = 0;//счётчик для подсчёта количкства совпадений параметров машины с параметрами условия исключения
-                $totalFields = $positive->countFields();//кол-во параметров в условий
+                $totalFields = $negative->countFields();//кол-во параметров в условий
                 ($vin           == $positive->vin)               ?   $k++    :   '';
                 ($model         == $positive->model_id)          ?   $k++    :   '';
                 ($complect      == $positive->complect_id)       ?   $k++    :   '';
@@ -196,6 +196,7 @@ class company extends Model
             $item->selected = crm_worklist_company::where('wl_id',$selectionCar->worklist_id)->where('company_id',$item->id)->first();
             $item->getSumVal($car);
             $item->getSumRep($car);
+            $item->default_percent = business_setting::first()->company;
         }
         
         $sales = $companies->filter(function($item){
@@ -216,6 +217,11 @@ class company extends Model
         })->toArray();
         $services = array_values($services);
 
-        return [$sales,$gifts,$services];
+        $products = $companies->filter(function($item){
+            return $item['razdel']==5;
+        })->toArray();
+        $products = array_values($products);
+
+        return [$sales,$gifts,$services,$products];
     }
 }

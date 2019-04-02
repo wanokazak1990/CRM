@@ -50,7 +50,7 @@ class ChatServer extends Command
                     new ChatSocket()
                 )
             ),
-            8080
+            8814
         );
         $server->run();
     }

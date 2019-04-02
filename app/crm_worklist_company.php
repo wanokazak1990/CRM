@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class crm_worklist_company extends Model
 {
     //
-    protected $fillable = ['wl_id', 'company_id', 'sum', 'rep','razdel'];
+    protected $fillable = ['wl_id', 'company_id', 'sum', 'rep','razdel','percent'];
     public $timestamps = false;
 
     public function company()

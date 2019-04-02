@@ -12,7 +12,15 @@ body{
 	min-height: 100%;
 	position: relative;
 	font-family: renault-regular !important;
+	overflow-x: hidden;
 }
+.click-tr{
+	background: #ccc;
+}
+.save-tr{
+	background: #fcc;
+}
+
 .table-title{
 	background: #eaeaea;
 }
@@ -566,8 +574,42 @@ b.green{background: #0f0;height: 20px;width: 20px;border-radius: 100%;display: b
 	position: absolute;
 	right: 5px;
 	top:5px;
+	z-index: 100
 }
 
 .item-block{
 	position: relative;
+}
+
+/*REMOTE*/
+
+.right-remote,.left-remote{
+	position: absolute;
+	top: 49%;
+	width: 50px;
+	height: 50px;
+	background: red;
+	background: #faa;
+	opacity: 0.2;
+	color: #fff;
+	transition: opacity 0.3s linear,width 0.3s linear;
+}
+.right-remote:hover,.left-remote:hover{
+	opacity: 1;
+	width: 100px
+}
+.left-remote{
+	left: -20px;
+	border-radius: 0 15px 15px 0;
+}
+.right-remote{
+	right: -20px;
+	border-radius: 15px  0 0 15px;
+}
+.curs{
+	display: block ;
+	margin: auto  ;
+	font-size: 30px  ;
+	color: #fff  ;
+	margin-top: 8px;
 }

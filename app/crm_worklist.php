@@ -7,11 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class crm_worklist extends Model
 {
     //
-    protected $fillable = array('traffic_id','client_id','manager_id');
+    protected $fillable = array('traffic_id','client_id','manager_id','old_manager');
 
     public function manager()
     {
     	return $this->hasOne('App\user','id','manager_id');
+    }
+
+    public function oldManager()
+    {
+        return $this->hasOne('App\user','id','old_manager');
     }
 
     public function traffic()
