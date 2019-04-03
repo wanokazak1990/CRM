@@ -70,7 +70,7 @@
 			<!-- Заголовок -->
 			<div class="d-flex bg-light text-secondary">
 				<span class="h3 flex-grow-1">Новый трафик</span>
-				<span class="h3">{{ date('d F Y') }}</span>
+				<span class="h3">{{ date('d.m.Y') }}</span>
 			</div>
 			<!-- Форма вкладки -->
 

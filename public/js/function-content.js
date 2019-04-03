@@ -129,7 +129,7 @@ function getTitleContent(parent,array,stock="",str='')
 
 
 //ЗАПИСЬ В КУКИ ВСЕХ ИД СТОЛБЦОВ КОТОРЫЕ ПОДХОДЯТ К ВЫБРАННОЙ НАСТРОЙКЕ
-$(document).on('click','#currentSettingsList a',function(){
+$(document).on('click','#currentSettingsList .setting-set-active',function(){
 	var parameters = {'settings_id':$(this).attr("data-id")}
 	var url = '/settings/fields/get'
 	$.when(
@@ -140,7 +140,7 @@ $(document).on('click','#currentSettingsList a',function(){
 				getContent($('#'+activeTab().attr('id')));
 			})
 	)
-})
+});
 
 //////////////////////////////////////////////////
 //////////////////////////////////////////////////

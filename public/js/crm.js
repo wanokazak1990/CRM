@@ -100,9 +100,6 @@ $(document).ready(function() {
 
 
 
-
-
-
 	//КЛИК ПО ВКЛАДКЕ ЖУРНАЛ АКТИВЕН
 	$('body').on('click','#log-tab',function(){
 
@@ -112,31 +109,9 @@ $(document).ready(function() {
 
 
 
-
-
-
-
-
-
 	$("body").on('click','#savecar',function(){
 		
 	})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	// Открытие боковой панели
@@ -166,75 +141,34 @@ $(document).ready(function() {
 
 
 
-
-
-
-
-
-
-
-	/** 
-	 * Отправка id открытой вкладки через AJAX, для получения в Настройках полей соответствующих полей для отображения
-	 * Осуществляется при первоначальной загрузке страницы
-	 */
+/** 
+ * Настройки отображения полей
+ * Отображение списка доступных полей в зависимости от текущей вкладки при открытии настроек
+ */ 
+$(document).on('shown.bs.modal', '#settingsModal', function() {
 	$('#crmTabPanels').children().each(function () {
 		if ($(this).hasClass('active'))
 		{
 			var tab_id = $(this).attr('id');
-			
+
 			var formData = new FormData();
 			formData.append('tab_id', tab_id);
-
-			$.ajax({
-				type: 'POST',
-				url: '/getcurrentsettings',
-				dataType : "json", 
-		        cache: false,
-		        contentType: false,
-		        processData: false, 
-		        data: formData,
-		        headers: {
-			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			    },
-			    success: function(data) {
-					if (data == '0')
-					{
-						$('#currentSettingsList').html('<div class="alert alert-warning" role="alert">Настройки не найдены</div>');
-					}
-					else
-					{
-						$('#currentSettingsList').html(data);
-					}
-				},
-				error: function() {
-					alert('Ошибка получения настроек для вкладки');
-				}
+			
+			var parameters = formData;
+			var url = '/getcurrentsettings';
+			$.when(ajaxWithFiles(parameters,url)).then(function(data){
+				if (data == '0')
+					$('#currentSettingsList').html('<div class="alert alert-warning" role="alert">Настройки не найдены</div>');
+				else
+					$('#currentSettingsList').html(data);
 			});
 
-			$.ajax({
-				type: 'POST',
-				url: '/getcurrentfields',
-				dataType : "json", 
-		        cache: false,
-		        contentType: false,
-		        processData: false, 
-		        data: formData,
-		        headers: {
-			        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			    },
-				success: function(data) {
-					if (data == '0')
-					{
-						$('#settingsFields').html('<div class="alert alert-warning" role="alert">Поля не найдены</div>');
-					}
-					else
-					{
-						$('#settingsFields').html(data);
-					}
-				},
-				error: function() {
-					alert('Ошибка получения названий вкладок');
-				}
+			var url = '/getcurrentfields';
+			$.when(ajaxWithFiles(parameters,url)).then(function(data){
+				if (data == '0')
+					$('#settingsFields').html('<div class="alert alert-warning" role="alert">Поля не найдены</div>');
+				else
+					$('#settingsFields').html(data);
 			});
 
 			$('.'+tab_id+'-td').css('display', 'none');
@@ -242,106 +176,86 @@ $(document).ready(function() {
 			$('.'+tab_id+'-head').each(function () {
 				var head_id = $(this).attr('id');
 				$('#'+head_id+'.'+tab_id+'-td').removeAttr('style');
-			});			
+			});		
 		}
 	});
+});
 
-	/** 
-	 * Отправка id открытой вкладки через AJAX для получения в Настройках полей соответствующих полей для отображения
-	 * Осуществляется при переходе на одну из вкладок
-	 */ 
-	$(document).on('click', '#crmTabs', function() {
-		$('#crmTabPanels').children().each(function () {
-			if ($(this).hasClass('active'))
-			{
-				var tab_id = $(this).attr('id');
+/**
+ * Настройки отображения полей
+ * Список полей
+ * Отметить все поля / снять отметку со всех полей
+ */
+$(document).on('click', '#checkAllFields', function() {
+	if ($(this).is(':checked'))
+	{
+		$('input[name="fieldsCheckbox[]"]').each(function() {
+			$(this).prop('checked', true);
+		});
+	}
+	else
+	{
+		$('input[name="fieldsCheckbox[]"]').each(function() {
+			$(this).prop('checked', false);
+		});
+	}
+});
 
-				var formData = new FormData();
-				formData.append('tab_id', tab_id);
-				
-				$.ajax({
-					type: 'POST',
-					url: '/getcurrentsettings',
-					dataType : "json", 
-			        cache: false,
-			        contentType: false,
-			        processData: false, 
-			        data: formData,
-			        headers: {
-				        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				    },
-				    success: function(data) {
-						if (data == '0')
-						{
-							$('#currentSettingsList').html('<div class="alert alert-warning" role="alert">Настройки не найдены</div>');
-						}
-						else
-						{
-							$('#currentSettingsList').html(data);
-						}
-					},
-					error: function() {
-						alert('Ошибка получения настроек для вкладки');
-					}
-				});
+/**
+ * Настройки отображения полей
+ * Очистка полей при переходе во вкладку "Добавить настройку"
+ */
+$(document).on('click', 'a[href="#settingsTableList"]', function() {
+	$('#settingsTableList input[name="settingId"]').removeAttr('value');
+	$('#settingsTableList input[name="settingName"]').val('');
+	$('#settingsTableList input[name="settingLevel"]').val('');
+	$('#settingsFields input[name="fieldsCheckbox[]"]:checked').each(function(){
+		$(this).prop('checked', false);
+	});
+});
 
-				$.ajax({
-					type: 'POST',
-					url: '/getcurrentfields',
-					dataType : "json", 
-			        cache: false,
-			        contentType: false,
-			        processData: false, 
-			        data: formData,
-			        headers: {
-				        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				    },
-					success: function(data) {
-						if (data == '0')
-						{
-							$('#settingsFields').html('<div class="alert alert-warning" role="alert">Поля не найдены</div>');
-						}
-						else
-						{
-							$('#settingsFields').html(data);
-						}	
-					},
-					error: function() {
-						alert('Ошибка получения названий вкладок');
-					}
-				});
+/**
+ * Настройки отображения полей
+ * Изменить настройку
+ */
+$(document).on('click', '#currentSettingsList .setting-edit',function(){
+	var setting_id = $(this).attr("data-id");
+	var parameters = {'settings_id':setting_id};
+	var url = '/settings/fields/get';
+	$.when(ajax(parameters,url)).then(function(data){
+		$('a[href="#settingsTableList"]').trigger('click');
 
-				$('.'+tab_id+'-td').css('display', 'none');
+		$('#settingsTableList input[name="settingId"]').val(setting_id);
 
-				$('.'+tab_id+'-head').each(function () {
-					var head_id = $(this).attr('id');
-					$('#'+head_id+'.'+tab_id+'-td').removeAttr('style');
-				});		
-			}
+		data = JSON.parse(data);
+		$('#settingsTableList input[name="settingName"]').val(data.name);
+		$('#settingsTableList input[name="settingLevel"]').val(data.level);
+
+		data.list.forEach(function(field){
+			$('#settingsFields input[name="fieldsCheckbox[]"][field_id="'+field.field_id+'"]').prop('checked', true);
 		});
 	});
+});
 
-	/**
-	 * Настройки отображения
-	 * Список полей
-	 * Отметить все поля / снять отметку со всех полей
-	 */
-	$(document).on('click', '#checkAllFields', function() {
-		if ($(this).is(':checked'))
-		{
-			$('input[name="fieldsCheckbox[]"]').each(function() {
-				$(this).prop('checked', true);
-			});
-		}
-		else
-		{
-			$('input[name="fieldsCheckbox[]"]').each(function() {
-				$(this).prop('checked', false);
-			});
-		}
-	});
+/**
+ * Настройки отображения полей
+ * Удалить настройку
+ */
+$(document).on('click', '#currentSettingsList .setting-delete',function(){
+	var answer = confirm('Вы действительно хотите удалить эту настройку?');
+	if (answer == true) {
+		var setting_id = $(this).attr('data-id');
+		var block = $(this).closest('.input-group');
+		
+		var parameters = {'setting_id':setting_id};
+		var url = '/deletesetting';
 
-
+		$.when(ajax(parameters,url)).then(function(data){
+			if (data == "1")
+				block.remove();
+		});
+	}
+});
 
 
 //ВЫДЕЛЕНЕИЕ СТРОКИ МАШИНЫ В ВКЛАДКЕ АВТОСКЛАД
