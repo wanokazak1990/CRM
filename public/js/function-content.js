@@ -224,19 +224,37 @@ function getDataContent(parent,array,stock="",str='')
 	{
 		$(document).find('table tr td .check-car[value="'+selcarId+'"]').closest('tr').addClass('save-tr')
 	}
+	//левая кнопка перемотки
 	parent.find('table').parent().append('<div class="left-remote"><i class="fa fa-angle-left curs" aria-hidden="true"></i>')
+	//правая кнопка перемотки
 	parent.find('table').parent().append('<div class="right-remote"><i class="fa fa-angle-right curs" aria-hidden="true"></i>')
-	log(activeTab().attr('aria-controls'))
+	//проверяю есть ли в куках набор данных совпадающих с атрибутом ария-контрол кнопки активной вкладки
+	if(getCookie(activeTab().attr('aria-controls'))==undefined){
+		alert('Настройка активных столбцов не выбрана, будут показаны все столбцы')
+		return false
+	}
+	//вытаскиваю куку имя которой совпадает с атрибутом ария-контрол кнопки активной вкладки(клиеты, трафик, автосклад и тд)
 	var seter = JSON.parse(getCookie(activeTab().attr('aria-controls')))
+	//беру таблиуц с даными которые нужно показывать в зависимости от набора данных куки
 	var table = parent.find('table')
+	//массив столбцов которые надо будет показывать
 	var indexes = []
+	//прохожусь по всей куке
 	for(i in seter){
+		//записываю в массив активных столбцов данные из куки которые совпадают с атрибутом тд-ид заголовков столбцов таблицы
 		indexes.push(table.find('[td-id="'+seter[i].field_id+'"]').index())
 	}
+	//прохожусь по всем строкам таблицы
 	table.find('tr').each(function(){
+		//прячу все тд в строке тр
 		$(this).find('td').css('display','none')
+		//беру значения из массива активных столбцов
 		for(i in indexes)
 		{
+			//если это автосклад то показывать 0ой столбец тк там чекбокс
+			if(activeTab().attr('aria-controls')=='stock')
+				$(this).find('td:eq(0)').css('display','table-cell')
+			//показать активный столбик
 			$(this).find('td:eq('+indexes[i]+')').css('display','table-cell')
 		}
 	})
