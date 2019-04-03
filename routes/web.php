@@ -388,6 +388,8 @@ Route::get('/crm', 'CRMMainController@main')->name('crm');
 Route::post('/crm/savesetting', 'CRMMainController@saveSetting')->name('savesetting');
 // Сделать настройку активной
 Route::get('/crm/setactive/{id}', 'CRMMainController@setActive')->name('setactive');
+// Удалить настройку
+Route::post('/deletesetting', 'CRMMainController@deleteSetting')->name('deletesetting');
 
 
 

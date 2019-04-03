@@ -80,18 +80,30 @@ class CRMAjaxController extends Controller
     		}
     		else
     		{
-    			$html = '<table class="table table-sm">';
+    			$html = '';
 	    		foreach ($settings as $setting) 
 	    		{
-	    			$html .= '<tr>
-	    				<td>'.$setting->name.'</td>';
-	    				if ($setting->active == 1)
-	    					$html .= '<td><span class="text-success">Сейчас активна</span></td>';
-	    				else
-	    					$html .= '<td><a data-id="'.$setting->id.'" class="text-dark">Сделать активной</a></td>';
-	    			$html .= '</tr>';
+                    $html .= '<div class="input-group no-gutters border-bottom p-1">';
+
+	    			$html .= '<div class="col-5">'.$setting->name.'</div>';
+    				
+                    if ($setting->active == 1)
+    					$html .= '<div class="col-3 text-success">Сейчас активна</div>';
+    				else
+    					$html .= '<div class="col-3">
+                            <a href="javascript://" data-id="'.$setting->id.'" class="setting-set-active">Сделать активной</a>
+                        </div>';
+
+                    $html .= '<div class="col-2">
+                            <a href="javascript://" data-id="'.$setting->id.'" class="text-info setting-edit">Изменить</a>
+                        </div>';
+
+                    $html .= '<div class="col-2">
+                            <a href="javascript://" data-id="'.$setting->id.'" class="text-danger setting-delete">Удалить</a>
+                        </div>';
+                    
+                    $html .= '</div>';
 	    		}
-	    		$html .= '</table>';
 		    	
 		    	echo json_encode($html);
     		}	
