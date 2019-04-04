@@ -23,6 +23,7 @@
 					</div>
 					<div class="tab-pane" id="settingsTableList" role="tabpanel" aria-labelledby="settingsTableList-tab">
 						{{ Form::open(array('route' => 'savesetting')) }}
+							<input type="hidden" name="settingId">
 							<div class="row">
 								<div class="col-6">
 									<label>Название настройки:</label>

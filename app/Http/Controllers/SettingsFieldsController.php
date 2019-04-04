@@ -14,7 +14,14 @@ class SettingsFieldsController extends Controller
     	$base = setting::where('id',$request->settings_id)->first();
     	
     	$list = tab::select('field_id')->where('setting_id',$request->settings_id)->get();
-    	$array = ['type'=>$base->field,'list'=>$list->toArray()];
+    	
+    	$array = [
+    		'name' => $base->name,
+    		'level' => $base->level,
+    		'type' => $base->field, 
+    		'list' => $list->toArray()
+    	];
+
     	echo json_encode($array);
     }
 }

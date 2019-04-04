@@ -99,11 +99,18 @@ class CRMMainController extends Controller
     {
         if (isset($request->saveSettings))
         {
-            $settings = new crm_setting();
+            if ($request->settingId == null)
+                $settings = new crm_setting();
+            else
+                $settings = crm_setting::find($request->settingId);
+
             $settings->name = $request->settingName;
             $settings->level = $request->settingLevel;
             $settings->field = $request->field;
             $settings->save();
+
+            if ($request->settingId != null)
+                crm_tab::where('setting_id', $request->settingId)->delete();
 
             foreach($request->fieldsCheckbox as $field)
             {
@@ -112,9 +119,24 @@ class CRMMainController extends Controller
                 $tabs->field_id = $field;
                 $tabs->save();
             }
+            
         }
         
         return redirect()->route('crm');
+    }
+
+
+    public function deleteSetting(Request $request)
+    {
+        if ($request->has('setting_id'))
+        {
+            crm_setting::where('id', $request->setting_id)->delete();
+            crm_tab::where('setting_id', $request->setting_id)->delete();
+
+            echo "1";
+        }
+        else
+            echo "0";
     }
 
     /**
