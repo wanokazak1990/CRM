@@ -105,13 +105,6 @@ class PdfController extends Controller
             }
         }
 
-        if ($cars_ids == null && $cfg_cars == null)
-        {
-            $car_id = crm_car_selection::where('worklist_id', $offer->worklist_id)->first()->car_id;
-            $car = avacar::find($car_id);
-            $cars[] = $this->getCarInfo($car);
-        }
-
         $items = [
             'cars' => $cars
         ];

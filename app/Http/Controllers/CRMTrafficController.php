@@ -8,6 +8,7 @@ use App\crm_client;
 use Auth;
 use App\_tab_traffic;
 use App\crm_client_contact;
+use App\crm_worklist;
 
 class CRMTrafficController extends Controller
 {
@@ -75,5 +76,45 @@ class CRMTrafficController extends Controller
             );
             echo json_encode($data);
         }
+    }
+
+    /**
+     * Получение типа трафика, интересующей модели и зоны контакта
+     * для модального окна Редактирования трафика
+     */
+    public function getWorklistInfo(Request $request)
+    {
+        $traffic = crm_worklist::find($request->wl_id)->traffic;
+
+        $data['type'] = $traffic->traffic_type_id;
+        $data['model'] = $traffic->desired_model;
+        $data['area'] = $traffic->client->area_id;
+
+        echo json_encode($data);
+    }
+
+    /**
+     * Обновление данных трафика из модального окна Редактирования трафика
+     */
+    public function updateWorklistInfo(Request $request)
+    {
+        if ($request->has('wl_id'))
+        {
+            $traffic_id = crm_worklist::find($request->wl_id)->traffic_id;
+            $client_id = crm_worklist::find($request->wl_id)->client_id;
+
+            $traffic = crm_traffic::find($traffic_id);
+            $traffic->traffic_type_id = $request->type;
+            $traffic->desired_model = $request->model;
+            $traffic->save();
+
+            $client = crm_client::find($client_id);
+            $client->area_id = $request->area;
+            $client->save();
+
+            echo json_encode("1");
+        }
+        else
+            echo json_encode("0");
     }
 }
