@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 	<!-- Font Awesome -->
 	<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="/public/fonts/icofont/icofont.min.css">
 	<link href='/css/crm.css' rel='stylesheet' type='text/css'>
 	<link href='/fonts/renault/font.css' rel='stylesheet' type='text/css'>
 	<title>{{ $title }}</title>
@@ -32,7 +33,7 @@
     		<div class="d-flex flex-grow-1 text-dark align-items-center">{{ Auth::user()->name }} on-line</div>
     		<div class="d-flex align-items-center mr-3">
     			<a href="javascript://" class="text-dark" onclick="location.reload();" title="Обновить">
-    				<i class="fas fa-undo"></i>
+    				<i class="icofont-refresh"></i>
     			</a>
     		</div>
     		<div class="d-flex align-items-center">
@@ -42,11 +43,10 @@
 		            onclick="event.preventDefault();
 		                     document.getElementById('logout-form').submit();"
 		        >
-		            <i class="fas fa-times"></i>
+		            <i class="icofont-error"></i>
 		        </a>
     		</div>
     	</div>
-        
 
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             {{ csrf_field() }}
@@ -409,7 +409,7 @@
 <script src="/js/worklist.js"></script>
 <script src="/js/car-add.js"></script>
 <script src="/js/worklist-configurator.js"></script>
-
+<script src="/js/phone.js"></script>
 
 </body>
 </html>

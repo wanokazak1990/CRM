@@ -111,6 +111,12 @@ class CRMAjaxController extends Controller
     	else
     		echo '0';
     }
+
+
+    public function getTitle($type_id)
+    {
+        return crm_all_field::where('type_id',$type_id)->pluck('name','id')->toArray();;
+    }
     
     //ФУНКЦИЯ ВЕРНЁТ КОЛЛЕКЦИЮ ДАННЫХ ВЫБИРАЕМЫХ ИЗ ТАБЛИЦЫ УКАЗАННОЙ в $request->has('model'), $request->has('model') - хранит название модели текущей вкладки CRM
 
@@ -137,7 +143,9 @@ class CRMAjaxController extends Controller
                             $mas[$key]['assigned_action']   = @$item->traffic->assigned_action->name;
                             $mas[$key]['action_date']    = @($item->traffic->action_date)?date('d.m.Y',$item->traffic->action_date):'';
                     }
-                    $titles = crm_all_field::where('type_id',$class_name::$tab_index)->pluck('name','id')->toArray();
+                    
+                    $titles = $this->getTitle($class_name::$tab_index);
+
                     $links = (string)$list->appends(['model'=>$request->model])->links();
                     echo json_encode([
                         'list'=>$mas,
@@ -167,7 +175,9 @@ class CRMAjaxController extends Controller
                             $mas[$key]['action_date']       = @($item->action_date)?date('d.m.Y',$item->action_date):'';
                             $mas[$key]['action_time']       = @($item->action_time)?date('H:i',$item->action_time):'';
                     }
-                    $titles = crm_all_field::where('type_id',$class_name::$tab_index)->pluck('name','id')->toArray();
+                    
+                    $titles = $this->getTitle($class_name::$tab_index);
+
                     $links = (string)$list->appends(['model'=>$request->model])->links();
                     echo json_encode([
                         'list'=>$mas,
@@ -194,7 +204,7 @@ class CRMAjaxController extends Controller
                     $tr = new \App\autostock_helper($list);
                     $tr->makeTableData();
 
-                    $titles = crm_all_field::where('type_id',$class_name::$tab_index)->pluck('name','id')->toArray();
+                    $titles = $this->getTitle($class_name::$tab_index);
 
                     $links = '';
                     echo json_encode([
@@ -202,11 +212,9 @@ class CRMAjaxController extends Controller
                         'links'=>$links,
                         'titles'=>$titles
                     ]);
-
                     break;
                 
                 default:
-                    # code...
                     break;
             }           
         }
@@ -279,12 +287,13 @@ class CRMAjaxController extends Controller
         $result = new \App\autostock_helper($list);
         $result->makeTableData();
 
-        $titles = crm_all_field::where('type_id',3)->pluck('name','id')->toArray();
+        $titles = $this->getTitle(3);
+
         $links = '';
         echo json_encode([
             'list'=>$result->response,
             'links'=>$links,
-            'titles'=>array_merge(['&nbsp'],$titles)
+            'titles'=>$titles
         ]);
     }
 }

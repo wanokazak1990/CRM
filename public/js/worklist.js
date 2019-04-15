@@ -29,6 +29,7 @@ function wl_save_changes(){
 				$('.ws-param').collapse('hide');
 				$('.ws-registration').collapse('hide');
     			log('Рабочий лист обновлен');
+    			refreshContent()
     			alert('Рабочий лист обновлен');	
     		}
     	},
