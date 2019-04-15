@@ -8,10 +8,10 @@ class crm_ofu_product extends Model
 {
     public $timestamps = false;
 
-    public static function getProductBlock($worklist = '')
+    public static function getProductBlock($worklist)
     {
-    	if ($worklist != '')
-    	{
+    	//if ($worklist != '')
+    	//{
     		$ofu_products = crm_ofu_product::where('worklist_id', $worklist)->get();
 
     		if (count($ofu_products) > 0)
@@ -26,9 +26,9 @@ class crm_ofu_product extends Model
 	    	}
 	    	else
     			return self::createHtmlBlock($worklist);
-    	}
-    	else
-    		return self::createHtmlBlock($worklist);
+    	//}
+    	//else
+    	//	return self::createHtmlBlock($worklist);
     }
 
     public static function sumProfit($worklistId)

@@ -72,14 +72,13 @@ function getComplectsCfg(elem,pastle=0)
 		},
 		error: function(param)
 		{
-			log('error123');
+			log('Не удалось получить комплектации автомобиля');
 		}
 	})
 }
 
 function modelObjCfg(obj)
 {
-	log(obj);
 	var result = '';
 	var formData = new FormData();
 	formData.append('id',obj.val());
@@ -137,7 +136,7 @@ function getColorCfg(elem)//вернёт плитку цветов с инпут
             //mother.html(str);
         },
         error: function(msg){
-            console.log('error');
+            console.log('Не удалось получить цвета автомобиля');
         }
     });
 }
@@ -195,7 +194,7 @@ function getPacksCfg(elem)
 		},
 		error: function(param)
 		{
-			log('error');
+			log('Не удалось получить пакеты');
 		}
 	})
 }

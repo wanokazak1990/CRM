@@ -191,7 +191,7 @@ Class autostock_helper {
                 /*ОПЛАТА КЛИЕНТОМ*/
                 $array['client_pay_sum']        = ($pay)?number_format(@$pay->sum('pay'),0,'',' ').' р.':'0 р.';
                 $array['client_pay_date']       = ($pay)?date('d.m.Y', @$pay->last()->date):'';
-                $array['client_pay_residue']    = ($pay)?number_format(@$pay->sum('debt'),0,'',' ').' р.':'0 р.';
+                $array['client_pay_residue']    = ($pay)?number_format(@$pay->last()->debt,0,'',' ').' р.':'0 р.';
 
                 /************************************************/
                 /*      ПЕРСОНАЛЬНЫЕ ДАННЫЕ КЛИЕНТА НАЧАЛО      */

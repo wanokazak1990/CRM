@@ -1,5 +1,5 @@
 @section('worklist')
-<div id="hidden_panel" class="container border-left border-dark">
+<div id="hidden_panel" class="container">
 <div class="row">
 	<!-- Вкладки боковой панели -->
 	<ul class="nav nav-tabs nav-justified right-menu" id="hiddenTab" role="tablist" style="width: 100%;">
@@ -25,14 +25,21 @@
 		<!-- Вкладка Журнал -->
 		<div class="tab-pane active" id="log" role="tabpanel" aria-labelledby="log-tab">
 			<!-- Панель иконок -->
-			<div class="border input-group align-items-center">
-				<div class="flex-grow-1">
-					<button id="closing" type="button" class="btn btn-light"><i class="fas fa-arrow-circle-right"></i></button>
-					<span class="text-success"><input type="checkbox" autocomplete="off"> Только мои</span>
+			<div class="border-bottom input-group align-items-center" style="height: 42px;">
+				<div class="d-flex flex-grow-1 align-items-center">
+					<a href="javascript://" id="closing" class="px-3 text-dark d-flex align-items-center">
+						<i class="fas fa-arrow-circle-right"></i>
+					</a>
+					<span class="text-success d-flex align-items-center"><input type="checkbox" autocomplete="off" class="mr-1"> Только мои</span>
 				</div>
-				<div>
-					<button type="button" class="btn btn-light"><i class="fas fa-filter"></i></button>
-					<button type="button" class="btn btn-light"><i class="fas fa-print"></i></button>
+
+				<div class="d-flex align-items-center">
+					<a href="javascript://" class="px-3 text-dark d-flex align-items-center">
+						<i class="fas fa-filter"></i>
+					</a>
+					<a href="javascript://" class="px-3 text-dark d-flex align-items-center">
+						<i class="fas fa-print"></i>
+					</a>
 				</div>
 			</div>
 
@@ -58,23 +65,29 @@
 		<div class="tab-pane" id="trafficList" role="tabpanel" aria-labelledby="trafficList-tab">
 
 			<!-- Панель иконок -->
-			<div class="border input-group align-items-center">
-				<div class="flex-grow-1">
-					<button id="closing" type="button" class="btn btn-light"><i class="fas fa-arrow-circle-right"></i></button>
+			<div class="border-bottom input-group align-items-center" style="height: 42px;">
+				<div class="d-flex flex-grow-1 align-items-center">
+					<a id="closing" href="javascript://" class="px-3 text-dark d-flex align-items-center">
+						<i class="fas fa-arrow-circle-right"></i>
+					</a>
 				</div>
-				<div>
-					<button type="button" class="btn btn-light"><i class="fas fa-save"></i></button>
-					<button type="button" class="btn btn-light"><i class="fas fa-trash-alt"></i></button>
+				<div class="d-flex align-items-center">
+					<a href="javascript://" class="px-3 text-dark d-flex align-items-center">
+						<i class="fas fa-save"></i>
+					</a>
+					<a href="javascript://" class="px-3 text-dark d-flex align-items-center">
+						<i class="fas fa-trash-alt"></i>
+					</a>
 				</div>
 			</div>
 			<!-- Заголовок -->
-			<div class="d-flex bg-light text-secondary">
+			<div class="d-flex bg-light text-secondary px-3">
 				<span class="h3 flex-grow-1">Новый трафик</span>
 				<span class="h3">{{ date('d.m.Y') }}</span>
 			</div>
 			<!-- Форма вкладки -->
 
-			{!! Form::open() !!}
+			{!! Form::open(['class' => 'px-3']) !!}
 			{{ csrf_field() }}
 
 			<div class="my-3">
@@ -124,7 +137,7 @@
 			</div>
 
 			<span class="h4 text-secondary">Действие</span>
-			<div>
+			<div class="mb-3">
 				<div class="input-group">
 					<input name="action_date" type="text" class="col-3 form-control calendar" title="Назначенная дата">
 					<input name="action_time" type="time" class="col-3 form-control" title="Назначенное время">
@@ -166,22 +179,26 @@
 		
 		<!-- Вкладка Рабочий лист -->
 		<div class="tab-pane" id="worksheet" role="tabpanel" aria-labelledby="worksheet-tab">
-			{{Form::open() }}
+			{{ Form::open() }}
 			<!-- Панель иконок -->
-			<div class="border input-group align-items-center">
-
-				<div class="flex-grow-1">
-					<button id="closing" type="button" class="btn btn-light"><i class="fas fa-arrow-circle-right"></i></button>
+			<div class="border-bottom input-group align-items-center" style="height: 42px;">
+				<div class="d-flex flex-grow-1 align-items-center">
+					<a id="closing" href="javascript://" class="px-3 text-dark d-flex align-items-center">
+						<i class="fas fa-arrow-circle-right"></i>
+					</a>
 					<span id="worklist-vin">
 						VIN-nomer
 					</span>
 				</div>
 
-				<div>
-					<button type="button" class="btn btn-light" id="wl_save_changes" title="Сохранить рабочий лист"><i class="fas fa-save"></i></button>
-					<button type="button" class="btn btn-light"><i class="fas fa-trash-alt"></i></button>
+				<div class="d-flex align-items-center">
+					<a href="javascript://" class="px-3 text-dark d-flex align-items-center" id="wl_save_changes" title="Сохранить рабочий лист">
+						<i class="fas fa-save"></i>
+					</a>
+					<a href="javascript://" class="px-3 text-dark d-flex align-items-center">
+						<i class="fas fa-trash-alt"></i>
+					</a>
 				</div>
-
 			</div>
 
 			<div class="d-flex">
@@ -197,9 +214,9 @@
 			</div>
 
 			<!-- Основной блок рабочего листа -->
-			<div>
+			<div class="px-3">
 				<div class="mb-3">
-					<div class="input-group d-flex align-items-center">
+					<div class="input-group no-gutters d-flex align-items-center">
 						<label class="col-3">Трафик</label>
 						<label class="col-3">Спрос</label>
 						<label class="col-3">Менеджер</label>
@@ -207,9 +224,9 @@
 					</div>
 
 					<div class="input-group">
-						<input name="traffic_type" type="text" class="col-3 form-control" value="-" readonly="">
-						<input name="traffic_model" type="text" class="col-3 form-control" value="-" disabled>
-						<input name="wl_manager" type="text" class="col-3 form-control" value="-" disabled>
+						<input name="traffic_type" type="text" class="col-3 form-control edit-traffic-modal" value="-" readonly="">
+						<input name="traffic_model" type="text" class="col-3 form-control edit-traffic-modal" value="-" readonly="">
+						<input name="wl_manager" type="text" class="col-3 form-control edit-traffic-modal" value="-" readonly="">
 						<div class="col-3 trafic_action_block">
 							<div class="row">
 								<input name="traffic_action_date" type="text" class="col-6 text-danger form-control calendar">
@@ -220,7 +237,7 @@
 				</div>
 				
 				<div class="mb-3">
-					<div class="input-group">
+					<div class="input-group no-gutters">
 						<label class="col-3">Тип контакта</label>					
 						<label class="col-9">Контакт</label>
 					</div>
@@ -234,7 +251,7 @@
 				</div>
 
 				<div>
-					<div class="input-group">
+					<div class="input-group no-gutters">
 						<label class="col-3">Телефон</label>
 						<label class="col-3">Почта</label>
 						<label class="col-3">Маркер</label>
@@ -259,7 +276,7 @@
 						</div>
 					</div>
 
-					<div class="input-group">
+					<div class="input-group no-gutters">
 						<div class="col-12 d-flex justify-content-between">
 							<a data-toggle="collapse" href="#worklistMoreInfo" aria-expanded="false" aria-controls="worklistMoreInfo">Еще о клиенте</a>
 							<a data-toggle="collapse" href="#worklistDocuments" aria-expanded="false" aria-controls="worklistDocuments">Рабочие документы</a>
@@ -268,7 +285,7 @@
 				</div>
 
 				<div id="worklistMoreInfo" class="collapse my-3">
-					<div class="input-group">
+					<div class="input-group no-gutters">
 						<label class="col-3">Зона контакта</label>
 						<label class="col-6">Адрес прописки</label>
 						<label class="col-3">Дата рождения</label>
@@ -280,7 +297,7 @@
 						<input name="client_birthday" type="text" class="col-3 form-control calendar">
 					</div>
 					
-					<div class="input-group">
+					<div class="input-group no-gutters">
 						<label class="col-6">Паспорт</label>
 						<label class="col-6">Водительское удостоверение</label>
 					</div>
@@ -295,18 +312,34 @@
 				</div>
 
 				<div id="worklistDocuments" class="collapse my-3">
-					<div class="input-group">
+					<div class="input-group no-gutters">
 						<div class="col-6">
-							<a href="javascript://" class="input-group">Доверенность на тест-драйв</a>
-							<a href="javascript://" class="input-group">Направление в гостиницу</a>
-							<a href="javascript://" class="input-group">Приветственная табличка</a>
-							<a href="javascript://" class="input-group">Заявка на сервис</a>
+							<div class="input-group">
+								<a href="javascript://">Доверенность на тест-драйв</a>
+							</div>
+							<div class="input-group">
+								<a href="javascript://">Направление в гостиницу</a>
+							</div>
+							<div class="input-group">
+								<a href="javascript://">Приветственная табличка</a>
+							</div>
+							<div class="input-group">
+								<a href="javascript://">Заявка на сервис</a>
+							</div>
 						</div>
 						<div class="col-6">
-							<a href="javascript://" class="input-group">Заявление на зачет денег</a>
-							<a href="javascript://" class="input-group">Заявление на расторжение договора</a>
-							<a href="javascript://" class="input-group">Заявление на возврат денег</a>
-							<a href="javascript://" class="input-group">Уведомление о задержке поставки</a>
+							<div class="input-group">
+								<a href="javascript://">Заявление на зачет денег</a>
+							</div>
+							<div class="input-group">
+								<a href="javascript://">Заявление на расторжение договора</a>
+							</div>
+							<div class="input-group">
+								<a href="javascript://">Заявление на возврат денег</a>
+							</div>
+							<div class="input-group">
+								<a href="javascript://">Уведомление о задержке поставки</a>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -708,7 +741,6 @@
 									</div>
 									<div class="col-4 h5">
 										<div id="wl_car_fullprice"></div>
-										<div id="wl_car_sale" class="text-warning">- 20 000 руб.</div>
 									</div>
 								</div>
 

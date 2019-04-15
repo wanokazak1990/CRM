@@ -138,6 +138,8 @@ $(document).on('click','#currentSettingsList .setting-set-active',function(){
 				data = (JSON.parse(data))
 				document.cookie = data.type + "=" + JSON.stringify(data.list);
 				getContent($('#'+activeTab().attr('id')));
+
+				$('#settingsModal').modal('hide');
 			})
 	)
 });

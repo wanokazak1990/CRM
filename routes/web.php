@@ -400,7 +400,11 @@ Route::post('/trafficadd', 'CRMTrafficController@put')->name('trafficadd');
 // ПОЛУЧЕНИЕ трафика ajax
 Route::post('/gettraffic', 'CRMTrafficController@get')->name('gettraffic');
 
+// Получение данных трафика из рабочего для модального окна редактирования трафика
+Route::post('/traffic/getworklistinfo', 'CRMTrafficController@getWorklistInfo')->name('getworklistinfo');
 
+// Обновление данных трафика из модального окна редактирования трафика
+Route::post('/traffic/updateworklistinfo', 'CRMTrafficController@updateWorklistInfo')->name('updateworklistinfo');
 
 
 // CRM AJAX запросы
@@ -524,9 +528,9 @@ Route::get('/getpdf', 'PdfController@test')->name('getpdf');
 
 
 // Создать коммерческое предложение
-Route::get('/createoffer/{id}', 'PdfController@createOffer')->name('createoffer');
+//Route::get('/createoffer/{id}', 'PdfController@createOffer')->name('createoffer');
 
-// Создать коммерческое предложение для нескольких машин
+// Создать коммерческое предложение 
 Route::post('/createoffer/{id}', 'PdfController@createOffer')->name('createoffer');
 
 // Получить архив коммерческих предложений для РЛ

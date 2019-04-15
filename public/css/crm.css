@@ -34,18 +34,18 @@ body{
 }
 
 #main{
-	height: calc(100% - 112px);
+	height: calc(100% - 84px);
 	background-color: white; 
 	z-index: 0;
 }
 #header{
-	height: 56px; 
+	height: 42px; 
 	padding-left: 16px;
 }
 #footer{
 	width: 100%;
-	height: 56px;
-	z-index: 1;
+	height: 42px;
+	z-index: 2;
 }
 .pdt-20{
 	padding-top: 20px;
@@ -118,8 +118,9 @@ label.form-control{
 /* Полупрозрачный блок, перекрывающий основной контент при открытии боковой панели */
 #disableContent{
 	position: fixed; 
+	top: 42px;
 	width: 100%; 
-	height: 100%; 
+	height: calc(100% - 84px); 
 	background-color: gray; 
 	opacity: 0.25;
 	z-index: 2;
@@ -130,11 +131,12 @@ label.form-control{
     position: fixed; /* положение */
     overflow: auto; 
     z-index: 3;
-    top: 0;
+    top: 42px;
     right: -50%; /* отступ справа */
     background: white; /* цвет фона */
     width: 50%; 
-    height: 100%; 
+    height: calc(100% - 84px); 
+    border-left: 10px solid #4f81bd;
 
     -webkit-transition-duration: 0.3s; /* анимационное выдвижение для всех браузеров*/
     -moz-transition-duration: 0.3s;
@@ -143,8 +145,8 @@ label.form-control{
 }
 /* Стили основных вкладок */
 #crmTabs li a{
-	color: #000;
-	background-color: #dbe5f1;
+	color: #fff;
+	background-color: #4f81bd;
 	border: 1px #fff solid;
 }
 #crmTabs li .active{
@@ -155,8 +157,8 @@ label.form-control{
 }
 /* Стили вкладок в боковой панели */
 #hiddenTab li a{
-	color: #000;
-	background-color: #dbe5f1;
+	color: #fff;
+	background-color: #4f81bd;
 	border: 1px #fff solid;
 }
 #hiddenTab li .active{
@@ -167,8 +169,8 @@ label.form-control{
 }
 /* Стили вкладок в Рабочем листе (Образ клиента, Параметры и т. д.) */
 #worksheetTabs li a{
-	color: #000;
-	background-color: #dbe5f1;
+	color: #fff;
+	background-color: #4f81bd;
 	border: 1px #fff solid;
 }
 #worksheetTabs li .active{
@@ -176,7 +178,7 @@ label.form-control{
 	font-weight: bold;
 	background-color: #fff;
 	border: 1px #fff solid;
-	border-top: 1px #dbe5f1 solid;
+	border-top: 1px #4f81bd solid;
 }
 /* Стили вкладок карточки автомобиля*/
 #autocardModalTabs li a{
@@ -199,7 +201,7 @@ label.form-control{
  * Голубой цвет фона из шаблона
  */
 .bg-ice {
-	background-color: #dbe5f1 !important;
+	background-color: #4f81bd !important;
 }
 /**
  * Оранжевый цвет для нажатых кнопок класса btn-light
@@ -256,6 +258,14 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:foc
 .btn-danger:hover {
 	background-color: #9e3c39 !important;
 	border-color: #9e3c39 !important;
+}
+
+/**
+ * Убрать закругления на вкладках
+ */
+.nav-tabs .nav-link {
+	border-top-left-radius: 0 !important;
+	border-top-right-radius: 0 !important;
 }
 
 
@@ -403,6 +413,22 @@ b.green{background: #0f0;height: 20px;width: 20px;border-radius: 100%;display: b
 .pack-name{padding-top: 10px;}
 .pack-desc{font-size: 12px; padding: 10px 0;}
 #complect-option{font-size: 12px;background: #eee;}
+
+.hide-block {
+	display: none !important;
+}
+
+#edit_traffic_modal {
+	z-index: 3; 
+	top: 0; 
+	left: 0; 
+	position: fixed;
+}
+
+#edit_traffic_modal .container {
+	background-color: #fff; 
+	width: 80%;
+}
 
 
 /*модальное окно выиджета программы лояльности*/

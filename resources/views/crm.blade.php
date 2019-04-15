@@ -30,15 +30,17 @@
     	<input type="hidden" id="auth_user_id" value="{{ Auth::user()->id }}">
 
     	<div class="input-group d-flex">
-    		<div class="d-flex flex-grow-1 text-dark align-items-center">{{ Auth::user()->name }} on-line</div>
+    		<div class="d-flex flex-grow-1 text-white align-items-center">{{ Auth::user()->name }} on-line</div>
     		<div class="d-flex align-items-center mr-3">
-    			<a href="javascript://" class="text-dark" onclick="location.reload();" title="Обновить">
-    				<i class="icofont-refresh"></i>
+
+    			<a href="javascript://" class="text-white" onclick="location.reload();" title="Обновить">
+    				<i class="fas fa-undo"></i>
     			</a>
+          
     		</div>
     		<div class="d-flex align-items-center">
     			<a href="{{ route('logout') }}"
-		        	class="text-dark"
+		        	class="text-white"
 		        	title="Выход" 
 		            onclick="event.preventDefault();
 		                     document.getElementById('logout-form').submit();"
@@ -75,7 +77,7 @@
 
 <!-- ОСНОВНОЙ КОНТЕНТ -->
 <div id="main" class="container-fluid">
-	<div class="row" style="height: 100%; overflow-x: auto;">
+	<div class="row" style="height: 100%;">
 		@section('nav-top')
 			<!-- Основные вкладки -->
 			<ul class="nav nav-tabs nav-justified bg-ice" id="crmTabs" role="tablist" style="width: 100%; height: 42px;">
@@ -208,41 +210,40 @@
 
 		@section('')
 			<!-- Панель иконок -->
-			<div class="border input-group no-gutters">
+			<div class="col-12">
+				<div class="row align-items-center" style="height: 42px;">
+					<div class="d-flex flex-grow-1 align-items-center">
+						<!-- Настройки отображения полей -->
+						<a href="javascript://" class="px-3 text-dark d-flex align-items-center" data-toggle="modal" data-target="#settingsModal">
+							<i class="fas fa-cog"></i>
+						</a>
+						<!-- Карточка автомобиля (сменить значок) -->
+						<a href="javascript://" class="px-3 text-dark d-flex align-items-center" data-toggle="modal" data-target="#autocardModal">
+							<i class="fas fa-search"></i>
+						</a>
+						<!-- Загрузить -->
+						<a href="javascript://" class="px-3 text-dark d-flex align-items-center">
+							<i class="fas fa-caret-square-down"></i>
+						</a>
+						<!-- Фильтр -->
+						<a href="javascript://" class="px-3 text-dark d-flex align-items-center">
+							<i class="fas fa-filter"></i>
+						</a>
+					</div>
 
-				<div class="col-sm-6">
-
-					<button type="button" class="btn btn-light" data-toggle="modal" data-target="#settingsModal">
-						<i class="fas fa-cog"></i>
-					</button>
-
-					<button type="button" class="btn btn-light" data-toggle="modal" data-target="#autocardModal">
-						<i class="fas fa-search"></i>
-					</button>
-
-					<button type="button" class="btn btn-light">
-						<i class="fas fa-caret-square-down"></i>
-					</button>
-
-					<button type="button" class="btn btn-light">
-						<i class="fas fa-filter"></i>
-					</button>
-
+					<div class="d-flex align-items-center">
+						<!-- Новый трафик -->
+						<a href="javascript://" class="px-3 text-dark d-flex align-items-center" id="openNewTraffic">
+							<i class="fas fa-user-plus"></i>
+						</a>
+						<!-- Открыть боковую панель -->
+						<a id="opening" a href="javascript://" class="px-3 text-dark d-flex align-items-center">
+							<i class="fas fa-arrow-circle-left"></i>
+						</a>
+					</div>
 				</div>
-
-				<div class="col-sm-6 text-right">
-
-					<button type="button" class="btn btn-light">
-						<i class="fas fa-user-plus"></i>
-					</button>
-
-					<button id="opening" type="button" class="btn btn-light">
-						<i class="fas fa-arrow-circle-left"></i>
-					</button>
-
-				</div>
-
 			</div>
+			
 		@show
 
 		@section('main')
@@ -253,7 +254,7 @@
 
 <!-- FOOTER -->
 <div id="footer" class="bg-ice d-flex align-items-center">
-	<div class="container-fluid text-right text-dark">
+	<div class="container-fluid text-right text-white">
 		CRM "Учет"	
 	</div>	
 </div>
@@ -380,6 +381,51 @@
 </div>
 
 
+<div id="edit_traffic_modal" class="w-50 h-100 align-items-center justify-content-center hide-block">
+	<div class="container p-3 border shadow">
+		<div class="input-group d-flex justify-content-between">
+			<span class="h5">Редактирование трафика</span>
+			<a href="javascript://" class="text-secondary">
+				<i class="fas fa-times" style="width: 21px; height: 21px;"></i>
+			</a>
+		</div>
+
+		<div class="w-100 border-top"></div>
+
+		<span class="h4 text-secondary">Канал</span>
+		<div class="input-group btn-group-toggle mb-3" data-toggle="buttons">
+			@foreach($traffic_types as $traffic)
+			<div class="col-3 btn btn-light"><input type="radio" name="traffic_type_modal" value="{{ $traffic->id }}" autocomplete="off"> {{ $traffic->name }}</div>
+			@endforeach
+		</div>
+		
+		<span class="h4 text-secondary">Спрос</span>
+		<div class="input-group btn-group-toggle mb-3" data-toggle="buttons">
+			@foreach($models as $key => $model)
+			<div class="col-3 btn btn-light"><input type="radio" name="traffic_car_modal" value="{{ $key }}" autocomplete="off"> {{ $model }}</div>
+			@endforeach
+		</div>
+
+		<span class="h4 text-secondary">Зона контакта</span>
+		<div class="input-group btn-group-toggle mb-3" data-toggle="buttons">
+			<div class="col-3 btn btn-light">
+				<input type="radio" name="area_id_modal" autocomplete="off" value="0"> 
+				Неизвестно
+			</div>
+
+			@foreach(App\crm_city_list::pluck('name','id') as $id=>$city)
+			<div class="col-3 btn btn-light">
+				<input type="radio" name="area_id_modal" autocomplete="off" value="{{$id}}"> 
+				{{$city}}
+			</div>
+			@endforeach
+		</div>
+
+		<div class="input-group d-flex justify-content-end">
+			<button type="button" id="traffic_modal_update" class="btn btn-primary col-3">Обновить трафик</button>
+		</div>
+	</div>
+</div>
 
 
 
