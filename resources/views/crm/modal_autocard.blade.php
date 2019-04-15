@@ -382,7 +382,7 @@
 										</div>
 										<div class="col-6">
 											<div class="row" style="padding: 0 15px;">
-											<input type="text" name="dc_pack_percent[]" class="form-control col-3 bt-0">
+											<input type="text" name="dc_pack_percent[]" class="form-control col-3 bt-0 deleter">
 											<input type="text" class="form-control bt-0 form-control col-9" name="dc_sale[]" style="border-left: 0px;">
 											<a class="input-icon clearer-block fa fa-times"></a>
 											</div>
