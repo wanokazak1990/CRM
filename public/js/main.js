@@ -56,7 +56,7 @@ $(document).on('click','.clearer',function(){
 
 $(document).on('click','.clearer-block',function(){
 	var parent = $(this).closest('.item-block').parent()
-	if(parent.find('input').length>1)
+	if(parent.find('.deleter').length>1)
 	{
 		$(this).closest('.item-block').remove()
 	}
