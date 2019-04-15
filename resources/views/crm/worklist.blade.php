@@ -97,7 +97,7 @@
 					<input type="text" name="client_lastname" class="col-4 form-control" placeholder="Фамилия">
 				</div>
 				<div class="input-group">
-					<input type="text" name="client_phone" class="col-6 form-control" placeholder="Телефон">
+					<input type="text" name="client_phone" class="col-6 form-control phone_mask" placeholder="Телефон">
 					<input type="text" name="client_email" class="col-6 form-control" placeholder="Email">
 				</div>
 				<div class="input-group">
@@ -243,7 +243,7 @@
 					</div>
 
 					<div class="input-group">
-						{{Form::select('client_type',App\crm_client_type::pluck('name','id'),'',['class'=>'col-3 form-control'])}}
+						{{Form::select('client_type',App\crm_client_type::pluck('name','id'),1,['class'=>'col-3 form-control'])}}
 						<input name="client_name" type="text" class="col-3 form-control" placeholder="Имя">
 						<input name="client_secondname" type="text" class="col-3 form-control" placeholder="Отчество">
 						<input name="client_lastname" type="text" class="col-3 form-control" placeholder="Фамилия">
@@ -259,7 +259,7 @@
 
 					<div wl_block='contacts' id="wl_contacts" class="mb-3">
 						<div class="input-group">
-							<input type="text" class="col-3 form-control" placeholder="Введите номер" name='contact_phone[]'>
+							<input type="text" class="col-3 form-control phone_mask" placeholder="Введите номер" name='contact_phone[]'>
 							<input type="text" class="col-3 form-control" placeholder="Введите Email" name='contact_email[]'>
 							
 							{!! Form::select(

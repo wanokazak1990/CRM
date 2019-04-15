@@ -330,6 +330,7 @@ function refreshContent()
 {
 	getContent($("#clients-tab"));//переписываю данные во вкладке клиенты
 	getContent($("#traffic-tab"));//переписываю данные во вкладке трафик
+	getContent($("#stock-tab"))
 }
 
 
