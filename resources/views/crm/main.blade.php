@@ -14,7 +14,7 @@
 
 
 <!-- Контент вкладок -->
-<div id="crmTabPanels" class="tab-content border-top border-secondary" style="width: 100%; height: calc(100% - 82px); overflow-x: auto;">
+<div id="crmTabPanels" class="tab-content border-top border-secondary" style="width: 100%; height: calc(100% - 84px); overflow-x: auto;">
 	<!-- Клиенты -->
 	<div class="tab-pane active" id="clients" role="tabpanel" aria-labelledby="clients-tab">
 		<table class="table table-bordered table-hover table-sm"></table>

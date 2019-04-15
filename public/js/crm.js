@@ -137,6 +137,17 @@ $(document).ready(function() {
 		$('#disableContent').css('display', 'none');
 	});
 
+	/**
+	 * Открытие боковой панели с активной вкладкой "Лист трафика" 
+	 * для создания нового трафика
+	 */
+	$(document).on('click', '#openNewTraffic', function() {
+		$(this).blur();
+		$('#hidden_panel').css('right', '0');
+		$('#disableContent').css('display', 'block');
+		$('#hiddenTab a[href="#trafficList"]').tab('show');
+	});
+
 })
 
 

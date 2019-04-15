@@ -386,7 +386,7 @@ $(document).on('click', '#wl_need_reserve', function() {
 		alert('Рабочий лист не загружен!');
 	else
 	{
-		var check_selected_car = checkSelectedCar(wl_id);
+		var check_selected_car = checkWorklistOnCar(wl_id);
 		if (check_selected_car == true)
 		{
 			alert('У текущего рабочего листа уже зарезервирован автомобиль!');
@@ -398,23 +398,30 @@ $(document).on('click', '#wl_need_reserve', function() {
 			else
 			{
 				var car_id = $('.check-car:checked').val();
-				
-				var formData = new FormData();
-				formData.append('car_id', car_id);
-				formData.append('wl_id', wl_id);
+				check_selected_car = checkCarOnWorklist(car_id);
+				if (check_selected_car == true)
+				{
+					alert('Выбранный автомобиль уже зарезервирован за другим рабочим листом!');
+				}
+				else
+				{
+					var formData = new FormData();
+					formData.append('car_id', car_id);
+					formData.append('wl_id', wl_id);
 
-				var parameters = formData;
-				var url = '/wlreservecar';
+					var parameters = formData;
+					var url = '/wlreservecar';
 
-				$.when(ajaxWithFiles(parameters, url)).then(function(data){
-					if (data == 'OK')
-					{
-						alert('Автомобиль зарезервирован.');
-						wl_save_changes(); // Обновляем данные в рабочем листе
-					}
-					else
-						alert('Не удалось зарезервировать автомобиль.');
-				});
+					$.when(ajaxWithFiles(parameters, url)).then(function(data){
+						if (data == 'OK')
+						{
+							alert('Автомобиль зарезервирован.');
+							wl_save_changes(); // Обновляем данные в рабочем листе
+						}
+						else
+							alert('Не удалось зарезервировать автомобиль.');
+					});
+				}
 			}
 		}
 	}
@@ -453,7 +460,6 @@ $(document).on('shown.bs.collapse', '#wsparam3', function() {
 				for (i = 0; i < data.length; i++)
 				{
 					var car = block.clone();
-					
 
 					var car_model = car.find('.cfg_model');
 					car_model.val(data[i].model_id);
@@ -513,7 +519,7 @@ $(document).on('click', '#wl_cfg_create_request', function() {
 
 	if (wl_id != '-')
 	{
-		var check_selected_car = checkSelectedCar(wl_id);
+		var check_selected_car = checkWorklistOnCar(wl_id);
 		if (check_selected_car == true)
 		{
 			alert('У текущего рабочего листа уже зарезервирован автомобиль!');
@@ -578,9 +584,47 @@ $(document).on('click', '#wl_cfg_create_request', function() {
 /**
  * Функция проверки, есть ли у рабочего листа привязанный (зарезервированный) автомобиль
  */
-function checkSelectedCar(worklist_id) {
+function checkWorklistOnCar(worklist_id) {
 	var formData = new FormData();
 	formData.append('worklist_id', worklist_id);
+	
+	var result = false;
+
+	$.ajax({
+		async: false,
+		url: '/wlcheckselectedcar',
+		type: 'POST',
+		data: formData,
+		dataType : "json", 
+		cache: false,
+		contentType: false,
+		processData: false, 
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		},
+		success: function(data){
+			if (data == '1')
+				result = true;
+			else
+				result = false;
+		},
+		error:function(xhr, ajaxOptions, thrownError){
+			log('Не удалось проверить рабочий лист на наличие привязанного автомобиля');
+			log("Ошибка: code-"+xhr.status+" "+thrownError);
+			log(xhr.responseText);
+			log(ajaxOptions);
+		}
+	});
+
+	return result;
+};
+
+/**
+ * Функция проверки, зарезервирован ли автомобиль за каким-либо рабочим листом
+ */
+function checkCarOnWorklist(car_id) {
+	var formData = new FormData();
+	formData.append('car_id', car_id);
 	
 	var result = false;
 
@@ -653,7 +697,7 @@ $(document).on('click', '#worksheetTabs a[href="#worksheet-auto"]', function() {
 	    		$('#wl_car_installed').html(data.installed);
 	    		$('#wl_car_complect_price').html(data.complect_price);
 	    		$('#wl_car_options').html(data.options);
-	    		$('#wl_car_fullprice').html(data.fullprice + ' ['+ data.car_sale +'] ['+data.dop_sale+']');
+	    		$('#wl_car_fullprice').html(data.fullprice);
 
 	    		$('#wl_car_opencard').addClass('opencar');
 	    		$('#wl_car_opencard').attr('car-id', data.car_id);
@@ -806,6 +850,69 @@ $(document).on('click', '#wl_create_comment', function(){
 });
 
 
+
+/**
+ * Редактирование трафика (модальное окно)
+ * Открытие модального окна при двойном клике на поля Трафик, Спрос, Менеджер
+ * во вкладке Рабочий лист
+ */
+$(document).on('dblclick', '.edit-traffic-modal', function() {
+	var wl_id = $('span[name="wl_id"]').html();
+	if (wl_id != '-')
+	{
+		$('#edit_traffic_modal').addClass('d-flex');
+		$('#edit_traffic_modal').removeClass('hide-block');
+
+		var formData = new FormData();
+		formData.append('wl_id', wl_id);
+
+		var parameters = formData;
+		var url = '/traffic/getworklistinfo';
+
+		$.when(ajaxWithFiles(parameters, url)).then(function(data){
+			$('#edit_traffic_modal input[name="traffic_type_modal"][value="'+data.type+'"]').closest('.btn-light').trigger('click');
+			$('#edit_traffic_modal input[name="traffic_car_modal"][value="'+data.model+'"]').closest('.btn-light').trigger('click');
+			$('#edit_traffic_modal input[name="area_id_modal"][value="'+data.area+'"]').closest('.btn-light').trigger('click');
+		});
+	}
+});
+
+/**
+ * Редактирование трафика (модальное окно)
+ * Закрытие модального окна
+ */
+$(document).on('click', '#edit_traffic_modal a', function() {
+	$('#edit_traffic_modal').addClass('hide-block');
+	$('#edit_traffic_modal').removeClass('d-flex');
+});
+
+/**
+ * Редактирование трафика (модальное окно)
+ * Кнопка "Обновить трафик"
+ */
+$(document).on('click', '#traffic_modal_update', function() {
+	$(this).blur();
+
+	var wl_id = $('span[name="wl_id"]').html();
+	var type = $('#edit_traffic_modal input[name="traffic_type_modal"]:checked').val();
+	var model = $('#edit_traffic_modal input[name="traffic_car_modal"]:checked').val();
+	var area = $('#edit_traffic_modal input[name="area_id_modal"]:checked').val();
+
+	var formData = new FormData();
+	formData.append('wl_id', wl_id);
+	formData.append('type', type);
+	formData.append('model', model);
+	formData.append('area', area);
+
+	var parameters = formData;
+	var url = '/traffic/updateworklistinfo';
+
+	$.when(ajaxWithFiles(parameters, url)).then(function(data){
+		if (data == "1")
+			$('#edit_traffic_modal a').trigger('click');
+	});
+});
+
 /**
  * КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ
  * Открытие блока
@@ -852,28 +959,37 @@ $(document).on('click', '#create_offer', function() {
 	var id = $('span[name="wl_id"]').html();
 	if (id != '-')
 	{
-		let form = $('#get-pdf')
-		let action = '/createoffer/' + id;
-		form.attr('action', action);
-		form.html('');
-		form.append('<input name="_token" value="'+$('meta[name="csrf-token"]').attr('content')+'" type="hidden">');
-
-		if ($('.check-car:checked').length > 0)
-		{	
-			$('.check-car:checked').each(function(){
-			    form.append('<input type="hidden" name="cars_ids[]" value="'+$(this).val()+'">');
-			});
-		}
-
-		if ($('.cfg_check_car:checked').length > 0)
+		if ($('.check-car:checked').length == 0 && $('.cfg_check_car:checked').length == 0)
 		{
-			$('.cfg_check_car:checked').each(function() {
-			    form.append('<input type="hidden" name="cfg_cars[]" value="'+$(this).attr('cfg-id')+'">');
-			});
+			alert("Коммерческое предложение не создано.\nВыберите одну или несколько машин из Автосклада и/или Конфигуратора.");
 		}
+		else
+		{
+			let form = $('#get-pdf')
+			let action = '/createoffer/' + id;
+			form.attr('action', action);
+			form.html('');
+			form.append('<input name="_token" value="'+$('meta[name="csrf-token"]').attr('content')+'" type="hidden">');
 
-		form.submit();
+			if ($('.check-car:checked').length > 0)
+			{	
+				$('.check-car:checked').each(function(){
+				    form.append('<input type="hidden" name="cars_ids[]" value="'+$(this).val()+'">');
+				});
+			}
+
+			if ($('.cfg_check_car:checked').length > 0)
+			{
+				$('.cfg_check_car:checked').each(function() {
+				    form.append('<input type="hidden" name="cfg_cars[]" value="'+$(this).attr('cfg-id')+'">');
+				});
+			}
+
+			form.submit();
+		}
 	}
+	else
+		alert("Для создания Коммерческого предложения необходимо загрузить рабочий лист!");
 });
 
 /**
@@ -902,7 +1018,7 @@ $(document).on('shown.bs.collapse', '#wsdesign3', function() {
 	var wl_id = $('span[name="wl_id"]').html();
 	if (wl_id != '-')
 	{
-		var check_selected_car = checkSelectedCar(wl_id);
+		var check_selected_car = checkWorklistOnCar(wl_id);
 		if (check_selected_car == true)
 		{
 			var formData = new FormData();
@@ -922,19 +1038,7 @@ $(document).on('shown.bs.collapse', '#wsdesign3', function() {
 				else
 					$('#services_list').html('<span class="ofu_empty_services font-weight-bold font-italic text-primary d-flex justify-content-center">Не найдено сервисов для привязанной машины</span>');
 
-				// Отмечаем сервисы, которые были выбраны в Программе лояльности
-				if (data.checked_services != '')
-				{
-					data.checked_services.forEach(function(item, index) {
-	    				var checkbox = $('input[class="wl-service-check"][id="'+item.company_id+'"]');
-	    				checkbox.prop('checked', true);
-	    				checkbox.closest('span').css('color', '#f5770a');
-						checkbox.closest('.input-group').find('input[type="number"]').removeAttr('disabled');
-						checkbox.closest('.input-group').find('input[type="number"]').val(item.sum);
-	    			});
-	    			
-	    			getServiceSum();
-				}
+	    		getServiceSum();
 
 				// Вставляем блоки продуктов
 				if ($('.ofu_empty_services').length > 0)
@@ -967,14 +1071,14 @@ function getServiceBlock(item)
 {
 	var block = '<div class="input-group wl-ofu-services">'
 		 + '<div class="col-9 d-flex align-items-center">'
-			+ '<span class="flex-grow-1">'
-				+ '<input type="checkbox" class="wl-service-check" id="'+ item.id +'"> ' + item.name
+			+ '<span class="flex-grow-1" style="color: #f5770a;">'
+				+ '<input type="checkbox" checked disabled> ' + item.name
 			+ '</span>'
 			+ '<a href="javascript://" description="' + item.text + '" class="wl-service-description">'
 				+ '<i class="fas fa-question-circle"></i>'
 			+ '</a>'
 		+ '</div>'
-		+ '<input type="text" class="col-3 form-control wl-service-price" value="0" disabled>'
+		+ '<input type="text" class="col-3 form-control wl-service-price" value="'+ item.sum +'" disabled>'
 	+ '</div>';
 
 	return block;
@@ -986,42 +1090,6 @@ function getServiceBlock(item)
  */
 $(document).on('click', '.wl-service-description', function() {
 	alert($(this).attr('description'));
-});
-
-/**
- * Продукты ОФУ
- * Изменение цвета и блокировка/разблокировка инпута при выборе сервиса
- */
-$(document).on('click', '.wl-service-check', function() {
-	if ($(this).is(':checked'))
-	{
-		$(this).closest('span').css('color', '#f5770a');
-		$(this).closest('.input-group').find('input[type="text"]').removeAttr('disabled');
-		var id = $(this).attr('id');
-		
-		var block = ofuAddBlock();
-		block.find('.ofu-block-products').val(id);
-	    		
-		$('#ofu_products').append(block);
-		$('#ofu_products_count').html( $('.ofu-block').length );
-	}
-	else
-	{
-		$(this).closest('span').removeAttr('style');
-		$(this).closest('.input-group').find('input[type="text"]').attr('disabled', 'disabled');
-		$(this).closest('.input-group').find('input[type="text"]').val(0);
-		getServiceSum();
-	}
-});
-
-
-/**
- * Продукты ОФУ
- * Подсчет Бюджета Клиента при изменении полей с ценами сервиса
- */
-$(document).on('change', '.wl-service-price', function() {
-	$(this).val(normalizeNumberValue($(this).val()));
-	getServiceSum();
 });
 
 /**
@@ -1068,24 +1136,36 @@ $(document).on('click', '#ofu_add_block', function() {
 function ofuAddBlock()
 {
 	var block = '';
+	var wl_id = $('span[name=wl_id]').html();
 
-	$.ajax({
-		async: false,
-		url: '/ofuaddblock',
-		type: 'POST',
-		headers: {
-        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    	},
-    	success: function(data){
-    		block = $(data);
-    	},
-    	error:function(xhr, ajaxOptions, thrownError){
-    		log('Не удалось добавить блок продукта ОФУ');
-	    	log("Ошибка: code-"+xhr.status+" "+thrownError);
-	    	log(xhr.responseText);
-	    	log(ajaxOptions);
-	    }
-	});
+	if (wl_id != '-')
+	{
+		var formData = new FormData();
+		formData.append('wl_id', wl_id);
+
+		$.ajax({
+			async: false,
+			url: '/ofuaddblock',
+			type: 'POST',
+			data: formData,
+			dataType : "json", 
+		    cache: false,
+		    contentType: false,
+		    processData: false, 
+			headers: {
+	        	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	    	},
+	    	success: function(data){
+	    		block = $(data);
+	    	},
+	    	error:function(xhr, ajaxOptions, thrownError){
+	    		log('Не удалось добавить блок продукта ОФУ');
+		    	log("Ошибка: code-"+xhr.status+" "+thrownError);
+		    	log(xhr.responseText);
+		    	log(ajaxOptions);
+		    }
+		});
+	}
 
 	return block;
 }
@@ -1111,24 +1191,34 @@ $(document).on('click', '.ofu-remove-block', function() {
 
 /**
  * Продукты ОФУ
- * Выбор продукта в списке Продукт в блоке рассчета
+ * Рассчет даты окончания при вводе месяцев
  */
-$(document).on('change', '.ofu-block-products', function() {
-	var product_id = $(this).val();
+$(document).on('keyup', '.ofu-block-months', function() {
+	var creation_date = $(this).closest('.ofu-block').find('.ofu-block-creation-date').val();
+	var months = $(this).val();
 
-	$('.wl-service-check').each(function() {
-		if ($(this).attr('id') == product_id)
-		{
-			if (!$(this).is(':checked'))
-			{
-				$(this).prop('checked', true);
-				$(this).closest('span').css('color', '#f5770a');
-				$(this).closest('.input-group').find('input[type="number"]').removeAttr('disabled');
-			}
-		}
-	});
+	if (creation_date != '' && months != '')
+	{
+		var date_arr = creation_date.split('.');
+		var temp_date = new Date(date_arr[2], (date_arr[1] - 1), date_arr[0]);
+		
+		temp_date.setMonth( temp_date.getMonth() + Number(months) );
+
+		var day = temp_date.getDate();
+		var month = temp_date.getMonth() + 1;
+		var year = temp_date.getFullYear();
+
+		if (day < 10)
+			day = '0' + day;
+
+		if (month < 10)
+			month = '0' + month;
+
+		var end_date = [day,month,year].join('.');
+
+		$(this).closest('.ofu-block').find('.ofu-block-end-date').val(end_date);
+	}
 });
-
 
 
 /**
