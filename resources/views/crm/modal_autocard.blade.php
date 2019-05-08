@@ -11,7 +11,7 @@
 
 				<div class="col-1 d-flex align-items-center justify-content-center">
 					<a href="javascript://" class="text-dark">
-						<i class="fas fa-save"></i>
+						<i class="icofont-save"></i>
 					</a>
 				</div>
 
@@ -32,7 +32,7 @@
 						{!! Form::label('title', 'Автор заказа: *',['class' => 'col-4']) !!}
 						<div class="col-4"> 
 							<input type="text" name="logist_date" class="marker_date form-control" style="border: 0px;width: 100%;padding: 0px;pointer-events: none;">
-							<a href="javascript://" class="clearer-marker" style="position: absolute;right: 8px;top:7px;"><i class="text-dark fa fa-times"></i></a>
+							<a href="javascript://" class="clearer-marker" style="position: absolute;right: 8px;top:7px;"><i class="text-dark icofont-close"></i></a>
 						</div>
 					</div>
 
@@ -189,7 +189,7 @@
 								<label class="col-8 form-control pr-0">
 									Дата сборки планируемамя
 									<a href="javascript://" class="text-dark label-adder" id="add-plan-date">
-										<i class="fa fa-plus-circle"></i>
+										<i class="icofont-plus-circle"></i>
 									</a>
 								</label>
 									
@@ -236,7 +236,7 @@
 								<label class="col-8 form-control">
 									Дата отгрузки
 									<a href="javascript://" class="text-dark label-adder" id="add-ship-date">
-										<i class="fas fa-plus-circle"></i>			
+										<i class="icofont-plus-circle"></i>			
 									</a>
 								</label>
 								<div class="col-4 pad-0">
@@ -311,7 +311,7 @@
 									<label class="col-4 form-control">
 										Условия отгрузки
 										<a href="javascript://" class=" text-dark label-adder">
-											<i class="fas fa-plus-circle" id="provision-adder"></i>
+											<i class="icofont-plus-circle" id="provision-adder"></i>
 										</a>
 									</label>
 									<div class="col-4">
@@ -371,7 +371,7 @@
 								<label class="form-control col-4">
 									Детализация скидки
 									<a href="javascript://" class="text-dark label-adder">
-										<i class="fa fa-plus-circle " id="discount-adder"></i>
+										<i class="icofont-plus-circle" id="discount-adder"></i>
 									</a>
 								</label>
 									
@@ -459,7 +459,7 @@
 				<div class="input-group">
 					<div class="col-1 d-flex align-items-center justify-content-center">
 						<a href="javascript://" class="text-dark">
-							<i class="fas fa-trash-alt"></i>
+							<i class="icofont-ui-delete"></i>
 						</a>
 					</div>
 					<button type="button" id="savecar" class="btn btn-success col-3 offset-8" data-dismiss="modal">Сохранить</button>	

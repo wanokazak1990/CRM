@@ -5,24 +5,18 @@ function log(val)
 
 $(document).ready(function() {
 
-
-	//ЗАГРУЗКА ПЕРВОЙ СТРАНИЦЫ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+	/**
+	 * Получение данных для первой вкладки при загрузке страницы
+	 */
 	$(function(){
 		getContent($("#crmTabs a:first"));
 	})
-
-
-
-
 
 	//КЛИК ПО ССЫЛКАМ ПАГИНАТОРА
 	$(document).on('click','#crmTabPanels .tab-pane .pagination a',function(e){
 		e.preventDefault();
 		getContent($(this))
-	})
-
-
-
+	});
 
 	//КЛИК ПО ССЫЛКАМ НАВИГАЦИИ
 	//аттрибут id ссылки в навигации (клиенты, трафик, автосклад и ...) равен аттрибуту aria-labelledby контент-полей вкладок. тоесть
@@ -35,19 +29,30 @@ $(document).ready(function() {
 		//{
 			getContent($(this));
 		//}
-	})
+	});
+
+	/**
+	 * Отображение общего количества машин в подвале сайта 
+	 * при загрузке вкладки "Автосклад"
+	 */
+	$(document).on('shown.bs.tab', '#crmTabs a[id="stock-tab"]', function() {
+		$('span[id="stockInfo"]').html('Количество машин: 123');
+	});
+
+	/**
+	 * Очистка подвала при загрузки другой вкладки
+	 */
+	$(document).on('hide.bs.tab', '#crmTabs a[id="stock-tab"]', function() {
+		$('span[id="stockInfo"]').html('');
+	});
 
 
 
-
-
-
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-	//ADD TRAFFIC///////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-	$(document).on("click","#traffic_submit",function(e){
+	/**
+	 * Лист трафика
+	 * Кнопка "Зарегистрировать трафик"
+	 */
+	$(document).on("click", "#traffic_submit", function(e){
 		var Form = $(this).closest('form');
 		var data = Form.serialize();
 
@@ -92,29 +97,20 @@ $(document).ready(function() {
 		});
 		
 	});
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-	//END TRAFFIC///////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
 
 
-
-	//КЛИК ПО ВКЛАДКЕ ЖУРНАЛ АКТИВЕН
+	/**
+	 * Журнал
+	 * Получение данных при нажатии на вкладку
+	 */
 	$('body').on('click','#log-tab',function(){
-
 		getJournal();
-		
-	})
+	});
 
 
-
-	$("body").on('click','#savecar',function(){
-		
-	})
-
-
-	// Открытие боковой панели
+	/** 
+	 * Открытие боковой панели
+	 */
 	$(document).on('click', '#opening', function() {
 		$(this).blur();
 		$('#hidden_panel').css('right', '0');
@@ -124,14 +120,18 @@ $(document).ready(function() {
 			getJournal();
 	});
 
-	// Закрытие боковой панели с помощью кнопки
+	/**
+	 * Закрытие боковой панели с помощью кнопки
+	 */
 	$(document).on('click', '#closing', function() {
 		$(this).blur();
-		$('#hidden_panel').css('right', '-50%');
+		$('#hidden_panel').css('right', '-45%');
 		$('#disableContent').css('display', 'none');
 	});
 
-	// Закрытие боковой панели путем нажатия на рабочую область
+	/**
+	 * Закрытие боковой панели путем нажатия на рабочую область
+	 */
 	$(document).on('click', '#disableContent', function() {
 		$('#hidden_panel').css('right', '-50%');
 		$('#disableContent').css('display', 'none');
@@ -148,7 +148,7 @@ $(document).ready(function() {
 		$('#hiddenTab a[href="#trafficList"]').tab('show');
 	});
 
-})
+});
 
 
 
@@ -268,9 +268,11 @@ $(document).on('click', '#currentSettingsList .setting-delete',function(){
 	}
 });
 
-
-//ВЫДЕЛЕНЕИЕ СТРОКИ МАШИНЫ В ВКЛАДКЕ АВТОСКЛАД
-$(document).on('click','#stock tr',function(e){
+/**
+ * Автосклад
+ * Выделение строки в таблице при клике
+ */
+$(document).on('click','#stock tr',function(e) {
 	if($(this).hasClass('click-tr') || $(this).hasClass('save-tr'))
 		{
 			$(this).removeClass('click-tr')
@@ -286,7 +288,4 @@ $(document).on('click','#stock tr',function(e){
 			$(this).addClass('click-tr')
 		}
 	}
-})
-
-
-
+});

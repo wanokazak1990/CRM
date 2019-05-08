@@ -54,26 +54,34 @@ class crm_client_old_car extends Model
 	{
 		$carModel = $this->myWorkList()->selectedModel();
 		?>	
-			<div class="input-group">
+			<div class="input-group no-gutters">
 				<div class="col-3"><input type="radio" name="cc[status]" value="1" <?=($this->status==1)?'checked':'';?>> Нет авто</div>
 				<div class="col-3"><input type="radio" name="cc[status]" value="2" <?=($this->status==2)?'checked':'';?>> Есть авто</div>
 				<div class="col-3"><input type="radio" name="cc[status]" value="3" <?=($this->status==3)?'checked':'';?>> Авто в ТИ</div>
 				<div class="col-3"><input type="radio" name="cc[status]" value="4" <?=($this->status==4)?'checked':'';?>> Авто в УТ</div>
 			</div>
-			<div class="input-group">
-				<input type="text" class="col-3 form-control" name="cc[brand]" 	placeholder="Марка" value="<?=$this->brand;?>">
-				<input type="text" class="col-3 form-control" name="cc[model]" 	placeholder="Модель" value="<?=$this->model;?>">
-				<input type="text" class="col-3 form-control" name="cc[year]" 	placeholder="Год по ПТС" value="<?=$this->year;?>">
-				<input type="text" class="col-3 form-control" name="cc[mileage]" placeholder="Пробег" value="<?=$this->mileage;?>">
+			<div class="input-group no-gutters">
+				<div class="col-3">
+					<input type="text" class="form-control" name="cc[brand]" placeholder="Марка" value="<?=$this->brand;?>">
+				</div>
+				<div class="col-3">
+					<input type="text" class="form-control" name="cc[model]" placeholder="Модель" value="<?=$this->model;?>">
+				</div>
+				<div class="col-3">
+					<input type="text" class="form-control" name="cc[year]" placeholder="Год по ПТС" value="<?=$this->year;?>">
+				</div>
+				<div class="col-3">
+					<input type="text" class="form-control" name="cc[mileage]" placeholder="Пробег" value="<?=$this->mileage;?>">
+				</div>
 			</div>
 
-			<div class="input-group">
-				<button type="button" class="col-3 offset-6 btn btn-success oldcar-photo">
-					Фотографии
-				</button>
-				<button type="button" class="col-3 btn btn-primary">
-					Отдать на оценку
-				</button>
+			<div class="input-group no-gutters pb-3">
+				<div class="col-3 offset-6">
+					<button type="button" class="btn btn-success btn-block oldcar-photo">Фотографии</button>
+				</div>
+				<div class="col-3">
+					<button type="button" class="btn btn-primary btn-block">Отдать на оценку</button>
+				</div>
 			</div>
 
 			<div class="photo-load">
@@ -106,19 +114,11 @@ class crm_client_old_car extends Model
 		
 		?>
 
-			<div class="input-group">
-				<div class="col-3 text-center">
-					<label>Автомобиль</label>
-				</div>
-				<div class="col-3 text-center">
-					<label>Анализ рынка</label>
-				</div>
-				<div class="col-3 text-center">
-					<label>Акт осмотра</label>
-				</div>
-				<div class="col-3 text-center">
-					<label>Акт диагностики</label>
-				</div>
+			<div class="input-group no-gutters d-flex align-items-center">
+				<div class="col-3 text-center">Автомобиль</div>
+				<div class="col-3 text-center">Анализ рынка</div>
+				<div class="col-3 text-center">Акт осмотра</div>
+				<div class="col-3 text-center">Акт диагностики</div>
 			</div>
 			<?php
 			
@@ -129,23 +129,31 @@ class crm_client_old_car extends Model
 				<div class="cc_analysis_block">
 					<div class="input-group">
 						<div class="col-3 d-flex align-items-center justify-content-end">
-							<a href="#"><i class="fas fa-times"></i></a>
+							<a href="#"><i class="icofont-close"></i></a>
 						</div>
 						<div class="col-3 text-center">
-							<a href="#" class="btn btn-primary"><i class="fas fa-clipboard-list"></i></a>
+							<a href="#" class="btn btn-primary"><i class="icofont-ui-file"></i></a>
 						</div>
 						<div class="col-3 text-center">
-							<a href="#" class="btn btn-primary"><i class="fas fa-clipboard-list"></i></a>
+							<a href="#" class="btn btn-primary"><i class="icofont-ui-file"></i></a>
 						</div>
 						<div class="col-3 text-center">
-							<a href="#" class="btn btn-primary disabled"><i class="fas fa-clipboard-list"></i></a>
+							<a href="#" class="btn btn-primary disabled"><i class="icofont-ui-file"></i></a>
 						</div>
 					</div>
-					<div class="input-group">
-						<input type="text" class="col-3 form-control text-center" value="<?=$model->name;?>" disabled>
-						<input type="text" class="col-3 form-control text-center" value="" disabled>
-						<input type="text" class="col-3 form-control text-center" value="" disabled>
-						<input type="text" class="col-3 form-control text-center" value="" disabled>
+					<div class="input-group no-gutters">
+						<div class="col-3">
+							<input type="text" class="form-control text-center" value="<?=$model->name;?>" disabled>
+						</div>
+						<div class="col-3">
+							<input type="text" class="form-control text-center" value="" disabled>
+						</div>
+						<div class="col-3">
+							<input type="text" class="form-control text-center" value="" disabled>
+						</div>
+						<div class="col-3">
+							<input type="text" class="form-control text-center" value="" disabled>
+						</div>
 					</div>
 				</div>
 			</div>

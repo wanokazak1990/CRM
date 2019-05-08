@@ -16,7 +16,7 @@ class oa_brand extends Model
     	return Storage::url(('brand').'/'.$this->icon);
     }
 
-    public function getIcon($height = 25)
+    public function getIcon($height = 20)
     {	
     	if($this->icon)
     		return '<img title="'.$this->name.'" src="'.$this->getPathIcon().'" style="height:'.$height.'px">';

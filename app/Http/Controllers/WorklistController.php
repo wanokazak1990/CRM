@@ -381,9 +381,7 @@ class WorklistController extends Controller
             {
                 $html .= '<div class="input-group p-1">
                     <div class="col-6 d-flex align-items-center justify-content-center">
-                        <div class="d-flex align-items-center justify-content-center" style="background-color: #ddd; width: 300px; height: 200px;">
-                            Картинка машины
-                        </div>
+                        <img src="/storage/images/'.$car->model->link.'/'.$car->model->alpha.'" style="width: 100%; height: auto; background-color: '.$car->color->web_code.';">
                     </div>
                     <div class="col-6">
                         <div class="input-group border-bottom text-secondary">'.
@@ -731,7 +729,7 @@ class WorklistController extends Controller
             $html .= '
             <div class="col-3 border">
                 <div class="text-right">
-                    <a href="javascript://" class="wl_del_testdrive" id="'.$car->id.'"><i class="fas fa-trash-alt text-danger"></i></a>
+                    <a href="javascript://" class="wl_del_testdrive text-danger" id="'.$car->id.'"><i class="icofont-close"></i></a>
                 </div>
                 <input type="text" class="form-control text-center" value="'.$car->model->name.'" disabled>
                 <div class="d-flex justify-content-center">
