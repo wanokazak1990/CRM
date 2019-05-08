@@ -345,7 +345,7 @@ $(document).on('click','#savecar',function(){
 })
 
 m_carModal.on('shown.bs.modal',function(){
-	m_carModal.find('input').val('')
+	m_carModal.find('input[type="hidden"]').val('')
 	info.clear();
 	m_carModal.find('form').trigger('reset');
 })
@@ -529,7 +529,7 @@ $(document).on('click','.opencar',function(){
 		ajax(parameters,url)
 			.then(function(data){
 				data = JSON.parse(data)
-				
+				log(data)
 				makeOption(data.complects,m_complect)
 				InfoCarLoader(data.car.complect_id);
 				info.base = parseInt(data.car.complect.price);
@@ -724,7 +724,7 @@ $(document).on('click','.opencar',function(){
 							info.totalPrice()
 						}
 						if(i=='dops')
-						{
+						{	
 							$('[name="dops[]"]').each(function(){
 								for (k in current)
 									if($(this).val()==current[k].dop_id)
