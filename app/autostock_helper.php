@@ -141,8 +141,18 @@ Class autostock_helper {
                 $array['complect_code']    =    @$item->complect->code;
                 $array['complect'] =            @$item->complect->name.' '.@$item->complect->motor->getEasyName();
                 $array['pack_code'] =           $item->stringPackName();
-                $array['pack'] =                '<a href="javascript://" class="stock-button" data-toggle="modal" data-target="#optionsModal" mind="pack" car-id="'.$item->id.'"><i class="icofont-tools-bag" style="font-size: 20px;"></i></a>';
-                $array['dops'] =                '<a href="javascript://" class="stock-button" data-toggle="modal" data-target="#optionsModal" mind="dop" car-id="'.$item->id.'"><i class="icofont-cart" style="font-size: 20px;"></i></a>';
+                
+                $array['pack'] = ($item->stringPackName())?               
+                        '<a href="javascript://" class="stock-button" data-toggle="modal" data-target="#optionsModal" mind="pack" car-id="'.$item->id.'">
+                                <i class="icofont-tools-bag" style="font-size: 20px;"></i>
+                        </a>'
+                        :'';
+
+                $array['dops'] = ($item->dopprice || $offeredDops)?               
+                        '<a href="javascript://" class="stock-button" data-toggle="modal" data-target="#optionsModal" mind="dop" car-id="'.$item->id.'">
+                                <i class="icofont-cart" style="font-size: 20px;"></i>
+                        </a>'
+                        :'';
                 
                 //CAR COLOR
                 $iconCol = '';
