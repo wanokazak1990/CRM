@@ -284,10 +284,10 @@ function activeTab()
 }
 
 
-function getContent(obj,get_param='')//отдаёт контент вкладок crmTabs (клиенты, трафик, автосклад и тд)
+function getContent(obj, get_param = '')//отдаёт контент вкладок crmTabs (клиенты, трафик, автосклад и тд)
 {
 	var formData = new FormData();
-	if(obj.closest('#crmTabs').attr('id')===undefined)
+	if (obj.closest('#crmTabs').attr('id') === undefined)
 	{
 		var parent = obj.closest('.tab-pane');
 		var mas = obj.attr('href').split('/');
@@ -311,7 +311,6 @@ function getContent(obj,get_param='')//отдаёт контент вкладо�
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    },
 	    success:function(param){
-	    	
 	    	parent.find('table').html("");
 	    	getTitleContent(parent,param.titles);		    
 	    	getDataContent(parent,param['list']);		    	
@@ -456,6 +455,3 @@ function getJournal()
 	    }
 	});
 }
-
-
-

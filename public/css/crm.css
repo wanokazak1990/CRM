@@ -14,6 +14,27 @@ body{
 	font-family: renault-regular !important;
 	overflow-x: hidden;
 }
+
+.h3 {
+	font-family: renault !important;
+	color: #777 !important;
+}
+.h4 {
+	font-family: renault !important;
+	color: #444 !important;
+}
+
+/**
+ * Цвет для ссылок
+ */
+.default-link {
+	color: #4f81bd;
+}
+
+.ws-header:hover {
+	background-color: #eee;
+}
+
 .click-tr{
 	background: #ccc;
 }
@@ -23,6 +44,7 @@ body{
 
 .table-title{
 	background: #eaeaea;
+	height: 48px;
 }
 .table-title td{
 	font-size: 12px;
@@ -37,6 +59,8 @@ body{
 	height: calc(100% - 84px);
 	background-color: white; 
 	z-index: 0;
+	border-left: 10px solid #4f81bd;
+	border-right: 10px solid #4f81bd;
 }
 #header{
 	height: 42px; 
@@ -129,14 +153,15 @@ label.form-control{
 /* Скрытая боковая панель */
 #hidden_panel{
     position: fixed; /* положение */
-    overflow: auto; 
+    overflow-y: scroll; 
     z-index: 3;
     top: 42px;
-    right: -50%; /* отступ справа */
+    right: -45%; /* отступ справа */
     background: white; /* цвет фона */
-    width: 50%; 
+    width: 45%; 
     height: calc(100% - 84px); 
     border-left: 10px solid #4f81bd;
+    border-right: 10px solid #4f81bd;
 
     -webkit-transition-duration: 0.3s; /* анимационное выдвижение для всех браузеров*/
     -moz-transition-duration: 0.3s;
@@ -156,6 +181,12 @@ label.form-control{
 	border: 1px #fff solid;
 }
 /* Стили вкладок в боковой панели */
+#hiddenTab {
+	width: 100%; 
+	position: sticky; 
+	z-index: 3; 
+	top: 0;
+}
 #hiddenTab li a{
 	color: #fff;
 	background-color: #4f81bd;
@@ -168,10 +199,16 @@ label.form-control{
 	border: 1px #fff solid;
 }
 /* Стили вкладок в Рабочем листе (Образ клиента, Параметры и т. д.) */
+#worksheetTabs {
+	position: sticky; 
+	z-index: 3; 
+	top: 132px;
+}
 #worksheetTabs li a{
 	color: #fff;
 	background-color: #4f81bd;
 	border: 1px #fff solid;
+	border-top: 1px #4f81bd solid;
 }
 #worksheetTabs li .active{
 	color: #000;
@@ -210,6 +247,15 @@ label.form-control{
 .btn.btn-light.active {
 	background-color: #fc3 !important;
 	border-color: #fc3 !important;
+}
+
+.btn.btn-light {
+	color: #000 !important;
+	background-color: #eee !important;
+	border-color: #fff !important;
+}
+.btn.btn-light:hover {
+	background-color: #ddd !important;
 }
 /**
  * Оранжевая обводка при фокусе на элементах ввода
@@ -266,6 +312,16 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:foc
 .nav-tabs .nav-link {
 	border-top-left-radius: 0 !important;
 	border-top-right-radius: 0 !important;
+}
+
+/**
+ * Липкий блок с иконками во вкладках боковой панели
+ */
+.sticky-icons {
+	position: sticky !important;
+	z-index: 3;
+	top: 42px;
+	background: #fff;
 }
 
 
@@ -418,6 +474,9 @@ b.green{background: #0f0;height: 20px;width: 20px;border-radius: 100%;display: b
 	display: none !important;
 }
 
+/**
+ * Стили всплывающего окна редактирования трафика
+ */
 #edit_traffic_modal {
 	z-index: 3; 
 	top: 0; 
@@ -465,6 +524,8 @@ b.green{background: #0f0;height: 20px;width: 20px;border-radius: 100%;display: b
 	display: none;
 }
 
+/* Отключил т.к. добавил готовое модальное окно
+
 #car-option-modal{
 	width: 30%;
 	position: fixed;
@@ -499,10 +560,12 @@ b.green{background: #0f0;height: 20px;width: 20px;border-radius: 100%;display: b
 	width: 100%;
 	height: 30px;
 }
+*/
+
 .v_color{
 	/*border:1px solid #ccc; */
-	width: 25px; 
-	height: 25px; 
+	width: 20px; 
+	height: 20px; 
 	display: block;	
 	float: left;
 	margin-top: 2px;

@@ -143,7 +143,7 @@ class crm_need_car extends Model
     	$block = '<div class="col-3 border">
 			<div class="d-flex">
 				<label class="flex-grow-1">Выберите модель</label>
-				<a href="javascript://" class="removeSelectedCar"><i class="fas fa-trash-alt text-danger"></i></a>
+				<a href="javascript://" class="removeSelectedCar text-danger"><i class="icofont-close"></i></a>
 			</div>
 			
 			

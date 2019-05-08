@@ -1,4 +1,4 @@
-var conn = new WebSocket('ws://192.168.1.98:8814');
+var conn = new WebSocket('ws://192.168.1.234:8814');
 
 conn.onopen = function (e)
 {

@@ -59,15 +59,15 @@ class crm_ofu_product extends Model
 		
 		$block = '
     		<div class="my-2 ofu-block">
-				<div class="input-group">
-					<span class="col-3">Консультант</span>
-					<span class="col-3">Продукт</span>
-					<span class="col-3">Партнер</span>
-					<span class="col-3">Стоимость продукта</span>
+				<div class="input-group no-gutters">
+					<div class="col-3">Консультант</div>
+					<div class="col-3">Продукт</div>
+					<div class="col-3">Партнер</div>
+					<div class="col-3">Стоимость продукта</div>
 				</div>
 
-				<div class="input-group mb-1">
-					<select class="col-3 form-control ofu-block-authors" name="wl_ofu[blocks][][author]">';
+				<div class="input-group no-gutters mb-1">
+					<div class="col-3"><select class="form-control ofu-block-authors" name="wl_ofu[blocks][][author]">';
 					if (empty($ofu_product))
 						$block .= '<option selected disabled>Укажите параметр</option>';
 					else
@@ -86,9 +86,9 @@ class crm_ofu_product extends Model
 						}
 					}
 
-		$block .= '</select>
+		$block .= '</select></div>
 
-					<select class="col-3 form-control ofu-block-products"  name="wl_ofu[blocks][][product]">';
+					<div class="col-3"><select class="form-control ofu-block-products"  name="wl_ofu[blocks][][product]">';
 					if (empty($ofu_product))
 						$block .= '<option selected disabled>Укажите параметр</option>';
 					else
@@ -107,9 +107,9 @@ class crm_ofu_product extends Model
 						}
 					}
 
-		$block .= '</select>
+		$block .= '</select></div>
 
-					<select class="col-3 form-control ofu-block-partners" name="wl_ofu[blocks][][partner]">';
+					<div class="col-3"><select class="form-control ofu-block-partners" name="wl_ofu[blocks][][partner]">';
 					if (empty($ofu_product))
 						$block .= '<option selected disabled>Укажите параметр</option>';
 					else
@@ -128,46 +128,46 @@ class crm_ofu_product extends Model
 						}
 					}
 
-		$block .= '</select>';
+		$block .= '</select></div>';
 				
 				if (empty($ofu_product))
-					$block .= '<input type="text" class="col-3 form-control ofu-block-price" name="wl_ofu[blocks][][price]" placeholder="Стоимость, р.">';
+					$block .= '<div class="col-3"><input type="text" class="form-control ofu-block-price" name="wl_ofu[blocks][][price]" placeholder="Стоимость, р."></div>';
 				else
-					$block .= '<input type="text" class="col-3 form-control ofu-block-price" name="wl_ofu[blocks][][price]" placeholder="Стоимость, р." value="'.$ofu_product->price.'">';
+					$block .= '<div class="col-3"><input type="text" class="form-control ofu-block-price" name="wl_ofu[blocks][][price]" placeholder="Стоимость, р." value="'.$ofu_product->price.'"></div>';
 		
 		$block .= '</div>
 				
-				<div class="input-group">
-					<span class="col-3">Дата оформления</span>
-					<span class="col-3">Дата окончания</span>
-					<span class="col-3">КВ за продукт</span>
-					<span class="col-3">Дата выплаты КВ</span>
+				<div class="input-group no-gutters">
+					<div class="col-3">Дата оформления</div>
+					<div class="col-3">Дата окончания</div>
+					<div class="col-3">КВ за продукт</div>
+					<div class="col-3">Дата выплаты КВ</div>
 				</div>
 
-				<div class="input-group">';
+				<div class="input-group no-gutters">';
 				if (empty($ofu_product))
 				{
-					$block .= '<input type="text" name="wl_ofu[blocks][][creation_date]" class="col-3 form-control ofu-block-creation-date" placeholder="Дата">
-					<input type="text" class="col-1 form-control ofu-block-months" placeholder="Мес.">
-					<input type="text" name="wl_ofu[blocks][][end_date]" class="col-2 form-control ofu-block-end-date" placeholder="Дата">
-					<input type="text" name="wl_ofu[blocks][][profit]" class="col-3 form-control ofu-block-profit" placeholder="Сумма, р.">
-					<input type="text" name="wl_ofu[blocks][][profit_date]" class="col-3 form-control ofu-block-profit-date" placeholder="Дата">';
+					$block .= '<div class="col-3"><input type="text" name="wl_ofu[blocks][][creation_date]" class="form-control ofu-block-creation-date" placeholder="Дата"></div>
+					<div class="col-1"><input type="text" class="form-control ofu-block-months" placeholder="Мес."></div>
+					<div class="col-2"><input type="text" name="wl_ofu[blocks][][end_date]" class="form-control ofu-block-end-date" placeholder="Дата"></div>
+					<div class="col-3"><input type="text" name="wl_ofu[blocks][][profit]" class="form-control ofu-block-profit" placeholder="Сумма, р."></div>
+					<div class="col-3"><input type="text" name="wl_ofu[blocks][][profit_date]" class="form-control ofu-block-profit-date" placeholder="Дата"></div>';
 				}
 				else
 				{
-					$block .= '<input type="text" name="wl_ofu[blocks][][creation_date]" class="col-3 form-control ofu-block-creation-date" placeholder="Дата" value="'.date('d.m.Y', $ofu_product->creation_date).'">
+					$block .= '<div class="col-3"><input type="text" name="wl_ofu[blocks][][creation_date]" class="form-control ofu-block-creation-date" placeholder="Дата" value="'.date('d.m.Y', $ofu_product->creation_date).'"></div>
 
-					<input type="text" class="col-1 form-control ofu-block-months" placeholder="Мес.">
+					<div class="col-1"><input type="text" class="form-control ofu-block-months" placeholder="Мес."></div>
 
-					<input type="text" name="wl_ofu[blocks][][end_date]" class="col-2 form-control ofu-block-end-date" placeholder="Дата" value="'.date('d.m.Y', $ofu_product->end_date).'">
+					<div class="col-2"><input type="text" name="wl_ofu[blocks][][end_date]" class="form-control ofu-block-end-date" placeholder="Дата" value="'.date('d.m.Y', $ofu_product->end_date).'"></div>
 
-					<input type="text" name="wl_ofu[blocks][][profit]" class="col-3 form-control ofu-block-profit" placeholder="Сумма, р." value="'.$ofu_product->profit.'">
+					<div class="col-3"><input type="text" name="wl_ofu[blocks][][profit]" class="form-control ofu-block-profit" placeholder="Сумма, р." value="'.$ofu_product->profit.'"></div>
 
-					<input type="text" name="wl_ofu[blocks][][profit_date]" class="col-3 form-control ofu-block-profit-date" placeholder="Дата" value="'.date('d.m.Y', $ofu_product->profit_date).'">';
+					<div class="col-3"><input type="text" name="wl_ofu[blocks][][profit_date]" class="form-control ofu-block-profit-date" placeholder="Дата" value="'.date('d.m.Y', $ofu_product->profit_date).'"></div>';
 				}
 		$block .= '</div>
 
-				<div class="input-group">
+				<div class="input-group no-gutters">
 					<div class="col-12 d-flex justify-content-end">
 						<a href="javascript://" class="ofu-remove-block">Удалить рассчет</a>
 					</div>
