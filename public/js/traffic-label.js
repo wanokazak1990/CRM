@@ -152,7 +152,16 @@ function worklistData(data)
 		}
 		else if(typeof(val)==='object' || typeof(val)==='array'){//если массив или объект
 			var block = work.find('[wl_block="'+key+'"]');//ищу контейнер для этих данных
-			var subblock = block.find(".input-group");
+
+			/**
+			 * В блоке контактов больше одного input-group, поэтому если 
+			 * проход по данным контактов, то ищем специальный класс блока
+			 */
+			if (key == 'contacts')
+				var subblock = block.find(".contact-row");
+			else
+				var subblock = block.find(".input-group");
+
 			for(index in val)//проходусь по строкам массива
 			{
 				var subval = val[index];//текущая строка массива

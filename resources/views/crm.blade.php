@@ -25,27 +25,32 @@
         <li><a href="{{ route('login') }}">Login</a></li>
         <li><a href="{{ route('register') }}">Register</a></li>
     @else
-
     	<!--ID пользователя-->
     	<input type="hidden" id="auth_user_id" value="{{ Auth::user()->id }}">
 
-    	<div class="input-group d-flex">
+    	<div class="input-group d-flex align-items-center">
     		<div class="d-flex flex-grow-1 text-white align-items-center">{{ Auth::user()->name }} on-line</div>
-    		<div class="d-flex align-items-center mr-3">
 
-    			<a href="javascript://" class="text-white" onclick="location.reload();" title="Обновить">
-    				<i class="fas fa-undo"></i>
+    		<div class="d-flex align-items-center mr-3">
+    			<a href="javascript://" class="text-white d-flex align-items-center">
+    				<i class="icofont-alarm"></i>
     			</a>
-          
     		</div>
+
+    		<div class="d-flex align-items-center mr-3">
+    			<a href="javascript://" class="text-white d-flex align-items-center" onclick="location.reload();" title="Обновить">
+    				<i class="icofont-refresh"></i>
+    			</a>
+    		</div>
+
     		<div class="d-flex align-items-center">
     			<a href="{{ route('logout') }}"
-		        	class="text-white"
+		        	class="text-white d-flex align-items-center"
 		        	title="Выход" 
 		            onclick="event.preventDefault();
 		                     document.getElementById('logout-form').submit();"
 		        >
-		            <i class="icofont-error"></i>
+		            <i class="icofont-close" style="font-size: 22px;"></i>
 		        </a>
     		</div>
     	</div>
@@ -73,6 +78,10 @@
 
 <!-- МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЕ ПРОБНОЙ ПОЕЗДКИ -->
 @section('modal_add_testdrive')
+@show
+
+<!-- МОДАЛЬНОЕ ОКНО ОПЦИЙ И ДО -->
+@section('modal_options')
 @show
 
 <!-- ОСНОВНОЙ КОНТЕНТ -->
@@ -215,30 +224,34 @@
 					<div class="d-flex flex-grow-1 align-items-center">
 						<!-- Настройки отображения полей -->
 						<a href="javascript://" class="px-3 text-dark d-flex align-items-center" data-toggle="modal" data-target="#settingsModal">
-							<i class="fas fa-cog"></i>
-						</a>
-						<!-- Карточка автомобиля (сменить значок) -->
-						<a href="javascript://" class="px-3 text-dark d-flex align-items-center" data-toggle="modal" data-target="#autocardModal">
-							<i class="fas fa-search"></i>
+							<i class="icofont-gear" style="font-size: 20px;"></i>
 						</a>
 						<!-- Загрузить -->
 						<a href="javascript://" class="px-3 text-dark d-flex align-items-center">
-							<i class="fas fa-caret-square-down"></i>
+							<i class="icofont-download" style="font-size: 20px;"></i>
+						</a>
+						<!-- Карточка автомобиля (сменить значок) -->
+						<a href="javascript://" class="px-3 text-dark d-flex align-items-center" data-toggle="modal" data-target="#autocardModal">
+							<i class="icofont-auto-mobile" style="font-size: 20px;"></i>
+						</a>
+						<!-- Поиск -->
+						<a href="javascript://" class="px-3 text-dark d-flex align-items-center">
+							<i class="icofont-ui-search" style="font-size: 20px;"></i>
 						</a>
 						<!-- Фильтр -->
 						<a href="javascript://" class="px-3 text-dark d-flex align-items-center">
-							<i class="fas fa-filter"></i>
+							<i class="icofont-filter" style="font-size: 20px;"></i>
 						</a>
 					</div>
 
 					<div class="d-flex align-items-center">
 						<!-- Новый трафик -->
 						<a href="javascript://" class="px-3 text-dark d-flex align-items-center" id="openNewTraffic">
-							<i class="fas fa-user-plus"></i>
+							<i class="icofont-ui-file" style="font-size: 20px;"></i>
 						</a>
 						<!-- Открыть боковую панель -->
 						<a id="opening" a href="javascript://" class="px-3 text-dark d-flex align-items-center">
-							<i class="fas fa-arrow-circle-left"></i>
+							<i class="icofont-simple-left" style="font-size: 20px;"></i>
 						</a>
 					</div>
 				</div>
@@ -254,8 +267,11 @@
 
 <!-- FOOTER -->
 <div id="footer" class="bg-ice d-flex align-items-center">
-	<div class="container-fluid text-right text-white">
-		CRM "Учет"	
+	<div class="container-fluid text-white">
+		<div class="input-group d-flex align-items-center justify-content-between">
+			<span id="stockInfo" class="font-weight-bold"></span>	
+			<span>CRM "Учет"</span>
+		</div>
 	</div>	
 </div>
 <!-- /FOOTER -->
@@ -339,7 +355,7 @@
 
 
 <div id="pv-modal">
-	<a class="close fa fa-times"></a>
+	<a class="close icofont-close"></a>
 	<div class="pv-price">
 		<div class="row">
 			<h4 class="col-12 text-center">
@@ -368,17 +384,17 @@
 		</div>
 		<div class="default row">
 			<div class="col-10 pv-name"></div>
-			<div class="col-2 icon text-right"><i class="fa fa-check"></i></div>
+			<div class="col-2 icon text-right"><i class="icofont-check text-success" style="font-size: 20px;"></i></div>
 		</div>
 	</div>
 </div>
 
-<div id="car-option-modal">
+<!-- <div id="car-option-modal">
 	<a class="close fa fa-times"></a>
-	<h4 class="title-option-modal"></h4>
+	<h5 class="title-option-modal"></h5>
 	<div class="car-option-content"></div>
 	<div class="footer-modal"></div>
-</div>
+</div> -->
 
 
 <div id="edit_traffic_modal" class="w-50 h-100 align-items-center justify-content-center hide-block">
@@ -452,10 +468,23 @@
 <script src="/js/crm.js"></script>
 <script src="/js/socket/trafficsocket.js"></script>
 <script src="/js/traffic-label.js"></script>
-<script src="/js/worklist.js"></script>
 <script src="/js/car-add.js"></script>
-<script src="/js/worklist-configurator.js"></script>
 <script src="/js/phone.js"></script>
+
+<script src="/js/worklist/worklist.js"></script>
+<script src="/js/worklist/wl-auto.js"></script>
+<script src="/js/worklist/wl-comments.js"></script>
+<script src="/js/worklist/wl-parameters-additional-equip.js"></script>
+<script src="/js/worklist/wl-parameters-commercial-offers.js"></script>
+<script src="/js/worklist/wl-parameters-configurator.js"></script>
+<script src="/js/worklist/wl-parameters-loyalty.js"></script>
+<script src="/js/worklist/wl-parameters-need-cars.js"></script>
+<script src="/js/worklist/wl-parameters-oldcar.js"></script>
+<script src="/js/worklist/wl-parameters-testdrives.js"></script>
+<script src="/js/worklist/wl-registration-contracts.js"></script>
+<script src="/js/worklist/wl-registration-credits.js"></script>
+<script src="/js/worklist/wl-registration-ofu-products.js"></script>
+<script src="/js/worklist/wl-registration-payments.js"></script>
 
 </body>
 </html>

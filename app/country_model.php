@@ -16,7 +16,7 @@ class country_model extends Model
     	return Storage::url(('country').'/'.$this->flag);
     }
 
-    public function getFlag($height = 25)
+    public function getFlag($height = 20)
     {	
     	if($this->flag)
     		return '<img title="'.$this->name.'" src="'.$this->getPathFlag().'" style="height:'.$height.'px">';

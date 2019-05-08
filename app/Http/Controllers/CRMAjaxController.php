@@ -124,13 +124,15 @@ class CRMAjaxController extends Controller
 
     //Так же вернёт готовую html строку с пагинацией
 
-    public function crmgetcontent(Request $request,$list = array(),$mas=array())
+    public function crmgetcontent(Request $request, $list = array(), $mas = array())
     {
-        if($request->has('model'))
+        if ($request->has('model'))
         {
             $class_name = 'App\\'.$request->model;//создаём имя класса вкладки с которой сделан переход         
             $class_name = new $class_name();//получаем объект вкладки с которой сделан клик 
+            
             switch ($request->model) {
+
                 case '_tab_client':
                     $list = crm_client::with('contact')->with('traffic')->orderBy('id','desc')->paginate(20);
                     foreach ($list as $key => $item) {
@@ -207,6 +209,7 @@ class CRMAjaxController extends Controller
                     $titles = $this->getTitle($class_name::$tab_index);
 
                     $links = '';
+
                     echo json_encode([
                         'list'=>$tr->response,
                         'links'=>$links,

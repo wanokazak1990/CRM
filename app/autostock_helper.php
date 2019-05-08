@@ -85,7 +85,7 @@ Class autostock_helper {
                 //Монитор состояния
                 $array['monitor'] =             $item->getStageDelivery()['monitor'];
                 //кнопка карт. машины
-                $array['button_carlist'] = '<a href="javascript://" class="opencar" car-id="'.$item->id.'"><i class="fas fa-car"></i></a>';
+                $array['button_carlist'] = '<a href="javascript://" class="opencar" car-id="'.$item->id.'"><i class="icofont-auto-mobile" style="font-size: 20px;"></i></a>';
                 //Маркер логиста
                 $array['logist_marker'] =       @$item->getLogistMarker->name;
                 //Автор заказа
@@ -141,8 +141,8 @@ Class autostock_helper {
                 $array['complect_code']    =    @$item->complect->code;
                 $array['complect'] =            @$item->complect->name.' '.@$item->complect->motor->getEasyName();
                 $array['pack_code'] =           $item->stringPackName();
-                $array['pack'] =                '<button class="stock-button" type="button" mind="pack" car-id="'.$item->id.'">PACKS</button>';
-                $array['dops'] =                '<button class="stock-button" type="button" mind="dop" car-id="'.$item->id.'">DOPS</button>';
+                $array['pack'] =                '<a href="javascript://" class="stock-button" data-toggle="modal" data-target="#optionsModal" mind="pack" car-id="'.$item->id.'"><i class="icofont-tools-bag" style="font-size: 20px;"></i></a>';
+                $array['dops'] =                '<a href="javascript://" class="stock-button" data-toggle="modal" data-target="#optionsModal" mind="dop" car-id="'.$item->id.'"><i class="icofont-cart" style="font-size: 20px;"></i></a>';
                 
                 //CAR COLOR
                 $iconCol = '';
@@ -185,7 +185,7 @@ Class autostock_helper {
                 $array['total'] = number_format(preg_replace("/[^,.0-9]/", '', $array['price_out_dops'])+preg_replace("/[^,.0-9]/", '', $array['dop_total_price']),0,'',' ').' р.';   
 
                 //кнопка раблиста
-                $array['button_worklist'] =     ($worklist_id)?'<a href="javascript://" class="car-worklist" worklist-id="'.$worklist_id.'"><i class="fas fa-clipboard-list"></i></a>':''; 
+                $array['button_worklist'] =     ($worklist_id)?'<a href="javascript://" class="car-worklist" worklist-id="'.$worklist_id.'"><i class="icofont-ui-file" style="font-size: 20px;"></i></a>':''; 
 
                 ///////////////////
                 /*ОПЛАТА КЛИЕНТОМ*/
